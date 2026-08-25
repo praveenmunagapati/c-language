@@ -2500,23 +2500,25 @@ After: num = 42</div>
 </div>
 
 <!-- ████████████████████████████████████████████████ -->
-<!-- PART 6 — POINTERS                               -->
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 6 — POINTERS & MEMORY ARCHITECTURE         -->
 <!-- ████████████████████████████████████████████████ -->
 
-<div class="slide" data-title="▸ PART 6: Pointers">
+<div class="slide" data-title="▸ PART 6: Pointers & Memory">
 <div class="slide-inner part-divider">
   <div class="part-icon" style="background: rgba(251,113,133,0.15); color: var(--accent-rose);">📍</div>
   <div class="part-number">Part 6</div>
-  <div class="part-title">Pointers</div>
-  <div class="part-desc">Understanding memory — the most powerful concept in C</div>
+  <div class="part-title">Pointers & Memory Architecture</div>
+  <div class="part-desc">Direct RAM access — understanding addresses, pointer arithmetic, and double pointers</div>
 </div>
 </div>
 
-<!-- S53: Pointers Aren't Scary -->
+<!-- S: Pointers Aren't Scary -->
 <div class="slide" data-title="Pointers Aren't Scary">
 <div class="slide-inner">
   <div class="big-question" style="font-size: 40px; margin-bottom: 20px;">POINTERS 😨?</div>
-  <div class="big-answer" style="font-size: 24px; margin-bottom: 24px;">"Pointers are <strong>not magic</strong>. They are just <strong>addresses</strong>."</div>
+  <div class="big-answer" style="font-size: 24px; margin-bottom: 24px;">"Pointers are <strong>not magic</strong>. They are just <strong>variables that store memory addresses</strong>."</div>
   <div class="analogy-box mb-2">
     <div class="analogy-label">🌍 House Address Analogy</div>
     <div class="analogy-content" style="font-size: 15px;">
@@ -2536,13 +2538,13 @@ After: num = 42</div>
 </div>
 </div>
 
-<!-- S54: Memory & Addresses -->
+<!-- S: Everything Lives in Memory -->
 <div class="slide" data-title="Everything Lives in Memory">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 6 · Slide 54</span>
+    <span class="section-number">Part 6 · Pointers</span>
     <h2 class="section-title">Everything Lives in Memory</h2>
-    <p class="section-subtitle">Every variable has a value AND an address where it's stored</p>
+    <p class="section-subtitle">Every variable has a value AND a unique hexadecimal address in RAM</p>
   </div>
   <div class="two-col">
     <div>
@@ -2553,29 +2555,34 @@ int main()
 {
     int x = 25;
 
-    printf("Value: %d\n", x);
-    printf("Address: %p\n", (void*)&x);
+    printf("Value of x:   %d
+", x);
+    printf("Address of x: %p
+", (void*)&x);
+    printf("Size of x:    %lu bytes
+", sizeof(x));
 
     return 0;
 }</pre></div>
       </div>
       <div class="output-block">
         <div class="output-header">▶ Output</div>
-        <div class="output-body">Value: 25
-Address: 0x7ffd5e8c</div>
+        <div class="output-body">Value of x:   25
+Address of x: 0x7ffd5e8c
+Size of x:    4 bytes</div>
       </div>
     </div>
     <div>
       <div class="memory-diagram">
         <div class="memory-row"><span class="memory-addr">0x1000</span><div class="memory-cell null">...</div><span class="memory-label"></span></div>
-        <div class="memory-row"><span class="memory-addr">0x1004</span><div class="memory-cell hl" style="font-size:16px; padding: 12px;"><strong>x = 25</strong></div><span class="memory-label">← our variable!</span></div>
+        <div class="memory-row"><span class="memory-addr">0x1004</span><div class="memory-cell hl" style="font-size:16px; padding: 12px;"><strong>x = 25</strong></div><span class="memory-label">← 4 bytes (int)</span></div>
         <div class="memory-row"><span class="memory-addr">0x1008</span><div class="memory-cell null">...</div><span class="memory-label"></span></div>
       </div>
       <div class="concept-box mt-2">
-        <div class="concept-title">🔑 Two Operators</div>
+        <div class="concept-title">🔑 Two Fundamental Operators</div>
         <div class="concept-text">
-          <strong><span class="ic">&x</span></strong> → "What is the <strong>address</strong> of x?"<br>
-          <strong><span class="ic">*p</span></strong> → "What is the <strong>value at</strong> this address?"
+          <strong><span class="ic">&x</span></strong> → <em>Address-of operator:</em> "Give me the RAM location of x."<br><br>
+          <strong><span class="ic">*p</span></strong> → <em>Dereference operator:</em> "Follow address stored in p and access the content!"
         </div>
       </div>
     </div>
@@ -2583,64 +2590,70 @@ Address: 0x7ffd5e8c</div>
 </div>
 </div>
 
-<!-- S55: Pointer Declaration & Usage -->
+<!-- S: Pointer Declaration & Dereferencing -->
 <div class="slide" data-title="Pointer: Declaration & Usage">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 6 · Slide 55</span>
-    <h2 class="section-title">Creating and Using a Pointer</h2>
+    <span class="section-number">Part 6 · Pointers</span>
+    <h2 class="section-title">Pointer Declaration & Dereferencing</h2>
+    <p class="section-subtitle">Reading and modifying data through memory addresses</p>
   </div>
   <div class="two-col code-heavy">
     <div>
       <div class="code-block">
-        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">pointer.c</span></div>
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">pointer_ops.c</span></div>
         <div class="code-body"><pre>#include &lt;stdio.h&gt;
 
 int main()
 {
-    int x = 42;
-    int *p = &x;  // p stores address of x
+    int score = 42;
+    int *p = &score;  // p holds address of score
 
-    printf("Value of x:    %d\n", x);
-    printf("Address of x:  %p\n", (void*)&x);
-    printf("Value of p:    %p\n", (void*)p);
-    printf("Value at *p:   %d\n", *p);
+    printf("score:  %d
+", score);
+    printf("&score: %p
+", (void*)&score);
+    printf("p:      %p
+", (void*)p);
+    printf("*p:     %d
+", *p);
 
-    // Modify x through pointer
+    // Modify original variable via pointer!
     *p = 100;
-    printf("\nAfter *p = 100:\n");
-    printf("x = %d\n", x);
-    printf("*p = %d\n", *p);
+    printf("
+After *p = 100:
+");
+    printf("score is now: %d
+", score);
 
     return 0;
 }</pre></div>
       </div>
       <div class="output-block">
         <div class="output-header">▶ Output</div>
-        <div class="output-body">Value of x:    42
-Address of x:  0x7ffd5e8c
-Value of p:    0x7ffd5e8c
-Value at *p:   42
+        <div class="output-body">score:  42
+&score: 0x7ffd5e8c
+p:      0x7ffd5e8c
+*p:     42
 
 After *p = 100:
-x = 100
-*p = 100</div>
+score is now: 100</div>
       </div>
     </div>
     <div>
       <div class="ptr-visual mb-2">
         <div class="ptr-box pointer">p = 0x7ffd</div>
         <span class="ptr-arrow">──▶</span>
-        <div class="ptr-box var">x = 42</div>
+        <div class="ptr-box var">score = 42</div>
       </div>
       <div class="what-happened">
         <div class="wh-label">🔍 Step by Step</div>
         <div class="wh-content">
           <ol>
-            <li><span class="ic">int x = 42</span> → x holds 42 at some address</li>
-            <li><span class="ic">int *p = &x</span> → p stores x's address</li>
-            <li><span class="ic">*p</span> → "go to address in p, get value" → 42</li>
-            <li><span class="ic">*p = 100</span> → "go to address in p, store 100" → x becomes 100!</li>
+            <li><span class="ic">int *p;</span> creates a pointer variable capable of storing an <span class="ic">int</span> address.</li>
+            <li><span class="ic">p = &score;</span> binds the pointer to the address of <span class="ic">score</span>.</li>
+            <li><span class="ic">*p</span> fetches the integer located at that address (42).</li>
+            <li><span class="ic">*p = 100</span> updates the value in the exact memory box of <span class="ic">score</span>!</li>
           </ol>
         </div>
       </div>
@@ -2649,13 +2662,13 @@ x = 100
 </div>
 </div>
 
-<!-- S56: Swap Using Pointers -->
+<!-- S: Swap Using Pointers -->
 <div class="slide" data-title="Swap Using Pointers">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 6 · Slide 56</span>
-    <h2 class="section-title">Swap Using Pointers (Call by Reference)</h2>
-    <p class="section-subtitle">The classic "aha!" moment for pointers</p>
+    <span class="section-number">Part 6 · Pointers</span>
+    <h2 class="section-title">Call by Reference: Swapping Values</h2>
+    <p class="section-subtitle">Passing addresses enables functions to modify caller variables</p>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -2674,320 +2687,441 @@ int main()
 {
     int x = 10, y = 20;
 
-    printf("Before: x=%d, y=%d\n", x, y);
-
-    swap(&x, &y);  // Pass ADDRESSES
-
-    printf("After:  x=%d, y=%d\n", x, y);
-
-    return 0;
-}</pre></div>
-      </div>
-      <div class="output-block">
-        <div class="output-header">▶ Output</div>
-        <div class="output-body">Before: x=10, y=20
-After:  x=20, y=10</div>
-      </div>
-    </div>
-    <div>
-      <div class="what-happened mb-2">
-        <div class="wh-label">🔍 Why This Works</div>
-        <div class="wh-content">
-          We pass <strong>addresses</strong> (&x, &y), not copies.<br>
-          Inside swap: <span class="ic">*a</span> IS x, <span class="ic">*b</span> IS y.<br>
-          Changes affect the <strong>original</strong> variables!
-        </div>
-      </div>
-      <table class="trace-table">
-        <thead><tr><th>Step</th><th>*a (x)</th><th>*b (y)</th><th>temp</th></tr></thead>
-        <tbody>
-          <tr><td>Start</td><td>10</td><td>20</td><td>—</td></tr>
-          <tr><td>temp = *a</td><td>10</td><td>20</td><td>10</td></tr>
-          <tr><td>*a = *b</td><td class="highlight-cell">20</td><td>20</td><td>10</td></tr>
-          <tr><td>*b = temp</td><td>20</td><td class="highlight-cell">10</td><td>10</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ████████████████████████████████████████████████ -->
-<!-- PART 7 — ARRAYS                                 -->
-<!-- ████████████████████████████████████████████████ -->
-
-<div class="slide" data-title="▸ PART 7: Arrays">
-<div class="slide-inner part-divider">
-  <div class="part-icon" style="background: rgba(99,102,241,0.15); color: var(--accent-indigo);">📊</div>
-  <div class="part-number">Part 7</div>
-  <div class="part-title">Arrays</div>
-  <div class="part-desc">Handling collections — storing multiple values in one variable</div>
-</div>
-</div>
-
-<!-- S58: Why Arrays -->
-<div class="slide" data-title="Why Arrays?">
-<div class="slide-inner">
-  <div class="section-header">
-    <span class="section-number">Part 7 · Slide 58</span>
-    <h2 class="section-title">Why Arrays?</h2>
-  </div>
-  <div class="big-question">How would you store marks of <em>100 students</em>?</div>
-  <div class="vs-grid mt-2">
-    <div class="vs-box" style="border-color: rgba(251,113,133,0.2);">
-      <div class="vs-title" style="color: var(--accent-rose);">❌ Without Arrays</div>
-      <div class="code-block"><div class="code-body"><pre>int m1, m2, m3, m4, m5;
-int m6, m7, m8, m9, m10;
-// ... 100 variables! 😱</pre></div></div>
-    </div>
-    <div class="vs-divider">→</div>
-    <div class="vs-box" style="border-color: rgba(52,211,153,0.2);">
-      <div class="vs-title" style="color: var(--accent-emerald);">✅ With Arrays</div>
-      <div class="code-block"><div class="code-body"><pre>int marks[100];
-// One line! 🎉</pre></div></div>
-    </div>
-  </div>
-  <div class="memory-diagram mt-2" style="max-width: 600px; margin: 0 auto;">
-    <div class="memory-row"><span class="memory-addr">[0]</span><div class="memory-cell hl">90</div><span class="memory-label">marks[0]</span></div>
-    <div class="memory-row"><span class="memory-addr">[1]</span><div class="memory-cell hl">75</div><span class="memory-label">marks[1]</span></div>
-    <div class="memory-row"><span class="memory-addr">[2]</span><div class="memory-cell hl">88</div><span class="memory-label">marks[2]</span></div>
-    <div class="memory-row"><span class="memory-addr">[3]</span><div class="memory-cell hl">64</div><span class="memory-label">marks[3]</span></div>
-    <div class="memory-row"><span class="memory-addr">[4]</span><div class="memory-cell hl">95</div><span class="memory-label">marks[4]</span></div>
-  </div>
-  <div class="callout warning mt-2"><strong>⚠️ Important:</strong> C arrays start at index <strong>0</strong>, not 1! So <span class="ic">marks[5]</span> has indices 0,1,2,3,4.</div>
-</div>
-</div>
-
-<!-- S59: Array Operations -->
-<div class="slide" data-title="Array: Sum, Avg, Min, Max">
-<div class="slide-inner">
-  <div class="section-header">
-    <span class="section-number">Part 7 · Slide 59</span>
-    <h2 class="section-title">Array Operations: Sum, Average, Min, Max</h2>
-  </div>
-  <div class="two-col code-heavy">
-    <div>
-      <div class="code-block">
-        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">array_ops.c</span></div>
-        <div class="code-body"><pre>#include &lt;stdio.h&gt;
-
-int main()
-{
-    int marks[] = {85, 92, 78, 95, 64};
-    int n = 5;
-    int sum = 0, min, max;
-
-    min = max = marks[0];
-
-    for (int i = 0; i < n; i++)
-    {
-        sum += marks[i];
-        if (marks[i] < min) min = marks[i];
-        if (marks[i] > max) max = marks[i];
-    }
-
-    printf("Sum:     %d\n", sum);
-    printf("Average: %.2f\n", (float)sum / n);
-    printf("Minimum: %d\n", min);
-    printf("Maximum: %d\n", max);
-
-    return 0;
-}</pre></div>
-      </div>
-    </div>
-    <div>
-      <div class="output-block mb-2">
-        <div class="output-header">▶ Output</div>
-        <div class="output-body">Sum:     414
-Average: 82.80
-Minimum: 64
-Maximum: 95</div>
-      </div>
-      <div class="concepts-banner">
-        <span class="cb-label">Concepts:</span>
-        <span class="cb-tag">array</span><span class="cb-tag">loop</span><span class="cb-tag">comparison</span><span class="cb-tag">type cast</span>
-      </div>
-      <div class="callout danger mt-1"><strong>🚫 No Bounds Check!</strong> C does NOT prevent you from accessing <span class="ic">marks[10]</span> on a 5-element array. This causes undefined behavior — crashes or silent data corruption.</div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- S60: 2D Arrays -->
-<div class="slide" data-title="2D Arrays & Matrix Addition">
-<div class="slide-inner">
-  <div class="section-header">
-    <span class="section-number">Part 7 · Slide 60</span>
-    <h2 class="section-title">2D Arrays — Matrix Addition</h2>
-  </div>
-  <div class="two-col code-heavy">
-    <div>
-      <div class="code-block">
-        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">matrix_add.c</span></div>
-        <div class="code-body"><pre>#include &lt;stdio.h&gt;
-
-int main()
-{
-    int a[2][2] = {{1, 2}, {3, 4}};
-    int b[2][2] = {{5, 6}, {7, 8}};
-    int c[2][2];
-
-    // Matrix Addition
-    for (int i = 0; i < 2; i++)
-        for (int j = 0; j < 2; j++)
-            c[i][j] = a[i][j] + b[i][j];
-
-    // Print result
-    printf("Result:\n");
-    for (int i = 0; i < 2; i++)
-    {
-        for (int j = 0; j < 2; j++)
-            printf("%3d", c[i][j]);
-        printf("\n");
-    }
-
-    return 0;
-}</pre></div>
-      </div>
-    </div>
-    <div>
-      <div class="output-block mb-2">
-        <div class="output-header">▶ Output</div>
-        <div class="output-body">Result:
-  6  8
- 10 12</div>
-      </div>
-      <div class="what-happened">
-        <div class="wh-label">🔍 Visual</div>
-        <div class="wh-content font-mono text-sm" style="line-height: 1.8;">
-          [1 2]   [5 6]   [ 6  8]<br>
-          [3 4] + [7 8] = [10 12]
-        </div>
-      </div>
-      <div class="callout info mt-1"><strong>📐 Syntax:</strong> <span class="ic">int matrix[rows][cols]</span>. Access: <span class="ic">matrix[row][col]</span>.</div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ████████████████████████████████████████████████ -->
-<!-- PART 8 — STRINGS                                -->
-<!-- ████████████████████████████████████████████████ -->
-
-<div class="slide" data-title="▸ PART 8: Strings">
-<div class="slide-inner part-divider">
-  <div class="part-icon" style="background: rgba(34,211,238,0.15); color: var(--accent-cyan);">🔤</div>
-  <div class="part-number">Part 8</div>
-  <div class="part-title">Strings</div>
-  <div class="part-desc">Text processing — character arrays with a null terminator</div>
-</div>
-</div>
-
-<!-- S62: String Basics -->
-<div class="slide" data-title="Strings in C">
-<div class="slide-inner">
-  <div class="section-header">
-    <span class="section-number">Part 8 · Slide 62</span>
-    <h2 class="section-title">Strings in C</h2>
-    <p class="section-subtitle">A string is a character array ending with '\0' (null terminator)</p>
-  </div>
-  <div class="two-col">
-    <div>
-      <div class="code-block">
-        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">strings.c</span></div>
-        <div class="code-body"><pre>#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-
-int main()
-{
-    char name[] = "Hello";
-    char city[20];
-
-    printf("Length: %lu\n", strlen(name));
-
-    strcpy(city, "Hyderabad");
-    printf("City: %s\n", city);
-
-    strcat(name, " World");
-    printf("Name: %s\n", name);
-
-    printf("Compare: %d\n",
-           strcmp("abc", "abc"));
+    printf("Before swap: x = %d, y = %d
+", x, y);
+    swap(&x, &y);  // Pass addresses!
+    printf("After swap:  x = %d, y = %d
+", x, y);
 
     return 0;
 }</pre></div>
       </div>
       <div class="output-block">
         <div class="output-header">▶ Output</div>
-        <div class="output-body">Length: 5
-City: Hyderabad
-Name: Hello World
-Compare: 0</div>
+        <div class="output-body">Before swap: x = 10, y = 20
+After swap:  x = 20, y = 10</div>
       </div>
     </div>
     <div>
       <div class="concept-box mb-2">
-        <div class="concept-title">💾 Memory Layout of "Hello"</div>
-        <div class="memory-diagram">
-          <div class="memory-row"><span class="memory-addr">[0]</span><div class="memory-cell hl">'H'</div><span class="memory-label">72</span></div>
-          <div class="memory-row"><span class="memory-addr">[1]</span><div class="memory-cell hl">'e'</div><span class="memory-label">101</span></div>
-          <div class="memory-row"><span class="memory-addr">[2]</span><div class="memory-cell hl">'l'</div><span class="memory-label">108</span></div>
-          <div class="memory-row"><span class="memory-addr">[3]</span><div class="memory-cell hl">'l'</div><span class="memory-label">108</span></div>
-          <div class="memory-row"><span class="memory-addr">[4]</span><div class="memory-cell hl">'o'</div><span class="memory-label">111</span></div>
-          <div class="memory-row"><span class="memory-addr">[5]</span><div class="memory-cell ptr">'\0'</div><span class="memory-label">null</span></div>
+        <div class="concept-title">💡 Why Call by Reference?</div>
+        <div class="concept-text">
+          C is strictly <strong>pass-by-value</strong> (arguments are copied into new stack frames).<br><br>
+          If you pass <span class="ic">swap(x, y)</span>, the function only swaps copies on its own stack.<br><br>
+          By passing <span class="ic">&x</span> and <span class="ic">&y</span>, you grant the function direct access to caller memory!
         </div>
       </div>
-      <table class="styled-table">
-        <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
-        <tbody>
-          <tr><td><code>strlen(s)</code></td><td>String length</td></tr>
-          <tr><td><code>strcpy(d, s)</code></td><td>Copy s into d</td></tr>
-          <tr><td><code>strcat(d, s)</code></td><td>Append s to d</td></tr>
-          <tr><td><code>strcmp(a, b)</code></td><td>Compare (0=equal)</td></tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </div>
 </div>
 
-<!-- S63: String Palindrome -->
-<div class="slide" data-title="Program: String Palindrome">
+<!-- S: Pointer Arithmetic -->
+<div class="slide" data-title="Pointer Arithmetic">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 8 · Slide 63</span>
-    <h2 class="section-title">Program: String Palindrome</h2>
+    <span class="section-number">Part 6 · Pointers</span>
+    <h2 class="section-title">Pointer Arithmetic & Byte Scaling</h2>
+    <p class="section-subtitle">Adding 1 to a pointer adds sizeof(*ptr) bytes, not 1 byte!</p>
   </div>
   <div class="two-col code-heavy">
     <div>
       <div class="code-block">
-        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">palindrome_str.c</span></div>
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">ptr_arithmetic.c</span></div>
         <div class="code-body"><pre>#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
 
 int main()
 {
-    char str[50];
-    int isPalin = 1;
+    int arr[3] = {10, 20, 30};
+    int *p = arr;  // points to arr[0]
 
-    printf("Enter a string: ");
-    scanf("%s", str);
+    printf("p     = %p (val = %d)
+", (void*)p, *p);
+    printf("p + 1 = %p (val = %d)
+", (void*)(p + 1), *(p + 1));
+    printf("p + 2 = %p (val = %d)
+", (void*)(p + 2), *(p + 2));
 
-    int len = strlen(str);
+    // Pointer difference (Distance)
+    int *pEnd = &arr[2];
+    printf("
+Distance (pEnd - p) = %ld elements
+", pEnd - p);
 
-    for (int i = 0; i < len / 2; i++)
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output (Notice +4 byte jumps!)</div>
+        <div class="output-body">p     = 0x1000 (val = 10)
+p + 1 = 0x1004 (val = 20)
+p + 2 = 0x1008 (val = 30)
+
+Distance (pEnd - p) = 2 elements</div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📏 Scale Factor Formula</div>
+        <div class="concept-text font-mono">
+          <strong>ptr + i = Base_Address + (i * sizeof(*ptr))</strong><br><br>
+          • <span class="ic">char*</span> + 1 → +1 byte<br>
+          • <span class="ic">int*</span> + 1 → +4 bytes<br>
+          • <span class="ic">double*</span> + 1 → +8 bytes
+        </div>
+      </div>
+      <div class="analogy-box">
+        <div class="analogy-label">🏢 Walking the Floor</div>
+        <div class="analogy-content">
+          If every hotel suite is <strong>4 meters wide</strong>, "step 1 suite over" means moving <strong>4 meters</strong>. The pointer automatically scales steps!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Array-Pointer Duality -->
+<div class="slide" data-title="Array-Pointer Duality">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 6 · Pointers</span>
+    <h2 class="section-title">Array-Pointer Duality: arr[i] is *(arr + i)</h2>
+    <p class="section-subtitle">In C, array subscript notation is pure syntactic sugar for pointer arithmetic</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">array_pointer_duality.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int arr[4] = {100, 200, 300, 400};
+
+    // Four identical ways to access element at index 2:
+    printf("arr[2]     = %d
+", arr[2]);
+    printf("*(arr + 2) = %d
+", *(arr + 2));
+    printf("*(2 + arr) = %d
+", *(2 + arr));
+    printf("2[arr]     = %d  (Yes! Valid C!)
+", 2[arr]);
+
+    // Traversing array using pointer arithmetic
+    int *p = arr;
+    printf("
+Traversing with *p++: ");
+    for (int i = 0; i < 4; i++) {
+        printf("%d ", *p++);
+    }
+    printf("
+");
+
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">arr[2]     = 300
+*(arr + 2) = 300
+*(2 + arr) = 300
+2[arr]     = 300  (Yes! Valid C!)
+
+Traversing with *p++: 100 200 300 400</div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened">
+        <div class="wh-label">💡 The Core Identity</div>
+        <div class="wh-content font-mono" style="font-size:14px; line-height:2;">
+          <span style="color:var(--accent-amber);">arr[i]</span> ≡ <span style="color:var(--accent-emerald);">*(arr + i)</span> ≡ <span style="color:var(--accent-cyan);">*(i + arr)</span> ≡ <span style="color:var(--accent-rose);">i[arr]</span>
+        </div>
+      </div>
+      <div class="concept-box mt-2">
+        <div class="concept-title">🔑 Array Decay Rule</div>
+        <div class="concept-text">
+          When an array name is evaluated in an expression, it <strong>decays into a pointer to its first element (<span class="ic">&arr[0]</span>)</strong>.<br><br>
+          <em>Key Difference:</em> An array name is a <strong>constant pointer</strong> (cannot do <span class="ic">arr++</span>), while a pointer variable can move freely (<span class="ic">p++</span>).
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Double Pointers (**ptr) -->
+<div class="slide" data-title="Double Pointers (**ptr)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 6 · Pointers</span>
+    <h2 class="section-title">Double Pointers: Pointer to a Pointer</h2>
+    <p class="section-subtitle">Storing the address of another pointer — indispensable for modifying Linked List heads</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">double_pointer.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+void changeTarget(int **pp, int *newTarget)
+{
+    *pp = newTarget;  // Modifies what p in main() points to!
+}
+
+int main()
+{
+    int val1 = 10, val2 = 99;
+    int *p = &val1;
+    int **pp = &p;  // pp holds address of p
+
+    printf("Before: *p = %d
+", *p);
+
+    changeTarget(&p, &val2);
+
+    printf("After:  *p = %d (now points to val2!)
+", *p);
+
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Before: *p = 10
+After:  *p = 99 (now points to val2!)</div>
+      </div>
+    </div>
+    <div>
+      <div class="ptr-visual mb-2">
+        <div class="ptr-box" style="border-color:var(--accent-violet); color:var(--accent-violet); background:rgba(139,92,246,0.1);">pp (&p)</div>
+        <span class="ptr-arrow">──▶</span>
+        <div class="ptr-box pointer">p (&val1)</div>
+        <span class="ptr-arrow">──▶</span>
+        <div class="ptr-box var">val1 (10)</div>
+      </div>
+      <div class="concept-box">
+        <div class="concept-title">🎯 Why Double Pointers in Data Structures?</div>
+        <div class="concept-text">
+          When adding a new node at the <strong>Head</strong> of a Linked List, the function must update the <span class="ic">head</span> pointer itself in <span class="ic">main()</span>.<br><br>
+          To modify a <span class="ic">Node*</span> in the caller, you must pass its address: <span class="ic">Node**</span>!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Void & Function Pointers -->
+<div class="slide" data-title="Void & Function Pointers">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 6 · Pointers</span>
+    <h2 class="section-title">Generic (void*) & Function Pointers</h2>
+    <p class="section-subtitle">How C implements generic algorithms, callbacks, and polymorphic behavior</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">qsort_callback.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Callback comparator for qsort
+int compareAsc(const void *a, const void *b)
+{
+    int x = *(const int*)a;
+    int y = *(const int*)b;
+    return (x - y);
+}
+
+int main()
+{
+    int arr[] = {42, 13, 89, 7, 55};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    // qsort takes a void* array & function pointer!
+    qsort(arr, n, sizeof(int), compareAsc);
+
+    printf("Sorted with qsort: ");
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("
+");
+
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Sorted with qsort: 7 13 42 55 89</div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb-2">
+        <div class="card-title">🧩 void* (Generic Pointer)</div>
+        <div class="card-text">
+          Can hold the address of <strong>any data type</strong>. It is the foundation of C's dynamic memory allocation (<span class="ic">malloc</span>) and generic data structures.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ Function Pointer Syntax</div>
+        <div class="card-text font-mono text-sm">
+          <span style="color:var(--accent-indigo);">int (*cmp)(const void*, const void*);</span><br>
+          Variables that store the address of executable machine instructions in memory!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Pointer Safety & Pitfalls -->
+<div class="slide" data-title="Pointer Safety & Pitfalls">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 6 · Pointers</span>
+    <h2 class="section-title">The 4 Deadly Pointer Pitfalls</h2>
+    <p class="section-subtitle">Avoid these to prevent Segmentation Faults and memory corruption</p>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="card" style="border-left: 3px solid var(--accent-rose);">
+      <div class="card-title" style="color:var(--accent-rose);">1. Wild Pointer (Uninitialized)</div>
+      <div class="code-block"><div class="code-body"><pre>int *p;  // Contains garbage address!
+*p = 100; // 💥 CRASH: corrupts random RAM!</pre></div></div>
+      <div class="callout tip"><strong>Fix:</strong> Always initialize: <span class="ic">int *p = NULL;</span></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-amber);">
+      <div class="card-title" style="color:var(--accent-amber);">2. NULL Pointer Dereference</div>
+      <div class="code-block"><div class="code-body"><pre>int *p = NULL;
+printf("%d", *p); // 💥 Segmentation Fault!</pre></div></div>
+      <div class="callout tip"><strong>Fix:</strong> Always guard: <span class="ic">if (p != NULL) ...</span></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-orange);">
+      <div class="card-title" style="color:var(--accent-orange);">3. Dangling Pointer</div>
+      <div class="code-block"><div class="code-body"><pre>int *p = malloc(sizeof(int));
+free(p);
+*p = 50; // 💥 Points to freed memory!</pre></div></div>
+      <div class="callout tip"><strong>Fix:</strong> Reset to NULL immediately: <span class="ic">free(p); p = NULL;</span></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-violet);">
+      <div class="card-title" style="color:var(--accent-violet);">4. Memory Leak</div>
+      <div class="code-block"><div class="code-body"><pre>void create() {
+    int *p = malloc(1024);
+    // Function exits without free(p)!
+}</pre></div></div>
+      <div class="callout tip"><strong>Fix:</strong> Pair every <span class="ic">malloc()</span> with a <span class="ic">free()</span>!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 7 — ARRAYS & MULTI-DIMENSIONAL MEMORY       -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 7: Arrays & Memory">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(34,211,238,0.15); color: var(--accent-cyan);">📊</div>
+  <div class="part-number">Part 7</div>
+  <div class="part-title">Arrays & Contiguous Memory</div>
+  <div class="part-desc">Sequences of elements in contiguous memory blocks — 1D and 2D row-major layout</div>
+</div>
+</div>
+
+<!-- S: Why Arrays -->
+<div class="slide" data-title="Why Arrays?">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 7 · Arrays</span>
+    <h2 class="section-title">What is an Array?</h2>
+    <p class="section-subtitle">A collection of items of the same data type stored in contiguous memory</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">array_intro.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int marks[5] = {85, 92, 78, 64, 99};
+
+    // Print array elements and addresses
+    for (int i = 0; i < 5; i++)
     {
-        if (str[i] != str[len - 1 - i])
-        {
-            isPalin = 0;
-            break;
-        }
+        printf("marks[%d] = %d  at  %p
+", i, marks[i], (void*)&marks[i]);
     }
 
-    if (isPalin)
-        printf("\"%s\" is a Palindrome!\n", str);
-    else
-        printf("\"%s\" is NOT a Palindrome.\n", str);
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output (Notice +4 bytes consecutive!)</div>
+        <div class="output-body">marks[0] = 85  at  0x1000
+marks[1] = 92  at  0x1004
+marks[2] = 78  at  0x1008
+marks[3] = 64  at  0x100c
+marks[4] = 99  at  0x1010</div>
+      </div>
+    </div>
+    <div>
+      <div class="analogy-box">
+        <div class="analogy-label">🏢 Egg Carton Analogy</div>
+        <div class="analogy-content">
+          An array is like an egg carton with numbered slots. All eggs are identical in type, and you can reach <strong>any slot instantly in O(1) time</strong>!
+        </div>
+      </div>
+      <div class="callout info mt-2">
+        <strong>⚡ Constant Time Access O(1):</strong><br>
+        Address of <span class="ic">arr[i] = Base + i * sizeof(type)</span>.<br>
+        No need to search through prior elements — CPU calculates target address instantly!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Array Operations -->
+<div class="slide" data-title="Array: Sum, Avg, Min, Max">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 7 · Arrays</span>
+    <h2 class="section-title">Core Operations: Sum, Avg, Min, Max</h2>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">array_stats.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int arr[] = {23, 89, 12, 67, 45, 99, 34};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    int sum = 0, min = arr[0], max = arr[0];
+
+    for (int i = 0; i < n; i++)
+    {
+        sum += arr[i];
+        if (arr[i] < min) min = arr[i];
+        if (arr[i] > max) max = arr[i];
+    }
+
+    float avg = (float)sum / n;
+
+    printf("Sum:     %d
+", sum);
+    printf("Average: %.2f
+", avg);
+    printf("Min:     %d
+", min);
+    printf("Max:     %d
+", max);
 
     return 0;
 }</pre></div>
@@ -2996,17 +3130,16 @@ int main()
     <div>
       <div class="output-block mb-2">
         <div class="output-header">▶ Output</div>
-        <div class="output-body">Enter a string: madam
-"madam" is a Palindrome!</div>
+        <div class="output-body">Sum:     369
+Average: 52.71
+Min:     12
+Max:     99</div>
       </div>
-      <div class="what-happened">
-        <div class="wh-label">🔍 How It Works</div>
-        <div class="wh-content">
-          Compare first with last, second with second-last, etc.:<br>
-          m == m ✓<br>
-          a == a ✓<br>
-          d (middle) — skip<br>
-          All matched → Palindrome!
+      <div class="concept-box">
+        <div class="concept-title">📏 Dynamic Size Pattern</div>
+        <div class="concept-text font-mono text-sm">
+          <strong>int n = sizeof(arr) / sizeof(arr[0]);</strong><br><br>
+          Calculates number of elements dynamically without hardcoding!
         </div>
       </div>
     </div>
@@ -3014,64 +3147,320 @@ int main()
 </div>
 </div>
 
+<!-- S: 2D Arrays & Row Major Layout -->
+<div class="slide" data-title="2D Arrays & Memory Layout">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 7 · Arrays</span>
+    <h2 class="section-title">2D Arrays & Row-Major Memory Layout</h2>
+    <p class="section-subtitle">RAM is strictly 1D flat. How C maps 2D grid [rows][cols] into a 1D line!</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">matrix_memory.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    // 2 Rows, 3 Columns
+    int mat[2][3] = {
+        {10, 20, 30},
+        {40, 50, 60}
+    };
+
+    printf("2D Grid Representation:
+");
+    for (int r = 0; r < 2; r++) {
+        for (int c = 0; c < 3; c++) {
+            printf("%d ", mat[r][c]);
+        }
+        printf("
+");
+    }
+
+    printf("
+Flat Memory Layout:
+");
+    int *flat = (int*)mat;
+    for (int i = 0; i < 6; i++) {
+        printf("flat[%d] = %d at %p
+", i, flat[i], (void*)&flat[i]);
+    }
+
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📐 Row-Major Address Formula</div>
+        <div class="concept-text font-mono text-sm">
+          <strong>&mat[r][c] = Base + (r * COLS + c) * sizeof(Type)</strong><br><br>
+          Row 0 elements are stored first, immediately followed by Row 1 elements!
+        </div>
+      </div>
+      <div class="callout warning">
+        <strong>⚠️ Matrix Rule in Functions:</strong><br>
+        You MUST specify column count in function headers:<br>
+        <span class="ic">void printMatrix(int mat[][3], int rows);</span><br>
+        Without column count, compiler cannot compute index offsets!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
 <!-- ████████████████████████████████████████████████ -->
-<!-- PART 9 — RECURSION                              -->
+<!-- PART 8 — STRINGS & LOW-LEVEL MANIPULATION       -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 8: Strings in C">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(52,211,153,0.15); color: var(--accent-emerald);">🔤</div>
+  <div class="part-number">Part 8</div>
+  <div class="part-title">Strings in C</div>
+  <div class="part-desc">Null-terminated character arrays, memory layout, and custom pointer implementations</div>
+</div>
+</div>
+
+<!-- S: Strings in C -->
+<div class="slide" data-title="Strings in C">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 8 · Strings</span>
+    <h2 class="section-title">Character Arrays & The Null Terminator '\0'</h2>
+    <p class="section-subtitle">There is no native string type in C — a string is a char array ending with '\0' (ASCII 0)</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">string_memory.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    char str[] = "HELLO";
+
+    printf("String: %s
+", str);
+    printf("sizeof(str): %lu bytes (includes '\0'!)
+
+", sizeof(str));
+
+    for (int i = 0; i < 6; i++) {
+        if (str[i] == '\0')
+            printf("str[%d] = '\0' (ASCII: %d)
+", i, str[i]);
+        else
+            printf("str[%d] = '%c'  (ASCII: %d)
+", i, str[i], str[i]);
+    }
+
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">String: HELLO
+sizeof(str): 6 bytes (includes '\0'!)
+
+str[0] = 'H'  (ASCII: 72)
+str[1] = 'E'  (ASCII: 69)
+str[2] = 'L'  (ASCII: 76)
+str[3] = 'L'  (ASCII: 76)
+str[4] = 'O'  (ASCII: 79)
+str[5] = '\0' (ASCII: 0)</div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened mb-2">
+        <div class="wh-label">🛑 Why '\0' Matters</div>
+        <div class="wh-content">
+          Functions like <span class="ic">printf("%s")</span> and <span class="ic">strlen()</span> keep reading bytes one by one until they hit <span class="ic">'\0'</span>.<br><br>
+          If you forget <span class="ic">'\0'</span>, the computer keeps reading garbage RAM until it crashes!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Custom String Functions using Pointers -->
+<div class="slide" data-title="Custom String Functions">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 8 · Strings</span>
+    <h2 class="section-title">Writing String Library from Scratch</h2>
+    <p class="section-subtitle">How strlen(), strcpy(), and strcmp() work under the hood using pointers</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">my_string_lib.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+// Custom strlen using pointer arithmetic
+int my_strlen(const char *s) {
+    const char *p = s;
+    while (*p != '\0') p++;
+    return (p - s);
+}
+
+// Custom strcpy
+void my_strcpy(char *dest, const char *src) {
+    while ((*dest++ = *src++) != '\0');
+}
+
+int main()
+{
+    char src[] = "DataStructures";
+    char dest[30];
+
+    my_strcpy(dest, src);
+
+    printf("Length: %d
+", my_strlen(src));
+    printf("Copied: %s
+", dest);
+
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Length: 14
+Copied: DataStructures</div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">✨ The Legendary C Idiom</div>
+        <div class="concept-text font-mono text-sm">
+          <strong>while ((*dest++ = *src++) != '\0');</strong><br><br>
+          In one line: copies char, increments both pointers, and checks if null terminator was copied.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: String Palindrome -->
+<div class="slide" data-title="Program: String Palindrome">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 8 · Strings</span>
+    <h2 class="section-title">Program: Check String Palindrome</h2>
+    <p class="section-subtitle">Two-pointer technique for symmetric sequences</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">palindrome.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int isPalindrome(char str[])
+{
+    int left = 0;
+    int right = strlen(str) - 1;
+
+    while (left < right)
+    {
+        if (str[left] != str[right])
+            return 0; // Mismatch
+        left++;
+        right--;
+    }
+    return 1; // Palindrome
+}
+
+int main()
+{
+    char word[] = "radar";
+
+    if (isPalindrome(word))
+        printf(""%s" is a Palindrome! ✓
+", word);
+    else
+        printf(""%s" is NOT a Palindrome! ✗
+", word);
+
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">"radar" is a Palindrome! ✓</div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened">
+        <div class="wh-label">🔍 Two-Pointer Trace</div>
+        <div class="wh-content font-mono text-sm" style="line-height:2;">
+          [<strong>r</strong> a d a <strong>r</strong>] left=0 ('r') == right=4 ('r') ✓<br>
+          [r <strong>a</strong> d <strong>a</strong> r] left=1 ('a') == right=3 ('a') ✓<br>
+          [r a <strong>d</strong> a r] left=2 == right=2 (Stop) ✓
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 9 — RECURSION MASTERCLASS                  -->
 <!-- ████████████████████████████████████████████████ -->
 
 <div class="slide" data-title="▸ PART 9: Recursion">
 <div class="slide-inner part-divider">
   <div class="part-icon" style="background: rgba(139,92,246,0.15); color: var(--accent-violet);">🔁</div>
   <div class="part-number">Part 9</div>
-  <div class="part-title">Recursion</div>
-  <div class="part-desc">A function calling itself — elegant solutions for self-similar problems</div>
+  <div class="part-title">Recursion Masterclass</div>
+  <div class="part-desc">Self-calling functions, call stack frames, tree recursion, and Divide & Conquer</div>
 </div>
 </div>
 
-<!-- S65: Recursion Concept -->
+<!-- S: What is Recursion -->
 <div class="slide" data-title="What is Recursion?">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 9 · Slide 65</span>
+    <span class="section-number">Part 9 · Recursion</span>
     <h2 class="section-title">What is Recursion?</h2>
+    <p class="section-subtitle">Solving a problem by reducing it to a smaller instance of the same problem</p>
   </div>
   <div class="big-question">A function that <em>calls itself</em></div>
   <div class="two-col mt-2">
     <div>
       <div class="concept-box mb-2">
-        <div class="concept-title">🔑 Two Rules — ALWAYS</div>
+        <div class="concept-title">🔑 The Two Sacred Rules</div>
         <div class="concept-text">
-          <strong>1. Base Case</strong> — When to STOP (prevents infinite recursion)<br><br>
-          <strong>2. Recursive Case</strong> — The function calls itself with a <em>smaller</em> problem
+          <strong>1. Base Case:</strong> The condition where the function stops and returns without calling itself (prevents infinite recursion / stack overflow).<br><br>
+          <strong>2. Recursive Step:</strong> The function calls itself with a strictly <em>smaller</em> subproblem that moves toward the base case.
         </div>
       </div>
       <div class="code-block">
-        <div class="code-body"><pre>void countdown(int n)
+        <div class="code-body"><pre>long factorial(int n)
 {
-    if (n == 0)        // Base case
-        return;
-
-    printf("%d\n", n);
-    countdown(n - 1);  // Recursive call
+    if (n <= 1)        // Base case
+        return 1;
+    return n * factorial(n - 1); // Recursive step
 }</pre></div>
       </div>
     </div>
     <div>
-      <div class="card mb-2">
-        <div class="card-title">📊 Factorial: n! = n × (n-1)!</div>
-        <div class="code-block"><div class="code-body"><pre>long factorial(int n)
-{
-    if (n <= 1)
-        return 1;
-    return n * factorial(n - 1);
-}</pre></div></div>
-      </div>
       <div class="card">
         <div class="card-title">📊 Call Stack for factorial(4)</div>
         <div class="card-text font-mono text-sm" style="line-height: 1.8;">
           factorial(4) → 4 × factorial(3)<br>
           &nbsp;&nbsp;factorial(3) → 3 × factorial(2)<br>
           &nbsp;&nbsp;&nbsp;&nbsp;factorial(2) → 2 × factorial(1)<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factorial(1) → <strong style="color: var(--accent-emerald);">1</strong><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factorial(1) → <strong style="color: var(--accent-emerald);">1 (Base Hit!)</strong><br>
           &nbsp;&nbsp;&nbsp;&nbsp;= 2 × 1 = <strong>2</strong><br>
           &nbsp;&nbsp;= 3 × 2 = <strong>6</strong><br>
           = 4 × 6 = <strong style="color: var(--accent-amber);">24</strong>
@@ -3082,25 +3471,183 @@ int main()
 </div>
 </div>
 
+<!-- S: Recursion Call Stack Visualization -->
+<div class="slide" data-title="Recursion Call Stack Frame">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 9 · Recursion</span>
+    <h2 class="section-title">The Call Stack: Push & Unwind</h2>
+    <p class="section-subtitle">How memory grows and shrinks during recursive execution</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📈 Winding Phase (Pushed onto Stack)</div>
+        <div class="concept-text">Each recursive call creates a new <strong>Activation Record (Stack Frame)</strong> containing local variables, parameters, and return address.</div>
+      </div>
+      <div class="stack-box">
+        <div class="stack-item top">factorial(1) [n=1]</div>
+        <div class="stack-item">factorial(2) [n=2]</div>
+        <div class="stack-item">factorial(3) [n=3]</div>
+        <div class="stack-item">factorial(4) [n=4]</div>
+        <div class="stack-item">main()</div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📉 Unwinding Phase (Popped from Stack)</div>
+        <div class="concept-text">Once the base case is reached, frames resolve their multiplication and are popped in <strong>Last-In, First-Out (LIFO)</strong> order!</div>
+      </div>
+      <div class="callout danger mt-2">
+        <strong>💥 Stack Overflow:</strong> If the base case is missing or unreachable, recursive frames will fill the entire stack memory, causing a fatal crash!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Tower of Hanoi -->
+<div class="slide" data-title="Tower of Hanoi">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 9 · Recursion</span>
+    <h2 class="section-title">Classic Problem: Tower of Hanoi</h2>
+    <p class="section-subtitle">Move N disks from Source to Destination using Auxiliary peg</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">tower_of_hanoi.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+void hanoi(int n, char from, char to, char aux)
+{
+    if (n == 1) {
+        printf("Move disk 1 from %c to %c
+", from, to);
+        return;
+    }
+    hanoi(n - 1, from, aux, to);
+    printf("Move disk %d from %c to %c
+", n, from, to);
+    hanoi(n - 1, aux, to, from);
+}
+
+int main()
+{
+    int n = 3;
+    printf("Moves for %d disks:
+", n);
+    hanoi(n, 'A', 'C', 'B');
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output (2^3 - 1 = 7 moves)</div>
+        <div class="output-body">Move disk 1 from A to C
+Move disk 2 from A to B
+Move disk 1 from C to B
+Move disk 3 from A to C
+Move disk 1 from B to A
+Move disk 2 from B to C
+Move disk 1 from A to C</div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🧩 Recursive Strategy</div>
+        <div class="concept-text font-mono text-sm">
+          1. Move n-1 disks from Source → Aux<br>
+          2. Move disk n from Source → Dest<br>
+          3. Move n-1 disks from Aux → Dest
+        </div>
+      </div>
+      <div class="callout info">
+        <strong>Time Complexity:</strong> <span class="badge rose">O(2ⁿ)</span><br>
+        For 64 disks, it would take <strong>584 billion years</strong> to complete!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Fibonacci Tree Recursion -->
+<div class="slide" data-title="Fibonacci Tree Recursion">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 9 · Recursion</span>
+    <h2 class="section-title">Tree Recursion: The Fibonacci Trap</h2>
+    <p class="section-subtitle">Why naive multiple recursion branches explode exponentially</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">fib_tree.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+// Two recursive calls per function!
+int fib(int n)
+{
+    if (n <= 1)
+        return n;
+    return fib(n - 1) + fib(n - 2);
+}
+
+int main()
+{
+    printf("Fib(6) = %d
+", fib(6));
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Fib(6) = 8</div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🌳 Execution Tree for fib(4)</div>
+        <div class="card-text font-mono text-sm" style="line-height:1.7;">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[fib(4)]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br>
+          &nbsp;&nbsp;&nbsp;[fib(3)]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[fib(2)]<br>
+          &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br>
+          [fib(2)] [fib(1)] [fib(1)] [fib(0)]<br>
+          Notice: <strong style="color:var(--accent-rose);">fib(2) is calculated twice!</strong>
+        </div>
+      </div>
+      <div class="callout tip">
+        <strong>💡 Precursor to Dynamic Programming:</strong><br>
+        Storing answers to subproblems so they are never computed twice turns this <span class="badge rose">O(2ⁿ)</span> tree into an <span class="badge emerald">O(n)</span> linear pass!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
 <!-- ████████████████████████████████████████████████ -->
-<!-- PART 10 — STRUCTURES & UNIONS                   -->
+<!-- PART 10 — STRUCTURES, PADDING & SELF-REFERENTIAL -->
 <!-- ████████████████████████████████████████████████ -->
 
 <div class="slide" data-title="▸ PART 10: Structures & Unions">
 <div class="slide-inner part-divider">
   <div class="part-icon" style="background: rgba(251,191,36,0.15); color: var(--accent-amber);">🏗️</div>
   <div class="part-number">Part 10</div>
-  <div class="part-title">Structures & Unions</div>
-  <div class="part-desc">Modeling real-world data — grouping related variables together</div>
+  <div class="part-title">Structures, Padding & Unions</div>
+  <div class="part-desc">User-defined types, memory alignment padding, and self-referential structures</div>
 </div>
 </div>
 
-<!-- S67: Structures -->
-<div class="slide" data-title="Structures">
+<!-- S: Structures Concept -->
+<div class="slide" data-title="Structures & Typedef">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 10 · Slide 67</span>
-    <h2 class="section-title">Structures — Custom Data Types</h2>
+    <span class="section-number">Part 10 · Structures</span>
+    <h2 class="section-title">Structures & typedef: Custom Types</h2>
+    <p class="section-subtitle">Bundling multiple variables of different types into a single composite entity</p>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -3109,53 +3656,169 @@ int main()
         <div class="code-body"><pre>#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 
-struct Student
-{
-    int rollNo;
-    char name[50];
-    float marks;
-    char grade;
-};
+typedef struct {
+    int id;
+    char name[40];
+    float gpa;
+} Student;
 
 int main()
 {
-    struct Student s1;
+    Student s1 = {101, "Alice Chen", 3.95};
 
-    s1.rollNo = 101;
-    strcpy(s1.name, "Alice Johnson");
-    s1.marks = 87.5;
-    s1.grade = 'A';
-
-    printf("Roll: %d\n", s1.rollNo);
-    printf("Name: %s\n", s1.name);
-    printf("Marks: %.1f\n", s1.marks);
-    printf("Grade: %c\n", s1.grade);
+    printf("Student ID:   %d
+", s1.id);
+    printf("Student Name: %s
+", s1.name);
+    printf("Student GPA:  %.2f
+", s1.gpa);
 
     return 0;
 }</pre></div>
       </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Student ID:   101
+Student Name: Alice Chen
+Student GPA:  3.95</div>
+      </div>
     </div>
     <div>
-      <div class="output-block mb-2">
-        <div class="output-header">▶ Output</div>
-        <div class="output-body">Roll: 101
-Name: Alice Johnson
-Marks: 87.5
-Grade: A</div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🏷️ typedef Power</div>
+        <div class="concept-text">
+          <span class="ic">typedef</span> gives a structure a clean type alias, so you can declare variables as <span class="ic">Student s1;</span> instead of the verbose <span class="ic">struct Student s1;</span>.
+        </div>
       </div>
-      <div class="analogy-box">
-        <div class="analogy-label">🌍 Analogy</div>
-        <div class="analogy-content">A structure is like an <strong>ID card</strong> — it holds different types of information (name, photo, number) about one entity.</div>
+      <div class="card">
+        <div class="card-title">Operators: Dot (.) vs Arrow (->)</div>
+        <div class="card-text font-mono text-sm">
+          • <span class="ic">s1.name</span> → when accessing via struct variable.<br>
+          • <span class="ic">sPtr->name</span> ≡ <span class="ic">(*sPtr).name</span> → when accessing via pointer!
+        </div>
       </div>
-      <ul class="feature-list mt-2">
-        <li><span class="bullet">.</span><strong>Dot operator</strong> <span class="ic">s1.name</span> — access members</li>
-        <li><span class="bullet">→</span><strong>Arrow operator</strong> <span class="ic">ptr->name</span> — with pointers</li>
-        <li><span class="bullet">[]</span><strong>Array of structs</strong> <span class="ic">struct Student class[50];</span></li>
-      </ul>
     </div>
   </div>
 </div>
 </div>
+
+<!-- S: Memory Alignment & Struct Padding -->
+<div class="slide" data-title="Struct Memory Alignment">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 10 · Structures</span>
+    <h2 class="section-title">Structure Padding & Memory Alignment</h2>
+    <p class="section-subtitle">Why sizeof(struct) is often larger than the sum of its member sizes!</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">struct_padding.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+struct BadOrder {
+    char a;    // 1 byte
+    int b;     // 4 bytes
+    char c;    // 1 byte
+};
+
+struct GoodOrder {
+    int b;     // 4 bytes
+    char a;    // 1 byte
+    char c;    // 1 byte
+};
+
+int main()
+{
+    printf("sizeof(struct BadOrder):  %lu bytes
+", sizeof(struct BadOrder));
+    printf("sizeof(struct GoodOrder): %lu bytes
+", sizeof(struct GoodOrder));
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output (Surprise!)</div>
+        <div class="output-body">sizeof(struct BadOrder):  12 bytes
+sizeof(struct GoodOrder): 8 bytes</div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened">
+        <div class="wh-label">🔍 Why CPU Pads Memory</div>
+        <div class="wh-content">
+          32-bit and 64-bit CPUs fetch words aligned to <strong>4 or 8-byte boundaries</strong> for performance.<br><br>
+          In <span class="ic">BadOrder</span>: 1 byte (char) + <strong>3 padding bytes</strong> + 4 bytes (int) + 1 byte (char) + <strong>3 padding bytes</strong> = <strong>12 bytes!</strong><br><br>
+          <em>Pro-Tip:</em> Order struct members from largest to smallest to minimize memory waste!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Self-Referential Structures -->
+<div class="slide" data-title="Self-Referential Structures">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 10 · Structures</span>
+    <h2 class="section-title">Self-Referential Structures: The Genesis of DS</h2>
+    <p class="section-subtitle">A structure containing a pointer to a structure of its own type</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">self_referential_node.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+// The building block of Linked Lists, Stacks, Trees!
+struct Node {
+    int data;
+    struct Node *next;  // Pointer to another Node!
+};
+
+int main()
+{
+    struct Node n1, n2;
+
+    n1.data = 10;
+    n1.next = &n2;  // n1 points to n2!
+
+    n2.data = 20;
+    n2.next = NULL; // End of chain!
+
+    printf("n1.data: %d
+", n1.data);
+    printf("Accessing n2 via n1: %d
+", n1.next->data);
+
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">n1.data: 10
+Accessing n2 via n1: 20</div>
+      </div>
+    </div>
+    <div>
+      <div class="node-chain mb-2">
+        <div class="ll-node"><div class="ll-data">10</div><div class="ll-next">&n2</div></div>
+        <div class="ll-arrow">──▶</div>
+        <div class="ll-node"><div class="ll-data">20</div><div class="ll-next">NULL</div></div>
+      </div>
+      <div class="concept-box">
+        <div class="concept-title">🧬 The Genetic Code of Data Structures</div>
+        <div class="concept-text">
+          This single concept allows us to link independent memory boxes into <strong>Linked Lists</strong>, <strong>Stacks</strong>, <strong>Queues</strong>, <strong>Trees</strong>, and <strong>Graphs</strong>!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
 
 <!-- ████████████████████████████████████████████████ -->
 <!-- PART 11 — FILES                                 -->
@@ -3166,16 +3829,16 @@ Grade: A</div>
   <div class="part-icon" style="background: rgba(251,146,60,0.15); color: var(--accent-orange);">📁</div>
   <div class="part-number">Part 11</div>
   <div class="part-title">File I/O</div>
-  <div class="part-desc">Permanent data storage — reading from and writing to files</div>
+  <div class="part-desc">Permanent data storage — reading from and writing to disk files</div>
 </div>
 </div>
 
-<!-- S69: File I/O -->
+<!-- S: File Read & Write -->
 <div class="slide" data-title="File Read & Write">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 11 · Slide 69</span>
-    <h2 class="section-title">File Read & Write</h2>
+    <span class="section-number">Part 11 · Files</span>
+    <h2 class="section-title">File Read & Write Operations</h2>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -3189,26 +3852,25 @@ int main()
 
     // Write to file
     fp = fopen("students.txt", "w");
-    if (fp == NULL)
-    {
-        printf("Error opening file!\n");
-        return 1;
-    }
-    fprintf(fp, "Alice 85\n");
-    fprintf(fp, "Bob 92\n");
-    fprintf(fp, "Carol 78\n");
+    if (fp == NULL) { printf("Error opening file!
+"); return 1; }
+    fprintf(fp, "Alice 85
+Bob 92
+Carol 78
+");
     fclose(fp);
-    printf("Data written!\n");
+    printf("Data written!
+");
 
     // Read from file
-    char name[50];
-    int marks;
-
+    char name[50]; int marks;
     fp = fopen("students.txt", "r");
-    printf("\nFile contents:\n");
-    while (fscanf(fp, "%s %d", name, &marks) == 2)
-    {
-        printf("%-10s %d\n", name, marks);
+    printf("
+File contents:
+");
+    while (fscanf(fp, "%s %d", name, &marks) == 2) {
+        printf("%-10s %d
+", name, marks);
     }
     fclose(fp);
 
@@ -3234,11 +3896,13 @@ Carol      78</div>
           <tr><td><code>"a"</code></td><td>Append to end</td></tr>
         </tbody>
       </table>
-      <div class="callout danger mt-1"><strong>🚫 Always close files:</strong> <span class="ic">fclose(fp);</span> — like returning a library book. Open files waste system resources.</div>
+      <div class="callout danger mt-1"><strong>🚫 Always close files:</strong> <span class="ic">fclose(fp);</span> — prevents file corruption & leaks.</div>
     </div>
   </div>
 </div>
 </div>
+
+
 
 <!-- ████████████████████████████████████████████████ -->
 <!-- PART 12 — SEARCHING                             -->
@@ -3248,18 +3912,18 @@ Carol      78</div>
 <div class="slide-inner part-divider">
   <div class="part-icon" style="background: rgba(99,102,241,0.15); color: var(--accent-indigo);">🔍</div>
   <div class="part-number">Part 12</div>
-  <div class="part-title">Searching</div>
-  <div class="part-desc">Finding information efficiently — Linear and Binary Search</div>
+  <div class="part-title">Searching Algorithms</div>
+  <div class="part-desc">Finding information efficiently — Linear Search and Binary Search</div>
 </div>
 </div>
 
-<!-- S71: Linear Search -->
+<!-- S: Linear Search -->
 <div class="slide" data-title="Linear Search">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 12 · Slide 71</span>
+    <span class="section-number">Part 12 · Searching</span>
     <h2 class="section-title">Linear Search</h2>
-    <p class="section-subtitle">Check each element one by one until found</p>
+    <p class="section-subtitle">Check each element one by one until found (Works on unsorted data)</p>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -3280,28 +3944,23 @@ int linearSearch(int arr[], int n, int key)
 int main()
 {
     int arr[] = {10, 25, 40, 56, 73, 88};
-    int n = 6, key;
-
-    printf("Enter number to find: ");
-    scanf("%d", &key);
+    int n = 6, key = 56;
 
     int pos = linearSearch(arr, n, key);
-
-    if (pos != -1)
-        printf("Found at index %d\n", pos);
-    else
-        printf("Not found!\n");
+    if (pos != -1) printf("Found at index %d
+", pos);
+    else printf("Not found!
+");
 
     return 0;
 }</pre></div>
       </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Found at index 3</div>
+      </div>
     </div>
     <div>
-      <div class="output-block mb-2">
-        <div class="output-header">▶ Output</div>
-        <div class="output-body">Enter number to find: 56
-Found at index 3</div>
-      </div>
       <div class="what-happened">
         <div class="wh-label">🔍 Visual Trace</div>
         <div class="wh-content font-mono text-sm" style="line-height: 2;">
@@ -3310,19 +3969,19 @@ Found at index 3</div>
           &nbsp;✗ &nbsp;&nbsp;&nbsp;✗ &nbsp;&nbsp;&nbsp;✗ &nbsp;&nbsp;<strong style="color: var(--accent-emerald);">✓ FOUND!</strong>
         </div>
       </div>
-      <div class="callout info mt-1"><strong>📌</strong> Works on <strong>unsorted</strong> arrays. Checks every element → worst case: N comparisons.</div>
+      <div class="callout info mt-2"><strong>Complexity:</strong> Worst Case: <span class="badge rose">O(n)</span>, Best Case: <span class="badge emerald">O(1)</span></div>
     </div>
   </div>
 </div>
 </div>
 
-<!-- S72: Binary Search -->
+<!-- S: Binary Search -->
 <div class="slide" data-title="Binary Search">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 12 · Slide 72</span>
-    <h2 class="section-title">Binary Search</h2>
-    <p class="section-subtitle">Divide and conquer — requires a SORTED array</p>
+    <span class="section-number">Part 12 · Searching</span>
+    <h2 class="section-title">Binary Search: Divide & Conquer</h2>
+    <p class="section-subtitle">Halves search space each step — REQUIRES A SORTED ARRAY!</p>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -3336,14 +3995,14 @@ int binarySearch(int arr[], int n, int key)
 
     while (low <= high)
     {
-        int mid = (low + high) / 2;
+        int mid = low + (high - low) / 2;
 
         if (arr[mid] == key)
             return mid;
         else if (key < arr[mid])
-            high = mid - 1;
+            high = mid - 1; // Discard right half
         else
-            low = mid + 1;
+            low = mid + 1;  // Discard left half
     }
     return -1;
 }
@@ -3352,63 +4011,53 @@ int main()
 {
     int arr[] = {10, 20, 30, 40, 50, 60, 70, 80};
     int n = 8;
-
-    int pos = binarySearch(arr, n, 50);
-    if (pos != -1)
-        printf("Found at index %d\n", pos);
-    else
-        printf("Not found\n");
-
+    printf("Found 50 at index %d
+", binarySearch(arr, n, 50));
     return 0;
 }</pre></div>
       </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Found 50 at index 4</div>
+      </div>
     </div>
     <div>
-      <div class="output-block mb-1">
-        <div class="output-header">▶ Output</div>
-        <div class="output-body">Found at index 4</div>
-      </div>
-      <div class="what-happened">
-        <div class="wh-label">🔍 Trace: Finding 50</div>
-        <div class="wh-content font-mono text-sm" style="line-height: 2;">
-          [10 20 30 <strong style="color:var(--accent-amber);">40</strong> 50 60 70 80] mid=40, 50>40 → go right<br>
-          [<strong style="color:var(--accent-amber);">60</strong> 70 80] &nbsp;&nbsp;mid=60, 50&lt;60 → go left<br>
-          [<strong style="color:var(--accent-emerald);">50</strong>] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mid=50 ✓ FOUND!
-        </div>
-      </div>
-      <table class="styled-table mt-1">
-        <thead><tr><th></th><th>Linear</th><th>Binary</th></tr></thead>
+      <table class="styled-table mb-2">
+        <thead><tr><th>Array Size N</th><th>Linear Search</th><th>Binary Search</th></tr></thead>
         <tbody>
-          <tr><td>Sorted needed?</td><td>No</td><td><strong>Yes</strong></td></tr>
-          <tr><td>Method</td><td>One-by-one</td><td>Halving</td></tr>
-          <tr><td>1000 elements</td><td>~1000 checks</td><td><strong>~10 checks!</strong></td></tr>
+          <tr><td>1,000</td><td>1,000 checks</td><td><strong>10 checks</strong></td></tr>
+          <tr><td>1,000,000</td><td>1,000,000 checks</td><td><strong>20 checks</strong></td></tr>
+          <tr><td>1,000,000,000</td><td>1 Billion checks</td><td><strong>30 checks!</strong></td></tr>
         </tbody>
       </table>
+      <div class="callout tip"><strong>Complexity:</strong> <span class="badge emerald">O(log n)</span> Logarithmic Time!</div>
     </div>
   </div>
 </div>
 </div>
 
+
+
 <!-- ████████████████████████████████████████████████ -->
-<!-- PART 13 — SORTING                               -->
+<!-- PART 13 — SORTING FOUNDATIONS                   -->
 <!-- ████████████████████████████████████████████████ -->
 
 <div class="slide" data-title="▸ PART 13: Sorting">
 <div class="slide-inner part-divider">
   <div class="part-icon" style="background: rgba(251,113,133,0.15); color: var(--accent-rose);">📈</div>
   <div class="part-number">Part 13</div>
-  <div class="part-title">Sorting</div>
-  <div class="part-desc">Organizing information — Bubble, Selection, and Insertion Sort</div>
+  <div class="part-title">Sorting Foundations</div>
+  <div class="part-desc">Organizing information — Bubble Sort, Selection Sort, and Insertion Sort</div>
 </div>
 </div>
 
-<!-- S74: Bubble Sort -->
+<!-- S: Bubble Sort -->
 <div class="slide" data-title="Bubble Sort">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 13 · Slide 74</span>
+    <span class="section-number">Part 13 · Sorting</span>
     <h2 class="section-title">Bubble Sort</h2>
-    <p class="section-subtitle">Repeatedly swap adjacent elements if they're in wrong order</p>
+    <p class="section-subtitle">Repeatedly swap adjacent elements if they are out of order</p>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -3418,13 +4067,9 @@ int main()
 
 void bubbleSort(int arr[], int n)
 {
-    for (int i = 0; i < n - 1; i++)
-    {
-        for (int j = 0; j < n - i - 1; j++)
-        {
-            if (arr[j] > arr[j + 1])
-            {
-                // Swap
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
@@ -3436,48 +4081,39 @@ void bubbleSort(int arr[], int n)
 int main()
 {
     int arr[] = {64, 34, 25, 12, 22, 11, 90};
-    int n = 7;
-
+    int n = sizeof(arr)/sizeof(arr[0]);
     bubbleSort(arr, n);
 
     printf("Sorted: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-    printf("\n");
-
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("
+");
     return 0;
 }</pre></div>
       </div>
-    </div>
-    <div>
-      <div class="output-block mb-1">
+      <div class="output-block">
         <div class="output-header">▶ Output</div>
         <div class="output-body">Sorted: 11 12 22 25 34 64 90</div>
       </div>
-      <div class="what-happened">
-        <div class="wh-label">🔍 Visual Trace (first pass)</div>
-        <div class="wh-content font-mono text-sm" style="line-height: 1.8;">
-          [<strong>64</strong> <strong>34</strong>] 25 12 → swap → [34 <strong>64</strong> <strong>25</strong>] 12 → swap<br>
-          34 [<strong>25</strong> <strong>64</strong>] 12 → [25 34 <strong>64</strong> <strong>12</strong>] → swap<br>
-          After pass 1: largest (64) "bubbles" to end!
-        </div>
-      </div>
-      <div class="analogy-box mt-1">
+    </div>
+    <div>
+      <div class="analogy-box">
         <div class="analogy-label">🌍 Analogy</div>
-        <div class="analogy-content">Like bubbles rising in water — the largest element "bubbles up" to the top in each pass.</div>
+        <div class="analogy-content">Like carbonation bubbles in soda — the largest element "bubbles up" to the top position in each pass.</div>
       </div>
+      <div class="callout warning mt-2"><strong>Complexity:</strong> Worst Case: <span class="badge rose">O(n²)</span>, Best Case: <span class="badge emerald">O(n)</span></div>
     </div>
   </div>
 </div>
 </div>
 
-<!-- S75: Selection Sort -->
+<!-- S: Selection Sort -->
 <div class="slide" data-title="Selection Sort">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 13 · Slide 75</span>
+    <span class="section-number">Part 13 · Sorting</span>
     <h2 class="section-title">Selection Sort</h2>
-    <p class="section-subtitle">Find the minimum element and put it in the correct position</p>
+    <p class="section-subtitle">Repeatedly select the minimum element and place it at the beginning</p>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -3487,18 +4123,12 @@ int main()
 
 void selectionSort(int arr[], int n)
 {
-    for (int i = 0; i < n - 1; i++)
-    {
+    for (int i = 0; i < n - 1; i++) {
         int minIdx = i;
-
-        // Find minimum in remaining
-        for (int j = i + 1; j < n; j++)
-        {
+        for (int j = i + 1; j < n; j++) {
             if (arr[j] < arr[minIdx])
                 minIdx = j;
         }
-
-        // Swap minimum with position i
         int temp = arr[i];
         arr[i] = arr[minIdx];
         arr[minIdx] = temp;
@@ -3509,30 +4139,28 @@ int main()
 {
     int arr[] = {29, 10, 14, 37, 13};
     int n = 5;
-
     selectionSort(arr, n);
 
     printf("Sorted: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
-
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("
+");
     return 0;
 }</pre></div>
       </div>
-    </div>
-    <div>
-      <div class="output-block mb-1">
+      <div class="output-block">
         <div class="output-header">▶ Output</div>
         <div class="output-body">Sorted: 10 13 14 29 37</div>
       </div>
+    </div>
+    <div>
       <div class="what-happened">
-        <div class="wh-label">🔍 Visual Trace</div>
+        <div class="wh-label">🔍 Trace</div>
         <div class="wh-content font-mono text-sm" style="line-height: 1.8;">
-          [29 10 14 37 13] → min=10 → swap with pos 0<br>
-          [<strong>10</strong> | 29 14 37 13] → min=13 → swap with pos 1<br>
-          [10 <strong>13</strong> | 14 37 29] → min=14 → already there<br>
-          [10 13 <strong>14</strong> | 37 29] → min=29 → swap with pos 3<br>
-          [10 13 14 <strong>29</strong> <strong>37</strong>] → Done!
+          [29 10 14 37 13] → min=10 → [<strong>10</strong> | 29 14 37 13]<br>
+          [10 | 29 14 37 13] → min=13 → [10 <strong>13</strong> | 14 37 29]<br>
+          [10 13 | 14 37 29] → min=14 → [10 13 <strong>14</strong> | 37 29]<br>
+          [10 13 14 | 37 29] → min=29 → [10 13 14 <strong>29</strong> <strong>37</strong>]
         </div>
       </div>
     </div>
@@ -3540,13 +4168,13 @@ int main()
 </div>
 </div>
 
-<!-- S76: Insertion Sort -->
+<!-- S: Insertion Sort -->
 <div class="slide" data-title="Insertion Sort">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Part 13 · Slide 76</span>
+    <span class="section-number">Part 13 · Sorting</span>
     <h2 class="section-title">Insertion Sort</h2>
-    <p class="section-subtitle">Like sorting playing cards in your hand — one at a time</p>
+    <p class="section-subtitle">Like sorting playing cards in your hand — insert each item into sorted part</p>
   </div>
   <div class="two-col code-heavy">
     <div>
@@ -3556,18 +4184,13 @@ int main()
 
 void insertionSort(int arr[], int n)
 {
-    for (int i = 1; i < n; i++)
-    {
+    for (int i = 1; i < n; i++) {
         int key = arr[i];
         int j = i - 1;
-
-        // Shift elements greater than key
-        while (j >= 0 && arr[j] > key)
-        {
+        while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
             j--;
         }
-
         arr[j + 1] = key;
     }
 }
@@ -3576,32 +4199,188 @@ int main()
 {
     int arr[] = {12, 11, 13, 5, 6};
     int n = 5;
-
     insertionSort(arr, n);
 
     printf("Sorted: ");
-    for (int i = 0; i < n; i++)
-        printf("%d ", arr[i]);
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("
+");
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Sorted: 5 6 11 12 13</div>
+      </div>
+    </div>
+    <div>
+      <div class="analogy-box">
+        <div class="analogy-label">🃏 Playing Cards Analogy</div>
+        <div class="analogy-content">Pick up cards one at a time. Each new card is inserted into its proper sorted position among held cards.</div>
+      </div>
+      <div class="callout tip mt-2"><strong>Super Fast on Nearly Sorted Data:</strong> Best case is <span class="badge emerald">O(n)</span>!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 14 — DYNAMIC MEMORY ALLOCATION (THE HEAP)  -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 14: Dynamic Memory">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(99,102,241,0.15); color: var(--accent-indigo);">💾</div>
+  <div class="part-number">Part 14</div>
+  <div class="part-title">Dynamic Memory Allocation</div>
+  <div class="part-desc">Mastering the Heap — malloc(), calloc(), realloc(), free(), and runtime vectors</div>
+</div>
+</div>
+
+<!-- S: Memory Segments -->
+<div class="slide" data-title="Memory Architecture (5 Segments)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 14 · Dynamic Memory</span>
+    <h2 class="section-title">The 5 Memory Segments of a C Program</h2>
+    <p class="section-subtitle">How operating systems partition RAM for your running process</p>
+  </div>
+  <div class="two-col">
+    <div class="memory-diagram" style="font-size: 13px;">
+      <div class="memory-row"><span class="memory-addr">High RAM</span><div class="memory-cell ptr" style="padding:10px;"><strong>STACK</strong> (Function frames, local vars) ↓</div></div>
+      <div class="memory-row"><span class="memory-addr"></span><div class="memory-cell null" style="padding:6px; border-style:dashed;">(Free Memory Gap)</div></div>
+      <div class="memory-row"><span class="memory-addr"></span><div class="memory-cell hl" style="padding:10px;"><strong>HEAP</strong> (Dynamic malloc memory) ↑</div></div>
+      <div class="memory-row"><span class="memory-addr"></span><div class="memory-cell" style="padding:8px;"><strong>BSS Segment</strong> (Uninitialized globals/static)</div></div>
+      <div class="memory-row"><span class="memory-addr"></span><div class="memory-cell" style="padding:8px;"><strong>Data Segment</strong> (Initialized globals/static)</div></div>
+      <div class="memory-row"><span class="memory-addr">Low RAM</span><div class="memory-cell" style="padding:8px;"><strong>Code / Text Segment</strong> (Binary machine code)</div></div>
+    </div>
+    <div>
+      <div class="card mb-2">
+        <div class="card-title">⚡ Stack vs Heap</div>
+        <div class="card-text">
+          • <strong>Stack:</strong> Automatic allocation, blazing fast, fixed size, memory freed as function returns.<br><br>
+          • <strong>Heap:</strong> Manual allocation at runtime, flexible size, survives function exits, <em>must be explicitly freed with free()</em>!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: malloc and free -->
+<div class="slide" data-title="malloc() and free()">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 14 · Dynamic Memory</span>
+    <h2 class="section-title">malloc() & free(): On-Demand Memory</h2>
+    <p class="section-subtitle">Allocating exact heap bytes and returning them to the OS</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">dynamic_alloc.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+    int n = 5;
+    // Allocate heap memory for 5 integers
+    int *arr = (int*)malloc(n * sizeof(int));
+
+    // ALWAYS check for NULL!
+    if (arr == NULL) {
+        printf("Memory allocation failed!
+");
+        return 1;
+    }
+
+    // Populate and print
+    for (int i = 0; i < n; i++) arr[i] = (i + 1) * 10;
+
+    printf("Heap Array: ");
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("
+");
+
+    // Free memory & clean dangling pointer
+    free(arr);
+    arr = NULL;
 
     return 0;
 }</pre></div>
       </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Heap Array: 10 20 30 40 50</div>
+      </div>
     </div>
     <div>
-      <div class="output-block mb-1">
+      <div class="concept-box mb-2">
+        <div class="concept-title">🛡️ The Golden Rule of Heap Memory</div>
+        <div class="concept-text">
+          1. Calculate byte size: <span class="ic">n * sizeof(Type)</span><br>
+          2. Check <span class="ic">if (ptr == NULL)</span> (RAM may be full!)<br>
+          3. When done: <span class="ic">free(ptr); ptr = NULL;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: calloc vs malloc -->
+<div class="slide" data-title="calloc() vs malloc()">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 14 · Dynamic Memory</span>
+    <h2 class="section-title">calloc() vs malloc(): Zero Initialization</h2>
+    <p class="section-subtitle">Comparing uninitialized garbage vs clean zeroed buffers</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">calloc_vs_malloc.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+    int n = 3;
+
+    // malloc: allocates raw bytes (holds GARBAGE)
+    int *m = (int*)malloc(n * sizeof(int));
+
+    // calloc: allocates & zeros every single byte
+    int *c = (int*)calloc(n, sizeof(int));
+
+    printf("calloc() initialized array:
+");
+    for (int i = 0; i < n; i++)
+        printf("c[%d] = %d
+", i, c[i]);
+
+    free(m); free(c);
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
         <div class="output-header">▶ Output</div>
-        <div class="output-body">Sorted: 5 6 11 12 13</div>
+        <div class="output-body">calloc() initialized array:
+c[0] = 0
+c[1] = 0
+c[2] = 0</div>
       </div>
-      <div class="analogy-box">
-        <div class="analogy-label">🃏 Playing Cards Analogy</div>
-        <div class="analogy-content">Pick up cards one at a time. Each new card is <strong>inserted into its correct position</strong> among the cards you're already holding.</div>
-      </div>
-      <table class="styled-table mt-1">
-        <thead><tr><th>Algorithm</th><th>Best Case</th><th>Worst Case</th></tr></thead>
+    </div>
+    <div>
+      <table class="styled-table mb-2">
+        <thead><tr><th>Feature</th><th>malloc()</th><th>calloc()</th></tr></thead>
         <tbody>
-          <tr><td>Bubble Sort</td><td>O(n)</td><td>O(n²)</td></tr>
-          <tr><td>Selection Sort</td><td>O(n²)</td><td>O(n²)</td></tr>
-          <tr><td>Insertion Sort</td><td>O(n)</td><td>O(n²)</td></tr>
+          <tr><td>Arguments</td><td>1 (total bytes)</td><td>2 (count, size)</td></tr>
+          <tr><td>Initialization</td><td>Garbage values</td><td><strong>All 0s</strong></td></tr>
+          <tr><td>Speed</td><td>Slightly faster</td><td>Slightly slower</td></tr>
         </tbody>
       </table>
     </div>
@@ -3609,90 +4388,993 @@ int main()
 </div>
 </div>
 
-<!-- ████████████████████████████████████████████████ -->
-<!-- PART 14 — FIND THE BUG & PREDICT OUTPUT         -->
-<!-- ████████████████████████████████████████████████ -->
-
-<div class="slide" data-title="🐛 Find the Bug">
+<!-- S: realloc -->
+<div class="slide" data-title="realloc(): Dynamic Resizing">
 <div class="slide-inner">
   <div class="section-header">
-    <span class="section-number">Practice</span>
-    <h2 class="section-title">🐛 Find the Bug!</h2>
-    <p class="section-subtitle">Can you spot the error in each code snippet?</p>
+    <span class="section-number">Part 14 · Dynamic Memory</span>
+    <h2 class="section-title">realloc(): Dynamic Array Resizing</h2>
+    <p class="section-subtitle">Growing or shrinking heap memory blocks without losing existing data</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">realloc_demo.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()
+{
+    int *arr = (int*)malloc(2 * sizeof(int));
+    arr[0] = 10; arr[1] = 20;
+
+    printf("Original 2 elements: %d %d
+", arr[0], arr[1]);
+
+    // Expand array capacity from 2 to 4 elements!
+    int *temp = (int*)realloc(arr, 4 * sizeof(int));
+    if (temp == NULL) { free(arr); return 1; }
+    arr = temp;
+
+    arr[2] = 30; arr[3] = 40;
+
+    printf("Expanded 4 elements: ");
+    for (int i = 0; i < 4; i++) printf("%d ", arr[i]);
+    printf("
+");
+
+    free(arr);
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Original 2 elements: 10 20
+Expanded 4 elements: 10 20 30 40</div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened">
+        <div class="wh-label">🔍 How realloc() Works</div>
+        <div class="wh-content">
+          1. Tries to expand current memory block in-place.<br>
+          2. If adjacent heap space is occupied, allocates a new block elsewhere, copies existing elements automatically, frees old block, and returns new address!
+        </div>
+      </div>
+      <div class="callout tip mt-2">
+        <strong>💡 Vector / ArrayList Principle:</strong> This is the exact mechanism C++ <span class="ic">std::vector</span> and Java <span class="ic">ArrayList</span> use to dynamically double capacity!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 15 — DATA STRUCTURES FOUNDATIONS (NODES)    -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 15: DS Foundations & Nodes">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(34,211,238,0.15); color: var(--accent-cyan);">🔗</div>
+  <div class="part-number">Part 15</div>
+  <div class="part-title">Data Structures Foundation: Nodes</div>
+  <div class="part-desc">Breaking free from array limitations — creating dynamic nodes and linking them in RAM</div>
+</div>
+</div>
+
+<!-- S: Why Arrays Aren't Enough -->
+<div class="slide" data-title="Why Arrays Aren't Enough">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 15 · DS Foundation</span>
+    <h2 class="section-title">The Limitations of Arrays</h2>
+    <p class="section-subtitle">Why computer scientists invented Node-based dynamic data structures</p>
+  </div>
+  <div class="content-grid cols-3">
+    <div class="card" style="border-top: 3px solid var(--accent-rose);">
+      <div class="card-title">1. Fixed Capacity</div>
+      <div class="card-text">Arrays must declare fixed size upfront. Either you waste unused memory or run out of space when data grows.</div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent-amber);">
+      <div class="card-title">2. Expensive Insertion O(n)</div>
+      <div class="card-text">Inserting an element at index 0 requires shifting every existing element one slot to the right!</div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent-violet);">
+      <div class="card-title">3. Expensive Deletion O(n)</div>
+      <div class="card-text">Deleting an element leaves a hole, forcing all subsequent elements to shift left to close the gap.</div>
+    </div>
+  </div>
+  <div class="big-question mt-3" style="font-size:24px;">The Solution: <em>Dynamic Nodes linked by pointers anywhere in RAM!</em></div>
+</div>
+</div>
+
+<!-- S: The Anatomy of a Node -->
+<div class="slide" data-title="The Anatomy of a Node">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 15 · DS Foundation</span>
+    <h2 class="section-title">The Anatomy of a Node</h2>
+    <p class="section-subtitle">The fundamental atomic unit of all pointer-based data structures</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">node_factory.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+// Factory function to allocate and initialize a Node
+Node* createNode(int value)
+{
+    Node *newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Heap full!
+");
+        exit(1);
+    }
+    newNode->data = value;
+    newNode->next = NULL; // Safe default!
+    return newNode;
+}
+
+int main()
+{
+    Node *first = createNode(10);
+    Node *second = createNode(20);
+
+    // Link them together!
+    first->next = second;
+
+    printf("First:  %d
+", first->data);
+    printf("Second: %d
+", first->next->data);
+
+    free(second);
+    free(first);
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="node-chain mb-2">
+        <div class="ll-node"><div class="ll-data">10</div><div class="ll-next">0x2000</div></div>
+        <div class="ll-arrow">──▶</div>
+        <div class="ll-node"><div class="ll-data">20</div><div class="ll-next">NULL</div></div>
+      </div>
+      <div class="concept-box">
+        <div class="concept-title">✨ Why createNode() is Essential</div>
+        <div class="concept-text">
+          Encapsulates memory allocation, error handling, and field initialization in a single clean reusable function.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 16 — LINKED LISTS MASTERCLASS              -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 16: Linked Lists">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(52,211,153,0.15); color: var(--accent-emerald);">⛓️</div>
+  <div class="part-number">Part 16</div>
+  <div class="part-title">Linked Lists Masterclass</div>
+  <div class="part-desc">Singly, Doubly, and Circular Linked Lists — Insert, Delete, Search, and Traversal</div>
+</div>
+</div>
+
+<!-- S: Singly Linked List Architecture -->
+<div class="slide" data-title="Singly Linked List Architecture">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 16 · Linked Lists</span>
+    <h2 class="section-title">Singly Linked List Architecture</h2>
+    <p class="section-subtitle">A linear collection of nodes connected unidirectionally via pointers</p>
+  </div>
+  <div class="node-chain" style="margin: 20px 0;">
+    <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-rose);">HEAD ──▶</div>
+    <div class="ll-node"><div class="ll-data">10</div><div class="ll-next">next</div></div>
+    <div class="ll-arrow">──▶</div>
+    <div class="ll-node"><div class="ll-data">20</div><div class="ll-next">next</div></div>
+    <div class="ll-arrow">──▶</div>
+    <div class="ll-node"><div class="ll-data">30</div><div class="ll-next">NULL</div></div>
+  </div>
+  <div class="content-grid cols-3 mt-3">
+    <div class="card">
+      <div class="card-title">1. Head Pointer</div>
+      <div class="card-text">Stores the address of the very first node. If <span class="ic">head == NULL</span>, the list is empty.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">2. Nodes in Heap</div>
+      <div class="card-text">Each node lives at an arbitrary location in heap RAM, connected solely by pointer references.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">3. NULL Terminator</div>
+      <div class="card-text">The <span class="ic">next</span> pointer of the last node is <span class="ic">NULL</span>, marking the end of traversal.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Traversing and Printing -->
+<div class="slide" data-title="Traversing a Linked List">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 16 · Linked Lists</span>
+    <h2 class="section-title">Traversing & Displaying Linked List</h2>
+    <p class="section-subtitle">Iterating through nodes from head to NULL</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">linked_list_print.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+void printList(Node *head)
+{
+    Node *temp = head;  // Temporary pointer
+    printf("List: ");
+    while (temp != NULL)
+    {
+        printf("%d -> ", temp->data);
+        temp = temp->next; // Advance to next node!
+    }
+    printf("NULL
+");
+}
+
+int main()
+{
+    Node *n1 = (Node*)malloc(sizeof(Node));
+    Node *n2 = (Node*)malloc(sizeof(Node));
+    Node *n3 = (Node*)malloc(sizeof(Node));
+
+    n1->data = 10; n1->next = n2;
+    n2->data = 20; n2->next = n3;
+    n3->data = 30; n3->next = NULL;
+
+    printList(n1);
+
+    free(n3); free(n2); free(n1);
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">List: 10 -> 20 -> 30 -> NULL</div>
+      </div>
+    </div>
+    <div>
+      <div class="callout warning mb-2">
+        <strong>⚠️ Never Move Head!</strong><br>
+        Always use a temporary pointer: <span class="ic">Node *temp = head;</span><br>
+        If you advance <span class="ic">head = head->next</span> during traversal, you lose access to the list forever!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Insertion at Head O(1) -->
+<div class="slide" data-title="Insert at Head O(1)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 16 · Linked Lists</span>
+    <h2 class="section-title">Insert at Beginning: O(1) Time</h2>
+    <p class="section-subtitle">Instant insertion using double pointers (Node** head)</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">insert_head.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+void insertAtHead(Node **head, int val)
+{
+    Node *newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = val;
+    newNode->next = *head;  // Point new node to old head
+    *head = newNode;        // Update head to new node!
+}
+
+void printList(Node *head) {
+    while (head) { printf("%d -> ", head->data); head = head->next; }
+    printf("NULL
+");
+}
+
+int main()
+{
+    Node *head = NULL; // Empty list
+
+    insertAtHead(&head, 30);
+    insertAtHead(&head, 20);
+    insertAtHead(&head, 10);
+
+    printList(head);
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">10 -> 20 -> 30 -> NULL</div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened">
+        <div class="wh-label">⚡ Why O(1)?</div>
+        <div class="wh-content">
+          No shifting required! Only 2 pointer assignments:<br>
+          1. <span class="ic">newNode->next = *head;</span><br>
+          2. <span class="ic">*head = newNode;</span><br><br>
+          Unlike arrays which take <strong>O(n)</strong> to insert at index 0, Linked Lists perform this in <strong>instant O(1) time</strong>!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Insert at End and Delete -->
+<div class="slide" data-title="Delete Node by Key">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 16 · Linked Lists</span>
+    <h2 class="section-title">Deleting a Node: Pointer Bypass</h2>
+    <p class="section-subtitle">Unlinking target node from chain and freeing heap memory</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">delete_node.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct Node { int data; struct Node *next; } Node;
+
+void deleteNode(Node **head, int key)
+{
+    Node *temp = *head, *prev = NULL;
+
+    // Case 1: Head node holds key
+    if (temp != NULL && temp->data == key) {
+        *head = temp->next; // Change head
+        free(temp);         // Free old head
+        return;
+    }
+
+    // Case 2: Search for key
+    while (temp != NULL && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) return; // Key not found!
+
+    // Bypass node & free
+    prev->next = temp->next;
+    free(temp);
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened mb-2">
+        <div class="wh-label">✂️ Pointer Bypass Concept</div>
+        <div class="wh-content">
+          To delete node B in <span class="ic">A -> B -> C</span>:<br><br>
+          Set <span class="ic">prev->next = temp->next;</span> (A now points directly to C).<br>
+          Then call <span class="ic">free(temp);</span> to reclaim B's RAM!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Array vs Linked List Matrix -->
+<div class="slide" data-title="Array vs Linked List">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 16 · Linked Lists</span>
+    <h2 class="section-title">Array vs Linked List: The Tradeoff Matrix</h2>
+    <p class="section-subtitle">Choosing the right data structure for your engineering problem</p>
+  </div>
+  <table class="styled-table" style="font-size:14px;">
+    <thead>
+      <tr><th>Operation / Property</th><th>Array</th><th>Singly Linked List</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Access by Index</td><td><span class="badge emerald">O(1) Instant</span></td><td><span class="badge rose">O(n) Must Traverse</span></td></tr>
+      <tr><td>Insert at Beginning</td><td><span class="badge rose">O(n) Shifting</span></td><td><span class="badge emerald">O(1) Instant</span></td></tr>
+      <tr><td>Insert at End</td><td><span class="badge emerald">O(1) if capacity</span></td><td><span class="badge amber">O(n) / O(1) with tail</span></td></tr>
+      <tr><td>Memory Layout</td><td>Contiguous (Cache Friendly)</td><td>Scattered across Heap</td></tr>
+      <tr><td>Size Flexibility</td><td>Fixed / Costly Realloc</td><td><strong>Completely Dynamic</strong></td></tr>
+      <tr><td>Memory Overhead</td><td>Zero pointer overhead</td><td>Extra pointer per node (8 bytes)</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- S: Doubly and Circular Linked Lists -->
+<div class="slide" data-title="Doubly & Circular Lists">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 16 · Linked Lists</span>
+    <h2 class="section-title">Doubly & Circular Linked Lists Preview</h2>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="card" style="border-top: 3px solid var(--accent-cyan);">
+      <div class="card-title">1. Doubly Linked List (Bidirectional)</div>
+      <div class="code-block"><div class="code-body"><pre>struct DNode {
+    int data;
+    struct DNode *prev; // Point backward
+    struct DNode *next; // Point forward
+};</pre></div></div>
+      <div class="card-text">Allows traversing in both directions (forward and reverse). Used in browser Back/Forward history and music player playlists!</div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent-rose);">
+      <div class="card-title">2. Circular Linked List (Ring Buffer)</div>
+      <div class="code-block"><div class="code-body"><pre>// Last node points back to Head!
+lastNode->next = head;</pre></div></div>
+      <div class="card-text">No NULL terminator! Continuous looping. Used in OS CPU round-robin scheduling and multiplayer turn-based games.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 17 — STACKS & QUEUES IN C                  -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 17: Stacks & Queues">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(139,92,246,0.15); color: var(--accent-violet);">🥞</div>
+  <div class="part-number">Part 17</div>
+  <div class="part-title">Stacks & Queues (Linear ADTs)</div>
+  <div class="part-desc">LIFO and FIFO linear abstract data types — array implementation and circular queues</div>
+</div>
+</div>
+
+<!-- S: The Stack ADT -->
+<div class="slide" data-title="The Stack ADT (LIFO)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 17 · Stacks</span>
+    <h2 class="section-title">The Stack ADT: Last In, First Out (LIFO)</h2>
+    <p class="section-subtitle">Like a stack of cafeteria plates — you add to the top, and remove from the top</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="stack-box" style="height:180px;">
+        <div class="stack-item top">30 (TOP)</div>
+        <div class="stack-item">20</div>
+        <div class="stack-item">10 (BOTTOM)</div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🔑 Core Stack Operations (All O(1)!)</div>
+        <div class="concept-text font-mono">
+          • <strong>push(val):</strong> Insert element on Top<br>
+          • <strong>pop():</strong> Remove and return Top element<br>
+          • <strong>peek():</strong> View Top element without removing<br>
+          • <strong>isEmpty():</strong> Check if top == -1<br>
+          • <strong>isFull():</strong> Check if top == MAX - 1
+        </div>
+      </div>
+      <div class="callout tip">
+        <strong>Applications:</strong> Function call stack, Undo/Redo (Ctrl+Z), Browser Back button, Balanced parentheses syntax checking.
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Stack Implementation in C -->
+<div class="slide" data-title="Stack Implementation in C">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 17 · Stacks</span>
+    <h2 class="section-title">Array-Based Stack Implementation</h2>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">stack_array.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#define MAX 5
+
+typedef struct {
+    int items[MAX];
+    int top;
+} Stack;
+
+void init(Stack *s) { s->top = -1; }
+
+void push(Stack *s, int val) {
+    if (s->top == MAX - 1) { printf("Stack Overflow!
+"); return; }
+    s->items[++(s->top)] = val;
+}
+
+int pop(Stack *s) {
+    if (s->top == -1) { printf("Stack Underflow!
+"); return -1; }
+    return s->items[(s->top)--];
+}
+
+int main()
+{
+    Stack s; init(&s);
+    push(&s, 10); push(&s, 20); push(&s, 30);
+
+    printf("Popped: %d
+", pop(&s));
+    printf("Popped: %d
+", pop(&s));
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Popped: 30
+Popped: 20</div>
+      </div>
+    </div>
+    <div>
+      <div class="what-happened">
+        <div class="wh-label">🔍 The Top Pointer</div>
+        <div class="wh-content">
+          <span class="ic">top = -1</span> means stack is empty.<br>
+          <span class="ic">push()</span> increments <span class="ic">++top</span> and stores data.<br>
+          <span class="ic">pop()</span> returns data and decrements <span class="ic">top--</span>.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: The Queue ADT -->
+<div class="slide" data-title="The Queue ADT (FIFO)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 17 · Queues</span>
+    <h2 class="section-title">The Queue ADT: First In, First Out (FIFO)</h2>
+    <p class="section-subtitle">Like a ticket counter line — first person to enter is the first to be served</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="queue-box">
+        <span style="font-family:var(--font-mono); font-size:11px; color:var(--accent-rose);">FRONT (dequeue) ◀</span>
+        <div class="queue-item">10</div>
+        <div class="queue-item">20</div>
+        <div class="queue-item">30</div>
+        <span style="font-family:var(--font-mono); font-size:11px; color:var(--accent-emerald);">◀ REAR (enqueue)</span>
+      </div>
+      <div class="concept-box mt-3">
+        <div class="concept-title">🔑 Core Queue Operations (O(1))</div>
+        <div class="concept-text font-mono">
+          • <strong>enqueue(val):</strong> Insert element at REAR<br>
+          • <strong>dequeue():</strong> Remove element from FRONT<br>
+          • <strong>front():</strong> View element at FRONT
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb-2">
+        <div class="card-title">💡 The Linear Queue Problem</div>
+        <div class="card-text">
+          In a simple array queue, after multiple dequeues, <span class="ic">front</span> moves forward leaving empty dead space on the left that cannot be reused!
+        </div>
+      </div>
+      <div class="card" style="border-top: 3px solid var(--accent-amber);">
+        <div class="card-title">🔄 Circular Queue Solution</div>
+        <div class="card-text font-mono text-sm">
+          <strong>rear = (rear + 1) % MAX;</strong><br>
+          Wraps around to index 0 when reaching the array boundary!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 18 — TREES & GRAPHS PREVIEW                -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 18: Trees & Graphs Preview">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(34,211,238,0.15); color: var(--accent-cyan);">🌲</div>
+  <div class="part-number">Part 18</div>
+  <div class="part-title">Non-Linear Structures: Trees & Graphs</div>
+  <div class="part-desc">Hierarchical data, Binary Search Trees, traversals, and network graphs</div>
+</div>
+</div>
+
+<!-- S: Binary Tree Node in C -->
+<div class="slide" data-title="Binary Tree Node in C">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 18 · Trees</span>
+    <h2 class="section-title">Binary Tree Node Structure</h2>
+    <p class="section-subtitle">A hierarchical node with at most two children: Left and Right</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">tree_node.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+TreeNode* createTreeNode(int val)
+{
+    TreeNode *node = (TreeNode*)malloc(sizeof(TreeNode));
+    node->val = val;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
+}
+
+int main()
+{
+    // Building a 3-node Binary Tree
+    TreeNode *root = createTreeNode(1);
+    root->left = createTreeNode(2);
+    root->right = createTreeNode(3);
+
+    printf("Root: %d, Left: %d, Right: %d
+",
+           root->val, root->left->val, root->right->val);
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div style="text-align:center; margin: 16px 0;">
+        <div class="tree-node">1</div>
+        <div class="tree-branch">
+          <div class="tree-node" style="border-color:var(--accent-emerald);">2</div>
+          <div class="tree-node" style="border-color:var(--accent-violet);">3</div>
+        </div>
+      </div>
+      <div class="concept-box">
+        <div class="concept-title">🌲 Tree Terminology</div>
+        <div class="concept-text">
+          • <strong>Root:</strong> Topmost node without parent.<br>
+          • <strong>Leaf:</strong> Node with no children (<span class="ic">left == NULL && right == NULL</span>).<br>
+          • <strong>Height:</strong> Longest path from root to leaf.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Tree Traversals (Inorder, Preorder, Postorder) -->
+<div class="slide" data-title="Tree Traversals in C">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 18 · Trees</span>
+    <h2 class="section-title">Tree Traversals (Depth-First Search)</h2>
+    <p class="section-subtitle">Three classic ways to visit all nodes using recursion</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">tree_traversals.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+typedef struct TreeNode { int val; struct TreeNode *left, *right; } TreeNode;
+
+void inorder(TreeNode *root) {
+    if (root == NULL) return;
+    inorder(root->left);          // 1. Left
+    printf("%d ", root->val);     // 2. Root
+    inorder(root->right);         // 3. Right
+}
+
+void preorder(TreeNode *root) {
+    if (root == NULL) return;
+    printf("%d ", root->val);     // 1. Root
+    preorder(root->left);         // 2. Left
+    preorder(root->right);        // 3. Right
+}
+
+void postorder(TreeNode *root) {
+    if (root == NULL) return;
+    postorder(root->left);        // 1. Left
+    postorder(root->right);       // 2. Right
+    printf("%d ", root->val);     // 3. Root
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <table class="styled-table">
+        <thead><tr><th>Traversal</th><th>Order</th><th>Use Case</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Inorder</strong></td><td>Left → Root → Right</td><td>Prints BST in sorted order!</td></tr>
+          <tr><td><strong>Preorder</strong></td><td>Root → Left → Right</td><td>Cloning / Serialization</td></tr>
+          <tr><td><strong>Postorder</strong></td><td>Left → Right → Root</td><td>Deleting / Freeing tree</td></tr>
+        </tbody>
+      </table>
+      <div class="callout tip mt-2">
+        <strong>⚡ BST Search Rule:</strong> In a Binary Search Tree (BST), all elements in left subtree are <strong>smaller</strong> than root, and all elements in right are <strong>larger</strong>. Search is blazing fast: <span class="badge emerald">O(log n)</span>!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 19 — ALGORITHMIC COMPLEXITY & BIG-O        -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 19: Algorithmic Complexity & Big-O">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(251,191,36,0.15); color: var(--accent-amber);">⏱️</div>
+  <div class="part-number">Part 19</div>
+  <div class="part-title">Algorithmic Complexity & Big-O</div>
+  <div class="part-desc">The universal language of data structures — Time vs Space complexity and asymptotic bounds</div>
+</div>
+</div>
+
+<!-- S: Big-O Visualized -->
+<div class="slide" data-title="Big-O Complexity Visualized">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 19 · Complexity</span>
+    <h2 class="section-title">Big-O Growth Rates Visualized</h2>
+    <p class="section-subtitle">How runtime scales as input size N grows toward infinity</p>
+  </div>
+  <table class="styled-table mb-2" style="font-size:14px;">
+    <thead>
+      <tr><th>Notation</th><th>Name</th><th>N = 10</th><th>N = 1,000,000</th><th>Example Algorithm</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="badge emerald">O(1)</span></td><td>Constant</td><td>1 op</td><td>1 op</td><td>Array Indexing, Stack Push</td></tr>
+      <tr><td><span class="badge cyan">O(log n)</span></td><td>Logarithmic</td><td>3 ops</td><td><strong>20 ops</strong></td><td>Binary Search, BST Search</td></tr>
+      <tr><td><span class="badge indigo">O(n)</span></td><td>Linear</td><td>10 ops</td><td>1,000,000 ops</td><td>Linear Search, Array Traversal</td></tr>
+      <tr><td><span class="badge violet">O(n log n)</span></td><td>Linearithmic</td><td>33 ops</td><td>20,000,000 ops</td><td>Merge Sort, Quick Sort, qsort()</td></tr>
+      <tr><td><span class="badge amber">O(n²)</span></td><td>Quadratic</td><td>100 ops</td><td>1,000,000,000,000</td><td>Bubble Sort, Nested Loops</td></tr>
+      <tr><td><span class="badge rose">O(2ⁿ)</span></td><td>Exponential</td><td>1,024 ops</td><td>💥 Impossible!</td><td>Tower of Hanoi, Naive Fib</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- S: Master DS Complexity Matrix -->
+<div class="slide" data-title="Master Data Structures Cheat Sheet">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 19 · Complexity</span>
+    <h2 class="section-title">Master Data Structures Cheat Sheet</h2>
+    <p class="section-subtitle">The ultimate reference for technical interviews and exams</p>
+  </div>
+  <table class="styled-table" style="font-size:13px;">
+    <thead>
+      <tr><th>Data Structure</th><th>Access</th><th>Search</th><th>Insertion</th><th>Deletion</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Array</strong></td><td><span class="badge emerald">O(1)</span></td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+      <tr><td><strong>Singly Linked List</strong></td><td>O(n)</td><td>O(n)</td><td><span class="badge emerald">O(1) [Head]</span></td><td><span class="badge emerald">O(1) [Head]</span></td></tr>
+      <tr><td><strong>Stack (Array/List)</strong></td><td>O(n)</td><td>O(n)</td><td><span class="badge emerald">O(1) [Push]</span></td><td><span class="badge emerald">O(1) [Pop]</span></td></tr>
+      <tr><td><strong>Queue (Array/List)</strong></td><td>O(n)</td><td>O(n)</td><td><span class="badge emerald">O(1) [Enqueue]</span></td><td><span class="badge emerald">O(1) [Dequeue]</span></td></tr>
+      <tr><td><strong>Binary Search Tree</strong></td><td><span class="badge cyan">O(log n)</span></td><td><span class="badge cyan">O(log n)</span></td><td><span class="badge cyan">O(log n)</span></td><td><span class="badge cyan">O(log n)</span></td></tr>
+      <tr><td><strong>Hash Table (Ideal)</strong></td><td>N/A</td><td><span class="badge emerald">O(1)</span></td><td><span class="badge emerald">O(1)</span></td><td><span class="badge emerald">O(1)</span></td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 20 — ADVANCED SORTING (DIVIDE & CONQUER)    -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="▸ PART 20: Advanced Sorting">
+<div class="slide-inner part-divider">
+  <div class="part-icon" style="background: rgba(251,113,133,0.15); color: var(--accent-rose);">⚡</div>
+  <div class="part-number">Part 20</div>
+  <div class="part-title">Advanced Sorting: Divide & Conquer</div>
+  <div class="part-desc">Scaling to millions of elements — Merge Sort and Quick Sort</div>
+</div>
+</div>
+
+<!-- S: Merge Sort -->
+<div class="slide" data-title="Merge Sort">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 20 · Advanced Sorting</span>
+    <h2 class="section-title">Merge Sort: Divide, Conquer & Combine</h2>
+    <p class="section-subtitle">Guaranteed O(n log n) stable sorting algorithm</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">merge_sort.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1, n2 = r - m;
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++) L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2)
+        arr[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);     // Divide left
+        mergeSort(arr, m + 1, r); // Divide right
+        merge(arr, l, m, r);      // Combine
+    }
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📊 Why O(n log n)?</div>
+        <div class="concept-text">
+          • Array is divided in half <strong>log₂ n times</strong>.<br>
+          • Each level takes <strong>O(n)</strong> to merge.<br>
+          • Total: <span class="badge emerald">O(n log n)</span> in ALL cases (Best, Average, Worst)!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- ████████████████████████████████████████████████ -->
+<!-- PART 21 — INTERVIEW PUZZLES & BUG HUNTING       -->
+<!-- ████████████████████████████████████████████████ -->
+
+<div class="slide" data-title="🧠 Advanced Pointers Quiz">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Mastery Quiz</span>
+    <h2 class="section-title">🧠 Advanced Pointers & Precedence Quiz</h2>
+    <p class="section-subtitle">Can you predict what each pointer expression evaluates to?</p>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="predict-box">
+      <div class="predict-label">Quiz #1: *p++ vs (*p)++</div>
+      <div class="code-block"><div class="code-body"><pre>int arr[] = {10, 20, 30};
+int *p = arr;
+int val = *p++;
+printf("val=%d, *p=%d", val, *p);</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer:</strong> <span class="ic">val = 10, *p = 20</span><br>
+        Postfix <span class="ic">++</span> has higher precedence than dereference <span class="ic">*</span>. It fetches old value at <span class="ic">*p</span> (10), then advances pointer <span class="ic">p</span> to point to 20!</div>
+      </div>
+    </div>
+    <div class="predict-box">
+      <div class="predict-label">Quiz #2: Dynamic 2D Array Sizing</div>
+      <div class="code-block"><div class="code-body"><pre>int **mat = malloc(3 * sizeof(int*));
+for (int i = 0; i < 3; i++)
+    mat[i] = malloc(4 * sizeof(int));</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer:</strong> Creates a <strong>3x4 2D matrix on the Heap</strong>! Array of 3 row pointers, each pointing to a 4-integer block.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="slide" data-title="🐛 Godzilla Bug Hunt">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Debugging Masterclass</span>
+    <h2 class="section-title">🐛 Godzilla Bug Hunt: Data Structures Edition</h2>
   </div>
   <div class="content-grid cols-2">
     <div class="bug-box">
-      <div class="bug-label">🐛 Bug #1</div>
-      <div class="code-block"><div class="code-body"><pre>int age
-printf("Age = %d", age);</pre></div></div>
+      <div class="bug-label">🐛 Bug #1: Lost Head in Linked List</div>
+      <div class="code-block"><div class="code-body"><pre>void insert(Node *head, int val) {
+    Node *n = malloc(sizeof(Node));
+    n->data = val;
+    n->next = head;
+    head = n; // 💥 Bug!
+}</pre></div></div>
       <button class="reveal-btn">👉 Show Answer</button>
       <div class="reveal-content">
-        <div class="callout danger mt-1"><strong>Fix:</strong> Missing semicolon after <span class="ic">int age</span> and variable is uninitialized!<br>
-        <span class="ic">int age = 0;</span></div>
+        <div class="callout danger mt-1"><strong>Fix:</strong> Pass by reference using double pointer <span class="ic">Node **head</span>! Updating a local copy <span class="ic">head = n</span> does not modify the caller's head.</div>
       </div>
     </div>
     <div class="bug-box">
-      <div class="bug-label">🐛 Bug #2</div>
-      <div class="code-block"><div class="code-body"><pre>if (marks = 40)
-    printf("Pass");</pre></div></div>
+      <div class="bug-label">🐛 Bug #2: Use After Free</div>
+      <div class="code-block"><div class="code-body"><pre>Node *temp = head;
+while (temp != NULL) {
+    free(temp);
+    temp = temp->next; // 💥 Bug!
+}</pre></div></div>
       <button class="reveal-btn">👉 Show Answer</button>
       <div class="reveal-content">
-        <div class="callout danger mt-1"><strong>Fix:</strong> <span class="ic">=</span> is assignment, not comparison! Use <span class="ic">==</span><br>
-        <span class="ic">if (marks == 40)</span></div>
-      </div>
-    </div>
-    <div class="bug-box">
-      <div class="bug-label">🐛 Bug #3</div>
-      <div class="code-block"><div class="code-body"><pre>int arr[5] = {1,2,3,4,5};
-printf("%d", arr[5]);</pre></div></div>
-      <button class="reveal-btn">👉 Show Answer</button>
-      <div class="reveal-content">
-        <div class="callout danger mt-1"><strong>Fix:</strong> Array bounds! <span class="ic">arr[5]</span> is out of bounds. Valid indices are 0-4.</div>
-      </div>
-    </div>
-    <div class="bug-box">
-      <div class="bug-label">🐛 Bug #4</div>
-      <div class="code-block"><div class="code-body"><pre>scanf("%d", age);</pre></div></div>
-      <button class="reveal-btn">👉 Show Answer</button>
-      <div class="reveal-content">
-        <div class="callout danger mt-1"><strong>Fix:</strong> Missing <span class="ic">&</span> operator!<br>
-        <span class="ic">scanf("%d", &age);</span></div>
+        <div class="callout danger mt-1"><strong>Fix:</strong> Save <span class="ic">next</span> before freeing:<br>
+        <span class="ic">Node *next = temp->next; free(temp); temp = next;</span></div>
       </div>
     </div>
   </div>
 </div>
 </div>
 
+
+
 <!-- ████████████████████████████████████████████████ -->
-<!-- FINAL SLIDE                                      -->
+<!-- GRAND FINALE — DATA STRUCTURES ROADMAP          -->
 <!-- ████████████████████████████████████████████████ -->
 
-<div class="slide" data-title="You Are Not Learning C">
+<div class="slide" data-title="The Road Ahead: Data Structures Roadmap">
 <div class="slide-inner">
-  <div class="big-question" style="font-size: 36px; margin-bottom: 24px;">You are not just learning C.<br>You are learning <em>how to think</em>.</div>
+  <div class="section-header">
+    <span class="section-number">The Bridge to Mastery</span>
+    <h2 class="section-title">Your Data Structures & Algorithms Roadmap</h2>
+    <p class="section-subtitle">You now possess the foundational C mechanics required to master advanced Computer Science!</p>
+  </div>
   <div class="flow-vertical mb-3">
-    <div class="flow-node blue">Understand the Problem</div><div class="flow-arrow">↓</div>
-    <div class="flow-node cyan">Break it Down</div><div class="flow-arrow">↓</div>
-    <div class="flow-node violet">Find a Pattern</div><div class="flow-arrow">↓</div>
-    <div class="flow-node rose">Create Algorithm</div><div class="flow-arrow">↓</div>
-    <div class="flow-node amber">Write Code</div><div class="flow-arrow">↓</div>
-    <div class="flow-node green">Test & Debug</div><div class="flow-arrow">↓</div>
-    <div class="flow-node blue">Improve</div>
+    <div class="flow-node green">1. C Pointers & Dynamic Memory (Mastered! ✓)</div><div class="flow-arrow">↓</div>
+    <div class="flow-node cyan">2. Linked Lists, Stacks & Queues (Building Blocks Ready! ✓)</div><div class="flow-arrow">↓</div>
+    <div class="flow-node blue">3. Trees, BSTs & Heaps (Priority Queues)</div><div class="flow-arrow">↓</div>
+    <div class="flow-node violet">4. Graph Algorithms (BFS, DFS, Dijkstra, MST)</div><div class="flow-arrow">↓</div>
+    <div class="flow-node rose">5. Dynamic Programming & Advanced Algorithms</div><div class="flow-arrow">↓</div>
+    <div class="flow-node amber">🏆 Software Engineering & High-Performance Systems!</div>
   </div>
   <div class="text-center">
-    <div class="end-badge">🎉 C is the language. Problem solving is the real skill.</div>
-    <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 800px; margin: 16px auto 0;">
-      <span class="badge indigo">Variables</span><span class="badge cyan">Data Types</span><span class="badge emerald">Operators</span>
-      <span class="badge amber">if/else</span><span class="badge rose">switch</span><span class="badge violet">Loops</span>
-      <span class="badge indigo">Patterns</span><span class="badge cyan">Functions</span><span class="badge emerald">Pointers</span>
-      <span class="badge amber">Arrays</span><span class="badge rose">Strings</span><span class="badge violet">Recursion</span>
-      <span class="badge indigo">Structures</span><span class="badge cyan">Files</span><span class="badge emerald">Searching</span>
-      <span class="badge amber">Sorting</span>
-    </div>
-    <p class="text-muted mt-2" style="font-size: 13px;">CS103ES — Programming for Problem Solving · JNTUH R25</p>
+    <div class="end-badge">🚀 You are not just writing code — You are mastering the Machine.</div>
+    <p class="text-muted mt-2" style="font-size: 13px;">CS103ES — Programming for Problem Solving with C · Complete Masterclass</p>
   </div>
 </div>
 </div>
+
 
 </div><!-- end .presentation -->
 
