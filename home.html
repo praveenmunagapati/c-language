@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The C Language — A Field Manual for First-Time Programmers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --paper: #F4EEE0;
+            --paper2: #FBF7EC;
+            --ink: #24201A;
+            --ink60: rgba(36, 32, 26, .6);
+            --ink25: rgba(36, 32, 26, .25);
+            --ink12: rgba(36, 32, 26, .12);
+            --accent: #C14E22;
+            --accent-deep: #8F3517;
+            --editor: #211C14;
+            --editor-bar: #2B2519;
+            --code: #EADFC7;
+            --term: #13211A;
+            --term-bar: #1B2E24;
+            --phos: #A9CF9F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--paper)
+        }
+
+        /* paper grain */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 70;
+            mix-blend-mode: multiply;
+            opacity: .6;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* crop marks — print-manual flavor */
+        .crops i {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            z-index: 65;
+            pointer-events: none;
+            border: 0 solid rgba(36, 32, 26, .35)
+        }
+
+        .crops i:nth-child(1) {
+            top: 13px;
+            left: 13px;
+            border-top-width: 1px;
+            border-left-width: 1px
+        }
+
+        .crops i:nth-child(2) {
+            top: 13px;
+            right: 13px;
+            border-top-width: 1px;
+            border-right-width: 1px
+        }
+
+        .crops i:nth-child(3) {
+            bottom: 13px;
+            left: 13px;
+            border-bottom-width: 1px;
+            border-left-width: 1px
+        }
+
+        .crops i:nth-child(4) {
+            bottom: 13px;
+            right: 13px;
+            border-bottom-width: 1px;
+            border-right-width: 1px
+        }
+
+        #deck {
+            position: fixed;
+            inset: 0;
+            overflow: hidden
+        }
+
+        /* ---------- slides ---------- */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: .94fr 1.06fr;
+            gap: clamp(28px, 4vw, 64px);
+            padding: clamp(44px, 8vh, 84px) clamp(24px, 4.5vw, 72px) clamp(96px, 15vh, 128px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .35s ease, visibility .35s;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            z-index: 2
+        }
+
+        .slide.leaving {
+            opacity: 0;
+            visibility: visible;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity .35s ease
+        }
+
+        .slide.leaving .anim {
+            opacity: 1 !important;
+            animation: none !important
+        }
+
+        /* staggered entrance */
+        .anim {
+            opacity: 0
+        }
+
+        .slide.active .anim {
+            animation: rise .85s cubic-bezier(.16, 1, .3, 1) forwards
+        }
+
+        .slide.active .a0 {
+            animation: ghost 1.2s cubic-bezier(.16, 1, .3, 1) forwards
+        }
+
+        .slide.active .a1 {
+            animation-delay: .06s
+        }
+
+        .slide.active .a2 {
+            animation-delay: .14s
+        }
+
+        .slide.active .a3 {
+            animation-delay: .22s
+        }
+
+        .slide.active .a4 {
+            animation-delay: .3s
+        }
+
+        .slide.active .a5 {
+            animation: slidein .85s cubic-bezier(.16, 1, .3, 1) .2s forwards
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(26px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes slidein {
+            from {
+                opacity: 0;
+                transform: translateX(38px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes ghost {
+            from {
+                opacity: 0;
+                transform: scale(.94) translateY(10px)
+            }
+
+            to {
+                opacity: .08;
+                transform: none
+            }
+        }
+
+        /* ---------- left column ---------- */
+        .left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            position: relative;
+            z-index: 1
+        }
+
+        .kicker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(9px, 1.15vh, 11px);
+            letter-spacing: .26em;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .kicker::before {
+            content: "";
+            width: 26px;
+            height: 1.5px;
+            background: var(--accent)
+        }
+
+        .left h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 560;
+            font-size: clamp(30px, 6.4vh, 58px);
+            line-height: 1.02;
+            letter-spacing: -.01em;
+            margin: clamp(10px, 1.8vh, 18px) 0 clamp(8px, 1.4vh, 14px);
+        }
+
+        .left h2 .accent {
+            font-style: italic;
+            color: var(--accent)
+        }
+
+        .sub {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(14px, 2.2vh, 19px);
+            color: var(--ink60);
+            line-height: 1.4;
+        }
+
+        .sub::after {
+            content: "";
+            display: block;
+            width: 44px;
+            height: 1px;
+            background: var(--ink25);
+            margin-top: clamp(12px, 2vh, 18px)
+        }
+
+        .analogy {
+            margin-top: clamp(16px, 2.6vh, 26px);
+            background: var(--paper2);
+            border: 1px solid var(--ink12);
+            border-radius: 10px;
+            padding: clamp(13px, 2.1vh, 19px) clamp(15px, 2.2vh, 21px);
+            box-shadow: 0 12px 26px -20px rgba(60, 40, 20, .4);
+        }
+
+        .a-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 9px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px;
+            letter-spacing: .3em;
+            color: var(--accent-deep);
+            font-weight: 700;
+        }
+
+        .a-ic {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--paper2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: none;
+        }
+
+        .a-ic svg {
+            width: 12px;
+            height: 12px
+        }
+
+        .analogy p {
+            font-size: clamp(12.5px, 1.95vh, 15.5px);
+            line-height: 1.6;
+            color: rgba(36, 32, 26, .82)
+        }
+
+        .analogy em {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            color: var(--accent-deep);
+            font-weight: 500
+        }
+
+        .analogy code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .86em;
+            color: var(--accent-deep);
+            background: rgba(193, 78, 34, .09);
+            border: 1px solid rgba(193, 78, 34, .18);
+            border-radius: 4px;
+            padding: 1px 5px;
+            white-space: nowrap;
+        }
+
+        /* ghost numeral */
+        .ghost {
+            position: absolute;
+            top: 2vh;
+            right: -1vw;
+            z-index: 0;
+            pointer-events: none;
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 36vh;
+            line-height: 1;
+            color: var(--accent);
+        }
+
+        /* ---------- right column : editor + terminal ---------- */
+        .right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: clamp(12px, 1.9vh, 18px);
+            min-width: 0;
+            position: relative;
+            z-index: 1
+        }
+
+        .editor {
+            background: var(--editor);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 26px 50px -24px rgba(55, 38, 18, .55)
+        }
+
+        .e-bar {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--editor-bar);
+            padding: 9px 14px;
+            border-bottom: 1px solid rgba(255, 240, 210, .07);
+        }
+
+        .d {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%
+        }
+
+        .d1 {
+            background: #C14E22
+        }
+
+        .d2 {
+            background: #C99A3F
+        }
+
+        .d3 {
+            background: #6F8560
+        }
+
+        .fname {
+            margin-left: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            color: rgba(234, 223, 199, .5);
+            letter-spacing: .06em;
+        }
+
+        pre.code {
+            padding: clamp(13px, 2.1vh, 20px) clamp(15px, 2vw, 22px);
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(11px, 1.75vh, 13.5px);
+            line-height: 1.75;
+            color: var(--code);
+            white-space: pre;
+        }
+
+        .tk-kw {
+            color: #F0A24E;
+            font-weight: 500
+        }
+
+        .tk-st {
+            color: #A9C47F
+        }
+
+        .tk-cm {
+            color: #7C7263;
+            font-style: italic
+        }
+
+        .tk-pre {
+            color: #E07B4F
+        }
+
+        .tk-nu {
+            color: #8FB6AE
+        }
+
+        .tk-fn {
+            color: #F6ECD6;
+            font-weight: 700
+        }
+
+        .terminal {
+            background: var(--term);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 18px 36px -22px rgba(20, 40, 30, .6)
+        }
+
+        .t-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--term-bar);
+            padding: 7px 14px;
+            border-bottom: 1px solid rgba(170, 207, 159, .1);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px;
+            letter-spacing: .3em;
+            color: rgba(169, 207, 159, .65);
+            font-weight: 700;
+        }
+
+        .t-bar svg {
+            width: 12px;
+            height: 12px
+        }
+
+        pre.out {
+            padding: clamp(11px, 1.8vh, 17px) clamp(15px, 2vw, 22px);
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(11px, 1.7vh, 13px);
+            line-height: 1.7;
+            color: var(--phos);
+            white-space: pre-wrap;
+        }
+
+        .cur {
+            display: inline-block;
+            width: .55em;
+            height: 1.05em;
+            background: #BFDCA8;
+            vertical-align: text-bottom;
+            margin-left: 3px;
+            animation: blink 1.1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0
+            }
+        }
+
+        /* ---------- title & end slides ---------- */
+        .slide.title,
+        .slide.end {
+            grid-template-columns: 1fr;
+            align-items: center
+        }
+
+        .t-wrap {
+            max-width: 820px;
+            position: relative;
+            z-index: 1
+        }
+
+        .t-wrap h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 520;
+            letter-spacing: -.015em;
+            font-size: clamp(52px, 11.5vh, 112px);
+            line-height: .98;
+            margin: clamp(14px, 2.4vh, 24px) 0 clamp(14px, 2.4vh, 22px);
+        }
+
+        .t-wrap h1 .big-c {
+            font-style: italic;
+            color: var(--accent);
+            font-weight: 600
+        }
+
+        .t-sub {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: clamp(15px, 2.4vh, 21px);
+            color: var(--ink60);
+            line-height: 1.5;
+            max-width: 560px;
+        }
+
+        .t-meta {
+            margin-top: clamp(18px, 3vh, 28px);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(9px, 1.2vh, 11px);
+            letter-spacing: .28em;
+            color: var(--ink60);
+        }
+
+        .t-hint {
+            margin-top: clamp(20px, 3.4vh, 34px);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--ink60);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        kbd {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--ink);
+            border: 1px solid var(--ink25);
+            border-bottom-width: 2.5px;
+            border-radius: 5px;
+            padding: 2px 8px;
+            background: var(--paper2);
+        }
+
+        .t-ghost {
+            position: absolute;
+            right: -2vw;
+            top: 50%;
+            transform: translateY(-52%);
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 62vh;
+            line-height: 1;
+            color: var(--accent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide.active .t-ghost {
+            opacity: .07
+        }
+
+        .end .editor,
+        .end .terminal {
+            max-width: 560px
+        }
+
+        /* ---------- footer UI ---------- */
+        #ui {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: clamp(14px, 2vw, 24px);
+            padding: 0 clamp(24px, 4.5vw, 72px) 20px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        #counter {
+            font-size: 11px;
+            letter-spacing: .14em;
+            color: var(--ink);
+            font-weight: 700;
+            white-space: nowrap
+        }
+
+        #chapter {
+            font-size: 9.5px;
+            letter-spacing: .24em;
+            color: var(--ink60);
+            white-space: nowrap;
+            text-transform: uppercase
+        }
+
+        #track {
+            flex: 1;
+            height: 2px;
+            background: var(--ink12);
+            border-radius: 2px;
+            overflow: hidden
+        }
+
+        #fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width .5s cubic-bezier(.22, 1, .36, 1)
+        }
+
+        .navbtn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            flex: none;
+            cursor: pointer;
+            border: 1.5px solid var(--ink25);
+            background: var(--paper2);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .25s ease;
+        }
+
+        .navbtn svg {
+            width: 18px;
+            height: 18px
+        }
+
+        .navbtn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--paper2);
+            transform: translateY(-2px)
+        }
+
+        .navbtn:active {
+            transform: translateY(0)
+        }
+
+        @media (max-width:900px) {
+            body {
+                overflow: auto
+            }
+
+            .slide {
+                display: block;
+                overflow-y: auto;
+                grid-template-columns: 1fr;
+                padding-bottom: 140px
+            }
+
+            .right {
+                margin-top: 26px
+            }
+
+            .ghost,
+            .t-ghost {
+                display: none
+            }
+
+            #chapter {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="crops"><i></i><i></i><i></i><i></i></div>
+    <div id="deck"></div>
+
+    <footer id="ui">
+        <span id="counter">§ 01 / 40</span>
+        <span id="chapter">Cover</span>
+        <div id="track">
+            <div id="fill"></div>
+        </div>
+        <button class="navbtn" id="prev" aria-label="Previous slide"><i data-lucide="chevron-left"></i></button>
+        <button class="navbtn" id="next" aria-label="Next slide"><i data-lucide="chevron-right"></i></button>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        /* =============== tiny C syntax highlighter =============== */
+        const RX = /(\/\/[^\n]*)|(\/\*[\s\S]*?\*\/)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|(^[ \t]*#[^\n]*)|\b(int|float|double|char|void|long|unsigned|const|struct|if|else|for|while|do|switch|case|default|break|continue|return|sizeof)\b|\b(\d+(?:\.\d+)?f?)\b|([A-Za-z_]\w*)(?=\s*\()/gm;
+        function hl(src) {
+            const e = src.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return e.replace(RX, (m, lc, bc, st, ch, pre, kw, nu, fn) => {
+                if (lc || bc) return `<span class="tk-cm">${m}</span>`;
+                if (st || ch) return `<span class="tk-st">${m}</span>`;
+                if (pre) return `<span class="tk-pre">${m}</span>`;
+                if (kw) return `<span class="tk-kw">${m}</span>`;
+                if (nu) return `<span class="tk-nu">${m}</span>`;
+                if (fn) return `<span class="tk-fn">${m}</span>`;
+                return m;
+            });
+        }
+
+        /* =============== the manual : 40 slides =============== */
+        const CH = { 1: 'First Steps', 2: 'Variables & Data', 3: 'Control Flow', 4: 'Building Blocks' };
+
+        const S = [
+            { type: 'title' },
+
+            /* ---- CHAPTER 1 · FIRST STEPS ---- */
+            {
+                ch: 1, icon: 'book-open', file: 'hello.c', title: 'What is C?', sub: 'The grandmother of modern languages',
+                analogy: 'C is the <em>Latin</em> of programming — Java, Python and C++ all borrowed their grammar from it. Learn C once, and every other language starts reading like a dialect you already speak.',
+                code: `#include <stdio.h>\n\nint main(void) {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+                out: `Hello, World!`
+            },
+
+            {
+                ch: 1, icon: 'chef-hat', file: 'compile.sh', title: 'From code to program', sub: 'How your words become a running thing',
+                analogy: 'You write a <em>recipe</em> (source code), hand it to a <em>chef</em> (the compiler), and receive a finished <em>dish</em> — a program you can serve again and again, instantly.',
+                code: `// step 1 — you write the recipe\n$ gcc hello.c -o hello\n\n// step 2 — the chef cooks it into a dish\n$ ./hello`,
+                out: `Hello, World!`
+            },
+
+            {
+                ch: 1, icon: 'mail', file: 'anatomy.c', title: 'Anatomy of a program', sub: 'Every C program wears the same skeleton',
+                analogy: 'A C program is a <em>formal letter</em>: the <code>#include</code> lines are the letterhead, <code>main()</code> is the body, and <code>return 0</code> is your signature meaning “all went well”.',
+                code: `#include <stdio.h>        // the letterhead\n\nint main(void) {          // the body begins\n    printf("Dear computer,\\n");\n    printf("Warm regards.\\n");\n    return 0;             // the signature\n}`,
+                out: `Dear computer,\nWarm regards.`
+            },
+
+            {
+                ch: 1, icon: 'wrench', file: 'include.c', title: '#include', sub: 'Borrowing tools from the library',
+                analogy: '<code>stdio.h</code> is a <em>toolbox</em> kept in a public library. <code>#include</code> is you signing it out, so your program may use tools like <code>printf</code> — no need to reinvent the hammer.',
+                code: `#include <stdio.h>   // sign out the printing toolbox\n\nint main(void) {\n    printf("Tools ready!\\n");\n    return 0;\n}`,
+                out: `Tools ready!`
+            },
+
+            {
+                ch: 1, icon: 'door-open', file: 'main.c', title: 'main()', sub: 'Where every journey begins',
+                analogy: 'Every program is a house, and <code>main()</code> is the <em>front door</em>. The computer always knocks here first — no matter what else is built inside.',
+                code: `#include <stdio.h>\n\nint main(void) {\n    printf("Knock knock.\\n");\n    return 0;\n}`,
+                out: `Knock knock.`
+            },
+
+            {
+                ch: 1, icon: 'megaphone', file: 'printf.c', title: 'printf()', sub: 'Your program finds its voice',
+                analogy: '<code>printf</code> is your program’s <em>megaphone</em>. Without it, your program works in total silence — like a mime performing behind soundproof glass.',
+                code: `printf("I am alive!\\n");\nprintf("Hello from the other slide!\\n");`,
+                out: `I am alive!\nHello from the other slide!`
+            },
+
+            {
+                ch: 1, icon: 'notebook-pen', file: 'comments.c', title: 'Comments', sub: 'Notes written for humans',
+                analogy: 'Comments are <em>scribbles in the margin of a cookbook</em>: “grandma’s trick — butter first!” The oven ignores them completely, but the next cook — future you — will be grateful.',
+                code: `// one-line note\nint socks = 3;   // one is always lost\n\n/* a block comment can\n   stretch across lines */\nprintf("%d\\n", socks);`,
+                out: `3`
+            },
+
+            {
+                ch: 1, icon: 'drama', file: 'escapes.c', title: 'Escape sequences', sub: 'Secret stage directions inside text',
+                analogy: 'Escapes are <em>whispered stage directions</em>: the audience sees the line, but <code>\\n</code> quietly tells the printer “curtain drop — new line here”.',
+                code: `printf("Line one\\n");\nprintf("Tab\\tjump\\n");\nprintf("She said \\"Hi!\\"\\n");`,
+                out: `Line one\nTab    jump\nShe said "Hi!"`
+            },
+
+            /* ---- CHAPTER 2 · VARIABLES & DATA ---- */
+            {
+                ch: 2, icon: 'package', file: 'variables.c', title: 'Variables', sub: 'The computer’s labeled boxes',
+                analogy: 'A variable is a <em>labeled box</em> in the computer’s vast warehouse. <code>int age = 25</code> puts a box on the shelf marked “age” and drops the number 25 inside.',
+                code: `int age = 25;\nfloat height = 1.75f;\n\nprintf("Age: %d\\n", age);\nprintf("Height: %.2f m\\n", height);`,
+                out: `Age: 25\nHeight: 1.75 m`
+            },
+
+            {
+                ch: 2, icon: 'hand', file: 'int.c', title: 'int', sub: 'Whole numbers, and only whole numbers',
+                analogy: '<code>int</code> counts on its <em>fingers</em>: perfect for 5 apples or 3 people — but ask for 2.5 fingers and it simply chops the fraction off.',
+                code: `int apples = 5;\nint people = 2;\n\nprintf("Each gets %d\\n", apples / people);`,
+                out: `Each gets 2`
+            },
+
+            {
+                ch: 2, icon: 'beaker', file: 'float.c', title: 'float & double', sub: 'When decimals matter',
+                analogy: '<code>float</code> is a <em>kitchen measuring jug</em> — fine for 250.5 ml. <code>double</code> is the <em>lab-grade cylinder</em>: same idea, twice the precision. Use it when decimals count.',
+                code: `float price = 19.99f;\ndouble pi = 3.141592653589;\n\nprintf("Price: %.2f\\n", price);\nprintf("Pi:    %.4f\\n", pi);`,
+                out: `Price: 19.99\nPi:    3.1416`
+            },
+
+            {
+                ch: 2, icon: 'square', file: 'char.c', title: 'char', sub: 'One letter at a time',
+                analogy: 'A <code>char</code> is a single <em>Scrabble tile</em> — one letter, one tile. To spell a word you need a whole row of them (that’s a string, coming later).',
+                code: `char grade = 'A';\n\nprintf("Grade: %c\\n", grade);\nprintf("Secretly, it is number %d\\n", grade);`,
+                out: `Grade: A\nSecretly, it is number 65`
+            },
+
+            {
+                ch: 2, icon: 'archive', file: 'declare.c', title: 'Declare, then initialize', sub: 'Make the box, then fill it',
+                analogy: 'First you <em>label the jar</em> (declaration), then you <em>pour the sugar in</em> (initialization). Skip step one and C refuses — no unlabeled jars in this warehouse.',
+                code: `int score;        // 1. make the box\nscore = 0;        // 2. fill it\n\nint lives = 3;    // both steps at once\n\nprintf("score=%d lives=%d\\n", score, lives);`,
+                out: `score=0 lives=3`
+            },
+
+            {
+                ch: 2, icon: 'lock', file: 'const.c', title: 'Constants', sub: 'Values locked under glass',
+                analogy: '<code>const</code> is a box <em>sealed with wax</em>: you may look at π as often as you like, but try to change it and the compiler slams the lid shut.',
+                code: `const float PI = 3.14159f;\nfloat r = 2.0f;\n\nprintf("Area: %.2f\\n", PI * r * r);`,
+                out: `Area: 12.57`
+            },
+
+            {
+                ch: 2, icon: 'ear', file: 'scanf.c', title: 'scanf()', sub: 'Your program learns to listen',
+                analogy: '<code>printf</code> talks; <code>scanf</code> <em>listens</em>. It is the order form on the counter — your program waits, pen hovering, until someone writes an answer and presses Enter.',
+                code: `int age;\n\nprintf("Enter your age: ");\nscanf("%d", &age);\n\nprintf("Next year: %d\\n", age + 1);`,
+                out: `Enter your age: 21\nNext year: 22`
+            },
+
+            {
+                ch: 2, icon: 'calculator', file: 'arith.c', title: 'Arithmetic operators', sub: 'The built-in calculator',
+                analogy: 'Your program has a <em>calculator wired into its skull</em> — but a strict one: with whole numbers, 17 ÷ 5 is exactly 3. The remainder? That’s what <code>%</code> is for.',
+                code: `int a = 17, b = 5;\n\nprintf("%d + %d = %d\\n", a, b, a + b);\nprintf("%d %% %d = %d\\n", a, b, a % b);`,
+                out: `17 + 5 = 22\n17 % 5 = 2`
+            },
+
+            {
+                ch: 2, icon: 'repeat', file: 'compound.c', title: 'Compound assignment', sub: 'Shorthand for updating a value',
+                analogy: '<code>score += 25</code> is <em>topping up the jar</em> instead of emptying it and refilling from scratch — same result, far less ceremony.',
+                code: `int score = 50;\n\nscore += 25;   // score = score + 25\nscore -= 10;\nscore *= 2;\n\nprintf("Score: %d\\n", score);`,
+                out: `Score: 130`
+            },
+
+            {
+                ch: 2, icon: 'plus', file: 'tally.c', title: '++ and --', sub: 'Tally marks for your variables',
+                analogy: 'Think <em>tally marks on a whiteboard</em>: every <code>++</code> is one more stroke, every <code>--</code> wipes one away. Bartenders have done this for centuries.',
+                code: `int tickets = 3;\n\ntickets++;   // sold one more -> 4\ntickets++;   // -> 5\ntickets--;   // a refund   -> 4\n\nprintf("Tickets: %d\\n", tickets);`,
+                out: `Tickets: 4`
+            },
+
+            {
+                ch: 2, icon: 'arrow-right-left', file: 'casting.c', title: 'Type casting', sub: 'Exchanging one type for another',
+                analogy: 'Casting is the <em>currency exchange desk</em>: hand over integer coins, receive decimal bills. Same value, different pocket — and suddenly 7 ÷ 2 buys 3.5.',
+                code: `int a = 7, b = 2;\n\nprintf("int division : %d\\n", a / b);\nprintf("real division: %.1f\\n", (float)a / b);`,
+                out: `int division : 3\nreal division: 3.5`
+            },
+
+            /* ---- CHAPTER 3 · CONTROL FLOW ---- */
+            {
+                ch: 3, icon: 'git-branch', file: 'if.c', title: 'if', sub: 'A fork in the road',
+                analogy: '<code>if</code> is a <em>fork guarded by a sentinel</em>: “Is it hotter than 35°?” Yes — take the umbrella path. No — the whole block is skipped, as if invisible.',
+                code: `int temperature = 38;\n\nif (temperature > 35) {\n    printf("Stay hydrated!\\n");\n}\n\nprintf("Done.\\n");`,
+                out: `Stay hydrated!\nDone.`
+            },
+
+            {
+                ch: 3, icon: 'toggle-left', file: 'ifelse.c', title: 'if — else', sub: 'The light switch',
+                analogy: 'An <code>if-else</code> is a <em>light switch</em>: exactly one of two states. The condition flips it to “on” or “off” — never both, never neither.',
+                code: `int number = 7;\n\nif (number % 2 == 0) {\n    printf("Even\\n");\n} else {\n    printf("Odd\\n");\n}`,
+                out: `Odd`
+            },
+
+            {
+                ch: 3, icon: 'list-ordered', file: 'ladder.c', title: 'The else-if ladder', sub: 'Passport control for your values',
+                analogy: 'The ladder is <em>passport control</em>: each officer checks one stamp, in order. The first match waves you through — every officer after that goes home unanswered.',
+                code: `int score = 78;\n\nif (score >= 90)       printf("A\\n");\nelse if (score >= 80)  printf("B\\n");\nelse if (score >= 70)  printf("C\\n");\nelse                   printf("Keep trying\\n");`,
+                out: `C`
+            },
+
+            {
+                ch: 3, icon: 'layout-grid', file: 'switch.c', title: 'switch', sub: 'The vending machine of decisions',
+                analogy: '<code>switch</code> is a <em>vending machine</em>: press one button (a <code>case</code>) and exactly that snack drops. Forget the <code>break</code>, and the machine empties the whole row.',
+                code: `char choice = 'B';\n\nswitch (choice) {\n    case 'A': printf("Americano\\n"); break;\n    case 'B': printf("Latte\\n");     break;\n    default:  printf("Water\\n");\n}`,
+                out: `Latte`
+            },
+
+            {
+                ch: 3, icon: 'rotate-cw', file: 'for.c', title: 'The for loop', sub: 'When you know how many laps',
+                analogy: 'A <code>for</code> loop is <em>ten laps around the track</em>: you know the count before starting — begin at 1, stop at 5, one lap at a time.',
+                code: `for (int i = 1; i <= 5; i++) {\n    printf("Lap %d done\\n", i);\n}`,
+                out: `Lap 1 done\nLap 2 done\nLap 3 done\nLap 4 done\nLap 5 done`
+            },
+
+            {
+                ch: 3, icon: 'utensils', file: 'while.c', title: 'The while loop', sub: 'As long as you’re hungry',
+                analogy: '<code>while</code> is <em>eating at a buffet</em>: you don’t count plates. You keep going exactly as long as the condition — “still hungry?” — holds true.',
+                code: `int fuel = 3;\n\nwhile (fuel > 0) {\n    printf("Fuel left: %d\\n", fuel);\n    fuel--;   // eventually, the condition fails\n}`,
+                out: `Fuel left: 3\nFuel left: 2\nFuel left: 1`
+            },
+
+            {
+                ch: 3, icon: 'utensils', file: 'dowhile.c', title: 'The do-while loop', sub: 'Taste first, decide after',
+                analogy: 'A <code>do-while</code> is <em>tasting the dish before reading the menu</em>: the first bite always happens. Only then do you decide whether to continue.',
+                code: `int i = 10;\n\ndo {\n    printf("Runs at least once!\\n");\n    i++;\n} while (i < 5);   // false — but too late, we already ran`,
+                out: `Runs at least once!`
+            },
+
+            {
+                ch: 3, icon: 'skip-forward', file: 'break.c', title: 'break & continue', sub: 'The fire exit and the skip button',
+                analogy: '<code>break</code> is the <em>fire exit</em> — leave the whole building now. <code>continue</code> is the <em>skip button</em> — jump past this one song, but keep the playlist running.',
+                code: `for (int i = 1; i <= 5; i++) {\n    if (i == 3) continue;   // skip 3\n    if (i == 5) break;      // stop early\n    printf("%d ", i);\n}`,
+                out: `1 2 4`
+            },
+
+            {
+                ch: 3, icon: 'clock', file: 'nested.c', title: 'Nested loops', sub: 'Clockwork: loops within loops',
+                analogy: 'A clock is <em>nested loops in brass and gears</em>: for every single step of the hour hand, the minute hand sweeps a complete lap — inner loop inside outer loop.',
+                code: `for (int h = 1; h <= 2; h++) {\n    for (int m = 1; m <= 3; m++) {\n        printf("%d:%d ", h, m);\n    }\n}`,
+                out: `1:1 1:2 1:3 2:1 2:2 2:3`
+            },
+
+            /* ---- CHAPTER 4 · BUILDING BLOCKS ---- */
+            {
+                ch: 4, icon: 'zap', file: 'functions.c', title: 'Functions', sub: 'Machines that do one job well',
+                analogy: 'A function is a <em>toaster</em>: bread in, toast out — and you never rewire the heating coil each breakfast. You just press the lever again.',
+                code: `void greet(void) {\n    printf("Hello there!\\n");\n}\n\ngreet();   // just call it\ngreet();   // and again`,
+                out: `Hello there!\nHello there!`
+            },
+
+            {
+                ch: 4, icon: 'coins', file: 'add.c', title: 'Arguments & return', sub: 'Ingredients in, dish out',
+                analogy: 'A function with arguments and <code>return</code> is a <em>vending machine</em>: coins and a button code go in, exactly one snack comes back. Clean, predictable, reusable.',
+                code: `int add(int a, int b) {\n    return a + b;\n}\n\nprintf("%d\\n", add(3, 4));\nprintf("%d\\n", add(20, 22));`,
+                out: `7\n42`
+            },
+
+            {
+                ch: 4, icon: 'home', file: 'scope.c', title: 'Scope', sub: 'House rules vs. the law of the land',
+                analogy: 'Scope is <em>house rules versus national law</em>: <code>slippers</code> exists only inside your <code>main()</code> house, while <code>tax</code> — being global — applies on every street of the program.',
+                code: `int tax = 10;            // global: the law\n\nint main(void) {\n    int slippers = 2;    // local: my house\n\n    printf("tax=%d slippers=%d\\n", tax, slippers);\n    return 0;\n}`,
+                out: `tax=10 slippers=2`
+            },
+
+            {
+                ch: 4, icon: 'infinity', file: 'recursion.c', title: 'Recursion', sub: 'The function that calls itself',
+                analogy: 'Recursion is <em>two mirrors facing each other</em>: every reflection holds a smaller one — until, at <code>n == 0</code>, the innermost mirror whispers “Lift-off!”.',
+                code: `void countdown(int n) {\n    if (n == 0) {\n        printf("Lift-off!\\n");\n        return;\n    }\n    printf("%d...\\n", n);\n    countdown(n - 1);   // calls itself, smaller\n}\n\ncountdown(3);`,
+                out: `3...\n2...\n1...\nLift-off!`
+            },
+
+            {
+                ch: 4, icon: 'layers', file: 'arrays.c', title: 'Arrays', sub: 'A carton of numbered slots',
+                analogy: 'An array is an <em>egg carton with numbers</em>: one carton named <code>marks</code>, slots 0 through 4. Numbering starts at zero — the classic C surprise.',
+                code: `int marks[5] = {88, 92, 79, 95, 84};\n\nprintf("1st: %d\\n", marks[0]);\nprintf("4th: %d\\n", marks[3]);`,
+                out: `1st: 88\n4th: 95`
+            },
+
+            {
+                ch: 4, icon: 'list-checks', file: 'rollcall.c', title: 'Walking an array', sub: 'Roll call for your data',
+                analogy: 'Looping over an array is <em>morning roll call</em>: the teacher — your <code>for</code> loop — walks the whole row, calls each name in order, and adds every mark to the total.',
+                code: `int marks[5] = {88, 92, 79, 95, 84};\nint total = 0;\n\nfor (int i = 0; i < 5; i++) {\n    total += marks[i];\n}\n\nprintf("Average: %.1f\\n", total / 5.0);`,
+                out: `Average: 87.6`
+            },
+
+            {
+                ch: 4, icon: 'link', file: 'strings.c', title: 'Strings', sub: 'A necklace of characters',
+                analogy: 'A string is a <em>beaded necklace</em>: one bead per letter, finished with an invisible clasp — the <code>\\0</code> — so C always knows where the word ends.',
+                code: `char name[6] = "Grace";   // G r a c e \\0\n\nprintf("Hello, %s!\\n", name);`,
+                out: `Hello, Grace!`
+            },
+
+            {
+                ch: 4, icon: 'map-pin', file: 'pointers.c', title: 'Pointers', sub: 'The address of the gold',
+                analogy: 'A pointer is not the <em>gold</em> — it is the <em>address of the house</em> where the gold lives. <code>&gold</code> writes the address down; the house number changes every run, but the note always finds it.',
+                code: `int gold = 100;\nint *p = &gold;     // p holds the address\n\nprintf("gold value    : %d\\n", gold);\nprintf("gold address  : %p\\n", (void *)p);`,
+                out: `gold value    : 100\ngold address  : 0x7ffee3b4a8ac`
+            },
+
+            {
+                ch: 4, icon: 'gift', file: 'deref.c', title: 'Dereferencing', sub: 'Following the address home',
+                analogy: '<code>*p</code> is <em>actually walking to the address</em> and opening the door. Change what’s inside, and — since there is only one gold — everyone watching sees it change.',
+                code: `int gold = 100;\nint *p = &gold;\n\n*p = 250;           // visit the address, change it\n\nprintf("gold: %d\\n", gold);`,
+                out: `gold: 250`
+            },
+
+            {
+                ch: 4, icon: 'credit-card', file: 'structs.c', title: 'Structures', sub: 'An ID card for your data',
+                analogy: 'A <code>struct</code> is an <em>ID card</em>: name, age and GPA travel together as one card — instead of three loose sticky notes you will inevitably lose.',
+                code: `struct Student {\n    char name[20];\n    int age;\n    float gpa;\n};\n\nstruct Student s = {"Maya", 19, 3.8f};\n\nprintf("%s, %d, %.1f\\n", s.name, s.age, s.gpa);`,
+                out: `Maya, 19, 3.8`
+            },
+
+            { type: 'end' }
+        ];
+
+        /* =============== render the deck =============== */
+        const deck = document.getElementById('deck');
+        const pad = n => String(n).padStart(2, '0');
+
+        S.forEach((s, i) => {
+            const sec = document.createElement('section');
+            sec.className = 'slide';
+
+            if (s.type === 'title') {
+                sec.classList.add('title');
+                sec.innerHTML = `
+      <div class="t-ghost anim a0">C</div>
+      <div class="t-wrap">
+        <div class="kicker anim a1">Field Manual · First Edition</div>
+        <h1 class="anim a2">The <span class="big-c">C</span><br>Language.</h1>
+        <p class="t-sub anim a3">A gentle field manual for absolute beginners —
+        every concept comes with an analogy, a program, and its output.</p>
+        <div class="t-meta anim a4">EST. 1972 · BELL LABS · DENNIS M. RITCHIE</div>
+        <div class="t-hint anim a5"><kbd>←</kbd><kbd>→</kbd> to turn the pages</div>
+      </div>`;
+            }
+            else if (s.type === 'end') {
+                sec.classList.add('end', 'title');
+                sec.innerHTML = `
+      <div class="t-ghost anim a0">∞</div>
+      <div class="t-wrap">
+        <div class="kicker anim a1">Epilogue</div>
+        <h1 class="anim a2">The manual ends.<br><span class="big-c">You begin.</span></h1>
+        <p class="t-sub anim a3">Every expert you admire once stared at their first
+        <em>Segmentation fault</em>. Compile early, break things often, and read the
+        error messages — rude friends, but friends.</p>
+        <div class="anim a5" style="margin-top:26px">
+          <div class="editor">
+            <div class="e-bar"><span class="d d1"></span><span class="d d2"></span><span class="d d3"></span><span class="fname">forever.c</span></div>
+            <pre class="code">${hl(`while (curious) {\n    write_code();\n    make_mistakes();\n    get_better();   // forever\n}`)}</pre>
+          </div>
+          <div class="terminal" style="margin-top:14px">
+            <div class="t-bar"><i data-lucide="terminal"></i><span>OUTPUT</span></div>
+            <pre class="out">see you in the terminal<span class="cur"></span></pre>
+          </div>
+        </div>
+      </div>`;
+            }
+            else {
+                sec.classList.add('std');
+                sec.innerHTML = `
+      <div class="ghost anim a0">${pad(i + 1)}</div>
+      <div class="left">
+        <div class="kicker anim a1">Ch 0${s.ch} — ${CH[s.ch]}</div>
+        <h2 class="anim a2">${s.title}</h2>
+        <p class="sub anim a3">${s.sub}</p>
+        <div class="analogy anim a4">
+          <div class="a-head"><span class="a-ic"><i data-lucide="${s.icon}"></i></span><span>Analogy</span></div>
+          <p>${s.analogy}</p>
+        </div>
+      </div>
+      <div class="right anim a5">
+        <div class="editor">
+          <div class="e-bar"><span class="d d1"></span><span class="d d2"></span><span class="d d3"></span><span class="fname">${s.file}</span></div>
+          <pre class="code">${hl(s.code)}</pre>
+        </div>
+        <div class="terminal">
+          <div class="t-bar"><i data-lucide="terminal"></i><span>Output</span></div>
+          <pre class="out">${s.out.replace(/</g, '&lt;')}<span class="cur"></span></pre>
+        </div>
+      </div>`;
+            }
+            deck.appendChild(sec);
+        });
+
+        lucide.createIcons();
+
+        /* =============== navigation =============== */
+        const els = [...deck.children];
+        const total = els.length;
+        const counter = document.getElementById('counter');
+        const chapter = document.getElementById('chapter');
+        const fill = document.getElementById('fill');
+        let idx = 0, leaveTimer;
+
+        function updateUI() {
+            const s = S[idx];
+            counter.textContent = `§ ${pad(idx + 1)} / ${total}`;
+            chapter.textContent = s.type ? (s.type === 'title' ? 'Cover' : 'Epilogue')
+                : `Ch 0${s.ch} · ${CH[s.ch]}`;
+            fill.style.width = ((idx + 1) / total * 100) + '%';
+        }
+        function go(n) {
+            n = Math.max(0, Math.min(total - 1, n));
+            if (n === idx) return;
+            clearTimeout(leaveTimer);
+            const old = els[idx];
+            old.classList.remove('active'); old.classList.add('leaving');
+            leaveTimer = setTimeout(() => old.classList.remove('leaving'), 400);
+            idx = n;
+            els[idx].classList.add('active');
+            updateUI();
+        }
+        els[0].classList.add('active');
+        updateUI();
+
+        document.getElementById('next').onclick = () => go(idx + 1);
+        document.getElementById('prev').onclick = () => go(idx - 1);
+        document.addEventListener('keydown', e => {
+            if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); go(idx + 1); }
+            if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(idx - 1); }
+            if (e.key === 'Home') go(0);
+            if (e.key === 'End') go(total - 1);
+        });
+        /* swipe on touch devices */
+        let tx = null;
+        document.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+        document.addEventListener('touchend', e => {
+            if (tx === null) return;
+            const dx = e.changedTouches[0].clientX - tx;
+            if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+            tx = null;
+        }, { passive: true });
+    </script>
+</body>
+
+</html>
