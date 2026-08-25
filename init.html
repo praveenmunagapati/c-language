@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The C Language — A Field Manual, Second Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --paper: #F4EEE0;
+            --paper2: #FBF7EC;
+            --ink: #24201A;
+            --ink60: rgba(36, 32, 26, .6);
+            --ink25: rgba(36, 32, 26, .25);
+            --ink12: rgba(36, 32, 26, .12);
+            --accent: #C14E22;
+            --accent-deep: #8F3517;
+            --editor: #211C14;
+            --editor-bar: #2B2519;
+            --code: #EADFC7;
+            --term: #13211A;
+            --term-bar: #1B2E24;
+            --phos: #A9CF9F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--paper)
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 70;
+            mix-blend-mode: multiply;
+            opacity: .6;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        .crops i {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            z-index: 65;
+            pointer-events: none;
+            border: 0 solid rgba(36, 32, 26, .35)
+        }
+
+        .crops i:nth-child(1) {
+            top: 13px;
+            left: 13px;
+            border-top-width: 1px;
+            border-left-width: 1px
+        }
+
+        .crops i:nth-child(2) {
+            top: 13px;
+            right: 13px;
+            border-top-width: 1px;
+            border-right-width: 1px
+        }
+
+        .crops i:nth-child(3) {
+            bottom: 13px;
+            left: 13px;
+            border-bottom-width: 1px;
+            border-left-width: 1px
+        }
+
+        .crops i:nth-child(4) {
+            bottom: 13px;
+            right: 13px;
+            border-bottom-width: 1px;
+            border-right-width: 1px
+        }
+
+        #deck {
+            position: fixed;
+            inset: 0;
+            overflow: hidden
+        }
+
+        /* ---------- slides ---------- */
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: .94fr 1.06fr;
+            gap: clamp(28px, 4vw, 64px);
+            padding: clamp(44px, 8vh, 84px) clamp(24px, 4.5vw, 72px) clamp(96px, 15vh, 128px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .35s ease, visibility .35s;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            z-index: 2
+        }
+
+        .slide.leaving {
+            opacity: 0;
+            visibility: visible;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity .35s ease
+        }
+
+        .slide.leaving .anim {
+            opacity: 1 !important;
+            animation: none !important
+        }
+
+        .anim {
+            opacity: 0
+        }
+
+        .slide.active .anim {
+            animation: rise .85s cubic-bezier(.16, 1, .3, 1) forwards
+        }
+
+        .slide.active .a0 {
+            animation: ghost 1.2s cubic-bezier(.16, 1, .3, 1) forwards
+        }
+
+        .slide.active .a1 {
+            animation-delay: .06s
+        }
+
+        .slide.active .a2 {
+            animation-delay: .14s
+        }
+
+        .slide.active .a3 {
+            animation-delay: .22s
+        }
+
+        .slide.active .a4 {
+            animation-delay: .3s
+        }
+
+        .slide.active .a5 {
+            animation: slidein .85s cubic-bezier(.16, 1, .3, 1) .2s forwards
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(26px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes slidein {
+            from {
+                opacity: 0;
+                transform: translateX(38px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes ghost {
+            from {
+                opacity: 0;
+                transform: scale(.94) translateY(10px)
+            }
+
+            to {
+                opacity: .08;
+                transform: none
+            }
+        }
+
+        /* ---------- left column ---------- */
+        .left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            position: relative;
+            z-index: 1
+        }
+
+        .kicker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(9px, 1.15vh, 11px);
+            letter-spacing: .26em;
+            color: var(--accent);
+            font-weight: 500;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .kicker::before {
+            content: "";
+            width: 26px;
+            height: 1.5px;
+            background: var(--accent)
+        }
+
+        .left h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 560;
+            font-size: clamp(30px, 6.4vh, 58px);
+            line-height: 1.02;
+            letter-spacing: -.01em;
+            margin: clamp(10px, 1.8vh, 18px) 0 clamp(8px, 1.4vh, 14px);
+        }
+
+        .left h2 .accent {
+            font-style: italic;
+            color: var(--accent)
+        }
+
+        .sub {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(14px, 2.2vh, 19px);
+            color: var(--ink60);
+            line-height: 1.4;
+        }
+
+        .sub::after {
+            content: "";
+            display: block;
+            width: 44px;
+            height: 1px;
+            background: var(--ink25);
+            margin-top: clamp(12px, 2vh, 18px)
+        }
+
+        .analogy {
+            margin-top: clamp(16px, 2.6vh, 26px);
+            background: var(--paper2);
+            border: 1px solid var(--ink12);
+            border-radius: 10px;
+            padding: clamp(13px, 2.1vh, 19px) clamp(15px, 2.2vh, 21px);
+            box-shadow: 0 12px 26px -20px rgba(60, 40, 20, .4);
+        }
+
+        .a-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 9px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px;
+            letter-spacing: .3em;
+            color: var(--accent-deep);
+            font-weight: 700;
+        }
+
+        .a-ic {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--paper2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: none;
+        }
+
+        .a-ic svg {
+            width: 12px;
+            height: 12px
+        }
+
+        .analogy p {
+            font-size: clamp(12.5px, 1.95vh, 15.5px);
+            line-height: 1.6;
+            color: rgba(36, 32, 26, .82)
+        }
+
+        .analogy em {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            color: var(--accent-deep);
+            font-weight: 500
+        }
+
+        .analogy code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .86em;
+            color: var(--accent-deep);
+            background: rgba(193, 78, 34, .09);
+            border: 1px solid rgba(193, 78, 34, .18);
+            border-radius: 4px;
+            padding: 1px 5px;
+            white-space: nowrap;
+        }
+
+        .ghost {
+            position: absolute;
+            top: 2vh;
+            right: -1vw;
+            z-index: 0;
+            pointer-events: none;
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 30vh;
+            line-height: 1;
+            color: var(--accent);
+        }
+
+        /* ---------- right column ---------- */
+        .right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: clamp(12px, 1.9vh, 18px);
+            min-width: 0;
+            position: relative;
+            z-index: 1
+        }
+
+        .editor {
+            background: var(--editor);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 26px 50px -24px rgba(55, 38, 18, .55)
+        }
+
+        .e-bar {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--editor-bar);
+            padding: 9px 14px;
+            border-bottom: 1px solid rgba(255, 240, 210, .07);
+        }
+
+        .d {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%
+        }
+
+        .d1 {
+            background: #C14E22
+        }
+
+        .d2 {
+            background: #C99A3F
+        }
+
+        .d3 {
+            background: #6F8560
+        }
+
+        .fname {
+            margin-left: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            color: rgba(234, 223, 199, .5);
+            letter-spacing: .06em;
+        }
+
+        pre.code {
+            padding: clamp(13px, 2.1vh, 20px) clamp(15px, 2vw, 22px);
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(11px, 1.7vh, 13.5px);
+            line-height: 1.7;
+            color: var(--code);
+            white-space: pre;
+        }
+
+        .tk-kw {
+            color: #F0A24E;
+            font-weight: 500
+        }
+
+        .tk-st {
+            color: #A9C47F
+        }
+
+        .tk-cm {
+            color: #7C7263;
+            font-style: italic
+        }
+
+        .tk-pre {
+            color: #E07B4F
+        }
+
+        .tk-nu {
+            color: #8FB6AE
+        }
+
+        .tk-fn {
+            color: #F6ECD6;
+            font-weight: 700
+        }
+
+        .terminal {
+            background: var(--term);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 18px 36px -22px rgba(20, 40, 30, .6)
+        }
+
+        .t-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--term-bar);
+            padding: 7px 14px;
+            border-bottom: 1px solid rgba(170, 207, 159, .1);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px;
+            letter-spacing: .3em;
+            color: rgba(169, 207, 159, .65);
+            font-weight: 700;
+        }
+
+        .t-bar svg {
+            width: 12px;
+            height: 12px
+        }
+
+        pre.out {
+            padding: clamp(11px, 1.8vh, 17px) clamp(15px, 2vw, 22px);
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(11px, 1.65vh, 13px);
+            line-height: 1.65;
+            color: var(--phos);
+            white-space: pre-wrap;
+        }
+
+        .cur {
+            display: inline-block;
+            width: .55em;
+            height: 1.05em;
+            background: #BFDCA8;
+            vertical-align: text-bottom;
+            margin-left: 3px;
+            animation: blink 1.1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0
+            }
+        }
+
+        /* ---------- title & end ---------- */
+        .slide.title,
+        .slide.end {
+            grid-template-columns: 1fr;
+            align-items: center
+        }
+
+        .t-wrap {
+            max-width: 840px;
+            position: relative;
+            z-index: 1
+        }
+
+        .t-wrap h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 520;
+            letter-spacing: -.015em;
+            font-size: clamp(50px, 11vh, 108px);
+            line-height: .98;
+            margin: clamp(14px, 2.4vh, 24px) 0 clamp(14px, 2.4vh, 22px);
+        }
+
+        .t-wrap h1 .big-c {
+            font-style: italic;
+            color: var(--accent);
+            font-weight: 600
+        }
+
+        .t-sub {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: clamp(15px, 2.4vh, 21px);
+            color: var(--ink60);
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        .t-meta {
+            margin-top: clamp(18px, 3vh, 28px);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(9px, 1.2vh, 11px);
+            letter-spacing: .28em;
+            color: var(--ink60);
+        }
+
+        .t-hint {
+            margin-top: clamp(18px, 3.2vh, 30px);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--ink60);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        kbd {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--ink);
+            border: 1px solid var(--ink25);
+            border-bottom-width: 2.5px;
+            border-radius: 5px;
+            padding: 2px 8px;
+            background: var(--paper2);
+        }
+
+        .t-ghost {
+            position: absolute;
+            right: -2vw;
+            top: 50%;
+            transform: translateY(-52%);
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: 62vh;
+            line-height: 1;
+            color: var(--accent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide.active .t-ghost {
+            opacity: .07
+        }
+
+        .end .editor,
+        .end .terminal {
+            max-width: 560px
+        }
+
+        /* ---------- footer UI ---------- */
+        #ui {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: clamp(14px, 2vw, 24px);
+            padding: 0 clamp(24px, 4.5vw, 72px) 20px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        #counter {
+            font-size: 11px;
+            letter-spacing: .14em;
+            color: var(--ink);
+            font-weight: 700;
+            white-space: nowrap
+        }
+
+        #chapter {
+            font-size: 9.5px;
+            letter-spacing: .24em;
+            color: var(--ink60);
+            white-space: nowrap;
+            text-transform: uppercase
+        }
+
+        #track {
+            flex: 1;
+            height: 2px;
+            background: var(--ink12);
+            border-radius: 2px;
+            overflow: visible;
+            position: relative
+        }
+
+        #fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width .5s cubic-bezier(.22, 1, .36, 1)
+        }
+
+        #track i {
+            position: absolute;
+            top: -2.5px;
+            width: 1.5px;
+            height: 7px;
+            background: var(--ink25)
+        }
+
+        .navbtn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            flex: none;
+            cursor: pointer;
+            border: 1.5px solid var(--ink25);
+            background: var(--paper2);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .25s ease;
+        }
+
+        .navbtn svg {
+            width: 18px;
+            height: 18px
+        }
+
+        .navbtn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--paper2);
+            transform: translateY(-2px)
+        }
+
+        .navbtn:active {
+            transform: translateY(0)
+        }
+
+        /* ---------- table of contents ---------- */
+        #toc {
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            background: var(--paper);
+            overflow-y: auto;
+            display: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        #toc.open {
+            display: block
+        }
+
+        .toc-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: clamp(40px, 7vh, 72px) clamp(24px, 4vw, 48px) 90px;
+        }
+
+        .toc-top {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: clamp(22px, 4vh, 40px)
+        }
+
+        .toc-top h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 560;
+            font-size: clamp(34px, 6vh, 54px);
+            line-height: 1;
+            letter-spacing: -.01em;
+        }
+
+        .toc-top .kicker {
+            margin-bottom: 12px
+        }
+
+        #tocClose {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            cursor: pointer;
+            flex: none;
+            border: 1.5px solid var(--ink25);
+            background: var(--paper2);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .25s ease;
+        }
+
+        #tocClose svg {
+            width: 20px;
+            height: 20px
+        }
+
+        #tocClose:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--paper2)
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: clamp(20px, 3vh, 36px) clamp(24px, 3vw, 44px)
+        }
+
+        .toc-ch h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: .28em;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--ink12);
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .toc-ch h3 span {
+            color: var(--ink60);
+            font-weight: 400;
+            letter-spacing: .14em
+        }
+
+        .toc-ch button {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: 0;
+            cursor: pointer;
+            padding: 5px 8px;
+            margin-left: -8px;
+            border-radius: 6px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 13.5px;
+            color: var(--ink);
+            transition: background .15s ease, color .15s ease;
+        }
+
+        .toc-ch button:hover {
+            background: rgba(193, 78, 34, .09);
+            color: var(--accent-deep)
+        }
+
+        .toc-ch button .n {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--ink60);
+            flex: none;
+            width: 22px;
+        }
+
+        .toc-ch button.cur {
+            color: var(--accent-deep);
+            font-weight: 600
+        }
+
+        .toc-ch button.cur .n {
+            color: var(--accent)
+        }
+
+        .toc-ch button.cur::after {
+            content: "◂";
+            margin-left: auto;
+            color: var(--accent);
+            font-size: 11px
+        }
+
+        @media (max-width:900px) {
+            body {
+                overflow: auto
+            }
+
+            .slide {
+                display: block;
+                overflow-y: auto;
+                grid-template-columns: 1fr;
+                padding-bottom: 140px
+            }
+
+            .right {
+                margin-top: 26px
+            }
+
+            .ghost,
+            .t-ghost {
+                display: none
+            }
+
+            #chapter {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="crops"><i></i><i></i><i></i><i></i></div>
+    <div id="deck"></div>
+
+    <!-- Table of Contents -->
+    <div id="toc">
+        <div class="toc-inner">
+            <div class="toc-top">
+                <div>
+                    <div class="kicker">Field Manual · Second Edition</div>
+                    <h2>Contents</h2>
+                </div>
+                <button id="tocClose" aria-label="Close contents"><i data-lucide="x"></i></button>
+            </div>
+            <div class="toc-grid" id="tocGrid"></div>
+        </div>
+    </div>
+
+    <footer id="ui">
+        <span id="counter">§ 01 / 105</span>
+        <span id="chapter">Cover</span>
+        <div id="track">
+            <div id="fill"></div>
+        </div>
+        <button class="navbtn" id="contents" aria-label="Contents"><i data-lucide="list"></i></button>
+        <button class="navbtn" id="prev" aria-label="Previous slide"><i data-lucide="chevron-left"></i></button>
+        <button class="navbtn" id="next" aria-label="Next slide"><i data-lucide="chevron-right"></i></button>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        /* =============== tiny C syntax highlighter =============== */
+        const RX = /(\/\/[^\n]*)|(\/\*[\s\S]*?\*\/)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|(^[ \t]*#[^\n]*)|\b(int|float|double|char|void|long|short|unsigned|signed|const|struct|typedef|union|enum|static|if|else|for|while|do|switch|case|default|break|continue|return|sizeof|NULL|true|false)\b|\b(\d+(?:\.\d+)?[uUlLfF]*)\b|([A-Za-z_]\w*)(?=\s*\()/gm;
+        function hl(src) {
+            const e = src.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return e.replace(RX, (m, lc, bc, st, ch, pre, kw, nu, fn) => {
+                if (lc || bc) return `<span class="tk-cm">${m}</span>`;
+                if (st || ch) return `<span class="tk-st">${m}</span>`;
+                if (pre) return `<span class="tk-pre">${m}</span>`;
+                if (kw) return `<span class="tk-kw">${m}</span>`;
+                if (nu) return `<span class="tk-nu">${m}</span>`;
+                if (fn) return `<span class="tk-fn">${m}</span>`;
+                return m;
+            });
+        }
+
+        /* =============== the manual : 105 pages =============== */
+        const CH = {
+            1: 'First Steps', 2: 'Data & Variables', 3: 'Operators & Input',
+            4: 'Making Decisions', 5: 'Loops', 6: 'Functions',
+            7: 'Arrays & Strings', 8: 'Pointers', 9: 'Structures', 10: 'The Road Ahead'
+        };
+
+        const S = [
+            { type: 'title' },
+
+            /* ================= CH 1 · FIRST STEPS ================= */
+            {
+                ch: 1, icon: 'languages', file: 'hello.c', title: 'What is C?', sub: 'The grandmother of modern languages',
+                analogy: `C is the <em>Latin</em> of programming — Java, Python and C++ all borrowed their grammar from it. Learn C once, and every other language starts reading like a dialect you already speak.`,
+                code: `#include <stdio.h>\n\nint main(void) {\n    printf("Hello, World!\\n");\n    return 0;\n}`,
+                out: `Hello, World!`
+            },
+
+            {
+                ch: 1, icon: 'chef-hat', file: 'translate.c', title: 'Why we compile', sub: 'Computers only read binary',
+                analogy: `The CPU speaks one language: <em>on/off switches</em>, pure binary. A compiler is a human translator who converts your entire letter into binary <em>before</em> delivery — so the machine later reads it at full speed, with no translator in the room.`,
+                code: `// what a human writes:\nprintf("Hi");\n\n// what the CPU actually reads:\n10010111 11001010 00001101`,
+                out: `Hi`
+            },
+
+            {
+                ch: 1, icon: 'factory', file: 'compile.sh', title: 'Compile & run', sub: 'From hello.c to ./hello',
+                analogy: `You write a <em>recipe</em> (source code), hand it to a <em>chef</em> (gcc), and receive a finished <em>dish</em> — an executable you can serve again and again, instantly, without re-cooking.`,
+                code: `// step 1 — hand over the recipe\n$ gcc hello.c -o hello\n\n// step 2 — serve the dish\n$ ./hello`,
+                out: `Hello, World!`
+            },
+
+            {
+                ch: 1, icon: 'factory', file: 'factory.sh', title: 'Inside the compiler', sub: 'Four stops on the factory line',
+                analogy: `Compilation is an <em>assembly line</em>: the prep chef unfolds every <code>#include</code>, the cook chops C into assembly, the assembler plates it as object code, and the <em>linker</em> glues on library tools like printf before serving the executable.`,
+                code: `$ gcc -E hello.c      // 1. preprocess\n$ gcc -S hello.c      // 2. compile to assembly\n$ gcc -c hello.c      // 3. assemble to object code\n$ gcc hello.c -o hello // 4. link + serve`,
+                out: `$ ./hello\nHello, World!`
+            },
+
+            {
+                ch: 1, icon: 'mail', file: 'anatomy.c', title: 'Anatomy of a program', sub: 'Every C program wears the same skeleton',
+                analogy: `A C program is a <em>formal letter</em>: the <code>#include</code> lines are the letterhead, <code>main()</code> is the body, and <code>return 0</code> is your signature meaning “all went well”.`,
+                code: `#include <stdio.h>        // the letterhead\n\nint main(void) {          // the body begins\n    printf("Dear computer,\\n");\n    printf("Warm regards.\\n");\n    return 0;             // the signature\n}`,
+                out: `Dear computer,\nWarm regards.`
+            },
+
+            {
+                ch: 1, icon: 'wrench', file: 'include.c', title: '#include', sub: 'Borrowing tools from the library',
+                analogy: `<code>stdio.h</code> is a <em>toolbox</em> kept in a public library. <code>#include</code> is you signing it out, so your program may use tools like <code>printf</code> — no need to reinvent the hammer.`,
+                code: `#include <stdio.h>   // sign out the printing toolbox\n\nint main(void) {\n    printf("Tools ready!\\n");\n    return 0;\n}`,
+                out: `Tools ready!`
+            },
+
+            {
+                ch: 1, icon: 'mail', file: 'stdio.c', title: 'stdio.h', sub: 'The mailroom of every program',
+                analogy: `stdio means <em>standard input/output</em> — it’s the building’s mailroom. It hands you <code>printf</code> (outgoing mail) and <code>scanf</code> (incoming mail). One signature at the top and the whole mailroom is yours.`,
+                code: `#include <stdio.h>   // mailroom access\n\nint main(void) {\n    printf("Outgoing mail!\\n");\n    return 0;\n}`,
+                out: `Outgoing mail!`
+            },
+
+            {
+                ch: 1, icon: 'door-open', file: 'main.c', title: 'main()', sub: 'Where every journey begins',
+                analogy: `Every program is a house, and <code>main()</code> is the <em>front door</em>. The computer always knocks here first — no matter what else is built inside.`,
+                code: `#include <stdio.h>\n\nint main(void) {\n    printf("Knock knock.\\n");\n    return 0;\n}`,
+                out: `Knock knock.`
+            },
+
+            {
+                ch: 1, icon: 'pilcrow', file: 'periods.c', title: 'Semicolons ;', sub: 'The full stop of C',
+                analogy: `Every statement is a sentence, and the semicolon is its <em>period</em>. Forget one and the compiler — a strict grammar teacher — stops reading mid-sentence and complains.`,
+                code: `int age = 21;               // full stop\nprintf("Age: %d\\n", age);   // full stop\n\n// int x = 5    <- no stop:\n// error: expected ';'`,
+                out: `Age: 21`
+            },
+
+            {
+                ch: 1, icon: 'flag', file: 'exit.c', title: 'return 0', sub: 'Your program’s report card',
+                analogy: `When <code>main</code> finishes, it hands the operating system a <em>report card</em>. 0 means “everything went well” — a Unix tradition older than most programming languages.`,
+                code: `int main(void) {\n    printf("Job done.\\n");\n    return 0;   // 0 = success\n}`,
+                out: `$ ./hello\nJob done.\n$ echo $?\n0`
+            },
+
+            {
+                ch: 1, icon: 'megaphone', file: 'printf.c', title: 'printf()', sub: 'Your program finds its voice',
+                analogy: `<code>printf</code> is your program’s <em>megaphone</em>. Without it, your program works in total silence — like a mime performing behind soundproof glass.`,
+                code: `printf("I am alive!\\n");\nprintf("Hello from the other side!\\n");`,
+                out: `I am alive!\nHello from the other side!`
+            },
+
+            {
+                ch: 1, icon: 'form-input', file: 'formats.c', title: 'Format specifiers', sub: 'Fill-in-the-blank sentences',
+                analogy: `A printf string is a <em>mad-libs form</em>: each <code>%</code> code is a blank, and each argument after the comma fills the next blank in order. <code>%d</code> whole numbers, <code>%f</code> decimals, <code>%c</code> one letter, <code>%s</code> words.`,
+                code: `int age = 21;\nfloat gpa = 3.9f;\nchar grade = 'A';\n\nprintf("Age %d, GPA %.1f, grade %c\\n", age, gpa, grade);`,
+                out: `Age 21, GPA 3.9, grade A`
+            },
+
+            {
+                ch: 1, icon: 'drama', file: 'escapes.c', title: 'Escape sequences', sub: 'Secret stage directions inside text',
+                analogy: `Escapes are <em>whispered stage directions</em>: the audience sees the line, but <code>\\n</code> quietly tells the printer “curtain drop — new line here”.`,
+                code: `printf("Line one\\n");\nprintf("Tab\\tjump\\n");\nprintf("She said \\"Hi!\\"\\n");`,
+                out: `Line one\nTab    jump\nShe said "Hi!"`
+            },
+
+            {
+                ch: 1, icon: 'notebook-pen', file: 'comments.c', title: 'Comments', sub: 'Notes written for humans',
+                analogy: `Comments are <em>scribbles in the margin of a cookbook</em>: “grandma’s trick — butter first!” The oven ignores them completely, but the next cook — future you — will be grateful.`,
+                code: `// one-line note\nint socks = 3;   // one is always lost\n\n/* a block comment can\n   stretch across lines */\nprintf("%d\\n", socks);`,
+                out: `3`
+            },
+
+            {
+                ch: 1, icon: 'braces', file: 'blocks.c', title: 'Blocks { }', sub: 'Walls that group statements',
+                analogy: `Curly braces are the <em>walls of a room</em>: everything inside belongs to one if, one loop, one function. Indenting the contents is sweeping the floor — the compiler doesn’t care, but humans instantly see the room’s shape.`,
+                code: `int score = 95;\n\nif (score > 90) {\n    printf("Excellent!\\n");\n    printf("Gold star.\\n");\n}\nprintf("Outside again.\\n");`,
+                out: `Excellent!\nGold star.\nOutside again.`
+            },
+
+            {
+                ch: 1, icon: 'case-sensitive', file: 'case.c', title: 'Case sensitive', sub: 'age, Age and AGE are three strangers',
+                analogy: `C treats capital letters as entirely different characters — like twins named “Anna” and “anna” whose mail keeps getting mixed up. <code>printf</code> and <code>PrintF</code> are not the same tool.`,
+                code: `int age = 20;\nint Age = 30;\n\nprintf("age = %d\\n", age);\nprintf("Age = %d\\n", Age);`,
+                out: `age = 20\nAge = 30`
+            },
+
+            {
+                ch: 1, icon: 'bug', file: 'error.c', title: 'Reading errors', sub: 'The compiler’s red pen',
+                analogy: `The compiler is a strict proofreader. A <em>syntax error</em> is a misspelled word — caught before running. A <em>runtime error</em> is a dropped tray mid-performance. The <em>logic error</em> is the villain: recipe followed perfectly, but the dish still tastes wrong.`,
+                code: `#include <stdio.h>\n\nint main(void) {\n    printf("Hello\\n")   // <- missing ;\n    return 0;\n}`,
+                out: `error.c:4:22: error: expected\n';' before 'return'`
+            },
+
+            /* ================= CH 2 · DATA & VARIABLES ================= */
+            {
+                ch: 2, icon: 'package', file: 'variables.c', title: 'Variables', sub: 'The computer’s labeled boxes',
+                analogy: `A variable is a <em>labeled box</em> in the computer’s vast warehouse. <code>int age = 25</code> puts a box on the shelf marked “age” and drops the number 25 inside.`,
+                code: `int age = 25;\nfloat height = 1.75f;\n\nprintf("Age: %d\\n", age);\nprintf("Height: %.2f m\\n", height);`,
+                out: `Age: 25\nHeight: 1.75 m`
+            },
+
+            {
+                ch: 2, icon: 'tag', file: 'declare.c', title: 'Declaration', sub: 'Make the box, then fill it',
+                analogy: `Declaring is <em>labeling an empty jar</em> and placing it on the shelf: the warehouse now knows the box exists and what shape of contents fits — even before anything is inside.`,
+                code: `int score;        // 1. box made, still empty\nscore = 100;      // 2. now filled\n\nprintf("%d\\n", score);`,
+                out: `100`
+            },
+
+            {
+                ch: 2, icon: 'package-open', file: 'garbage.c', title: 'Uninitialized garbage', sub: 'What’s in the box before you fill it?',
+                analogy: `A brand-new jar isn’t truly empty — it holds <em>whatever the previous tenant left behind</em>. Reading an uninitialized variable is eating from an unlabeled jar: technically allowed, gastronomically risky.`,
+                code: `int lucky;        // holds random dust\nint safe = 7;     // properly filled\n\nprintf("safe = %d\\n", safe);\n// lucky might print -12173... or 0\n// ...or anything at all!`,
+                out: `safe = 7`
+            },
+
+            {
+                ch: 2, icon: 'hand', file: 'int.c', title: 'int', sub: 'Whole numbers, and only whole numbers',
+                analogy: `<code>int</code> counts on its <em>fingers</em>: perfect for 5 apples or 3 people — but ask for 2.5 fingers and it simply chops the fraction off.`,
+                code: `int apples = 5;\nint people = 2;\n\nprintf("Each gets %d\\n", apples / people);`,
+                out: `Each gets 2`
+            },
+
+            {
+                ch: 2, icon: 'gauge', file: 'overflow.c', title: 'Integer overflow', sub: 'When the odometer rolls over',
+                analogy: `An int is an <em>odometer with a fixed number of digits</em>. Drive past 2,147,483,647 and it silently rolls back around to the negatives — just like a car odometer spinning from 999999 to 000000.`,
+                code: `#include <limits.h>\n\nprintf("INT_MAX     = %d\\n", INT_MAX);\nprintf("INT_MAX + 1 = %d\\n", INT_MAX + 1);`,
+                out: `INT_MAX     = 2147483647\nINT_MAX + 1 = -2147483648`
+            },
+
+            {
+                ch: 2, icon: 'archive', file: 'sizes.c', title: 'short & long', sub: 'Choosing your box size',
+                analogy: `Same warehouse, different shelf sizes. <code>short</code> is a small matchbox — saves space, holds less. <code>long</code> is a wardrobe box — holds far more, costs more shelf. Match the box to the cargo.`,
+                code: `short year = 2024;\nlong distance_to_moon = 384400L;\n\nprintf("%d\\n", year);\nprintf("%ld km\\n", distance_to_moon);`,
+                out: `2024\n384400 km`
+            },
+
+            {
+                ch: 2, icon: 'trending-up', file: 'unsigned.c', title: 'unsigned', sub: 'No negatives allowed',
+                analogy: `An unsigned counter is a <em>turnstile at a stadium</em>: it only counts upward and physically cannot go below zero. In exchange — with the negative half of the dial removed — it counts twice as high.`,
+                code: `unsigned int population = 4200000000u;\n\nprintf("people on Earth: %u\\n", population);`,
+                out: `people on Earth: 4200000000`
+            },
+
+            {
+                ch: 2, icon: 'beaker', file: 'float.c', title: 'float', sub: 'When decimals matter',
+                analogy: `<code>float</code> is a <em>kitchen measuring jug</em> — fine for 250.5 ml. The markings are close together, so a tiny smear of imprecision is baked in. Use it when “roughly right” is right enough.`,
+                code: `float price = 19.99f;\n\nprintf("Price: %.2f\\n", price);`,
+                out: `Price: 19.99`
+            },
+
+            {
+                ch: 2, icon: 'ruler', file: 'precision.c', title: 'Floating-point fuzz', sub: 'Why 0.1 + 0.2 ≠ 0.3',
+                analogy: `Floats measure with a <em>slightly stretchy ruler</em>: every value snaps to the nearest marking, and tiny errors accumulate. That’s why banks count money in integer cents — never in float dollars.`,
+                code: `printf("%.20f\\n", 0.1 + 0.2);\nprintf("%d\\n", 0.1 + 0.2 == 0.3);`,
+                out: `0.30000000000000004441\n0`
+            },
+
+            {
+                ch: 2, icon: 'flask-conical', file: 'double.c', title: 'double', sub: 'Twice the precision',
+                analogy: `If float is the kitchen jug, <code>double</code> is the <em>lab-grade graduated cylinder</em>: same idea, markings twice as fine. Science, engineering and most everyday math default to double.`,
+                code: `double pi = 3.141592653589793;\n\nprintf("pi   = %f\\n", pi);\nprintf("pi   = %.10f\\n", pi);`,
+                out: `pi   = 3.141593\npi   = 3.1415926536`
+            },
+
+            {
+                ch: 2, icon: 'square', file: 'char.c', title: 'char', sub: 'One letter at a time',
+                analogy: `A <code>char</code> is a single <em>Scrabble tile</em> — one letter, one tile, always in single quotes. To spell a word you need a whole row of them (that’s a string, coming later).`,
+                code: `char grade = 'A';\n\nprintf("Grade: %c\\n", grade);`,
+                out: `Grade: A`
+            },
+
+            {
+                ch: 2, icon: 'hash', file: 'ascii.c', title: 'Chars are numbers', sub: 'Every letter has a locker number',
+                analogy: `Under the hood, a char is just a small number — the ASCII table is the school’s <em>locker map</em>: locker 65 holds 'A', locker 97 holds 'a'. That’s why 'A' + 1 opens locker 66: 'B'.`,
+                code: `char letter = 'A';\n\nprintf("%c lives in locker %d\\n", letter, letter);\nprintf("next door: %c\\n", letter + 1);`,
+                out: `A lives in locker 65\nnext door: B`
+            },
+
+            {
+                ch: 2, icon: 'power', file: 'bool.c', title: 'bool', sub: 'The yes/no type',
+                analogy: `A boolean is a bare <em>light switch</em>: exactly two positions — on (1, true) and off (0, false). Include <code>&lt;stdbool.h&gt;</code> to write them by name.`,
+                code: `#include <stdbool.h>\n\nbool isRaining = true;\n\nif (isRaining)\n    printf("Take an umbrella.\\n");`,
+                out: `Take an umbrella.`
+            },
+
+            {
+                ch: 2, icon: 'dimensions', file: 'sizeof.c', title: 'sizeof', sub: 'Measuring the boxes',
+                analogy: `<code>sizeof</code> is a <em>tape measure for the warehouse</em>: hold it against any type and it reports the box’s size in bytes. On most machines: char 1, int 4, double 8.`,
+                code: `printf("char   : %zu\\n", sizeof(char));\nprintf("int    : %zu\\n", sizeof(int));\nprintf("double : %zu\\n", sizeof(double));`,
+                out: `char   : 1\nint    : 4\ndouble : 8`
+            },
+
+            {
+                ch: 2, icon: 'lock', file: 'const.c', title: 'Constants', sub: 'Values locked under glass',
+                analogy: `<code>const</code> is a box <em>sealed with wax</em>: you may look at π as often as you like, but try to change it and the compiler slams the lid shut.`,
+                code: `const float PI = 3.14159f;\nfloat r = 2.0f;\n\nprintf("Area: %.2f\\n", PI * r * r);`,
+                out: `Area: 12.57`
+            },
+
+            {
+                ch: 2, icon: 'stamp', file: 'define.c', title: '#define', sub: 'A rubber stamp before compilation',
+                analogy: `<code>#define</code> is a <em>rubber stamp</em> pressed before the compiler reads a word: every <code>MAX_LAPS</code> in your text is stamped into 5 first. Pure text substitution — no box, no type, just ink.`,
+                code: `#define MAX_LAPS 3\n\nfor (int i = 1; i <= MAX_LAPS; i++)\n    printf("Lap %d\\n", i);`,
+                out: `Lap 1\nLap 2\nLap 3`
+            },
+
+            {
+                ch: 2, icon: 'fingerprint', file: 'names.c', title: 'Identifiers', sub: 'Naming your variables',
+                analogy: `Naming a variable is naming a child: letters and digits allowed, no spaces, can’t start with a digit — and the family’s reserved names (<code>int</code>, <code>return</code>, <code>for</code>…) are already taken. C’s house style is snake_case.`,
+                code: `int player_score = 10;   // house style\nint playerScore  = 10;   // legal, camelCase\n// int 2players;  // can't start with a digit\n// int my score;  // no spaces!\nprintf("%d\\n", player_score);`,
+                out: `10`
+            },
+
+            {
+                ch: 2, icon: 'package-plus', file: 'assign.c', title: 'Assignment =', sub: 'Storing, never comparing',
+                analogy: `<code>=</code> is a courier with a <em>one-way arrow</em>: whatever stands on the right is delivered into the box on the left. It never asks “are these equal?” — that question belongs to <code>==</code>, arriving shortly.`,
+                code: `int left, right;\nleft = 5;      // deliver 5 into 'left'\nright = left;  // copy left's value into right\nleft = 99;     // only 'left' changes\n\nprintf("left %d, right %d\\n", left, right);`,
+                out: `left 99, right 5`
+            },
+
+            /* ================= CH 3 · OPERATORS & INPUT ================= */
+            {
+                ch: 3, icon: 'calculator', file: 'arith.c', title: 'Arithmetic operators', sub: 'The built-in calculator',
+                analogy: `Your program has a <em>calculator wired into its skull</em> — but a strict one: with whole numbers, 17 ÷ 5 is exactly 3. The remainder? That’s what <code>%</code> is for.`,
+                code: `int a = 17, b = 5;\n\nprintf("%d + %d = %d\\n", a, b, a + b);\nprintf("%d - %d = %d\\n", a, b, a - b);\nprintf("%d * %d = %d\\n", a, b, a * b);`,
+                out: `17 + 5 = 22\n17 - 5 = 12\n17 * 5 = 85`
+            },
+
+            {
+                ch: 3, icon: 'pizza', file: 'intdiv.c', title: 'Integer division', sub: '5 / 2 is 2. Deal with it.',
+                analogy: `Dividing two ints is <em>sharing pizza among whole people</em>: 5 slices, 2 friends — each gets 2, and the half-slice quietly vanishes. Want the half? Make one side a float first.`,
+                code: `printf("5 / 2   = %d\\n", 5 / 2);\nprintf("5.0 / 2 = %.1f\\n", 5.0 / 2);`,
+                out: `5 / 2   = 2\n5.0 / 2 = 2.5`
+            },
+
+            {
+                ch: 3, icon: 'cookie', file: 'modulus.c', title: 'Modulus %', sub: 'What’s left on the plate',
+                analogy: `<code>%</code> hands you the <em>leftover after the fair sharing</em>: 17 slices among 5 friends — everyone gets 3, and 2 stay on the plate. It’s also the classic even/odd test.`,
+                code: `int slices = 17, friends = 5;\n\nprintf("each gets %d\\n", slices / friends);\nprintf("leftover  %d\\n", slices % friends);`,
+                out: `each gets 3\nleftover  2`
+            },
+
+            {
+                ch: 3, icon: 'list-ordered', file: 'precedence.c', title: 'Operator precedence', sub: 'Who calculates first',
+                analogy: `Operators queue like customers with <em>VIP badges</em>: <code>* / %</code> cut in line before <code>+ -</code>. Parentheses are the manager — anything inside them is served first, always.`,
+                code: `printf("%d\\n", 2 + 3 * 4);    // * first\nprintf("%d\\n", (2 + 3) * 4);  // brackets first`,
+                out: `14\n20`
+            },
+
+            {
+                ch: 3, icon: 'coins', file: 'compound.c', title: 'Compound assignment', sub: 'Shorthand for updating a value',
+                analogy: `<code>score += 25</code> is <em>topping up the jar</em> instead of emptying it and refilling from scratch — same result, far less ceremony.`,
+                code: `int score = 50;\n\nscore += 25;   // score = score + 25\nscore -= 10;\nscore *= 2;\n\nprintf("Score: %d\\n", score);`,
+                out: `Score: 130`
+            },
+
+            {
+                ch: 3, icon: 'plus', file: 'tally.c', title: '++ and --', sub: 'Tally marks for your variables',
+                analogy: `Think <em>tally marks on a whiteboard</em>: every <code>++</code> is one more stroke, every <code>--</code> wipes one away. Bartenders have done this for centuries.`,
+                code: `int tickets = 3;\n\ntickets++;   // sold one more -> 4\ntickets++;   // -> 5\ntickets--;   // a refund   -> 4\n\nprintf("Tickets: %d\\n", tickets);`,
+                out: `Tickets: 4`
+            },
+
+            {
+                ch: 3, icon: 'camera', file: 'prefix.c', title: '++i vs i++', sub: 'Photo before or after the haircut',
+                analogy: `<code>i++</code> takes the photo <em>first</em>, then gets the haircut — you see the old value. <code>++i</code> gets the haircut <em>first</em>, then the photo — the new value. Alone on a line, nobody can tell them apart.`,
+                code: `int a = 5, b = 5;\n\nprintf("a++ gives %d\\n", a++);  // old value\nprintf("++b gives %d\\n", ++b);  // new value\nprintf("a=%d b=%d\\n", a, b);`,
+                out: `a++ gives 5\n++b gives 6\na=6 b=6`
+            },
+
+            {
+                ch: 3, icon: 'banknote', file: 'implicit.c', title: 'Implicit conversion', sub: 'The quiet banker',
+                analogy: `Mixing types triggers an <em>automatic currency exchange behind the counter</em>: hand the cashier an int next to a double and she quietly upgrades your coins to bills. Convenient — but converting the other way chops your change.`,
+                code: `int coins = 7;\ndouble bills = coins;    // int -> double: safe\n\ndouble price = 9.99;\nint paid = price;        // chopped to 9!\n\nprintf("%.1f\\n", bills);\nprintf("%d\\n", paid);`,
+                out: `7.0\n9`
+            },
+
+            {
+                ch: 3, icon: 'arrow-left-right', file: 'casting.c', title: 'Type casting', sub: 'Exchanging one type for another',
+                analogy: `Casting is the <em>currency exchange desk</em>: hand over integer coins, receive decimal bills. Same value, different pocket — and suddenly 7 ÷ 2 buys 3.5.`,
+                code: `int a = 7, b = 2;\n\nprintf("int division : %d\\n", a / b);\nprintf("real division: %.1f\\n", (float)a / b);`,
+                out: `int division : 3\nreal division: 3.5`
+            },
+
+            {
+                ch: 3, icon: 'scale', file: 'compare.c', title: 'Comparison operators', sub: 'Questions with yes/no answers',
+                analogy: `Every comparison is a <em>balance scale asked a question</em> — “is left heavier than right?” The answer is always exactly 1 (yes) or 0 (no): C’s native words for true and false.`,
+                code: `printf("%d\\n", 10 > 3);    // 1 = true\nprintf("%d\\n", 10 < 3);    // 0 = false\nprintf("%d\\n", 10 >= 10);  // 1`,
+                out: `1\n0\n1`
+            },
+
+            {
+                ch: 3, icon: 'equal', file: 'eqeq.c', title: '== vs =', sub: 'C’s most famous trap',
+                analogy: `<code>=</code> places a sticker; <code>==</code> asks “are these twins?”. Inside an if, typing <code>=</code> by accident makes C answer a totally different question — “did the sticker stick?” — which is almost always yes.`,
+                code: `int magic = 7, guess = 5;\n\nif (guess == magic)\n    printf("You win!\\n");\nelse\n    printf("Try again!\\n");\n\n// if (guess = magic)  <- trap!`,
+                out: `Try again!`
+            },
+
+            {
+                ch: 3, icon: 'key', file: 'and.c', title: '&& (AND)', sub: 'The two-key vault',
+                analogy: `Some vaults need <em>two keys turned at once</em>: <code>&amp;&amp;</code> insists every condition is true simultaneously. One missing key and the vault stays shut.`,
+                code: `int age = 22, hasTicket = 1;\n\nif (age >= 18 && hasTicket)\n    printf("Welcome to the show.\\n");`,
+                out: `Welcome to the show.`
+            },
+
+            {
+                ch: 3, icon: 'unlock', file: 'or.c', title: '|| (OR)', sub: 'Any key opens the door',
+                analogy: `A house where the front door, the back door or the garage code all let you in: <code>||</code> is satisfied when <em>at least one</em> condition holds. Only when every single one fails does it stay locked.`,
+                code: `int weekend = 0, holiday = 1;\n\nif (weekend || holiday)\n    printf("Sleep in!\\n");`,
+                out: `Sleep in!`
+            },
+
+            {
+                ch: 3, icon: 'rotate-ccw', file: 'not.c', title: '! (NOT)', sub: 'Opposite day',
+                analogy: `<code>!</code> flips any claim to its <em>opposite</em>: “not raining” is true exactly when “raining” is false. One exclamation mark turns a yes into a no.`,
+                code: `int raining = 0;\n\nprintf("raining     : %d\\n", raining);\nprintf("not raining : %d\\n", !raining);`,
+                out: `raining     : 0\nnot raining : 1`
+            },
+
+            {
+                ch: 3, icon: 'ear', file: 'scanf.c', title: 'scanf()', sub: 'Your program learns to listen',
+                analogy: `<code>printf</code> talks; <code>scanf</code> <em>listens</em>. It is the order form on the counter — your program waits, pen hovering, until someone writes an answer and presses Enter.`,
+                code: `int age;\n\nprintf("Enter your age: ");\nscanf("%d", &age);\n\nprintf("Next year: %d\\n", age + 1);`,
+                out: `Enter your age: 21\nNext year: 22`
+            },
+
+            {
+                ch: 3, icon: 'map-pin', file: 'ampersand.c', title: 'Why & in scanf?', sub: 'Writing the delivery address',
+                analogy: `scanf is a courier who needs an <em>address</em>, not a package. <code>age</code> is the box itself; <code>&amp;age</code> is the box’s street address on the delivery slip. Hand over the box and the courier has nowhere to put your answer.`,
+                code: `int age;\n\nprintf("Age? ");\nscanf("%d", &age);   // & = "address of"\n\nprintf("Dog years: %d\\n", age * 7);`,
+                out: `Age? 12\nDog years: 84`
+            },
+
+            {
+                ch: 3, icon: 'clipboard-list', file: 'multi.c', title: 'Reading several values', sub: 'One slip, several blanks',
+                analogy: `A single order form with <em>several blanks</em>: scanf fills them left to right, in the order you list the addresses. Separate the numbers with spaces or new lines when typing.`,
+                code: `int a, b;\n\nprintf("Two numbers: ");\nscanf("%d %d", &a, &b);\n\nprintf("Sum: %d\\n", a + b);`,
+                out: `Two numbers: 3 9\nSum: 12`
+            },
+
+            /* ================= CH 4 · MAKING DECISIONS ================= */
+            {
+                ch: 4, icon: 'git-branch', file: 'if.c', title: 'if', sub: 'A fork in the road',
+                analogy: `<code>if</code> is a <em>fork guarded by a sentinel</em>: “Is it hotter than 35°?” Yes — take the umbrella path. No — the whole block is skipped, as if invisible.`,
+                code: `int temperature = 38;\n\nif (temperature > 35) {\n    printf("Stay hydrated!\\n");\n}\n\nprintf("Done.\\n");`,
+                out: `Stay hydrated!\nDone.`
+            },
+
+            {
+                ch: 4, icon: 'toggle-left', file: 'ifelse.c', title: 'if — else', sub: 'The light switch',
+                analogy: `An <code>if-else</code> is a <em>light switch</em>: exactly one of two states. The condition flips it to “on” or “off” — never both, never neither.`,
+                code: `int number = 7;\n\nif (number % 2 == 0) {\n    printf("Even\\n");\n} else {\n    printf("Odd\\n");\n}`,
+                out: `Odd`
+            },
+
+            {
+                ch: 4, icon: 'list-checks', file: 'ladder.c', title: 'The else-if ladder', sub: 'Passport control for your values',
+                analogy: `The ladder is <em>passport control</em>: each officer checks one stamp, in order. The first match waves you through — every officer after that goes home unanswered.`,
+                code: `int score = 78;\n\nif (score >= 90)       printf("A\\n");\nelse if (score >= 80)  printf("B\\n");\nelse if (score >= 70)  printf("C\\n");\nelse                   printf("Keep trying\\n");`,
+                out: `C`
+            },
+
+            {
+                ch: 4, icon: 'layers', file: 'nested.c', title: 'Nested ifs', sub: 'Checkpoints within checkpoints',
+                analogy: `Airport <em>security gates</em>: first the outer checkpoint — do you have a ticket? — and only then an inner one — is your seat business class? Questions inside questions, gates inside gates.`,
+                code: `int age = 22, member = 1;\n\nif (age >= 18) {\n    if (member) {\n        printf("VIP lounge access.\\n");\n    } else {\n        printf("Regular entry.\\n");\n    }\n}`,
+                out: `VIP lounge access.`
+            },
+
+            {
+                ch: 4, icon: 'layout-grid', file: 'switch.c', title: 'switch', sub: 'The vending machine of decisions',
+                analogy: `<code>switch</code> is a <em>vending machine</em>: press one button (a <code>case</code>) and exactly that snack drops. It shines when one value has many possible exact matches.`,
+                code: `char choice = 'B';\n\nswitch (choice) {\n    case 'A': printf("Americano\\n"); break;\n    case 'B': printf("Latte\\n");     break;\n    default:  printf("Water\\n");\n}`,
+                out: `Latte`
+            },
+
+            {
+                ch: 4, icon: 'chevrons-down', file: 'fallthrough.c', title: 'break in switch', sub: 'Stopping the dominoes',
+                analogy: `Without <code>break</code>, cases are <em>dominoes</em>: knock over case 'B' and every case after it topples too. This is called fallthrough — sometimes used by veterans on purpose, but today: always break.`,
+                code: `char choice = 'B';\n\nswitch (choice) {\n    case 'A': printf("Americano\\n"); break;\n    case 'B': printf("Latte\\n");     // no break!\n    case 'C': printf("+ syrup\\n");   // falls through\n    default:  printf("+ cup\\n");    // ...and again\n}`,
+                out: `Latte\n+ syrup\n+ cup`
+            },
+
+            {
+                ch: 4, icon: 'shield', file: 'default.c', title: 'default', sub: 'The none-of-the-above box',
+                analogy: `Ballot papers end with <em>“none of the above”</em> — <code>default</code> is where the switch lands when no case matches. The polite safety net that keeps silent programs honest.`,
+                code: `int day = 9;\n\nswitch (day) {\n    case 6:\n    case 7: printf("Weekend!\\n"); break;\n    default: printf("Weekday.\\n");\n}`,
+                out: `Weekday.`
+            },
+
+            {
+                ch: 4, icon: 'soup', file: 'ternary.c', title: 'The ternary ? :', sub: 'if-else in one breath',
+                analogy: `The ternary is a <em>waiter’s whispered question</em> — “soup or salad?” One condition, one value if yes, one if no, all inside a single expression.`,
+                code: `int age = 15;\n\nprintf("%s\\n", age >= 18 ? "Adult" : "Minor");`,
+                out: `Minor`
+            },
+
+            /* ================= CH 5 · LOOPS ================= */
+            {
+                ch: 5, icon: 'printer', file: 'why.c', title: 'Why loops?', sub: 'Never copy-paste 100 lines',
+                analogy: `Printing “lap” five times by hand is <em>handwriting the same poster five times</em>; a loop is a photocopier: write the body once, state how many copies, walk away.`,
+                code: `// without loops: copy-paste 5 times\n// with a loop: write once, repeat 5 times\n\nfor (int i = 0; i < 5; i++)\n    printf("Push-up %d\\n", i + 1);`,
+                out: `Push-up 1\nPush-up 2\nPush-up 3\nPush-up 4\nPush-up 5`
+            },
+
+            {
+                ch: 5, icon: 'rotate-cw', file: 'for.c', title: 'The for loop', sub: 'When you know how many laps',
+                analogy: `A <code>for</code> loop is <em>ten laps around the track</em>: you know the count before starting — begin at 1, stop at 5, one lap at a time.`,
+                code: `for (int i = 1; i <= 5; i++) {\n    printf("Lap %d done\\n", i);\n}`,
+                out: `Lap 1 done\nLap 2 done\nLap 3 done\nLap 4 done\nLap 5 done`
+            },
+
+            {
+                ch: 5, icon: 'timer', file: 'anatomy.c', title: 'Anatomy of for', sub: 'Start, check, step',
+                analogy: `The for header is a <em>race official</em>: the starter fires the gun once (init), the marshal checks before every lap (condition), and the timekeeper ticks the counter after each lap (update). Three jobs, two semicolons.`,
+                code: `for (int i = 1; i <= 3; i++) {\n//   ^start   ^check  ^step\n    printf("lap %d\\n", i);\n}`,
+                out: `lap 1\nlap 2\nlap 3`
+            },
+
+            {
+                ch: 5, icon: 'utensils', file: 'while.c', title: 'The while loop', sub: 'As long as you’re hungry',
+                analogy: `<code>while</code> is <em>eating at a buffet</em>: you don’t count plates. You keep going exactly as long as the condition — “still hungry?” — holds true.`,
+                code: `int fuel = 3;\n\nwhile (fuel > 0) {\n    printf("Fuel left: %d\\n", fuel);\n    fuel--;   // eventually, the condition fails\n}`,
+                out: `Fuel left: 3\nFuel left: 2\nFuel left: 1`
+            },
+
+            {
+                ch: 5, icon: 'infinity', file: 'forever.c', title: 'Infinite loops', sub: 'The song that never ends',
+                analogy: `<code>while(1)</code> is a <em>carousel with no stop button</em> — the condition never turns false, so it spins forever. Sometimes that’s a bug (forgot <code>fuel--</code>), sometimes exactly what you want (a game loop). <kbd>Ctrl+C</kbd> is your fire escape.`,
+                code: `// while (1) printf("again!"); <- never stops\n\nint n = 0;\nwhile (n < 3) {\n    printf("tick %d\\n", n);\n    n++;   // the step that saves us\n}`,
+                out: `tick 0\ntick 1\ntick 2`
+            },
+
+            {
+                ch: 5, icon: 'coffee', file: 'dowhile.c', title: 'The do-while loop', sub: 'Taste first, decide after',
+                analogy: `A <code>do-while</code> is <em>sipping the soup before reading the menu</em>: the first taste always happens. Only then do you decide whether to continue.`,
+                code: `int i = 10;\n\ndo {\n    printf("Runs at least once!\\n");\n    i++;\n} while (i < 5);   // false — but too late`,
+                out: `Runs at least once!`
+            },
+
+            {
+                ch: 5, icon: 'door-closed', file: 'break.c', title: 'break', sub: 'The fire exit',
+                analogy: `<code>break</code> is the <em>fire exit</em>: leave the entire building — the whole loop — immediately, no matter which lap you’re on. Found what you came for? Leave.`,
+                code: `for (int i = 1; i <= 100; i++) {\n    if (i * i > 50) {\n        printf("first square over 50: %d\\n", i * i);\n        break;   // stop searching\n    }\n}`,
+                out: `first square over 50: 64`
+            },
+
+            {
+                ch: 5, icon: 'skip-forward', file: 'continue.c', title: 'continue', sub: 'The skip button',
+                analogy: `<code>continue</code> is the <em>skip button</em> on your music player: jump past this one song, but keep the playlist running. Only the current lap is abandoned.`,
+                code: `for (int i = 1; i <= 5; i++) {\n    if (i == 3) continue;   // skip 3\n    printf("%d ", i);\n}\nprintf("\\n");`,
+                out: `1 2 4 5`
+            },
+
+            {
+                ch: 5, icon: 'clock', file: 'nested.c', title: 'Nested loops', sub: 'Clockwork: loops within loops',
+                analogy: `A clock is <em>nested loops in brass and gears</em>: for every single step of the hour hand, the minute hand sweeps a complete lap — inner loop inside outer loop.`,
+                code: `for (int h = 1; h <= 2; h++) {\n    for (int m = 1; m <= 3; m++) {\n        printf("%d:%d ", h, m);\n    }\n}\nprintf("\\n");`,
+                out: `1:1 1:2 1:3 2:1 2:2 2:3`
+            },
+
+            {
+                ch: 5, icon: 'piggy-bank', file: 'total.c', title: 'Pattern: running total', sub: 'The piggy bank',
+                analogy: `Summing in a loop is a <em>piggy bank</em>: start empty (<code>total = 0</code>), and after every lap drop one more coin in. By the last lap, the bank holds the whole sum.`,
+                code: `int total = 0;\n\nfor (int i = 1; i <= 100; i++)\n    total += i;    // coin drop\n\nprintf("1+2+...+100 = %d\\n", total);`,
+                out: `1+2+...+100 = 5050`
+            },
+
+            {
+                ch: 5, icon: 'brick-wall', file: 'stars.c', title: 'Pattern: rows & stars', sub: 'The bricklayer',
+                analogy: `Printing a triangle is <em>bricklaying</em>: row 1 gets one brick, row 2 gets two… The outer loop picks the row; the inner loop lays that row’s bricks.`,
+                code: `for (int row = 1; row <= 4; row++) {\n    for (int star = 0; star < row; star++)\n        printf("* ");\n    printf("\\n");\n}`,
+                out: `* \n* * \n* * * \n* * * * `
+            },
+
+            /* ================= CH 6 · FUNCTIONS ================= */
+            {
+                ch: 6, icon: 'zap', file: 'functions.c', title: 'Functions', sub: 'Machines that do one job well',
+                analogy: `A function is a <em>toaster</em>: bread in, toast out — and you never rewire the heating coil each breakfast. You just press the lever again.`,
+                code: `void greet(void) {\n    printf("Hello there!\\n");\n}\n\ngreet();   // just call it\ngreet();   // and again`,
+                out: `Hello there!\nHello there!`
+            },
+
+            {
+                ch: 6, icon: 'bell', file: 'void.c', title: 'void functions', sub: 'Doing, not returning',
+                analogy: `A <em>doorbell</em>: press it (call it), it rings (does its job), and hands nothing back. <code>void</code> is C’s way of saying “this machine produces no product.”`,
+                code: `void doorbell(void) {\n    printf("Ding-dong!\\n");\n}\n\ndoorbell();\ndoorbell();`,
+                out: `Ding-dong!\nDing-dong!`
+            },
+
+            {
+                ch: 6, icon: 'carrot', file: 'params.c', title: 'Parameters', sub: 'Ingredients into the machine',
+                analogy: `Parameters are the <em>ingredient slots on the machine’s front panel</em>: each caller must supply them, in order, every time. The machine never asks what they are — it just cooks with whatever arrives.`,
+                code: `void area(int w, int h) {\n    printf("%d x %d = %d\\n", w, h, w * h);\n}\n\narea(3, 4);\narea(20, 22);`,
+                out: `3 x 4 = 12\n20 x 22 = 440`
+            },
+
+            {
+                ch: 6, icon: 'gift', file: 'return.c', title: 'Return values', sub: 'The product comes back out',
+                analogy: `A function with <code>return</code> is a <em>vending machine</em>: coins and a button code go in, exactly one snack comes back out. Clean, predictable, reusable.`,
+                code: `int add(int a, int b) {\n    return a + b;\n}\n\nprintf("%d\\n", add(3, 4));\nprintf("%d\\n", add(20, 22));`,
+                out: `7\n42`
+            },
+
+            {
+                ch: 6, icon: 'utensils-crossed', file: 'proto.c', title: 'Prototypes', sub: 'The menu before the kitchen',
+                analogy: `A prototype is the <em>menu posted at the door</em>: it names the dish and its ingredients before the kitchen — the definition further down — is ever reached. C reads top to bottom and refuses to order from an unlisted dish.`,
+                code: `int add(int a, int b);   // the menu\n\nint main(void) {\n    printf("%d\\n", add(3, 4));\n    return 0;\n}\n\nint add(int a, int b) {  // the kitchen\n    return a + b;\n}`,
+                out: `7`
+            },
+
+            {
+                ch: 6, icon: 'home', file: 'local.c', title: 'Local scope', sub: 'House rules',
+                analogy: `A local variable follows <em>house rules</em>: <code>secret_recipe</code> exists only inside the kitchen that declared it. Step outside and the name simply doesn’t exist — the neighbors can’t even see it.`,
+                code: `void kitchen(void) {\n    int secret_recipe = 11;\n    printf("kitchen knows: %d\\n", secret_recipe);\n}\n\nkitchen();\n// printf("%d", secret_recipe); // error!`,
+                out: `kitchen knows: 11`
+            },
+
+            {
+                ch: 6, icon: 'globe', file: 'global.c', title: 'Global scope', sub: 'The law of the land',
+                analogy: `A global variable is <em>national law</em>: declared outside every house, visible on every street of the program. Powerful — and dangerous — because anyone, anywhere, can change it.`,
+                code: `int tax_rate = 10;   // the law of the land\n\nvoid receipt(void) {\n    printf("tax: %d%%\\n", tax_rate);\n}\n\nreceipt();`,
+                out: `tax: 10%`
+            },
+
+            {
+                ch: 6, icon: 'copy', file: 'byvalue.c', title: 'Pass by value', sub: 'The photocopy rule',
+                analogy: `Handing a variable to a function gives it a <em>photocopy of your ID</em>: it may doodle on the copy all it likes — your original stays pristine. To let a function touch the original, hand over the address (pointers, soon).`,
+                code: `void try_to_change(int x) {\n    x = 999;    // scribbles on the copy\n}\n\nint original = 42;\ntry_to_change(original);\n\nprintf("original: %d\\n", original);`,
+                out: `original: 42`
+            },
+
+            {
+                ch: 6, icon: 'corner-up-left', file: 'recursion.c', title: 'Recursion', sub: 'The function that calls itself',
+                analogy: `Recursion is <em>two mirrors facing each other</em>: every reflection holds a smaller one — until, at <code>n == 0</code>, the innermost mirror whispers “Lift-off!”.`,
+                code: `void countdown(int n) {\n    if (n == 0) {\n        printf("Lift-off!\\n");\n        return;\n    }\n    printf("%d...\\n", n);\n    countdown(n - 1);   // calls itself, smaller\n}\n\ncountdown(3);`,
+                out: `3...\n2...\n1...\nLift-off!`
+            },
+
+            {
+                ch: 6, icon: 'anchor', file: 'basecase.c', title: 'The base case', sub: 'Where the chain ends',
+                analogy: `factorial(5) is a <em>chain of delegation</em>: each worker asks the next, until the intern at the bottom — the base case — simply knows the answer and the results multiply their way back up. Without that intern, the questions never end.`,
+                code: `int factorial(int n) {\n    if (n <= 1)          // base case\n        return 1;\n    return n * factorial(n - 1);\n}\n\n// 5 * f(4) -> 4 * f(3) -> 2 * f(1) -> 1\nprintf("5! = %d\\n", factorial(5));`,
+                out: `5! = 120`
+            },
+
+            /* ================= CH 7 · ARRAYS & STRINGS ================= */
+            {
+                ch: 7, icon: 'egg', file: 'arrays.c', title: 'Arrays', sub: 'A carton of numbered slots',
+                analogy: `An array is an <em>egg carton with numbers</em>: one carton named <code>marks</code>, slots 0 through 4. One name, many slots — one type, many values.`,
+                code: `int marks[5] = {88, 92, 79, 95, 84};\n\nprintf("1st: %d\\n", marks[0]);\nprintf("4th: %d\\n", marks[3]);`,
+                out: `1st: 88\n4th: 95`
+            },
+
+            {
+                ch: 7, icon: 'footprints', file: 'zero.c', title: 'Zero-based indexing', sub: 'The ground floor is 0',
+                analogy: `C counts floors the <em>European way</em>: the ground floor is 0, the floor above is 1. So a 5-slot carton has slots 0, 1, 2, 3, 4 — and slot 5 does not exist.`,
+                code: `int marks[5] = {88, 92, 79, 95, 84};\n\nprintf("slot 0 -> %d\\n", marks[0]);\nprintf("slot 4 -> %d\\n", marks[4]);\n// marks[5] does NOT exist!`,
+                out: `slot 0 -> 88\nslot 4 -> 84`
+            },
+
+            {
+                ch: 7, icon: 'package-check', file: 'init.c', title: 'Array initialization', sub: 'Filling the carton at once',
+                analogy: `Fill the carton slot by slot, or <em>pour all the eggs in one go</em> with <code>{ }</code>. Too few values? The remaining slots arrive pre-lined with zeros.`,
+                code: `int full[3]    = {10, 20, 30};\nint partial[3] = {7};   // rest are 0\n\nprintf("%d %d %d\\n", full[0], full[1], full[2]);\nprintf("%d %d %d\\n", partial[0], partial[1], partial[2]);`,
+                out: `10 20 30\n7 0 0`
+            },
+
+            {
+                ch: 7, icon: 'triangle-alert', file: 'oob.c', title: 'Out of bounds', sub: 'Walking off the edge',
+                analogy: `Reading <code>marks[5]</code> in a 5-slot carton is <em>stepping off the last stair in the dark</em>: C won’t stop you — you land in somebody else’s memory. Sometimes silence, sometimes garbage, sometimes a crash. The fence is your job.`,
+                code: `int carton[3] = {1, 2, 3};\n\nprintf("carton[2] = %d  (safe)\\n", carton[2]);\n// carton[3] = ???  <- out of bounds!\n// no error, just chaos`,
+                out: `carton[2] = 3  (safe)`
+            },
+
+            {
+                ch: 7, icon: 'replace', file: 'modify.c', title: 'Changing elements', sub: 'Swap the egg, keep the slot',
+                analogy: `The carton’s shape is fixed, but <em>the eggs inside are yours</em>: reach into any slot and swap what’s there. The array never changes size — only its contents do.`,
+                code: `int scores[3] = {50, 60, 70};\n\nscores[1] = 99;    // replace slot 1\nscores[2] += 5;    // top up slot 2\n\nprintf("%d %d %d\\n", scores[0], scores[1], scores[2]);`,
+                out: `50 99 75`
+            },
+
+            {
+                ch: 7, icon: 'graduation-cap', file: 'rollcall.c', title: 'Walking an array', sub: 'Roll call for your data',
+                analogy: `Looping over an array is <em>morning roll call</em>: the teacher — your <code>for</code> loop — walks the whole row, calls each name in order, and adds every mark to the total.`,
+                code: `int marks[5] = {88, 92, 79, 95, 84};\nint total = 0;\n\nfor (int i = 0; i < 5; i++)\n    total += marks[i];\n\nprintf("Average: %.1f\\n", total / 5.0);`,
+                out: `Average: 87.6`
+            },
+
+            {
+                ch: 7, icon: 'armchair', file: 'grid.c', title: '2D arrays', sub: 'The theater seating chart',
+                analogy: `A 2D array is a <em>cinema</em>: rows and seat numbers. <code>seats[0][2]</code> is row 0, seat 2 — and nested loops are the usher walking every row, every seat.`,
+                code: `int seats[2][3] = {{1, 0, 1},\n                    {0, 1, 1}};\n\nprintf("row 0, seat 2: %d\\n", seats[0][2]);\n\nfor (int r = 0; r < 2; r++) {\n    for (int c = 0; c < 3; c++)\n        printf("%d ", seats[r][c]);\n    printf("\\n");\n}`,
+                out: `row 0, seat 2: 1\n1 0 1 \n0 1 1 `
+            },
+
+            {
+                ch: 7, icon: 'link', file: 'strings.c', title: 'Strings', sub: 'A necklace of characters',
+                analogy: `A string is a <em>beaded necklace</em>: one bead per letter — and in C, it’s really just a row of chars wearing one shared name.`,
+                code: `char name[6] = "Grace";\n\nprintf("Hello, %s!\\n", name);`,
+                out: `Hello, Grace!`
+            },
+
+            {
+                ch: 7, icon: 'eye-off', file: 'clasp.c', title: 'The \\0 terminator', sub: 'How C knows the word ended',
+                analogy: `Every C necklace ends with an <em>invisible clasp</em>, <code>\\0</code>. Functions count beads until they feel the clasp — that’s how printf knows where “Grace” stops and random memory begins.`,
+                code: `char word[6] = "Grace";\n// beads: G r a c e \\0\n\nprintf("%s\\n", word);\nprintf("last bead is the clasp: %d\\n", word[5]);`,
+                out: `Grace\nlast bead is the clasp: 0`
+            },
+
+            {
+                ch: 7, icon: 'signature', file: 'read.c', title: 'Reading a word', sub: 'scanf listens for letters',
+                analogy: `<code>scanf("%s", ...)</code> is a <em>guest book</em>: it copies one word — and the pen lifts at the first space. For full sentences, borrow the wider tool: <code>fgets</code>. (Notice: no <code>&amp;</code> — an array’s name already <em>is</em> an address.)`,
+                code: `char name[20];\n\nprintf("Name? ");\nscanf("%19s", name);\nprintf("Hello, %s!\\n", name);`,
+                out: `Name? Ada\nHello, Ada!`
+            },
+
+            {
+                ch: 7, icon: 'scissors', file: 'stringh.c', title: 'The string.h toolkit', sub: 'The tailor’s bench',
+                analogy: `<code>string.h</code> is a <em>tailor’s bench</em>: <code>strlen</code> is the measuring tape (beads before the clasp), <code>strcpy</code> re-strings a necklace onto another, and <code>strcmp</code> is the twin-test.`,
+                code: `#include <string.h>\n\nchar src[] = "hello";\nchar dst[10];\n\nprintf("length: %zu\\n", strlen(src));\nstrcpy(dst, src);\nprintf("copy  : %s\\n", dst);\nprintf("same? : %d\\n", strcmp(dst, src) == 0);`,
+                out: `length: 5\ncopy  : hello\nsame? : 1`
+            },
+
+            /* ================= CH 8 · POINTERS ================= */
+            {
+                ch: 8, icon: 'bed-double', file: 'memory.c', title: 'Memory is a hotel', sub: 'Every value gets a room',
+                analogy: `RAM is a <em>giant hotel with billions of numbered rooms</em>. Every variable checks into one — and <code>&amp;</code> is simply asking “where do you live?” The answer is the room number, not the guest.`,
+                code: `int a = 10;\nint b = 20;\n\nprintf("a's room: %p\\n", (void *)&a);\nprintf("b's room: %p\\n", (void *)&b);`,
+                out: `a's room: 0x7ffee4a2b87c\nb's room: 0x7ffee4a2b878`
+            },
+
+            {
+                ch: 8, icon: 'map-pin', file: 'pointer.c', title: 'Pointers', sub: 'The address of the gold',
+                analogy: `A pointer holds not the <em>gold</em> but the <em>address of the house where the gold lives</em>, written on a note. <code>&amp;gold</code> writes the address down; the room number changes every run, but the note always finds it.`,
+                code: `int gold = 100;\nint *p = &gold;    // p holds the address\n\nprintf("gold value   : %d\\n", gold);\nprintf("p's note     : %p\\n", (void *)p);`,
+                out: `gold value   : 100\np's note     : 0x7ffee3b4a8ac`
+            },
+
+            {
+                ch: 8, icon: 'navigation', file: 'deref.c', title: 'Dereferencing *', sub: 'Following the address home',
+                analogy: `<code>*p</code> is <em>actually walking to the address and opening the door</em>. Change what’s inside, and — since there is only one gold — everyone watching sees it change.`,
+                code: `int gold = 100;\nint *p = &gold;\n\n*p = 250;    // visit the address, change it\n\nprintf("gold: %d\\n", gold);`,
+                out: `gold: 250`
+            },
+
+            {
+                ch: 8, icon: 'mail-x', file: 'null.c', title: 'NULL', sub: 'A note with no address',
+                analogy: `NULL is an <em>envelope stamped “no address”</em> — a pointer that points nowhere, on purpose. Every trained pointer starts as NULL, and wise code checks the envelope before knocking.`,
+                code: `int *p = NULL;   // points nowhere, safely\n\nif (p == NULL)\n    printf("The note is empty.\\n");\nelse\n    printf("Gold: %d\\n", *p);`,
+                out: `The note is empty.`
+            },
+
+            {
+                ch: 8, icon: 'key-round', file: 'swap.c', title: 'Functions that change things', sub: 'Handing over the house keys',
+                analogy: `Pass-by-value gave the function a photocopy; passing a pointer hands over your <em>actual house keys</em>. The function walks in, rearranges the furniture — and the change is yours to keep.`,
+                code: `void swap(int *a, int *b) {\n    int tmp = *a;\n    *a = *b;\n    *b = tmp;\n}\n\nint x = 1, y = 9;\nswap(&x, &y);\n\nprintf("x=%d y=%d\\n", x, y);`,
+                out: `x=9 y=1`
+            },
+
+            {
+                ch: 8, icon: 'route', file: 'walk.c', title: 'Pointers & arrays', sub: 'The corridor walk',
+                analogy: `An array’s name is the <em>address of room 0</em>; a pointer can stroll down the corridor: <code>p + 1</code> knocks one door further. Array indexing and pointer arithmetic are the same thing in different coats.`,
+                code: `int nums[3] = {10, 20, 30};\nint *p = nums;   // address of slot 0\n\nprintf("%d\\n", *p);       // first\nprintf("%d\\n", *(p + 2)); // third\nprintf("%d\\n", p[2]);     // same thing!`,
+                out: `10\n30\n30`
+            },
+
+            /* ================= CH 9 · STRUCTURES ================= */
+            {
+                ch: 9, icon: 'credit-card', file: 'structs.c', title: 'Structures', sub: 'An ID card for your data',
+                analogy: `A <code>struct</code> is an <em>ID card</em>: name, age and GPA travel together as one card — instead of three loose sticky notes you will inevitably lose.`,
+                code: `struct Student {\n    char name[20];\n    int age;\n    float gpa;\n};\n\nstruct Student s = {"Maya", 19, 3.8f};\n\nprintf("%s, %d, %.1f\\n", s.name, s.age, s.gpa);`,
+                out: `Maya, 19, 3.8`
+            },
+
+            {
+                ch: 9, icon: 'at-sign', file: 'dot.c', title: 'The dot operator', sub: 'Reading fields off the card',
+                analogy: `<code>s.age</code> is <em>pointing at one line of the ID card</em>: card first, then the field. You can read it — or rewrite it — but always through the dot.`,
+                code: `struct Student {\n    char name[20];\n    int age;\n};\n\nstruct Student s = {"Maya", 19};\ns.age = 20;    // rewrite a field\n\nprintf("%s is %d\\n", s.name, s.age);`,
+                out: `Maya is 20`
+            },
+
+            {
+                ch: 9, icon: 'badge', file: 'typedef.c', title: 'typedef', sub: 'A nickname for your type',
+                analogy: `Writing <code>struct Student</code> at every mention is calling someone <em>“Mr. Bartholomew Edgar Thompson III”</em> every single time. typedef issues a nickname: just <code>Student</code>, please.`,
+                code: `typedef struct {\n    char name[20];\n    int age;\n} Student;\n\nStudent s = {"Ada", 36};\n\nprintf("%s, %d\\n", s.name, s.age);`,
+                out: `Ada, 36`
+            },
+
+            {
+                ch: 9, icon: 'library', file: 'rolodex.c', title: 'Arrays of structs', sub: 'The rolodex',
+                analogy: `One struct is one ID card; an array of them is a <em>rolodex</em> — flip through with a loop, pull any card by index. This is how real programs hold lists of real things.`,
+                code: `typedef struct {\n    char name[10];\n    int score;\n} Player;\n\nPlayer team[2] = {{"Ada", 90}, {"Linus", 85}};\n\nfor (int i = 0; i < 2; i++)\n    printf("%s: %d\\n", team[i].name, team[i].score);`,
+                out: `Ada: 90\nLinus: 85`
+            },
+
+            /* ================= CH 10 · THE ROAD AHEAD ================= */
+            {
+                ch: 10, icon: 'components', file: 'gradebook.c', title: 'Everything, together', sub: 'One small program, every big idea',
+                analogy: `Like a first recipe that uses knife, pan and oven at once — here is a program mixing a <em>struct</em>, an <em>array</em>, a <em>function</em> and a <em>loop</em>. If you can read this page, you can read C.`,
+                code: `#include <stdio.h>\n\ntypedef struct { char name[10]; int mark; } Student;\n\nfloat average(Student list[], int n) {\n    int total = 0;\n    for (int i = 0; i < n; i++)\n        total += list[i].mark;\n    return total / (float)n;\n}\n\nint main(void) {\n    Student class[3] = {{"Ada", 92}, {"Linus", 78},\n                        {"Grace", 88}};\n    printf("Class average: %.1f\\n", average(class, 3));\n    return 0;\n}`,
+                out: `Class average: 86.0`
+            },
+
+            { type: 'end' }
+        ];
+
+        /* =============== render the deck =============== */
+        const deck = document.getElementById('deck');
+        const pad = n => String(n).padStart(2, '0');
+
+        S.forEach((s, i) => {
+            const sec = document.createElement('section');
+            sec.className = 'slide';
+
+            if (s.type === 'title') {
+                sec.classList.add('title');
+                sec.innerHTML = `
+      <div class="t-ghost anim a0">C</div>
+      <div class="t-wrap">
+        <div class="kicker anim a1">Field Manual · Second Edition</div>
+        <h1 class="anim a2">The <span class="big-c">C</span><br>Language.</h1>
+        <p class="t-sub anim a3">Expanded &amp; annotated — one hundred and five pages, each
+        concept, sub-concept, operator and classic trap on its own page, with an analogy,
+        a program, and its output.</p>
+        <div class="t-meta anim a4">EST. 1972 · BELL LABS · DENNIS M. RITCHIE</div>
+        <div class="t-hint anim a5"><kbd>←</kbd><kbd>→</kbd> turn pages · <kbd>O</kbd> contents</div>
+      </div>`;
+            }
+            else if (s.type === 'end') {
+                sec.classList.add('end', 'title');
+                sec.innerHTML = `
+      <div class="t-ghost anim a0">∞</div>
+      <div class="t-wrap">
+        <div class="kicker anim a1">Epilogue</div>
+        <h1 class="anim a2">The manual ends.<br><span class="big-c">You begin.</span></h1>
+        <p class="t-sub anim a3">Every expert you admire once stared at their first
+        <em>Segmentation fault</em>. Compile early, break things often, and read the
+        error messages — rude friends, but friends.</p>
+        <div class="anim a5" style="margin-top:26px">
+          <div class="editor">
+            <div class="e-bar"><span class="d d1"></span><span class="d d2"></span><span class="d d3"></span><span class="fname">forever.c</span></div>
+            <pre class="code">${hl(`while (curious) {\n    write_code();\n    make_mistakes();\n    get_better();   // forever\n}`)}</pre>
+          </div>
+          <div class="terminal" style="margin-top:14px">
+            <div class="t-bar"><i data-lucide="terminal"></i><span>OUTPUT</span></div>
+            <pre class="out">see you in the terminal<span class="cur"></span></pre>
+          </div>
+        </div>
+      </div>`;
+            }
+            else {
+                sec.classList.add('std');
+                sec.innerHTML = `
+      <div class="ghost anim a0">${pad(i + 1)}</div>
+      <div class="left">
+        <div class="kicker anim a1">Ch ${pad(s.ch)} · ${CH[s.ch]}</div>
+        <h2 class="anim a2">${s.title}</h2>
+        <p class="sub anim a3">${s.sub}</p>
+        <div class="analogy anim a4">
+          <div class="a-head"><span class="a-ic"><i data-lucide="${s.icon}"></i></span><span>Analogy</span></div>
+          <p>${s.analogy}</p>
+        </div>
+      </div>
+      <div class="right anim a5">
+        <div class="editor">
+          <div class="e-bar"><span class="d d1"></span><span class="d d2"></span><span class="d d3"></span><span class="fname">${s.file}</span></div>
+          <pre class="code">${hl(s.code)}</pre>
+        </div>
+        <div class="terminal">
+          <div class="t-bar"><i data-lucide="terminal"></i><span>Output</span></div>
+          <pre class="out">${s.out.replace(/</g, '&lt;')}<span class="cur"></span></pre>
+        </div>
+      </div>`;
+            }
+            deck.appendChild(sec);
+        });
+
+        lucide.createIcons();
+
+        /* =============== table of contents =============== */
+        const toc = document.getElementById('toc');
+        const tocGrid = document.getElementById('tocGrid');
+        const groups = [];
+        S.forEach((s, i) => {
+            const key = s.type ? (s.type === 'title' ? 'cover' : 'end') : s.ch;
+            const label = s.type ? (s.type === 'title' ? 'Cover' : 'Epilogue')
+                : `Ch ${pad(s.ch)} — ${CH[s.ch]}`;
+            let g = groups[groups.length - 1];
+            if (!g || g.key !== key) { g = { key, label, items: [] }; groups.push(g); }
+            g.items.push({ i, title: s.type ? (s.type === 'title' ? 'Cover' : 'The manual ends') : s.title });
+        });
+        groups.forEach(g => {
+            const div = document.createElement('section');
+            div.className = 'toc-ch';
+            div.innerHTML = `<h3>${g.label}<span>${g.items.length} pg</span></h3>` +
+                g.items.map(it => `<button data-i="${it.i}"><span class="n">${pad(it.i + 1)}</span>${it.title}</button>`).join('');
+            tocGrid.appendChild(div);
+        });
+        tocGrid.addEventListener('click', e => {
+            const b = e.target.closest('button[data-i]');
+            if (!b) return;
+            go(+b.dataset.i);
+            closeToc();
+        });
+        function openToc() {
+            toc.classList.add('open');
+            toc.querySelectorAll('button.cur').forEach(b => b.classList.remove('cur'));
+            const cur = toc.querySelector(`button[data-i="${idx}"]`);
+            if (cur) { cur.classList.add('cur'); cur.scrollIntoView({ block: 'center', behavior: 'instant' }); }
+        }
+        function closeToc() { toc.classList.remove('open'); }
+        document.getElementById('contents').onclick = openToc;
+        document.getElementById('tocClose').onclick = closeToc;
+
+        /* =============== navigation =============== */
+        const els = [...deck.children];
+        const total = els.length;
+        const counter = document.getElementById('counter');
+        const chapter = document.getElementById('chapter');
+        const fill = document.getElementById('fill');
+        let idx = 0, leaveTimer;
+
+        /* chapter notches on the progress track */
+        const track = document.getElementById('track');
+        S.forEach((s, i) => {
+            if (s.ch !== undefined && (i === 0 || S[i - 1].ch !== s.ch)) {
+                const n = document.createElement('i');
+                n.style.left = (i / total * 100) + '%';
+                track.appendChild(n);
+            }
+        });
+
+        function updateUI() {
+            const s = S[idx];
+            counter.textContent = `§ ${pad(idx + 1)} / ${total}`;
+            chapter.textContent = s.type ? (s.type === 'title' ? 'Cover' : 'Epilogue')
+                : `Ch ${pad(s.ch)} · ${CH[s.ch]}`;
+            fill.style.width = ((idx + 1) / total * 100) + '%';
+        }
+        function go(n) {
+            n = Math.max(0, Math.min(total - 1, n));
+            if (n === idx) return;
+            clearTimeout(leaveTimer);
+            const old = els[idx];
+            old.classList.remove('active'); old.classList.add('leaving');
+            leaveTimer = setTimeout(() => old.classList.remove('leaving'), 400);
+            idx = n;
+            els[idx].classList.add('active');
+            updateUI();
+        }
+        els[0].classList.add('active');
+        updateUI();
+
+        document.getElementById('next').onclick = () => go(idx + 1);
+        document.getElementById('prev').onclick = () => go(idx - 1);
+        document.addEventListener('keydown', e => {
+            if (e.key === 'o' || e.key === 'O') { toc.classList.contains('open') ? closeToc() : openToc(); return; }
+            if (e.key === 'Escape') { closeToc(); return; }
+            if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); go(idx + 1); }
+            if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(idx - 1); }
+            if (e.key === 'Home') go(0);
+            if (e.key === 'End') go(total - 1);
+        });
+        let tx = null;
+        document.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+        document.addEventListener('touchend', e => {
+            if (tx === null) return;
+            const dx = e.changedTouches[0].clientX - tx;
+            if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+            tx = null;
+        }, { passive: true });
+    </script>
+</body>
+
+</html>
