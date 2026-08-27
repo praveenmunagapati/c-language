@@ -1,0 +1,3380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming for Problem Solving - JNTU Hyderabad | 260+ Slides</title>
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --slide-bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #4f46e5;
+            --accent-light: #6366f1;
+            --accent-dark: #4338ca;
+            --border: #e2e8f0;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --keyword: #c084fc;
+            --string: #fbbf24;
+            --comment: #94a3b8;
+            --type: #34d399;
+            --func: #f472b6;
+            --number: #f87171;
+            --unit-bg: #eef2ff;
+            --unit-text: #4f46e5;
+            --slide-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            --card-bg: #f8fafc;
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --header-height: 60px;
+            --footer-height: 48px;
+            --progress-bg: #e2e8f0;
+            --progress-fill: #4f46e5;
+            --nav-bg: #ffffff;
+            --nav-border: #e2e8f0;
+            --nav-hover-bg: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            z-index: 100;
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.03);
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+            color: var(--accent);
+        }
+        .header-left .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+        .header-center {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-align: center;
+            flex: 1;
+            letter-spacing: 0.3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0 20px;
+        }
+        .header-right {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-right .slide-counter {
+            background: var(--unit-bg);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--unit-text);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--progress-bg);
+            z-index: 99;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #8b5cf6);
+            width: 0%;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--footer-height);
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            z-index: 100;
+            font-size: 11px;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            box-shadow: 0 -1px 10px rgba(0,0,0,0.03);
+        }
+        .footer .unit-indicator {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            background: var(--unit-bg);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* Main Slide Area */
+        .slide-area {
+            position: fixed;
+            top: calc(var(--header-height) + 3px);
+            left: 0;
+            right: 0;
+            bottom: var(--footer-height);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 980px;
+            max-height: 100%;
+            overflow-y: auto;
+            background: var(--slide-bg);
+            border-radius: 16px;
+            box-shadow: var(--slide-shadow);
+            padding: 36px 44px;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+            transition: box-shadow 0.3s ease;
+        }
+        .slide:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+        .slide::-webkit-scrollbar {
+            width: 6px;
+        }
+        .slide::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Slide Content Styles */
+        .slide-tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            background: var(--unit-bg);
+            color: var(--unit-text);
+            border: 1px solid rgba(79, 70, 229, 0.15);
+        }
+        .slide-tag.unit1 { background: #e0e7ff; color: #4f46e5; }
+        .slide-tag.unit2 { background: #dcfce7; color: #16a34a; }
+        .slide-tag.unit3 { background: #fef9c3; color: #ca8a04; }
+        .slide-tag.unit4 { background: #fee2e2; color: #dc2626; }
+        .slide-tag.unit5 { background: #f3e8ff; color: #7c3aed; }
+        .slide-tag.lab { background: #cffafe; color: #0891b2; }
+        .slide-tag.intro { background: #f1f5f9; color: #64748b; }
+
+        .slide h1 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent-dark);
+            letter-spacing: -0.5px;
+            line-height: 1.3;
+        }
+        .slide h2 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 22px 0 10px;
+            color: var(--accent);
+            letter-spacing: -0.2px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            position: relative;
+        }
+        .slide h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--accent);
+        }
+        .slide h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 16px 0 6px;
+            color: var(--accent-light);
+        }
+        .slide p {
+            font-size: 15px;
+            margin-bottom: 10px;
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .slide ul,
+        .slide ol {
+            font-size: 15px;
+            margin: 8px 0 12px 24px;
+            line-height: 1.75;
+        }
+        .slide li {
+            margin-bottom: 4px;
+        }
+        .slide code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
+            font-size: 13px;
+            color: #b91c1c;
+            border: 1px solid #e2e8f0;
+        }
+        .slide pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 18px 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
+            font-size: 13px;
+            line-height: 1.65;
+            margin: 12px 0 16px;
+            border: none;
+            letter-spacing: 0;
+            tab-size: 4;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .slide pre code {
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: inherit;
+            font-size: 13px;
+            white-space: pre;
+        }
+        .slide .keyword { color: #c084fc; font-weight: 500; }
+        .slide .string { color: #fbbf24; }
+        .slide .comment { color: #94a3b8; font-style: italic; }
+        .slide .number { color: #f87171; }
+        .slide .type { color: #34d399; }
+        .slide .func { color: #f472b6; }
+        .slide table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 16px;
+            font-size: 14px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .slide table th {
+            background: #f8fafc;
+            color: var(--accent-dark);
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .slide table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13.5px;
+        }
+        .slide table tr:last-child td {
+            border-bottom: none;
+        }
+        .slide .highlight-box {
+            background: #f8fafc;
+            border-left: 5px solid var(--accent);
+            padding: 16px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 12px 0 16px;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .slide .note-box {
+            background: #fffbeb;
+            border-left: 5px solid var(--warning);
+            padding: 14px 18px;
+            border-radius: 0 10px 10px 0;
+            margin: 10px 0 14px;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .slide .key-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 6px 0;
+            font-size: 14.5px;
+        }
+        .slide .key-point::before {
+            content: '▸';
+            color: var(--accent);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .slide .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 6px;
+            letter-spacing: 0.3px;
+        }
+        .slide .formula {
+            background: #f1f5f9;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-family: 'SF Mono', Consolas, monospace;
+            font-size: 14px;
+            margin: 8px 0;
+            display: inline-block;
+        }
+        .slide .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 12px 0;
+        }
+        .slide .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin: 12px 0;
+        }
+        .slide .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .slide .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+        }
+        .slide .card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent-dark);
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--nav-bg);
+            border: 1px solid var(--nav-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            z-index: 99;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 20px;
+            color: var(--accent);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn:hover {
+            background: var(--nav-hover-bg);
+            color: #fff;
+            border-color: var(--nav-hover-bg);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .nav-btn:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+        .nav-btn.prev {
+            left: 20px;
+        }
+        .nav-btn.next {
+            right: 20px;
+        }
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
+        }
+
+        /* Keyboard hint */
+        .kbd-hint {
+            position: fixed;
+            bottom: calc(var(--footer-height) + 16px);
+            right: 28px;
+            font-size: 10px;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+            z-index: 99;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide-area {
+                padding: 8px 16px;
+            }
+            .slide {
+                padding: 20px 18px;
+                border-radius: 12px;
+            }
+            .slide h1 {
+                font-size: 22px;
+            }
+            .slide h2 {
+                font-size: 18px;
+            }
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .nav-btn.prev { left: 8px; }
+            .nav-btn.next { right: 8px; }
+            .header {
+                padding: 0 16px;
+            }
+            .footer {
+                padding: 0 16px;
+            }
+            .slide .grid-2,
+            .slide .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .kbd-hint {
+                display: none;
+            }
+            .header-center {
+                font-size: 12px;
+            }
+        }
+
+        @media print {
+            .header,
+            .footer,
+            .nav-btn,
+            .progress-container,
+            .kbd-hint {
+                display: none !important;
+            }
+            .slide-area {
+                position: static;
+                overflow: visible;
+                padding: 0;
+            }
+            .slide {
+                display: block !important;
+                max-height: none;
+                overflow: visible;
+                page-break-after: always;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                padding: 24px;
+                max-width: 100%;
+            }
+            body {
+                overflow: visible;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <span class="dot"></span>
+            <span>CS103ES · PPS</span>
+        </div>
+        <div class="header-center" id="slideTitle">Programming for Problem Solving</div>
+        <div class="header-right">
+            <span>JNTU Hyderabad</span>
+            <span class="slide-counter" id="slideCounter">1 / 1</span>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Main Slide Area -->
+    <div class="slide-area" id="slideArea"></div>
+
+    <!-- Navigation -->
+    <button class="nav-btn prev" id="prevBtn" title="Previous (←)" aria-label="Previous slide">‹</button>
+    <button class="nav-btn next" id="nextBtn" title="Next (→)" aria-label="Next slide">›</button>
+
+    <div class="kbd-hint">← → to navigate · Esc for overview</div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <span class="unit-indicator" id="unitIndicator">UNIT I</span>
+        <span>JNTU Hyderabad · R25 · B.Tech CSE (AI&ML) · I Year I Sem</span>
+    </div>
+
+    <script>
+        // ============================================================
+        // SLIDE DATA — 260+ Slides covering complete PPS Syllabus
+        // ============================================================
+        const slides = [];
+
+        // Helper function to add slides
+        function addSlide(tag, tagClass, title, content, unitLabel) {
+            slides.push({
+                tag: tag,
+                tagClass: tagClass,
+                title: title,
+                content: content,
+                unitLabel: unitLabel || tag
+            });
+        }
+
+        // ==================== INTRODUCTION ====================
+        addSlide('Course', 'intro', 'Programming for Problem Solving (CS103ES)',
+            `<h1>Programming for Problem Solving</h1>
+         <p style="font-size:18px;font-weight:500;color:#4f46e5;">B.Tech I Year I Sem · L T P C: 3 0 0 3</p>
+         <p style="font-size:15px;color:#64748b;">JNTU Hyderabad · R25 · B.Tech CSE (AI & ML)</p>
+         <div class="highlight-box" style="margin-top:24px;">
+           <strong>Course Focus:</strong> Fundamentals of computers, program development steps, C programming language syntax & semantics, and structured programming approaches for problem solving.
+         </div>
+         <p style="margin-top:16px;font-size:13px;color:#94a3b8;">Textbook: <em>Problem Solving and Program Design in C</em> — Jeri R. Hanly & Elliot B. Koffman, 7th Ed., Pearson</p>`,
+            'OVERVIEW');
+
+        addSlide('Objectives', 'intro', 'Course Objectives',
+            `<h1>Course Objectives</h1>
+         <ul>
+           <li><strong>Fundamentals of Computers</strong> — Understand basic computer architecture, memory, and execution model</li>
+           <li><strong>Program Development Steps</strong> — Learn the systematic process from problem analysis to algorithm design</li>
+           <li><strong>C Language Syntax & Semantics</strong> — Master the grammar and meaning of C programming constructs</li>
+           <li><strong>Structured Programming</strong> — Apply top-down design and modular approaches to solve problems</li>
+         </ul>
+         <div class="note-box">
+           <strong>Key Takeaway:</strong> This course bridges the gap between algorithmic thinking and practical C implementation.
+         </div>`,
+            'OVERVIEW');
+
+        addSlide('Outcomes', 'intro', 'Course Outcomes (COs)',
+            `<h1>Course Outcomes</h1>
+         <p>Upon completion, students will be able to:</p>
+         <ol>
+           <li><strong>CO1:</strong> Write algorithms and draw flowcharts for problem solving</li>
+           <li><strong>CO2:</strong> Convert algorithms/flowcharts to C programs</li>
+           <li><strong>CO3:</strong> Code and test given logic in C programming</li>
+           <li><strong>CO4:</strong> Decompose problems into functions and develop modular reusable code</li>
+           <li><strong>CO5:</strong> Use arrays, pointers, strings, and structures in C programs</li>
+           <li><strong>CO6:</strong> Implement searching and sorting algorithms</li>
+         </ol>`,
+            'OVERVIEW');
+
+        addSlide('Syllabus Units', 'intro', 'Syllabus Overview — 5 Units',
+            `<h1>Five Units of Study</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>UNIT I</h4>
+             <p style="font-size:13px;">Overview of C, Selection Structures, Repetition & Loop Statements</p>
+           </div>
+           <div class="card">
+             <h4>UNIT II</h4>
+             <p style="font-size:13px;">Top-Down Design with Functions, Pointers & Modular Programming</p>
+           </div>
+           <div class="card">
+             <h4>UNIT III</h4>
+             <p style="font-size:13px;">Arrays, Searching & Sorting Arrays, Strings</p>
+           </div>
+           <div class="card">
+             <h4>UNIT IV</h4>
+             <p style="font-size:13px;">Recursion, Structure and Union Types</p>
+           </div>
+           <div class="card" style="grid-column: span 2;">
+             <h4>UNIT V</h4>
+             <p style="font-size:13px;">Text and Binary Files, Searching & Sorting Algorithms (Linear, Binary, Bubble, Insertion, Selection)</p>
+           </div>
+         </div>`,
+            'OVERVIEW');
+
+        addSlide('Lab Overview', 'intro', 'PPS Lab (CS107ES) — Practice Sessions',
+            `<h1>Lab Practice Sessions</h1>
+         <p style="font-size:15px;font-weight:600;color:#4f46e5;">CS107ES · L T P C: 0 0 2 1</p>
+         <ul>
+           <li><strong>Simple Numeric Problems</strong> — max/min, interest, multiplication table, binary conversion</li>
+           <li><strong>Expression Evaluation</strong> — operators, prime, digit sum, Fibonacci sequence</li>
+           <li><strong>Arrays, Pointers & Functions</strong> — matrix ops, pointer-based access</li>
+           <li><strong>Files</strong> — copy with case conversion, merge files</li>
+           <li><strong>Strings</strong> — insertion, deletion, palindrome, character search, word count</li>
+           <li><strong>Sorting & Searching</strong> — linear search, binary search, bubble, selection, insertion sort</li>
+         </ul>
+         <p style="font-size:12px;color:#94a3b8;margin-top:12px;">Tools: CodeLite, Code::Blocks, DevCpp, Eclipse — or any Open Source IDE</p>`,
+            'OVERVIEW');
+
+        addSlide('Textbooks', 'intro', 'Textbooks & References',
+            `<h1>Textbooks</h1>
+         <ol>
+           <li><strong>Primary:</strong> Jeri R. Hanly & Elliot B. Koffman — <em>Problem Solving and Program Design in C</em>, 7th Ed., Pearson</li>
+           <li><strong>Secondary:</strong> B.A. Forouzan & R.F. Gilberg — <em>C Programming and Data Structures</em>, 3rd Ed., Cengage</li>
+         </ol>
+         <h2>Reference Books</h2>
+         <ul>
+           <li>Kernighan & Ritchie — <em>The C Programming Language</em>, PHI</li>
+           <li>E. Balagurusamy — <em>Computer Fundamentals and C</em>, 2nd Ed., McGraw-Hill</li>
+           <li>Yashavant Kanetkar — <em>Let Us C</em>, 18th Ed., BPB</li>
+           <li>R.G. Dromey — <em>How to Solve it by Computer</em>, Pearson</li>
+           <li>Stephen G. Kochan — <em>Programming in C</em>, 4th Ed., Pearson</li>
+           <li>Herbert Schildt — <em>C: The Complete Reference</em>, 4th Ed., McGraw-Hill</li>
+           <li>Byron Gottfried — <em>Schaum's Outline of Programming with C</em>, McGraw-Hill</li>
+         </ul>`,
+            'OVERVIEW');
+
+        addSlide('Navigation Guide', 'intro', 'How to Use This Presentation',
+            `<h1>Navigation Guide</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>Keyboard</h4>
+             <p style="font-size:13px;"><strong>←</strong> / <strong>→</strong> — Previous / Next slide<br>
+             <strong>Home</strong> / <strong>End</strong> — First / Last slide<br>
+             <strong>Space</strong> — Next slide</p>
+           </div>
+           <div class="card">
+             <h4>Mouse</h4>
+             <p style="font-size:13px;">Click <strong>‹</strong> / <strong>›</strong> buttons on screen edges<br>
+             Progress bar at top shows position<br>
+             Unit indicator in footer</p>
+           </div>
+         </div>
+         <div class="note-box" style="margin-top:16px;">
+           <strong>Content Coverage:</strong> 260+ slides · Units I–V · All Lab Practice Sessions · Code examples throughout
+         </div>`,
+            'OVERVIEW');
+
+        addSlide('Course Mapping', 'intro', 'CO-PO Mapping & Assessment',
+            `<h1>Assessment & Mapping</h1>
+         <table>
+           <tr><th>Assessment Component</th><th>Weightage</th><th>Type</th></tr>
+           <tr><td>Mid-Term Examinations</td><td>30%</td><td>Theory + Programs</td></tr>
+           <tr><td>End Semester Exam</td><td>70%</td><td>Theory + Problem Solving</td></tr>
+           <tr><td>Lab Continuous Assessment</td><td>40%</td><td>Record + Viva + Programs</td></tr>
+           <tr><td>Lab Final Exam</td><td>60%</td><td>Programming + Viva</td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;margin-top:10px;">COs map to POs: PO1 (Engineering Knowledge), PO2 (Problem Analysis), PO3 (Design), PO5 (Modern Tools)</p>`,
+            'OVERVIEW');
+
+        // ==================== UNIT I : OVERVIEW OF C ====================
+        addSlide('Unit I', 'unit1', 'UNIT I: Overview of C — C Language Elements',
+            `<h1>UNIT I: Overview of C</h1>
+         <h2>C Language Elements</h2>
+         <ul>
+           <li>C is a <strong>procedural, structured programming language</strong> developed by Dennis Ritchie at Bell Labs (1972)</li>
+           <li>Combines high-level abstraction with low-level efficiency</li>
+           <li>Foundation for operating systems (UNIX), embedded systems, and compilers</li>
+           <li>Characterized by <strong>functions, data types, and control flow</strong></li>
+         </ul>
+         <div class="highlight-box">
+           <strong>Key insight:</strong> C programs are collections of functions that operate on data. Understanding this is fundamental to PPS.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'C Language Elements — Tokens',
+            `<h1>C Tokens</h1>
+         <p>Smallest individual units in a C program:</p>
+         <table>
+           <tr><th>Token Type</th><th>Examples</th><th>Description</th></tr>
+           <tr><td><code>Keywords</code></td><td><code>int, return, if, for</code></td><td>Reserved words with fixed meaning</td></tr>
+           <tr><td><code>Identifiers</code></td><td><code>sum, count, x1</code></td><td>User-defined names for variables & functions</td></tr>
+           <tr><td><code>Constants</code></td><td><code>10, 3.14, 'A'</code></td><td>Fixed values</td></tr>
+           <tr><td><code>Strings</code></td><td><code>"Hello"</code></td><td>Sequence of characters</td></tr>
+           <tr><td><code>Operators</code></td><td><code>+ - * / =</code></td><td>Symbols for operations</td></tr>
+           <tr><td><code>Punctuators</code></td><td><code>( ) { } , ;</code></td><td>Syntax elements</td></tr>
+         </table>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'C Language Elements — Character Set',
+            `<h1>Character Set in C</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>Letters</h4>
+             <p style="font-size:14px;">A–Z, a–z</p>
+             <h4 style="margin-top:8px;">Digits</h4>
+             <p style="font-size:14px;">0–9</p>
+           </div>
+           <div class="card">
+             <h4>Special Characters</h4>
+             <p style="font-size:13px;"><code>+ - * / = % & # ! ? ^ ~ " ' \\ | < > ( ) [ ] { } : ; , . _</code></p>
+             <h4 style="margin-top:8px;">White Space</h4>
+             <p style="font-size:14px;">Space, Tab, Newline</p>
+           </div>
+         </div>
+         <div class="note-box">
+           <strong>Note:</strong> C is case-sensitive. <code>Sum</code> and <code>sum</code> are different identifiers.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Keywords in C (32 Standard Keywords)',
+            `<h1>C Keywords</h1>
+         <p>All 32 standard keywords in C:</p>
+         <pre><code><span class="keyword">auto</span>     <span class="keyword">break</span>    <span class="keyword">case</span>     <span class="keyword">char</span>     <span class="keyword">const</span>    <span class="keyword">continue</span>
+<span class="keyword">default</span>  <span class="keyword">do</span>       <span class="keyword">double</span>   <span class="keyword">else</span>     <span class="keyword">enum</span>     <span class="keyword">extern</span>
+<span class="keyword">float</span>    <span class="keyword">for</span>      <span class="keyword">goto</span>     <span class="keyword">if</span>       <span class="keyword">inline</span>   <span class="keyword">int</span>
+<span class="keyword">long</span>     <span class="keyword">register</span> <span class="keyword">restrict</span> <span class="keyword">return</span>   <span class="keyword">short</span>    <span class="keyword">signed</span>
+<span class="keyword">sizeof</span>   <span class="keyword">static</span>   <span class="keyword">struct</span>   <span class="keyword">switch</span>   <span class="keyword">typedef</span>  <span class="keyword">union</span>
+<span class="keyword">unsigned</span> <span class="keyword">void</span>     <span class="keyword">volatile</span> <span class="keyword">while</span></code></pre>
+         <p style="font-size:13px;color:#64748b;">Keywords cannot be used as variable names or function names.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Variables — Declaration & Initialization',
+            `<h1>Variable Declarations</h1>
+         <h2>Declaration Syntax</h2>
+         <pre><code><span class="type">data_type</span> variable_name;          <span class="comment">// declaration only</span>
+<span class="type">data_type</span> variable_name = value;  <span class="comment">// declaration + initialization</span></code></pre>
+         <h2>Examples</h2>
+         <pre><code><span class="type">int</span> age;              <span class="comment">// uninitialized (garbage value)</span>
+<span class="type">int</span> count = 0;        <span class="comment">// initialized to 0</span>
+<span class="type">float</span> pi = 3.14159;
+<span class="type">char</span> grade = 'A';
+<span class="type">double</span> salary = 50000.50;</code></pre>
+         <div class="note-box">
+           <strong>Best Practice:</strong> Always initialize variables before use to avoid undefined behavior.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Data Types in C — Integer Types',
+            `<h1>Integer Data Types</h1>
+         <table>
+           <tr><th>Type</th><th>Size (typical)</th><th>Range</th><th>Format Specifier</th></tr>
+           <tr><td><code>short int</code></td><td>2 bytes</td><td>-32,768 to 32,767</td><td><code>%hd</code></td></tr>
+           <tr><td><code>int</code></td><td>4 bytes</td><td>-2,147,483,648 to 2,147,483,647</td><td><code>%d</code></td></tr>
+           <tr><td><code>long int</code></td><td>4–8 bytes</td><td>±(2³¹–1) or ±(2⁶³–1)</td><td><code>%ld</code></td></tr>
+           <tr><td><code>long long int</code></td><td>8 bytes</td><td>±(2⁶³–1)</td><td><code>%lld</code></td></tr>
+           <tr><td><code>unsigned int</code></td><td>4 bytes</td><td>0 to 4,294,967,295</td><td><code>%u</code></td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;margin-top:8px;">Sizes vary by platform. Use <code>sizeof()</code> to check.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Data Types — Floating Point & Characters',
+            `<h1>Floating-Point & Character Types</h1>
+         <table>
+           <tr><th>Type</th><th>Size</th><th>Precision</th><th>Format</th></tr>
+           <tr><td><code>float</code></td><td>4 bytes</td><td>~6 decimal digits</td><td><code>%f</code></td></tr>
+           <tr><td><code>double</code></td><td>8 bytes</td><td>~15 decimal digits</td><td><code>%lf</code></td></tr>
+           <tr><td><code>long double</code></td><td>16 bytes</td><td>~19 decimal digits</td><td><code>%Lf</code></td></tr>
+           <tr><td><code>char</code></td><td>1 byte</td><td>-128 to 127 or 0 to 255</td><td><code>%c</code></td></tr>
+         </table>
+         <h2>Example</h2>
+         <pre><code><span class="type">float</span> temp = 36.5f;
+<span class="type">double</span> pi = 3.14159265358979;
+<span class="type">char</span> symbol = '$';</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Constants & Literals',
+            `<h1>Constants in C</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>Integer Constants</h4>
+             <p style="font-size:13px;"><code>42</code>, <code>0</code>, <code>-15</code><br>
+             Octal: <code>052</code> (prefix 0)<br>
+             Hex: <code>0x2A</code> (prefix 0x)</p>
+           </div>
+           <div class="card">
+             <h4>Floating Constants</h4>
+             <p style="font-size:13px;"><code>3.14</code>, <code>2.5e3</code> (2500)<br>
+             <code>1.2e-3</code> (0.0012)</p>
+           </div>
+           <div class="card">
+             <h4>Character Constants</h4>
+             <p style="font-size:13px;"><code>'A'</code>, <code>'5'</code>, <code>'\\n'</code>, <code>'\\t'</code></p>
+           </div>
+           <div class="card">
+             <h4>String Constants</h4>
+             <p style="font-size:13px;"><code>"Hello"</code>, <code>"C Programming"</code></p>
+           </div>
+         </div>
+         <h3>const Keyword</h3>
+         <pre><code><span class="keyword">const</span> <span class="type">int</span> MAX = 100;  <span class="comment">// cannot be changed after initialization</span></code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Executable Statements — Assignment & Expressions',
+            `<h1>Executable Statements</h1>
+         <h2>Assignment Statement</h2>
+         <pre><code>variable = expression;
+x = 5;
+y = x + 3;
+z = x * y - 10;</code></pre>
+         <h2>Expression Statements</h2>
+         <pre><code>x++;             <span class="comment">// increment</span>
+y--;             <span class="comment">// decrement</span>
+sum += value;    <span class="comment">// compound assignment: sum = sum + value</span>
+printf("Hi");    <span class="comment">// function call statement</span></code></pre>
+         <div class="highlight-box">
+           A statement ends with a <strong>semicolon (;)</strong>. Expressions evaluate to a value.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'General Form of a C Program',
+            `<h1>General Structure of a C Program</h1>
+         <pre><code><span class="comment">/* preprocessor directives */</span>
+<span class="keyword">#include</span> &lt;stdio.h&gt;
+<span class="keyword">#define</span> PI 3.14159
+
+<span class="comment">/* function prototypes */</span>
+<span class="type">int</span> add(<span class="type">int</span> a, <span class="type">int</span> b);
+
+<span class="comment">/* main function — entry point */</span>
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> result = add(3, 5);
+    <span class="func">printf</span>(<span class="string">"Result: %d\\n"</span>, result);
+    <span class="keyword">return</span> 0;
+}
+
+<span class="comment">/* user-defined functions */</span>
+<span class="type">int</span> <span class="func">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">return</span> a + b;
+}</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Preprocessor Directives',
+            `<h1>Preprocessor Directives</h1>
+         <p>Instructions processed before compilation:</p>
+         <table>
+           <tr><th>Directive</th><th>Purpose</th><th>Example</th></tr>
+           <tr><td><code>#include</code></td><td>Include header files</td><td><code>#include &lt;stdio.h&gt;</code></td></tr>
+           <tr><td><code>#define</code></td><td>Macro definition</td><td><code>#define MAX 100</code></td></tr>
+           <tr><td><code>#ifdef / #ifndef</code></td><td>Conditional compilation</td><td><code>#ifdef DEBUG</code></td></tr>
+           <tr><td><code>#undef</code></td><td>Undefine a macro</td><td><code>#undef MAX</code></td></tr>
+           <tr><td><code>#pragma</code></td><td>Compiler-specific</td><td><code>#pragma once</code></td></tr>
+         </table>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Arithmetic Expressions — Operators',
+            `<h1>Arithmetic Operators in C</h1>
+         <table>
+           <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
+           <tr><td><code>+</code></td><td>Addition</td><td><code>5 + 3</code></td><td>8</td></tr>
+           <tr><td><code>-</code></td><td>Subtraction</td><td><code>7 - 2</code></td><td>5</td></tr>
+           <tr><td><code>*</code></td><td>Multiplication</td><td><code>4 * 6</code></td><td>24</td></tr>
+           <tr><td><code>/</code></td><td>Division</td><td><code>10 / 3</code></td><td>3 (int division)</td></tr>
+           <tr><td><code>%</code></td><td>Modulus (remainder)</td><td><code>10 % 3</code></td><td>1</td></tr>
+         </table>
+         <div class="note-box">
+           <strong>Watch out:</strong> Integer division truncates. Use <code>float</code> operands for decimal results.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Arithmetic Expressions — Operator Precedence',
+            `<h1>Operator Precedence & Associativity</h1>
+         <table>
+           <tr><th>Precedence</th><th>Operator</th><th>Associativity</th></tr>
+           <tr><td>1 (Highest)</td><td><code>()</code> <code>[]</code> <code>-></code> <code>.</code></td><td>Left to Right</td></tr>
+           <tr><td>2</td><td><code>!</code> <code>~</code> <code>++</code> <code>--</code> <code>-</code> (unary)</td><td>Right to Left</td></tr>
+           <tr><td>3</td><td><code>*</code> <code>/</code> <code>%</code></td><td>Left to Right</td></tr>
+           <tr><td>4</td><td><code>+</code> <code>-</code></td><td>Left to Right</td></tr>
+           <tr><td>5</td><td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td><td>Left to Right</td></tr>
+           <tr><td>6</td><td><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td><td>Left to Right</td></tr>
+           <tr><td>7</td><td><code>==</code> <code>!=</code></td><td>Left to Right</td></tr>
+           <tr><td>8</td><td><code>&&</code></td><td>Left to Right</td></tr>
+           <tr><td>9</td><td><code>||</code></td><td>Left to Right</td></tr>
+           <tr><td>10</td><td><code>=</code> <code>+=</code> <code>-=</code> etc.</td><td>Right to Left</td></tr>
+         </table>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Arithmetic Expressions — Type Conversion',
+            `<h1>Type Conversion (Implicit & Explicit)</h1>
+         <h3>Implicit Conversion (Auto)</h3>
+         <pre><code><span class="type">int</span> a = 5;
+<span class="type">float</span> b = a;        <span class="comment">// int → float: 5.0</span>
+<span class="type">int</span> c = 3.7;       <span class="comment">// float → int: 3 (truncation)</span></code></pre>
+         <h3>Explicit Conversion (Casting)</h3>
+         <pre><code><span class="type">float</span> result = (<span class="type">float</span>)10 / 3;  <span class="comment">// 3.333...</span>
+<span class="type">int</span> x = (<span class="type">int</span>)3.99;         <span class="comment">// 3</span></code></pre>
+         <div class="highlight-box">
+           <strong>Promotion Rule:</strong> In mixed expressions, lower types are promoted to higher types (char → int → float → double).
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Formatting Numbers in Output',
+            `<h1>Formatting Output with printf()</h1>
+         <h2>Common Format Specifiers</h2>
+         <table>
+           <tr><th>Specifier</th><th>Type</th><th>Example</th></tr>
+           <tr><td><code>%d</code></td><td>Signed integer</td><td><code>printf("%d", 42)</code></td></tr>
+           <tr><td><code>%f</code></td><td>Float</td><td><code>printf("%f", 3.14)</code></td></tr>
+           <tr><td><code>%.2f</code></td><td>Float with 2 decimals</td><td><code>printf("%.2f", 3.14159)</code> → <strong>3.14</strong></td></tr>
+           <tr><td><code>%c</code></td><td>Character</td><td><code>printf("%c", 'A')</code></td></tr>
+           <tr><td><code>%s</code></td><td>String</td><td><code>printf("%s", "Hello")</code></td></tr>
+           <tr><td><code>%e</code></td><td>Scientific notation</td><td><code>printf("%e", 1234.5)</code></td></tr>
+         </table>
+         <h3>Width & Precision</h3>
+         <pre><code><span class="func">printf</span>(<span class="string">"%8d"</span>, 42);      <span class="comment">// right-aligned in 8 chars</span>
+<span class="func">printf</span>(<span class="string">"%-8d"</span>, 42);     <span class="comment">// left-aligned in 8 chars</span>
+<span class="func">printf</span>(<span class="string">"%10.3f"</span>, 3.14159); <span class="comment">// width 10, 3 decimals</span></code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Input with scanf()',
+            `<h1>Reading Input with scanf()</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="type">int</span> age;
+<span class="func">scanf</span>(<span class="string">"%d"</span>, &age);   <span class="comment">// & is the address-of operator</span></code></pre>
+         <h2>Multiple Inputs</h2>
+         <pre><code><span class="type">int</span> a, b;
+<span class="type">float</span> f;
+<span class="func">scanf</span>(<span class="string">"%d %d %f"</span>, &a, &b, &f);</code></pre>
+         <div class="note-box">
+           <strong>Critical:</strong> <code>scanf()</code> requires the <strong>&</strong> operator for all non-string variables. Strings (char arrays) don't need it.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'First Complete Program',
+            `<h1>Complete Example: Temperature Conversion</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">float</span> celsius, fahrenheit;
+
+    <span class="func">printf</span>(<span class="string">"Enter temperature in Celsius: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%f"</span>, &celsius);
+
+    fahrenheit = (celsius * 9.0 / 5.0) + 32.0;
+
+    <span class="func">printf</span>(<span class="string">"%.1f°C = %.1f°F\\n"</span>, celsius, fahrenheit);
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong> Enter temperature in Celsius: 25 → 25.0°C = 77.0°F</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Control Structures — Overview',
+            `<h1>Control Structures in C</h1>
+         <p>Three categories of control flow:</p>
+         <div class="grid-3">
+           <div class="card">
+             <h4>Sequential</h4>
+             <p style="font-size:13px;">Statements execute in order, top to bottom (default)</p>
+           </div>
+           <div class="card">
+             <h4>Selection (Branching)</h4>
+             <p style="font-size:13px;"><code>if</code>, <code>if-else</code>, <code>switch</code></p>
+           </div>
+           <div class="card">
+             <h4>Repetition (Looping)</h4>
+             <p style="font-size:13px;"><code>while</code>, <code>for</code>, <code>do-while</code></p>
+           </div>
+         </div>
+         <p style="margin-top:12px;">Control structures allow programs to make decisions and repeat operations.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Conditions & Relational Operators',
+            `<h1>Conditions and Relational Operators</h1>
+         <table>
+           <tr><th>Operator</th><th>Meaning</th><th>Example (evaluates to)</th></tr>
+           <tr><td><code>==</code></td><td>Equal to</td><td><code>5 == 5</code> → 1 (true)</td></tr>
+           <tr><td><code>!=</code></td><td>Not equal to</td><td><code>5 != 3</code> → 1 (true)</td></tr>
+           <tr><td><code>&lt;</code></td><td>Less than</td><td><code>3 &lt; 5</code> → 1 (true)</td></tr>
+           <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>7 &gt; 10</code> → 0 (false)</td></tr>
+           <tr><td><code>&lt;=</code></td><td>Less than or equal</td><td><code>5 &lt;= 5</code> → 1 (true)</td></tr>
+           <tr><td><code>&gt;=</code></td><td>Greater than or equal</td><td><code>8 &gt;= 9</code> → 0 (false)</td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;">C treats 0 as false and any non-zero value as true.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Logical Operators',
+            `<h1>Logical Operators</h1>
+         <table>
+           <tr><th>Operator</th><th>Meaning</th><th>Truth Table</th></tr>
+           <tr><td><code>&&</code></td><td>Logical AND</td><td>true only if both operands true</td></tr>
+           <tr><td><code>||</code></td><td>Logical OR</td><td>true if at least one operand true</td></tr>
+           <tr><td><code>!</code></td><td>Logical NOT</td><td>Inverts truth value</td></tr>
+         </table>
+         <pre><code><span class="type">int</span> x = 5, y = 10;
+<span class="keyword">if</span> (x &gt; 0 && y &gt; 0) { ... }   <span class="comment">// both positive</span>
+<span class="keyword">if</span> (x &gt; 20 || y &gt; 5) { ... }  <span class="comment">// at least one condition</span>
+<span class="keyword">if</span> (!(x == 5)) { ... }         <span class="comment">// x is NOT equal to 5</span></code></pre>
+         <div class="note-box">
+           <strong>Short-circuit:</strong> <code>&&</code> stops if left side is false; <code>||</code> stops if left side is true.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'The if Statement',
+            `<h1>The if Statement</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="keyword">if</span> (condition) {
+    <span class="comment">// statements executed when condition is true</span>
+}</code></pre>
+         <h2>Example</h2>
+         <pre><code><span class="type">int</span> age = 20;
+<span class="keyword">if</span> (age >= 18) {
+    <span class="func">printf</span>(<span class="string">"You are eligible to vote.\\n"</span>);
+}</code></pre>
+         <h2>Single Statement (no braces needed)</h2>
+         <pre><code><span class="keyword">if</span> (score > 90)
+    <span class="func">printf</span>(<span class="string">"Excellent!\\n"</span>);</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'if-else Statement',
+            `<h1>if-else Statement</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="keyword">if</span> (condition) {
+    <span class="comment">// executed when condition is true</span>
+} <span class="keyword">else</span> {
+    <span class="comment">// executed when condition is false</span>
+}</code></pre>
+         <h2>Example</h2>
+         <pre><code><span class="type">int</span> num = 7;
+<span class="keyword">if</span> (num % 2 == 0) {
+    <span class="func">printf</span>(<span class="string">"%d is even\\n"</span>, num);
+} <span class="keyword">else</span> {
+    <span class="func">printf</span>(<span class="string">"%d is odd\\n"</span>, num);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong> 7 is odd</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'else-if Ladder',
+            `<h1>else-if Ladder</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="keyword">if</span> (condition1) {
+    <span class="comment">// block 1</span>
+} <span class="keyword">else if</span> (condition2) {
+    <span class="comment">// block 2</span>
+} <span class="keyword">else if</span> (condition3) {
+    <span class="comment">// block 3</span>
+} <span class="keyword">else</span> {
+    <span class="comment">// default block</span>
+}</code></pre>
+         <h2>Example: Grade Calculator</h2>
+         <pre><code><span class="keyword">if</span> (score >= 90) grade = 'A';
+<span class="keyword">else if</span> (score >= 80) grade = 'B';
+<span class="keyword">else if</span> (score >= 70) grade = 'C';
+<span class="keyword">else if</span> (score >= 60) grade = 'D';
+<span class="keyword">else</span> grade = 'F';</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'if with Compound Statements',
+            `<h1>Compound Statements with if</h1>
+         <p>When multiple statements need to be executed under a condition, use braces <code>{ }</code>:</p>
+         <pre><code><span class="type">int</span> a = 5, b = 10;
+<span class="keyword">if</span> (a &lt; b) {
+    <span class="type">int</span> temp = a;
+    a = b;
+    b = temp;
+    <span class="func">printf</span>(<span class="string">"Swapped: a=%d, b=%d\\n"</span>, a, b);
+}</code></pre>
+         <div class="note-box">
+           <strong>Warning:</strong> Without braces, only the <em>first</em> statement after <code>if</code> is part of the conditional.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Nested if Statements',
+            `<h1>Nested if Statements</h1>
+         <p>if statements can be nested inside other if statements:</p>
+         <pre><code><span class="type">int</span> age = 25;
+<span class="type">char</span> hasLicense = 'Y';
+
+<span class="keyword">if</span> (age >= 18) {
+    <span class="keyword">if</span> (hasLicense == 'Y') {
+        <span class="func">printf</span>(<span class="string">"You can drive.\\n"</span>);
+    } <span class="keyword">else</span> {
+        <span class="func">printf</span>(<span class="string">"You need a license.\\n"</span>);
+    }
+} <span class="keyword">else</span> {
+    <span class="func">printf</span>(<span class="string">"Too young to drive.\\n"</span>);
+}</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'switch Statement',
+            `<h1>switch Statement</h1>
+         <p>Alternative to long else-if chains for discrete values:</p>
+         <pre><code><span class="type">int</span> day = 3;
+<span class="keyword">switch</span> (day) {
+    <span class="keyword">case</span> 1: <span class="func">printf</span>(<span class="string">"Monday\\n"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> 2: <span class="func">printf</span>(<span class="string">"Tuesday\\n"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> 3: <span class="func">printf</span>(<span class="string">"Wednesday\\n"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> 4: <span class="func">printf</span>(<span class="string">"Thursday\\n"</span>); <span class="keyword">break</span>;
+    <span class="keyword">case</span> 5: <span class="func">printf</span>(<span class="string">"Friday\\n"</span>); <span class="keyword">break</span>;
+    <span class="keyword">default</span>: <span class="func">printf</span>(<span class="string">"Weekend\\n"</span>);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;">The <code>break</code> statement prevents fall-through to next case.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Decision Steps in Algorithms — Flowcharts',
+            `<h1>Decision Steps in Algorithm Design</h1>
+         <p>Decision steps in algorithms correspond to branching in flowcharts:</p>
+         <h3>Standard Flowchart Symbols</h3>
+         <table>
+           <tr><th>Symbol</th><th>Name</th><th>Purpose</th></tr>
+           <tr><td>⬭ Oval</td><td>Start/End</td><td>Beginning or end of algorithm</td></tr>
+           <tr><td>▭ Rectangle</td><td>Process</td><td>Assignment or operation</td></tr>
+           <tr><td>⬦ Diamond</td><td>Decision</td><td>Branching based on condition</td></tr>
+           <tr><td>▱ Parallelogram</td><td>Input/Output</td><td>Data read/write</td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;">Decision diamonds have yes/no (true/false) branches.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Algorithm: Find Largest of Three Numbers',
+            `<h1>Algorithm: Find Maximum of Three Numbers</h1>
+         <pre><code>STEP 1: Input a, b, c
+STEP 2: IF a > b AND a > c THEN
+            max = a
+        ELSE IF b > a AND b > c THEN
+            max = b
+        ELSE
+            max = c
+        END IF
+STEP 3: Output max
+STEP 4: STOP</code></pre>
+         <h3>Flowchart Representation</h3>
+         <p style="font-size:14px;">Start → Input → Decision (a>b?) → Decision (a>c?) → ... → Output → End</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Repetition in Programs',
+            `<h1>Repetition (Iteration) in Programs</h1>
+         <p>Loops allow executing a block of code multiple times without rewriting it.</p>
+         <div class="grid-3">
+           <div class="card">
+             <h4>while</h4>
+             <p style="font-size:13px;">Entry-controlled loop. Condition checked first.</p>
+           </div>
+           <div class="card">
+             <h4>for</h4>
+             <p style="font-size:13px;">Entry-controlled loop with initialization, condition, update.</p>
+           </div>
+           <div class="card">
+             <h4>do-while</h4>
+             <p style="font-size:13px;">Exit-controlled loop. Executes at least once.</p>
+           </div>
+         </div>
+         <div class="highlight-box" style="margin-top:12px;">
+           Loops are essential for processing data collections, generating sequences, and repeated calculations.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Counting Loops and while Statement',
+            `<h1>Counting Loops & while Statement</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="keyword">while</span> (condition) {
+    <span class="comment">// loop body</span>
+}</code></pre>
+         <h2>Example: Count 1 to 5</h2>
+         <pre><code><span class="type">int</span> count = 1;
+<span class="keyword">while</span> (count &lt;= 5) {
+    <span class="func">printf</span>(<span class="string">"%d "</span>, count);
+    count++;   <span class="comment">// update to avoid infinite loop</span>
+}
+<span class="comment">// Output: 1 2 3 4 5</span></code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'while Loop — Detailed Flow',
+            `<h1>while Loop — Execution Flow</h1>
+         <pre><code>1. Check condition
+2. If condition is TRUE:
+   a. Execute loop body
+   b. Go back to step 1
+3. If condition is FALSE:
+   a. Exit loop
+   b. Continue with next statement</code></pre>
+         <div class="note-box">
+           <strong>Zero Iterations Possible:</strong> If condition is false initially, the loop body never executes.
+         </div>
+         <h3>Example: Sum of First N Numbers</h3>
+         <pre><code><span class="type">int</span> n = 100, sum = 0, i = 1;
+<span class="keyword">while</span> (i &lt;= n) {
+    sum += i;
+    i++;
+}
+<span class="func">printf</span>(<span class="string">"Sum: %d\\n"</span>, sum);  <span class="comment">// 5050</span></code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Computing Sum or Product in a Loop',
+            `<h1>Accumulating Sum/Product in Loops</h1>
+         <h3>Sum Pattern</h3>
+         <pre><code><span class="type">int</span> sum = 0;  <span class="comment">// initialize accumulator</span>
+<span class="keyword">for</span> (<span class="type">int</span> i = 1; i &lt;= 10; i++) {
+    sum += i;  <span class="comment">// accumulate</span>
+}</code></pre>
+         <h3>Product Pattern (Factorial)</h3>
+         <pre><code><span class="type">int</span> product = 1;  <span class="comment">// initialize to 1 for multiplication</span>
+<span class="type">int</span> n = 5;
+<span class="keyword">for</span> (<span class="type">int</span> i = 1; i &lt;= n; i++) {
+    product *= i;  <span class="comment">// multiply accumulate</span>
+}
+<span class="comment">// product = 120 (5!)</span></code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'for Statement — Syntax',
+            `<h1>for Statement</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="keyword">for</span> (initialization; condition; update) {
+    <span class="comment">// loop body</span>
+}</code></pre>
+         <h2>Example</h2>
+         <pre><code><span class="keyword">for</span> (<span class="type">int</span> i = 0; i &lt; 5; i++) {
+    <span class="func">printf</span>(<span class="string">"Iteration %d\\n"</span>, i);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;">All three parts are optional but semicolons are mandatory.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'for Loop — Parts Explained',
+            `<h1>for Loop — Detailed Breakdown</h1>
+         <table>
+           <tr><th>Part</th><th>Purpose</th><th>Executed When</th></tr>
+           <tr><td>Initialization</td><td>Set starting value</td><td>Once, before loop starts</td></tr>
+           <tr><td>Condition</td><td>Check if loop should continue</td><td>Before each iteration</td></tr>
+           <tr><td>Update</td><td>Modify loop variable</td><td>After each iteration</td></tr>
+         </table>
+         <h3>Flow:</h3>
+         <pre><code>Initialization → Condition (true?) → Body → Update → Condition → ...</code></pre>
+         <h3>Infinite for loop</h3>
+         <pre><code><span class="keyword">for</span>(;;) { <span class="comment">// no condition = always true</span>
+    <span class="comment">// infinite loop</span>
+}</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'for Loop — Common Patterns',
+            `<h1>for Loop — Common Patterns</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>Counting Up</h4>
+             <pre><code><span class="keyword">for</span>(<span class="type">int</span> i = 1; i &lt;= 10; i++)</code></pre>
+           </div>
+           <div class="card">
+             <h4>Counting Down</h4>
+             <pre><code><span class="keyword">for</span>(<span class="type">int</span> i = 10; i &gt;= 1; i--)</code></pre>
+           </div>
+           <div class="card">
+             <h4>Step by 2</h4>
+             <pre><code><span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt;= 20; i += 2)</code></pre>
+           </div>
+           <div class="card">
+             <h4>Nested Loop</h4>
+             <pre><code><span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 3; i++)
+  <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; 3; j++)</code></pre>
+           </div>
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Conditional Loops',
+            `<h1>Conditional Loops</h1>
+         <p>Loops that continue while a <em>condition</em> is true, not based on a counter:</p>
+         <h3>Example: Read until sentinel</h3>
+         <pre><code><span class="type">int</span> num;
+<span class="func">printf</span>(<span class="string">"Enter numbers (0 to stop): "</span>);
+<span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+<span class="keyword">while</span> (num != 0) {
+    <span class="func">printf</span>(<span class="string">"You entered: %d\\n"</span>, num);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+}</code></pre>
+         <h3>Example: Count digits of a number</h3>
+         <pre><code><span class="type">int</span> n = 12345, digits = 0;
+<span class="keyword">while</span> (n > 0) {
+    n /= 10;
+    digits++;
+}
+<span class="comment">// digits = 5</span></code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Loop Design — Choosing the Right Loop',
+            `<h1>Loop Design Guidelines</h1>
+         <table>
+           <tr><th>Scenario</th><th>Recommended Loop</th></tr>
+           <tr><td>Known number of iterations</td><td><code>for</code></td></tr>
+           <tr><td>Condition-based termination</td><td><code>while</code></td></tr>
+           <tr><td>Must execute at least once</td><td><code>do-while</code></td></tr>
+           <tr><td>Menu-driven programs</td><td><code>do-while</code> (show menu first)</td></tr>
+         </table>
+         <div class="highlight-box">
+           <strong>Rule of Thumb:</strong> If you know the count → use <code>for</code>. If you don't know when to stop → use <code>while</code>. If it must run once → <code>do-while</code>.
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Nested Loops',
+            `<h1>Nested Loops</h1>
+         <p>A loop inside another loop is a <strong>nested loop</strong>.</p>
+         <h3>Example: Multiplication Table (1–3 × 1–3)</h3>
+         <pre><code><span class="keyword">for</span> (<span class="type">int</span> i = 1; i &lt;= 3; i++) {
+    <span class="keyword">for</span> (<span class="type">int</span> j = 1; j &lt;= 3; j++) {
+        <span class="func">printf</span>(<span class="string">"%d x %d = %d\\t"</span>, i, j, i*j);
+    }
+    <span class="func">printf</span>(<span class="string">"\\n"</span>);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong></p>
+         <pre><code>1 x 1 = 1    1 x 2 = 2    1 x 3 = 3
+2 x 1 = 2    2 x 2 = 4    2 x 3 = 6
+3 x 1 = 3    3 x 2 = 6    3 x 3 = 9</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Nested Loops — Printing Patterns',
+            `<h1>Pattern Printing with Nested Loops</h1>
+         <h3>Right Triangle Pattern</h3>
+         <pre><code><span class="keyword">for</span> (<span class="type">int</span> i = 1; i &lt;= 5; i++) {
+    <span class="keyword">for</span> (<span class="type">int</span> j = 1; j &lt;= i; j++) {
+        <span class="func">printf</span>(<span class="string">"* "</span>);
+    }
+    <span class="func">printf</span>(<span class="string">"\\n"</span>);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong></p>
+         <pre><code>*
+* *
+* * *
+* * * *
+* * * * *</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'do-while Statement',
+            `<h1>do-while Statement</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="keyword">do</span> {
+    <span class="comment">// loop body (executes at least once)</span>
+} <span class="keyword">while</span> (condition);  <span class="comment">// semicolon required</span></code></pre>
+         <h2>Example: Menu-Driven Program</h2>
+         <pre><code><span class="type">int</span> choice;
+<span class="keyword">do</span> {
+    <span class="func">printf</span>(<span class="string">"1. Continue\\n2. Exit\\nChoice: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &choice);
+} <span class="keyword">while</span> (choice != 2);
+<span class="comment">// Body executes at least once</span></code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'break and continue Statements',
+            `<h1>break and continue</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>break</h4>
+             <p style="font-size:13px;">Terminates the loop immediately</p>
+             <pre><code><span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 10; i++) {
+    <span class="keyword">if</span> (i == 5) <span class="keyword">break</span>;
+    <span class="func">printf</span>(<span class="string">"%d "</span>, i);
+}
+<span class="comment">// Output: 0 1 2 3 4</span></code></pre>
+           </div>
+           <div class="card">
+             <h4>continue</h4>
+             <p style="font-size:13px;">Skips to next iteration</p>
+             <pre><code><span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 5; i++) {
+    <span class="keyword">if</span> (i == 2) <span class="keyword">continue</span>;
+    <span class="func">printf</span>(<span class="string">"%d "</span>, i);
+}
+<span class="comment">// Output: 0 1 3 4</span></code></pre>
+           </div>
+         </div>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Sentinel-Controlled Loops',
+            `<h1>Sentinel-Controlled Loops</h1>
+         <p>Loops that terminate when a special <strong>sentinel value</strong> is entered:</p>
+         <pre><code><span class="type">int</span> sum = 0, count = 0, num;
+<span class="func">printf</span>(<span class="string">"Enter grades (negative to end):\\n"</span>);
+<span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+<span class="keyword">while</span> (num >= 0) {
+    sum += num;
+    count++;
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+}
+<span class="keyword">if</span> (count > 0)
+    <span class="func">printf</span>(<span class="string">"Average: %.2f\\n"</span>, (<span class="type">float</span>)sum/count);</code></pre>
+         <p style="font-size:13px;color:#64748b;">Sentinel value must be outside the valid data range.</p>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Flag-Controlled Loops',
+            `<h1>Flag-Controlled Loops</h1>
+         <p>Use a <strong>flag variable</strong> (boolean) to control loop execution:</p>
+         <pre><code><span class="type">int</span> found = 0;  <span class="comment">// flag initialized to false</span>
+<span class="type">int</span> target = 42, num;
+
+<span class="keyword">while</span> (!found) {
+    <span class="func">printf</span>(<span class="string">"Guess a number: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+    <span class="keyword">if</span> (num == target) {
+        found = 1;  <span class="comment">// set flag to true</span>
+        <span class="func">printf</span>(<span class="string">"Correct!\\n"</span>);
+    } <span class="keyword">else if</span> (num &lt; target) {
+        <span class="func">printf</span>(<span class="string">"Too low. Try again.\\n"</span>);
+    } <span class="keyword">else</span> {
+        <span class="func">printf</span>(<span class="string">"Too high. Try again.\\n"</span>);
+    }
+}</code></pre>`,
+            'UNIT I');
+
+        addSlide('Unit I', 'unit1', 'Common Loop Errors',
+            `<h1>Common Loop Pitfalls</h1>
+         <table>
+           <tr><th>Error</th><th>Description</th><th>Prevention</th></tr>
+           <tr><td>Infinite Loop</td><td>Condition never becomes false</td><td>Ensure update statement changes condition</td></tr>
+           <tr><td>Off-by-One</td><td>Wrong number of iterations</td><td>Carefully check &lt; vs &lt;= boundaries</td></tr>
+           <tr><td>Uninitialized Accumulator</td><td>Using garbage value for sum/product</td><td>Initialize sum=0, product=1</td></tr>
+           <tr><td>Missing Semicolon in do-while</td><td>Compilation error</td><td>Remember <code>} while(...);</code></td></tr>
+           <tr><td>Wrong Operator in Condition</td><td><code>=</code> instead of <code>==</code></td><td>Use <code>==</code> for comparison</td></tr>
+         </table>`,
+            'UNIT I');
+
+        // ==================== UNIT II : FUNCTIONS & POINTERS ====================
+        addSlide('Unit II', 'unit2', 'UNIT II: Top-Down Design with Functions',
+            `<h1>UNIT II: Top-Down Design with Functions</h1>
+         <h2>Building Programs from Existing Information</h2>
+         <ul>
+           <li>Reuse existing code instead of reinventing</li>
+           <li>Leverage <strong>library functions</strong> (printf, scanf, sqrt, etc.)</li>
+           <li>Break complex problems into smaller, manageable sub-problems</li>
+         </ul>
+         <div class="highlight-box">
+           <strong>Top-Down Design:</strong> Start with the overall problem, progressively decompose into smaller functions.
+         </div>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Library Functions',
+            `<h1>Library Functions in C</h1>
+         <p>Pre-written functions provided by C standard library:</p>
+         <table>
+           <tr><th>Header</th><th>Functions</th><th>Purpose</th></tr>
+           <tr><td><code>stdio.h</code></td><td><code>printf, scanf, gets, puts</code></td><td>I/O operations</td></tr>
+           <tr><td><code>math.h</code></td><td><code>sqrt, pow, sin, cos, fabs</code></td><td>Mathematical operations</td></tr>
+           <tr><td><code>string.h</code></td><td><code>strlen, strcpy, strcat, strcmp</code></td><td>String manipulation</td></tr>
+           <tr><td><code>stdlib.h</code></td><td><code>malloc, free, atoi, rand</code></td><td>Memory & conversion</td></tr>
+           <tr><td><code>ctype.h</code></td><td><code>isalpha, isdigit, toupper</code></td><td>Character classification</td></tr>
+         </table>
+         <h3>Example</h3>
+         <pre><code><span class="keyword">#include</span> &lt;math.h&gt;
+<span class="type">double</span> result = <span class="func">sqrt</span>(16.0);  <span class="comment">// 4.0</span></code></pre>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Top-Down Design & Structure Charts',
+            `<h1>Top-Down Design & Structure Charts</h1>
+         <p><strong>Top-Down Design</strong>: Break a problem into sub-problems, then solve each independently.</p>
+         <h3>Structure Chart for Calculator Program</h3>
+         <pre><code>              ┌─────────────────┐
+              │     Calculator   │
+              └────────┬─────────┘
+        ┌──────────────┼──────────────┐
+        ▼              ▼              ▼
+   ┌─────────┐    ┌─────────┐    ┌─────────┐
+   │  Add    │    │ Subtract│    │ Multiply│
+   └─────────┘    └─────────┘    └─────────┘</code></pre>
+         <p style="font-size:13px;color:#64748b;">Each box becomes a function in the C program.</p>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Functions without Arguments',
+            `<h1>Functions without Arguments</h1>
+         <h2>Definition</h2>
+         <pre><code><span class="type">void</span> <span class="func">displayMessage</span>() {
+    <span class="func">printf</span>(<span class="string">"Welcome to C Programming!\\n"</span>);
+}</code></pre>
+         <h2>Call</h2>
+         <pre><code><span class="func">displayMessage</span>();  <span class="comment">// function call</span></code></pre>
+         <h2>Complete Example</h2>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">void</span> <span class="func">greet</span>() {
+    <span class="func">printf</span>(<span class="string">"Hello!\\n"</span>);
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="func">greet</span>();   <span class="comment">// call greet()</span>
+    <span class="func">greet</span>();   <span class="comment">// call again</span>
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Functions with Input Arguments (Parameters)',
+            `<h1>Functions with Input Arguments</h1>
+         <h2>Definition with Parameters</h2>
+         <pre><code><span class="type">void</span> <span class="func">printSum</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="func">printf</span>(<span class="string">"Sum: %d\\n"</span>, a + b);
+}</code></pre>
+         <h2>Call with Arguments</h2>
+         <pre><code><span class="func">printSum</span>(5, 10);  <span class="comment">// a=5, b=10</span>
+<span class="func">printSum</span>(3, 7);   <span class="comment">// a=3, b=7</span></code></pre>
+         <h3>Return Value Function</h3>
+         <pre><code><span class="type">int</span> <span class="func">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">return</span> a + b;
+}
+<span class="type">int</span> result = <span class="func">add</span>(4, 6);  <span class="comment">// result = 10</span></code></pre>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Function Prototypes (Declarations)',
+            `<h1>Function Prototypes</h1>
+         <p>Declares function signature before use (required in C89/C90):</p>
+         <pre><code><span class="comment">// Function prototype (declaration)</span>
+<span class="type">int</span> <span class="func">add</span>(<span class="type">int</span> a, <span class="type">int</span> b);
+<span class="type">void</span> <span class="func">printMessage</span>(<span class="type">char</span> *msg);
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> sum = <span class="func">add</span>(3, 4);  <span class="comment">// can call before definition</span>
+    <span class="func">printMessage</span>(<span class="string">"Hi"</span>);
+    <span class="keyword">return</span> 0;
+}
+
+<span class="comment">// Function definition</span>
+<span class="type">int</span> <span class="func">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">return</span> a + b;
+}</code></pre>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Call by Value vs Call by Reference',
+            `<h1>Call by Value vs Call by Reference</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>Call by Value (Default)</h4>
+             <p style="font-size:13px;">A copy of the argument is passed. Changes inside function don't affect the original.</p>
+             <pre><code><span class="type">void</span> <span class="func">change</span>(<span class="type">int</span> x) { x = 100; }
+<span class="type">int</span> a = 5;
+<span class="func">change</span>(a);
+<span class="comment">// a is still 5</span></code></pre>
+           </div>
+           <div class="card">
+             <h4>Call by Reference (Pointers)</h4>
+             <p style="font-size:13px;">Address of the argument is passed. Changes affect the original.</p>
+             <pre><code><span class="type">void</span> <span class="func">change</span>(<span class="type">int</span> *x) { *x = 100; }
+<span class="type">int</span> a = 5;
+<span class="func">change</span>(&a);
+<span class="comment">// a is now 100</span></code></pre>
+           </div>
+         </div>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Pointers — Introduction',
+            `<h1>Pointers — Introduction</h1>
+         <p>A <strong>pointer</strong> is a variable that stores the <strong>memory address</strong> of another variable.</p>
+         <pre><code><span class="type">int</span> x = 10;
+<span class="type">int</span> *ptr = &x;  <span class="comment">// ptr stores address of x</span>
+
+<span class="func">printf</span>(<span class="string">"x = %d\\n"</span>, x);       <span class="comment">// 10</span>
+<span class="func">printf</span>(<span class="string">"&x = %p\\n"</span>, &x);     <span class="comment">// address of x</span>
+<span class="func">printf</span>(<span class="string">"ptr = %p\\n"</span>, ptr);   <span class="comment">// same address</span>
+<span class="func">printf</span>(<span class="string">"*ptr = %d\\n"</span>, *ptr); <span class="comment">// 10 (dereference)</span></code></pre>
+         <div class="highlight-box">
+           <strong>Key Symbols:</strong> <code>&</code> = "address of", <code>*</code> = "value at" (dereference).
+         </div>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Pointers and the Indirection Operator (*)',
+            `<h1>Pointers and the Indirection Operator</h1>
+         <p>The <code>*</code> operator (dereference) accesses the value at the address stored in the pointer.</p>
+         <h3>Example</h3>
+         <pre><code><span class="type">int</span> num = 50;
+<span class="type">int</span> *p = &num;
+
+<span class="func">printf</span>(<span class="string">"num = %d\\n"</span>, num);     <span class="comment">// 50</span>
+<span class="func">printf</span>(<span class="string">"*p = %d\\n"</span>, *p);       <span class="comment">// 50 (dereference)</span>
+
+*p = 75;  <span class="comment">// change value through pointer</span>
+<span class="func">printf</span>(<span class="string">"num = %d\\n"</span>, num);     <span class="comment">// 75 (changed!)</span></code></pre>
+         <div class="note-box">
+           <strong>Indirection:</strong> Accessing data through a pointer adds one level of indirection. This is the basis for call-by-reference.
+         </div>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Declaring Pointer Variables',
+            `<h1>Declaring Pointer Variables</h1>
+         <h2>Syntax</h2>
+         <pre><code><span class="type">data_type</span> *pointer_name;</code></pre>
+         <h3>Examples</h3>
+         <pre><code><span class="type">int</span> *p;       <span class="comment">// pointer to int</span>
+<span class="type">float</span> *fp;    <span class="comment">// pointer to float</span>
+<span class="type">char</span> *cp;     <span class="comment">// pointer to char</span>
+<span class="type">double</span> *dp;   <span class="comment">// pointer to double</span>
+<span class="type">void</span> *vp;     <span class="comment">// generic pointer (void pointer)</span></code></pre>
+         <h3>Initialization</h3>
+         <pre><code><span class="type">int</span> x = 5;
+<span class="type">int</span> *p = &x;   <span class="comment">// pointer initialized to address of x</span>
+<span class="type">int</span> *q = NULL; <span class="comment">// NULL pointer (safe initialization)</span></code></pre>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Functions with Output Parameters (Pointers)',
+            `<h1>Functions with Output Parameters</h1>
+         <p>Functions can "return" multiple values using pointer parameters:</p>
+         <pre><code><span class="type">void</span> <span class="func">compute</span>(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> *sum, <span class="type">int</span> *diff) {
+    *sum = a + b;
+    *diff = a - b;
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> s, d;
+    <span class="func">compute</span>(10, 5, &s, &d);
+    <span class="func">printf</span>(<span class="string">"Sum: %d, Diff: %d\\n"</span>, s, d);
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong> Sum: 15, Diff: 5</p>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Passing Pointers to Functions',
+            `<h1>Passing Pointers to Functions</h1>
+         <pre><code><span class="type">void</span> <span class="func">increment</span>(<span class="type">int</span> *value) {
+    (*value)++;  <span class="comment">// increment the value pointed to</span>
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> num = 10;
+    <span class="func">increment</span>(&num);
+    <span class="func">printf</span>(<span class="string">"num = %d\\n"</span>, num);  <span class="comment">// 11</span>
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <div class="highlight-box">
+           Passing <code>&num</code> gives the function access to the original variable, enabling modification.
+         </div>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Multiple Calls with Input/Output Parameters',
+            `<h1>Multiple Calls with I/O Parameters</h1>
+         <pre><code><span class="type">void</span> <span class="func">swap</span>(<span class="type">int</span> *a, <span class="type">int</span> *b) {
+    <span class="type">int</span> temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> x = 5, y = 10;
+    <span class="func">printf</span>(<span class="string">"Before: x=%d, y=%d\\n"</span>, x, y);
+    <span class="func">swap</span>(&x, &y);
+    <span class="func">printf</span>(<span class="string">"After: x=%d, y=%d\\n"</span>, x, y);
+
+    <span class="comment">// Multiple calls</span>
+    <span class="func">swap</span>(&x, &y);   <span class="comment">// swap again</span>
+    <span class="func">swap</span>(&x, &y);   <span class="comment">// swap third time</span>
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong> Before: x=5, y=10 → After: x=10, y=5</p>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Scope of Names — Local vs Global',
+            `<h1>Scope of Names</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>Local Scope</h4>
+             <p style="font-size:13px;">Variables declared inside a function. Accessible only within that function.</p>
+             <pre><code><span class="type">void</span> <span class="func">func</span>() {
+    <span class="type">int</span> localVar = 10;
+    <span class="comment">// only accessible here</span>
+}</code></pre>
+           </div>
+           <div class="card">
+             <h4>Global Scope</h4>
+             <p style="font-size:13px;">Variables declared outside all functions. Accessible throughout the program.</p>
+             <pre><code><span class="type">int</span> globalVar = 20;
+
+<span class="type">void</span> <span class="func">func</span>() {
+    <span class="comment">// can access globalVar</span>
+}</code></pre>
+           </div>
+         </div>
+         <div class="note-box">
+           <strong>Shadowing:</strong> A local variable can shadow a global variable with the same name.
+         </div>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Scope of Names — Block Scope & Static',
+            `<h1>Block Scope & Static Variables</h1>
+         <h3>Block Scope</h3>
+         <pre><code><span class="keyword">if</span> (condition) {
+    <span class="type">int</span> blockVar = 10;  <span class="comment">// only inside this block</span>
+}
+<span class="comment">// blockVar not accessible here</span></code></pre>
+         <h3>Static Variables</h3>
+         <pre><code><span class="type">void</span> <span class="func">counter</span>() {
+    <span class="keyword">static</span> <span class="type">int</span> count = 0;  <span class="comment">// initialized once</span>
+    count++;
+    <span class="func">printf</span>(<span class="string">"Count: %d\\n"</span>, count);
+}
+<span class="func">counter</span>();  <span class="comment">// Count: 1</span>
+<span class="func">counter</span>();  <span class="comment">// Count: 2</span>
+<span class="func">counter</span>();  <span class="comment">// Count: 3</span></code></pre>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Formal Output Parameters as Actual Arguments',
+            `<h1>Formal Output Parameters as Actual Arguments</h1>
+         <p>When a function expects a pointer (formal parameter), you must pass an address (actual argument):</p>
+         <pre><code><span class="comment">// Formal parameters are pointers</span>
+<span class="type">void</span> <span class="func">getMinMax</span>(<span class="type">int</span> arr[], <span class="type">int</span> n, <span class="type">int</span> *min, <span class="type">int</span> *max) {
+    *min = arr[0];
+    *max = arr[0];
+    <span class="keyword">for</span>(<span class="type">int</span> i = 1; i &lt; n; i++) {
+        <span class="keyword">if</span>(arr[i] &lt; *min) *min = arr[i];
+        <span class="keyword">if</span>(arr[i] &gt; *max) *max = arr[i];
+    }
+}
+
+<span class="comment">// Actual arguments are addresses</span>
+<span class="type">int</span> data[] = {5, 2, 9, 1, 7};
+<span class="type">int</span> minVal, maxVal;
+<span class="func">getMinMax</span>(data, 5, &minVal, &maxVal);</code></pre>`,
+            'UNIT II');
+
+        addSlide('Unit II', 'unit2', 'Recap: Function Parameters Patterns',
+            `<h1>Function Parameter Patterns — Recap</h1>
+         <table>
+           <tr><th>Pattern</th><th>Formal Parameter</th><th>Actual Argument</th><th>Purpose</th></tr>
+           <tr><td>Input only</td><td><code>int x</code></td><td><code>5</code></td><td>Pass a value</td></tr>
+           <tr><td>Output only</td><td><code>int *x</code></td><td><code>&amp;var</code></td><td>Return a value</td></tr>
+           <tr><td>Input-Output</td><td><code>int *x</code></td><td><code>&amp;var</code></td><td>Read & modify</td></tr>
+           <tr><td>Array input</td><td><code>int arr[]</code></td><td><code>arr</code></td><td>Pass array</td></tr>
+           <tr><td>No parameters</td><td><code>void</code></td><td><code>()</code></td><td>No data exchange</td></tr>
+         </table>`,
+            'UNIT II');
+
+        // ==================== UNIT III : ARRAYS & STRINGS ====================
+        addSlide('Unit III', 'unit3', 'UNIT III: Arrays — Declaring and Referencing',
+            `<h1>UNIT III: Arrays</h1>
+         <h2>Declaring and Referencing Arrays</h2>
+         <p>An <strong>array</strong> is a collection of elements of the <strong>same data type</strong> stored in contiguous memory.</p>
+         <pre><code><span class="type">data_type</span> array_name[size];
+
+<span class="type">int</span> numbers[5];        <span class="comment">// array of 5 integers</span>
+<span class="type">float</span> temps[10];       <span class="comment">// array of 10 floats</span>
+<span class="type">char</span> letters[26];     <span class="comment">// array of 26 characters</span></code></pre>
+         <h3>Referencing Elements</h3>
+         <pre><code>numbers[0] = 10;   <span class="comment">// first element (index 0)</span>
+numbers[4] = 50;   <span class="comment">// last element (index 4)</span>
+<span class="type">int</span> x = numbers[2];  <span class="comment">// access third element</span></code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Arrays — Indexing (0-based)',
+            `<h1>Array Subscripts (0-based Indexing)</h1>
+         <p>C uses <strong>zero-based indexing</strong>: first element is at index 0.</p>
+         <pre><code><span class="type">int</span> arr[5] = {10, 20, 30, 40, 50};
+<span class="comment">// Index:   0   1   2   3   4</span>
+<span class="comment">// Value:  10  20  30  40  50</span></code></pre>
+         <table>
+           <tr><th>Expression</th><th>Value</th></tr>
+           <tr><td><code>arr[0]</code></td><td>10 (first element)</td></tr>
+           <tr><td><code>arr[2]</code></td><td>30 (third element)</td></tr>
+           <tr><td><code>arr[4]</code></td><td>50 (last element)</td></tr>
+           <tr><td><code>arr[5]</code></td><td>Out of bounds — undefined behavior</td></tr>
+         </table>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Array Initialization',
+            `<h1>Array Initialization Methods</h1>
+         <h3>Full Initialization</h3>
+         <pre><code><span class="type">int</span> arr1[5] = {10, 20, 30, 40, 50};</code></pre>
+         <h3>Partial Initialization (rest = 0)</h3>
+         <pre><code><span class="type">int</span> arr2[5] = {1, 2};   <span class="comment">// {1, 2, 0, 0, 0}</span></code></pre>
+         <h3>Without Size (compiler determines)</h3>
+         <pre><code><span class="type">int</span> arr3[] = {1, 2, 3, 4, 5, 6};  <span class="comment">// size = 6</span></code></pre>
+         <h3>All Zeros</h3>
+         <pre><code><span class="type">int</span> arr4[100] = {0};  <span class="comment">// all 100 elements = 0</span></code></pre>
+         <h3>Designated Initializers (C99)</h3>
+         <pre><code><span class="type">int</span> arr5[5] = {[2]=30, [4]=50};  <span class="comment">// {0,0,30,0,50}</span></code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Using for Loops for Sequential Access',
+            `<h1>Sequential Array Access with for Loops</h1>
+         <h3>Reading into an Array</h3>
+         <pre><code><span class="type">int</span> arr[5];
+<span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 5; i++) {
+    <span class="func">printf</span>(<span class="string">"Enter element %d: "</span>, i);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &arr[i]);
+}</code></pre>
+         <h3>Printing an Array</h3>
+         <pre><code><span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 5; i++) {
+    <span class="func">printf</span>(<span class="string">"arr[%d] = %d\\n"</span>, i, arr[i]);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;">The loop index <code>i</code> serves as the array subscript for sequential access.</p>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Using Array Elements as Function Arguments',
+            `<h1>Array Elements as Function Arguments</h1>
+         <p>Individual array elements can be passed to functions just like regular variables:</p>
+         <pre><code><span class="type">void</span> <span class="func">printSquare</span>(<span class="type">int</span> x) {
+    <span class="func">printf</span>(<span class="string">"Square: %d\\n"</span>, x * x);
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> arr[5] = {1, 2, 3, 4, 5};
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 5; i++) {
+        <span class="func">printSquare</span>(arr[i]);  <span class="comment">// pass element value</span>
+    }
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Note:</strong> This is call-by-value; the function gets a copy.</p>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Passing Entire Arrays to Functions',
+            `<h1>Array Arguments (Passing Entire Arrays)</h1>
+         <p>Arrays are passed by <strong>reference</strong> (address of first element):</p>
+         <pre><code><span class="type">void</span> <span class="func">doubleElements</span>(<span class="type">int</span> arr[], <span class="type">int</span> size) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; size; i++) {
+        arr[i] *= 2;  <span class="comment">// modifies original array</span>
+    }
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> nums[5] = {1, 2, 3, 4, 5};
+    <span class="func">doubleElements</span>(nums, 5);
+    <span class="comment">// nums is now {2, 4, 6, 8, 10}</span>
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <div class="note-box">
+           <strong>Key:</strong> Arrays are not copied; the function receives the memory address.
+         </div>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Searching an Array — Linear Search',
+            `<h1>Linear Search in an Array</h1>
+         <p>Sequentially check each element until match is found or end is reached.</p>
+         <pre><code><span class="type">int</span> <span class="func">linearSearch</span>(<span class="type">int</span> arr[], <span class="type">int</span> n, <span class="type">int</span> key) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n; i++) {
+        <span class="keyword">if</span>(arr[i] == key)
+            <span class="keyword">return</span> i;   <span class="comment">// found at index i</span>
+    }
+    <span class="keyword">return</span> -1;  <span class="comment">// not found</span>
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Time Complexity:</strong> O(n) — may need to check all elements.</p>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Sorting an Array — Bubble Sort',
+            `<h1>Bubble Sort Algorithm</h1>
+         <p>Repeatedly step through the array, comparing adjacent elements and swapping them if they're in the wrong order.</p>
+         <pre><code><span class="type">void</span> <span class="func">bubbleSort</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n-1; i++) {
+        <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; n-i-1; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[j+1]) {
+                <span class="comment">// swap</span>
+                <span class="type">int</span> temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Time Complexity:</strong> O(n²) worst case, O(n) best case (already sorted)</p>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Sorting — Selection Sort',
+            `<h1>Selection Sort Algorithm</h1>
+         <p>Find the minimum element and place it at the beginning, repeat for remaining.</p>
+         <pre><code><span class="type">void</span> <span class="func">selectionSort</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n-1; i++) {
+        <span class="type">int</span> minIdx = i;
+        <span class="keyword">for</span>(<span class="type">int</span> j = i+1; j &lt; n; j++) {
+            <span class="keyword">if</span>(arr[j] &lt; arr[minIdx])
+                minIdx = j;
+        }
+        <span class="type">int</span> temp = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = temp;
+    }
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Time Complexity:</strong> O(n²) in all cases</p>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Parallel Arrays and Enumerated Types',
+            `<h1>Parallel Arrays & Enumerated Types</h1>
+         <h3>Parallel Arrays</h3>
+         <p>Two or more arrays where corresponding elements are related:</p>
+         <pre><code><span class="type">int</span> ids[] = {101, 102, 103, 104};
+<span class="type">char</span> *names[] = {<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Charlie"</span>, <span class="string">"Diana"</span>};
+<span class="type">float</span> gpas[] = {3.5, 3.2, 3.8, 3.6};
+<span class="comment">// ids[0], names[0], gpas[0] all belong to Alice</span></code></pre>
+         <h3>Enumerated Types</h3>
+         <pre><code><span class="keyword">enum</span> Day {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY};
+<span class="keyword">enum</span> Day today = WEDNESDAY;
+<span class="func">printf</span>(<span class="string">"Day index: %d\\n"</span>, today);  <span class="comment">// 2</span></code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Multidimensional Arrays',
+            `<h1>Multidimensional Arrays (2D)</h1>
+         <h3>Declaration</h3>
+         <pre><code><span class="type">int</span> matrix[3][4];  <span class="comment">// 3 rows, 4 columns</span></code></pre>
+         <h3>Initialization</h3>
+         <pre><code><span class="type">int</span> matrix[2][3] = {
+    {1, 2, 3},   <span class="comment">// row 0</span>
+    {4, 5, 6}    <span class="comment">// row 1</span>
+};</code></pre>
+         <h3>Accessing Elements</h3>
+         <pre><code><span class="func">printf</span>(<span class="string">"%d"</span>, matrix[0][1]);  <span class="comment">// 2 (row 0, col 1)</span>
+<span class="func">printf</span>(<span class="string">"%d"</span>, matrix[1][2]);  <span class="comment">// 6 (row 1, col 2)</span></code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', '2D Arrays — Iteration & Memory',
+            `<h1>2D Array Iteration</h1>
+         <pre><code><span class="type">int</span> matrix[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+<span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 3; i++) {
+    <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; 3; j++) {
+        <span class="func">printf</span>(<span class="string">"%d "</span>, matrix[i][j]);
+    }
+    <span class="func">printf</span>(<span class="string">"\\n"</span>);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Memory Layout:</strong> Row-major order (elements stored row by row).</p>
+         <p style="font-size:13px;color:#64748b;"><strong>Higher Dimensions:</strong> <code>int cube[3][4][5];</code> — 3D array.</p>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Matrix Operations with 2D Arrays',
+            `<h1>Matrix Addition Example</h1>
+         <pre><code><span class="type">void</span> <span class="func">addMatrices</span>(<span class="type">int</span> A[][3], <span class="type">int</span> B[][3], <span class="type">int</span> C[][3], <span class="type">int</span> rows) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; rows; i++) {
+        <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; 3; j++) {
+            C[i][j] = A[i][j] + B[i][j];
+        }
+    }
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;">For 2D arrays, the first dimension can be omitted, but subsequent dimensions must be specified in function parameters.</p>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Strings — Basics',
+            `<h1>String Basics in C</h1>
+         <p>A <strong>string</strong> is a <strong>null-terminated character array</strong>.</p>
+         <pre><code><span class="type">char</span> name[] = <span class="string">"Alice"</span>;
+<span class="comment">// Internally: {'A','l','i','c','e','\\0'}</span>
+
+<span class="type">char</span> greeting[20] = <span class="string">"Hello"</span>;
+<span class="comment">// Remaining elements are \\0</span></code></pre>
+         <h3>Accessing Individual Characters</h3>
+         <pre><code><span class="func">printf</span>(<span class="string">"%c"</span>, name[0]);  <span class="comment">// 'A'</span>
+<span class="func">printf</span>(<span class="string">"%c"</span>, name[4]);  <span class="comment">// 'e'</span></code></pre>
+         <div class="highlight-box">
+           The null character <code>\\0</code> marks the end of the string.
+         </div>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'String Input and Output',
+            `<h1>String Input/Output</h1>
+         <h3>Output — printf()</h3>
+         <pre><code><span class="type">char</span> name[] = <span class="string">"Alice"</span>;
+<span class="func">printf</span>(<span class="string">"Hello, %s!\\n"</span>, name);</code></pre>
+         <h3>Input — scanf() with %s</h3>
+         <pre><code><span class="type">char</span> name[50];
+<span class="func">scanf</span>(<span class="string">"%s"</span>, name);  <span class="comment">// no & needed (array = pointer)</span>
+<span class="comment">// Stops at whitespace (can't read full names with spaces)</span></code></pre>
+         <h3>Input — fgets() (safer)</h3>
+         <pre><code><span class="type">char</span> name[50];
+<span class="func">fgets</span>(name, 50, stdin);  <span class="comment">// reads including spaces</span>
+<span class="comment">// Includes \\n character</span></code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'String Library Functions — Assignment & Substrings',
+            `<h1>String Library Functions (string.h)</h1>
+         <h3>strcpy() — Copy String</h3>
+         <pre><code><span class="type">char</span> dest[20];
+<span class="func">strcpy</span>(dest, <span class="string">"Hello"</span>);  <span class="comment">// dest = "Hello"</span></code></pre>
+         <h3>strncpy() — Copy with Limit</h3>
+         <pre><code><span class="type">char</span> dest[10];
+<span class="func">strncpy</span>(dest, <span class="string">"Programming"</span>, 4);  <span class="comment">// "Prog"</span></code></pre>
+         <h3>strlen() — String Length</h3>
+         <pre><code><span class="type">int</span> len = <span class="func">strlen</span>(<span class="string">"Hello"</span>);  <span class="comment">// 5 (excludes \\0)</span></code></pre>
+         <h3>Substring Extraction</h3>
+         <pre><code><span class="type">char</span> str[] = <span class="string">"Programming"</span>;
+<span class="type">char</span> sub[10];
+<span class="func">strncpy</span>(sub, str + 3, 4);  <span class="comment">// sub = "gram"</span>
+sub[4] = <span class="string">'\\0'</span>;  <span class="comment">// terminate</span></code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'String Concatenation — strcat()',
+            `<h1>String Concatenation</h1>
+         <h3>strcat() — Concatenate Strings</h3>
+         <pre><code><span class="type">char</span> str1[50] = <span class="string">"Hello"</span>;
+<span class="type">char</span> str2[] = <span class="string">" World"</span>;
+<span class="func">strcat</span>(str1, str2);  <span class="comment">// str1 = "Hello World"</span></code></pre>
+         <h3>strncat() — Concatenate with Limit</h3>
+         <pre><code><span class="type">char</span> str1[50] = <span class="string">"Hi"</span>;
+<span class="func">strncat</span>(str1, <span class="string">" everyone"</span>, 4);  <span class="comment">// str1 = "Hi eve"</span></code></pre>
+         <div class="note-box">
+           <strong>Caution:</strong> Ensure destination array has enough space for concatenated result.
+         </div>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'String Comparison — strcmp()',
+            `<h1>String Comparison</h1>
+         <h3>strcmp() — Compare Two Strings</h3>
+         <pre><code><span class="type">int</span> result = <span class="func">strcmp</span>(<span class="string">"apple"</span>, <span class="string">"banana"</span>);
+<span class="comment">// result < 0 because "apple" < "banana"</span>
+
+<span class="type">int</span> result2 = <span class="func">strcmp</span>(<span class="string">"hello"</span>, <span class="string">"hello"</span>);
+<span class="comment">// result2 == 0 (equal)</span>
+
+<span class="type">int</span> result3 = <span class="func">strcmp</span>(<span class="string">"zebra"</span>, <span class="string">"apple"</span>);
+<span class="comment">// result3 > 0 because "zebra" > "apple"</span></code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Return values:</strong> &lt;0 (first &lt; second), 0 (equal), &gt;0 (first &gt; second)</p>
+         <h3>strncmp() — Compare First N Characters</h3>
+         <pre><code><span class="type">int</span> r = <span class="func">strncmp</span>(<span class="string">"hello"</span>, <span class="string">"help"</span>, 3);  <span class="comment">// compares "hel" with "hel" → 0</span></code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Arrays of Pointers (Strings)',
+            `<h1>Arrays of Pointers</h1>
+         <p>An array where each element is a pointer — commonly used for strings:</p>
+         <pre><code><span class="type">char</span> *names[] = {<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Charlie"</span>, <span class="string">"Diana"</span>};
+
+<span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 4; i++) {
+    <span class="func">printf</span>(<span class="string">"Name %d: %s\\n"</span>, i, names[i]);
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;">Each element points to a string literal. Memory efficient for variable-length strings.</p>
+         <h3>Sorting Names using Array of Pointers</h3>
+         <pre><code><span class="comment">// Swap pointers instead of copying strings</span>
+<span class="type">char</span> *temp = names[0];
+names[0] = names[1];
+names[1] = temp;</code></pre>`,
+            'UNIT III');
+
+        addSlide('Unit III', 'unit3', 'Strings — Character by Character Processing',
+            `<h1>Processing Strings Character by Character</h1>
+         <h3>Count Vowels</h3>
+         <pre><code><span class="type">char</span> str[] = <span class="string">"Hello World"</span>;
+<span class="type">int</span> vowels = 0;
+<span class="keyword">for</span>(<span class="type">int</span> i = 0; str[i] != <span class="string">'\\0'</span>; i++) {
+    <span class="type">char</span> c = <span class="func">tolower</span>(str[i]);
+    <span class="keyword">if</span>(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+        vowels++;
+}
+<span class="func">printf</span>(<span class="string">"Vowels: %d\\n"</span>, vowels);  <span class="comment">// 3</span></code></pre>
+         <h3>Reverse a String</h3>
+         <pre><code><span class="type">char</span> str[] = <span class="string">"Hello"</span>;
+<span class="type">int</span> len = <span class="func">strlen</span>(str);
+<span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; len/2; i++) {
+    <span class="type">char</span> temp = str[i];
+    str[i] = str[len-1-i];
+    str[len-1-i] = temp;
+}
+<span class="comment">// str = "olleH"</span></code></pre>`,
+            'UNIT III');
+
+        // ==================== UNIT IV : RECURSION & STRUCTURES ====================
+        addSlide('Unit IV', 'unit4', 'UNIT IV: Recursion — The Nature of Recursion',
+            `<h1>UNIT IV: Recursion</h1>
+         <h2>The Nature of Recursion</h2>
+         <p><strong>Recursion</strong> is a technique where a function calls itself to solve a smaller version of the same problem.</p>
+         <div class="highlight-box">
+           <strong>Key Components:</strong>
+           <ol>
+             <li><strong>Base Case:</strong> Condition that stops recursion</li>
+             <li><strong>Recursive Case:</strong> Function calls itself with modified arguments</li>
+           </ol>
+         </div>
+         <pre><code><span class="type">void</span> <span class="func">recursiveFunction</span>(...) {
+    <span class="keyword">if</span>(base_condition) {
+        <span class="comment">// return without recursive call</span>
+    } <span class="keyword">else</span> {
+        <span class="comment">// call itself with smaller problem</span>
+        <span class="func">recursiveFunction</span>(...);
+    }
+}</code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Recursion — Factorial Example',
+            `<h1>Recursive Factorial</h1>
+         <pre><code><span class="type">int</span> <span class="func">factorial</span>(<span class="type">int</span> n) {
+    <span class="keyword">if</span>(n == 0 || n == 1)  <span class="comment">// base case</span>
+        <span class="keyword">return</span> 1;
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> n * <span class="func">factorial</span>(n - 1);  <span class="comment">// recursive case</span>
+}
+
+<span class="comment">// factorial(5) = 5 * 4 * 3 * 2 * 1 = 120</span></code></pre>
+         <h3>Execution Trace for factorial(5)</h3>
+         <pre><code>factorial(5) → 5 * factorial(4)
+             → 5 * (4 * factorial(3))
+             → 5 * (4 * (3 * factorial(2)))
+             → 5 * (4 * (3 * (2 * factorial(1))))
+             → 5 * (4 * (3 * (2 * 1))) = 120</code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Tracing a Recursive Function',
+            `<h1>Tracing Recursive Calls</h1>
+         <p>Each recursive call creates a new stack frame with its own local variables.</p>
+         <h3>Stack Frames for factorial(4)</h3>
+         <pre><code>┌─────────────────┐
+│ factorial(4)    │ → returns 24
+│  └─factorial(3) │ → returns 6
+│     └─factorial(2)│ → returns 2
+│        └─factorial(1)│ → returns 1 (base case)
+└─────────────────┘</code></pre>
+         <p style="font-size:13px;color:#64748b;">When base case is reached, calls "unwind" returning values back up the stack.</p>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Recursive Mathematical Functions — Fibonacci',
+            `<h1>Recursive Fibonacci</h1>
+         <pre><code><span class="type">int</span> <span class="func">fibonacci</span>(<span class="type">int</span> n) {
+    <span class="keyword">if</span>(n == 0) <span class="keyword">return</span> 0;
+    <span class="keyword">if</span>(n == 1) <span class="keyword">return</span> 1;
+    <span class="keyword">return</span> <span class="func">fibonacci</span>(n-1) + <span class="func">fibonacci</span>(n-2);
+}</code></pre>
+         <h3>Fibonacci Sequence</h3>
+         <p style="font-size:14px;">0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...</p>
+         <div class="note-box">
+           <strong>Performance Note:</strong> Recursive Fibonacci is O(2ⁿ). An iterative solution is O(n) and more efficient.
+         </div>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Recursive Functions — Power Calculation',
+            `<h1>Recursive Power Function</h1>
+         <pre><code><span class="type">double</span> <span class="func">power</span>(<span class="type">double</span> base, <span class="type">int</span> exp) {
+    <span class="keyword">if</span>(exp == 0)
+        <span class="keyword">return</span> 1;  <span class="comment">// base case</span>
+    <span class="keyword">else if</span>(exp &gt; 0)
+        <span class="keyword">return</span> base * <span class="func">power</span>(base, exp - 1);
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> 1 / <span class="func">power</span>(base, -exp);  <span class="comment">// negative exponent</span>
+}
+
+<span class="comment">// power(2, 3) = 2 * power(2, 2)</span>
+<span class="comment">//            = 2 * (2 * power(2, 1))</span>
+<span class="comment">//            = 2 * (2 * (2 * power(2, 0)))</span>
+<span class="comment">//            = 2 * (2 * (2 * 1)) = 8</span></code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Recursive Functions — GCD (Euclidean Algorithm)',
+            `<h1>Recursive GCD (Euclidean Algorithm)</h1>
+         <pre><code><span class="type">int</span> <span class="func">gcd</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">if</span>(b == 0)
+        <span class="keyword">return</span> a;
+    <span class="keyword">return</span> <span class="func">gcd</span>(b, a % b);
+}
+
+<span class="comment">// gcd(48, 18)</span>
+<span class="comment">// = gcd(18, 12)</span>
+<span class="comment">// = gcd(12, 6)</span>
+<span class="comment">// = gcd(6, 0)</span>
+<span class="comment">// = 6</span></code></pre>
+         <h3>Iterative Version</h3>
+         <pre><code><span class="type">int</span> <span class="func">gcdIterative</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="keyword">while</span>(b != 0) {
+        <span class="type">int</span> temp = b;
+        b = a % b;
+        a = temp;
+    }
+    <span class="keyword">return</span> a;
+}</code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Recursive Functions with Array Parameters',
+            `<h1>Recursion with Arrays</h1>
+         <h3>Sum of Array Elements (Recursive)</h3>
+         <pre><code><span class="type">int</span> <span class="func">sumArray</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">if</span>(n &lt;= 0)
+        <span class="keyword">return</span> 0;
+    <span class="keyword">return</span> arr[n-1] + <span class="func">sumArray</span>(arr, n-1);
+}
+
+<span class="comment">// sumArray({1,2,3,4}, 4)</span>
+<span class="comment">// = 4 + sumArray({1,2,3}, 3)</span>
+<span class="comment">// = 4 + (3 + sumArray({1,2}, 2))</span>
+<span class="comment">// = 4 + 3 + 2 + 1 = 10</span></code></pre>
+         <h3>Find Maximum (Recursive)</h3>
+         <pre><code><span class="type">int</span> <span class="func">findMax</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">if</span>(n == 1)
+        <span class="keyword">return</span> arr[0];
+    <span class="type">int</span> maxRest = <span class="func">findMax</span>(arr, n-1);
+    <span class="keyword">return</span> (arr[n-1] > maxRest) ? arr[n-1] : maxRest;
+}</code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Recursive Functions with String Parameters',
+            `<h1>Recursion with Strings</h1>
+         <h3>Recursive Palindrome Check</h3>
+         <pre><code><span class="type">int</span> <span class="func">isPalindrome</span>(<span class="type">char</span> str[], <span class="type">int</span> left, <span class="type">int</span> right) {
+    <span class="keyword">if</span>(left >= right)
+        <span class="keyword">return</span> 1;  <span class="comment">// base: single char or empty</span>
+    <span class="keyword">if</span>(str[left] != str[right])
+        <span class="keyword">return</span> 0;  <span class="comment">// mismatch</span>
+    <span class="keyword">return</span> <span class="func">isPalindrome</span>(str, left+1, right-1);
+}
+
+<span class="comment">// Check "madam": left=0, right=4</span>
+<span class="comment">// 'm' == 'm' → check "ada" → 'a'=='a' → check "d" → true</span></code></pre>
+         <h3>Recursive String Reverse</h3>
+         <pre><code><span class="type">void</span> <span class="func">reverseString</span>(<span class="type">char</span> str[], <span class="type">int</span> left, <span class="type">int</span> right) {
+    <span class="keyword">if</span>(left >= right) <span class="keyword">return</span>;
+    <span class="type">char</span> temp = str[left];
+    str[left] = str[right];
+    str[right] = temp;
+    <span class="func">reverseString</span>(str, left+1, right-1);
+}</code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Recursion vs Iteration',
+            `<h1>Recursion vs Iteration — Comparison</h1>
+         <table>
+           <tr><th>Aspect</th><th>Recursion</th><th>Iteration</th></tr>
+           <tr><td>Code size</td><td>Shorter, elegant</td><td>Longer, more verbose</td></tr>
+           <tr><td>Memory usage</td><td>Uses stack frames</td><td>Constant memory</td></tr>
+           <tr><td>Speed</td><td>Usually slower (overhead)</td><td>Usually faster</td></tr>
+           <tr><td>Best for</td><td>Tree traversal, divide & conquer</td><td>Simple loops, performance-critical</td></tr>
+           <tr><td>Risk</td><td>Stack overflow</td><td>Less prone</td></tr>
+         </table>
+         <div class="note-box">
+           <strong>Guideline:</strong> Use recursion when the problem is naturally recursive (e.g., tree traversal). Prefer iteration for simple counting loops.
+         </div>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'User-Defined Structure Types',
+            `<h1>User-Defined Structure Types (struct)</h1>
+         <p>A <strong>structure</strong> groups related data of different types under one name.</p>
+         <h3>Declaration</h3>
+         <pre><code><span class="keyword">struct</span> Student {
+    <span class="type">int</span> id;
+    <span class="type">char</span> name[50];
+    <span class="type">float</span> gpa;
+};</code></pre>
+         <h3>Creating Variables</h3>
+         <pre><code><span class="keyword">struct</span> Student s1, s2;  <span class="comment">// two student variables</span></code></pre>
+         <h3>Accessing Members (dot operator)</h3>
+         <pre><code>s1.id = 101;
+<span class="func">strcpy</span>(s1.name, <span class="string">"Alice"</span>);
+s1.gpa = 3.7;</code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Structure Initialization & Assignment',
+            `<h1>Structure Initialization and Assignment</h1>
+         <h3>Initialization at Declaration</h3>
+         <pre><code><span class="keyword">struct</span> Student s1 = {101, <span class="string">"Alice"</span>, 3.7};
+<span class="keyword">struct</span> Point p = {10, 20};  <span class="comment">// x=10, y=20</span></code></pre>
+         <h3>Designated Initialization (C99)</h3>
+         <pre><code><span class="keyword">struct</span> Student s2 = {.name = <span class="string">"Bob"</span>, .gpa = 3.2, .id = 102};</code></pre>
+         <h3>Assignment (copy whole structure)</h3>
+         <pre><code><span class="keyword">struct</span> Student s3;
+s3 = s1;  <span class="comment">// copies all members</span></code></pre>
+         <h3>typedef for Convenience</h3>
+         <pre><code><span class="keyword">typedef</span> <span class="keyword">struct</span> {
+    <span class="type">int</span> id;
+    <span class="type">char</span> name[50];
+} Student;  <span class="comment">// now use "Student" instead of "struct Student"</span></code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Structure as Function Parameters',
+            `<h1>Structures as Function Parameters</h1>
+         <h3>Pass by Value (Copy)</h3>
+         <pre><code><span class="type">void</span> <span class="func">printStudent</span>(<span class="keyword">struct</span> Student s) {
+    <span class="func">printf</span>(<span class="string">"ID: %d, Name: %s, GPA: %.1f\\n"</span>, s.id, s.name, s.gpa);
+}
+<span class="func">printStudent</span>(s1);  <span class="comment">// passes a copy</span></code></pre>
+         <h3>Pass by Pointer (Efficient)</h3>
+         <pre><code><span class="type">void</span> <span class="func">updateGPA</span>(<span class="keyword">struct</span> Student *s, <span class="type">float</span> newGPA) {
+    s->gpa = newGPA;  <span class="comment">// arrow operator for pointer access</span>
+}
+<span class="func">updateGPA</span>(&s1, 3.9);</code></pre>
+         <div class="highlight-box">
+           <strong>Arrow Operator (<code>-></code>):</strong> <code>s->member</code> is shorthand for <code>(*s).member</code>.
+         </div>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Functions with Structured Result Values',
+            `<h1>Functions Returning Structures</h1>
+         <p>Functions can return a structure as a result:</p>
+         <pre><code><span class="keyword">struct</span> Point <span class="func">midpoint</span>(<span class="keyword">struct</span> Point p1, <span class="keyword">struct</span> Point p2) {
+    <span class="keyword">struct</span> Point mid;
+    mid.x = (p1.x + p2.x) / 2;
+    mid.y = (p1.y + p2.y) / 2;
+    <span class="keyword">return</span> mid;
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="keyword">struct</span> Point a = {2, 4};
+    <span class="keyword">struct</span> Point b = {8, 10};
+    <span class="keyword">struct</span> Point m = <span class="func">midpoint</span>(a, b);
+    <span class="func">printf</span>(<span class="string">"Midpoint: (%d, %d)\\n"</span>, m.x, m.y);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Union Types',
+            `<h1>Union Types</h1>
+         <p>A <strong>union</strong> stores different data types in the <strong>same memory location</strong>. Only one member can be used at a time.</p>
+         <pre><code><span class="keyword">union</span> Data {
+    <span class="type">int</span> i;
+    <span class="type">float</span> f;
+    <span class="type">char</span> str[20];
+};
+
+<span class="keyword">union</span> Data data;
+data.i = 42;
+<span class="func">printf</span>(<span class="string">"data.i = %d\\n"</span>, data.i);  <span class="comment">// 42</span>
+
+data.f = 3.14;
+<span class="func">printf</span>(<span class="string">"data.f = %.2f\\n"</span>, data.f);  <span class="comment">// 3.14</span>
+<span class="comment">// Note: data.i now contains garbage (overwritten)</span></code></pre>
+         <h3>Size Comparison</h3>
+         <pre><code><span class="func">printf</span>(<span class="string">"Union size: %zu\\n"</span>, <span class="keyword">sizeof</span>(<span class="keyword">union</span> Data));
+<span class="comment">// Union size = size of largest member</span></code></pre>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Structure vs Union — Key Differences',
+            `<h1>Structure vs Union</h1>
+         <table>
+           <tr><th>Feature</th><th>Structure</th><th>Union</th></tr>
+           <tr><td>Memory allocation</td><td>Sum of all member sizes</td><td>Size of largest member only</td></tr>
+           <tr><td>Accessing members</td><td>All members simultaneously</td><td>Only one member at a time</td></tr>
+           <tr><td>Keyword</td><td><code>struct</code></td><td><code>union</code></td></tr>
+           <tr><td>Use case</td><td>Grouping related data</td><td>Saving memory when only one value needed</td></tr>
+           <tr><td>Default initialization</td><td>All members can be initialized</td><td>Only first member initialized</td></tr>
+         </table>`,
+            'UNIT IV');
+
+        addSlide('Unit IV', 'unit4', 'Structures with Arrays & Pointers',
+            `<h1>Structures with Arrays and Pointers</h1>
+         <h3>Array of Structures</h3>
+         <pre><code><span class="keyword">struct</span> Student students[50];  <span class="comment">// 50 student records</span>
+
+students[0].id = 101;
+<span class="func">strcpy</span>(students[0].name, <span class="string">"Alice"</span>);
+
+<span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 50; i++) {
+    <span class="func">printf</span>(<span class="string">"Student %d: %s\\n"</span>, students[i].id, students[i].name);
+}</code></pre>
+         <h3>Pointer to Structure</h3>
+         <pre><code><span class="keyword">struct</span> Student *ptr = &s1;
+ptr->id = 201;  <span class="comment">// equivalent to (*ptr).id = 201</span>
+<span class="func">printf</span>(<span class="string">"ID: %d\\n"</span>, ptr->id);</code></pre>`,
+            'UNIT IV');
+
+        // ==================== UNIT V : FILES & SEARCHING/SORTING ====================
+        addSlide('Unit V', 'unit5', 'UNIT V: File Pointers — Input/Output Files',
+            `<h1>UNIT V: File Handling</h1>
+         <h2>Input/Output Files</h2>
+         <p>C provides file I/O through <code>stdio.h</code> using <strong>file pointers</strong> of type <code>FILE*</code>.</p>
+         <h3>Opening a File</h3>
+         <pre><code><span class="type">FILE</span> *fp;
+fp = <span class="func">fopen</span>(<span class="string">"data.txt"</span>, <span class="string">"r"</span>);  <span class="comment">// read mode</span>
+<span class="keyword">if</span>(fp == NULL) {
+    <span class="func">printf</span>(<span class="string">"Cannot open file.\\n"</span>);
+    <span class="keyword">return</span> 1;
+}</code></pre>
+         <h3>Common File Modes</h3>
+         <table>
+           <tr><th>Mode</th><th>Description</th></tr>
+           <tr><td><code>"r"</code></td><td>Read (file must exist)</td></tr>
+           <tr><td><code>"w"</code></td><td>Write (creates/overwrites)</td></tr>
+           <tr><td><code>"a"</code></td><td>Append (adds to end)</td></tr>
+           <tr><td><code>"r+"</code></td><td>Read and write</td></tr>
+           <tr><td><code>"b"</code></td><td>Binary mode (e.g., "rb", "wb")</td></tr>
+         </table>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'File I/O — Reading and Writing',
+            `<h1>Basic File I/O Operations</h1>
+         <h3>Writing to a File</h3>
+         <pre><code><span class="type">FILE</span> *fp = <span class="func">fopen</span>(<span class="string">"output.txt"</span>, <span class="string">"w"</span>);
+<span class="func">fprintf</span>(fp, <span class="string">"Hello, World!\\n"</span>);
+<span class="func">fprintf</span>(fp, <span class="string">"Number: %d\\n"</span>, 42);
+<span class="func">fclose</span>(fp);</code></pre>
+         <h3>Reading from a File</h3>
+         <pre><code><span class="type">FILE</span> *fp = <span class="func">fopen</span>(<span class="string">"input.txt"</span>, <span class="string">"r"</span>);
+<span class="type">char</span> buffer[100];
+<span class="keyword">while</span>(<span class="func">fgets</span>(buffer, 100, fp) != NULL) {
+    <span class="func">printf</span>(<span class="string">"%s"</span>, buffer);
+}
+<span class="func">fclose</span>(fp);</code></pre>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'File I/O — Character and Line Operations',
+            `<h1>Character & Line File I/O</h1>
+         <h3>fgetc() and fputc() — Character I/O</h3>
+         <pre><code><span class="type">int</span> ch;
+<span class="keyword">while</span>((ch = <span class="func">fgetc</span>(fp)) != EOF) {
+    <span class="func">fputc</span>(ch, outFp);  <span class="comment">// copy character</span>
+}</code></pre>
+         <h3>fgets() and fputs() — Line I/O</h3>
+         <pre><code><span class="type">char</span> line[256];
+<span class="keyword">while</span>(<span class="func">fgets</span>(line, 256, fp) != NULL) {
+    <span class="func">fputs</span>(line, outFp);  <span class="comment">// copy line</span>
+}</code></pre>
+         <h3>Checking EOF</h3>
+         <pre><code><span class="keyword">while</span>(!<span class="func">feof</span>(fp)) {
+    <span class="comment">// process file content</span>
+}</code></pre>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Binary Files — Reading and Writing',
+            `<h1>Binary Files</h1>
+         <p>Binary files store data in the same format as in memory — more efficient, not human-readable.</p>
+         <h3>fwrite() — Write to Binary File</h3>
+         <pre><code><span class="type">int</span> data[] = {10, 20, 30, 40, 50};
+<span class="type">FILE</span> *fp = <span class="func">fopen</span>(<span class="string">"data.bin"</span>, <span class="string">"wb"</span>);
+<span class="func">fwrite</span>(data, <span class="keyword">sizeof</span>(<span class="type">int</span>), 5, fp);
+<span class="func">fclose</span>(fp);</code></pre>
+         <h3>fread() — Read from Binary File</h3>
+         <pre><code><span class="type">int</span> readData[5];
+<span class="type">FILE</span> *fp = <span class="func">fopen</span>(<span class="string">"data.bin"</span>, <span class="string">"rb"</span>);
+<span class="func">fread</span>(readData, <span class="keyword">sizeof</span>(<span class="type">int</span>), 5, fp);
+<span class="func">fclose</span>(fp);</code></pre>
+         <p style="font-size:13px;color:#64748b;">Use <code>fwrite</code>/<code>fread</code> for structures, arrays, and raw data.</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Searching a Database in Files',
+            `<h1>Searching a Database (File Search)</h1>
+         <pre><code><span class="keyword">struct</span> Record {
+    <span class="type">int</span> id;
+    <span class="type">char</span> name[50];
+    <span class="type">float</span> salary;
+};
+
+<span class="type">int</span> <span class="func">searchRecord</span>(<span class="type">FILE</span> *fp, <span class="type">int</span> searchId) {
+    <span class="keyword">struct</span> Record rec;
+    <span class="func">rewind</span>(fp);  <span class="comment">// start from beginning</span>
+    <span class="keyword">while</span>(<span class="func">fread</span>(&rec, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> Record), 1, fp) == 1) {
+        <span class="keyword">if</span>(rec.id == searchId) {
+            <span class="func">printf</span>(<span class="string">"Found: %s, Salary: %.2f\\n"</span>, rec.name, rec.salary);
+            <span class="keyword">return</span> 1;
+        }
+    }
+    <span class="keyword">return</span> 0;  <span class="comment">// not found</span>
+}</code></pre>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Linear Search — Detailed Explanation',
+            `<h1>Linear Search Algorithm</h1>
+         <p><strong>Method:</strong> Traverse the array from the beginning, comparing each element with the target key.</p>
+         <pre><code><span class="type">int</span> <span class="func">linearSearch</span>(<span class="type">int</span> arr[], <span class="type">int</span> n, <span class="type">int</span> key) {
+    <span class="type">int</span> comparisons = 0;
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n; i++) {
+        comparisons++;
+        <span class="keyword">if</span>(arr[i] == key) {
+            <span class="func">printf</span>(<span class="string">"Found after %d comparisons\\n"</span>, comparisons);
+            <span class="keyword">return</span> i;
+        }
+    }
+    <span class="func">printf</span>(<span class="string">"Not found after %d comparisons\\n"</span>, comparisons);
+    <span class="keyword">return</span> -1;
+}</code></pre>
+         <div class="highlight-box">
+           <strong>Best Case:</strong> O(1) — key at first position<br>
+           <strong>Worst Case:</strong> O(n) — key at last position or absent<br>
+           <strong>Average:</strong> O(n) — approximately n/2 comparisons
+         </div>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Binary Search — Detailed Explanation',
+            `<h1>Binary Search Algorithm</h1>
+         <p><strong>Precondition:</strong> Array must be <strong>sorted</strong>.</p>
+         <p><strong>Method:</strong> Divide and conquer — compare with middle element, eliminate half the search space.</p>
+         <pre><code><span class="type">int</span> <span class="func">binarySearch</span>(<span class="type">int</span> arr[], <span class="type">int</span> left, <span class="type">int</span> right, <span class="type">int</span> key) {
+    <span class="keyword">while</span>(left &lt;= right) {
+        <span class="type">int</span> mid = left + (right - left) / 2;
+        <span class="keyword">if</span>(arr[mid] == key)
+            <span class="keyword">return</span> mid;
+        <span class="keyword">else if</span>(arr[mid] &lt; key)
+            left = mid + 1;
+        <span class="keyword">else</span>
+            right = mid - 1;
+    }
+    <span class="keyword">return</span> -1;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Time Complexity:</strong> O(log₂n) — much faster than linear search for large arrays.</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Binary Search — Step-by-Step Trace',
+            `<h1>Binary Search — Trace Example</h1>
+         <p>Array: <code>{2, 5, 8, 12, 16, 23, 38, 45, 56, 72}</code> — Search for <strong>23</strong></p>
+         <table>
+           <tr><th>Step</th><th>Left</th><th>Right</th><th>Mid</th><th>arr[mid]</th><th>Action</th></tr>
+           <tr><td>1</td><td>0</td><td>9</td><td>4</td><td>16</td><td>16 &lt; 23 → left=5</td></tr>
+           <tr><td>2</td><td>5</td><td>9</td><td>7</td><td>45</td><td>45 &gt; 23 → right=6</td></tr>
+           <tr><td>3</td><td>5</td><td>6</td><td>5</td><td>23</td><td><strong>Found!</strong></td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;">Found in 3 comparisons vs. 6 needed by linear search.</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Bubble Sort — Detailed Explanation',
+            `<h1>Bubble Sort Algorithm</h1>
+         <p><strong>Method:</strong> Repeatedly compare adjacent elements and swap if they are in wrong order. Largest elements "bubble up" to the end.</p>
+         <pre><code><span class="type">void</span> <span class="func">bubbleSort</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="type">int</span> swapped;
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n-1; i++) {
+        swapped = 0;
+        <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; n-i-1; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[j+1]) {
+                <span class="type">int</span> temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+                swapped = 1;
+            }
+        }
+        <span class="keyword">if</span>(!swapped) <span class="keyword">break</span>;  <span class="comment">// already sorted</span>
+    }
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Time Complexity:</strong> O(n²) worst, O(n) best (with optimization)</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Bubble Sort — Trace Example',
+            `<h1>Bubble Sort — Trace Example</h1>
+         <p>Array: <code>{64, 34, 25, 12, 22}</code></p>
+         <table>
+           <tr><th>Pass</th><th>Array after pass</th><th>Swaps</th></tr>
+           <tr><td>Initial</td><td>64, 34, 25, 12, 22</td><td>—</td></tr>
+           <tr><td>1</td><td>34, 25, 12, 22, <strong>64</strong></td><td>4</td></tr>
+           <tr><td>2</td><td>25, 12, 22, <strong>34, 64</strong></td><td>3</td></tr>
+           <tr><td>3</td><td>12, 22, <strong>25, 34, 64</strong></td><td>2</td></tr>
+           <tr><td>4</td><td>12, <strong>22, 25, 34, 64</strong></td><td>1</td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;">After 4 passes, array is fully sorted. Largest elements move to the end first.</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Insertion Sort — Detailed Explanation',
+            `<h1>Insertion Sort Algorithm</h1>
+         <p><strong>Method:</strong> Build sorted portion by inserting each element into its correct position among already sorted elements.</p>
+         <pre><code><span class="type">void</span> <span class="func">insertionSort</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 1; i &lt; n; i++) {
+        <span class="type">int</span> key = arr[i];
+        <span class="type">int</span> j = i - 1;
+        <span class="keyword">while</span>(j >= 0 && arr[j] > key) {
+            arr[j+1] = arr[j];  <span class="comment">// shift right</span>
+            j--;
+        }
+        arr[j+1] = key;  <span class="comment">// place key in correct position</span>
+    }
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Time Complexity:</strong> O(n²) worst, O(n) best (already sorted)</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Insertion Sort — Trace Example',
+            `<h1>Insertion Sort — Trace Example</h1>
+         <p>Array: <code>{5, 2, 4, 6, 1, 3}</code></p>
+         <table>
+           <tr><th>Step</th><th>Key</th><th>Array state</th></tr>
+           <tr><td>Initial</td><td>—</td><td>5, 2, 4, 6, 1, 3</td></tr>
+           <tr><td>i=1</td><td>2</td><td><strong>2, 5</strong>, 4, 6, 1, 3</td></tr>
+           <tr><td>i=2</td><td>4</td><td><strong>2, 4, 5</strong>, 6, 1, 3</td></tr>
+           <tr><td>i=3</td><td>6</td><td><strong>2, 4, 5, 6</strong>, 1, 3</td></tr>
+           <tr><td>i=4</td><td>1</td><td><strong>1, 2, 4, 5, 6</strong>, 3</td></tr>
+           <tr><td>i=5</td><td>3</td><td><strong>1, 2, 3, 4, 5, 6</strong></td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;">Works like sorting playing cards in your hand.</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Selection Sort — Detailed Explanation',
+            `<h1>Selection Sort Algorithm</h1>
+         <p><strong>Method:</strong> Find the minimum element from the unsorted portion and swap it with the first unsorted element.</p>
+         <pre><code><span class="type">void</span> <span class="func">selectionSort</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n-1; i++) {
+        <span class="type">int</span> minIdx = i;
+        <span class="keyword">for</span>(<span class="type">int</span> j = i+1; j &lt; n; j++) {
+            <span class="keyword">if</span>(arr[j] &lt; arr[minIdx])
+                minIdx = j;
+        }
+        <span class="comment">// swap arr[i] with arr[minIdx]</span>
+        <span class="type">int</span> temp = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = temp;
+    }
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Time Complexity:</strong> O(n²) in all cases. Makes minimum number of swaps (O(n)).</p>`,
+            'UNIT V');
+
+        addSlide('Unit V', 'unit5', 'Selection Sort — Trace Example',
+            `<h1>Selection Sort — Trace Example</h1>
+         <p>Array: <code>{64, 25, 12, 22, 11}</code></p>
+         <table>
+           <tr><th>Pass</th><th>Min Found</th><th>Array after swap</th></tr>
+           <tr><td>Initial</td><td>—</td><td>64, 25, 12, 22, 11</td></tr>
+           <tr><td>1</td><td>11 (idx 4)</td><td><strong>11</strong>, 25, 12, 22, 64</td></tr>
+           <tr><td>2</td><td>12 (idx 2)</td><td>11, <strong>12</strong>, 25, 22, 64</td></tr>
+           <tr><td>3</td><td>22 (idx 3)</td><td>11, 12, <strong>22</strong>, 25, 64</td></tr>
+           <tr><td>4</td><td>25 (idx 3)</td><td>11, 12, 22, <strong>25</strong>, 64</td></tr>
+         </table>
+         <p style="font-size:13px;color:#64748b;">Smallest elements are placed at the beginning one by one.</p>`,
+            'UNIT V');
+
+        // ==================== LAB PRACTICE SESSIONS ====================
+        addSlide('Lab', 'lab', 'Lab: Max & Min of Three Numbers',
+            `<h1>Lab: Max and Min of Three Numbers</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> a, b, c, max, min;
+    <span class="func">printf</span>(<span class="string">"Enter three numbers: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d %d %d"</span>, &a, &b, &c);
+
+    <span class="comment">// Find max</span>
+    max = (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);
+
+    <span class="comment">// Find min</span>
+    min = (a &lt; b) ? ((a &lt; c) ? a : c) : ((b &lt; c) ? b : c);
+
+    <span class="func">printf</span>(<span class="string">"Max: %d, Min: %d\\n"</span>, max, min);
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong> Enter three numbers: 45 12 78 → Max: 78, Min: 12</p>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Simple & Compound Interest',
+            `<h1>Lab: Simple & Compound Interest</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+<span class="keyword">#include</span> &lt;math.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">float</span> principal, rate, time, simple, compound;
+    <span class="type">int</span> n;
+
+    <span class="func">printf</span>(<span class="string">"Enter principal, rate, time, and compounding freq: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%f %f %f %d"</span>, &principal, &rate, &time, &n);
+
+    simple = (principal * rate * time) / 100;
+    compound = principal * <span class="func">pow</span>(1 + rate/(n*100), n*time) - principal;
+
+    <span class="func">printf</span>(<span class="string">"Simple Interest: %.2f\\n"</span>, simple);
+    <span class="func">printf</span>(<span class="string">"Compound Interest: %.2f\\n"</span>, compound);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Multiplication Table',
+            `<h1>Lab: Multiplication Table Generator</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> num, rows;
+    <span class="func">printf</span>(<span class="string">"Enter number and rows: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d %d"</span>, &num, &rows);
+
+    <span class="keyword">for</span>(<span class="type">int</span> i = 1; i &lt;= rows; i++) {
+        <span class="func">printf</span>(<span class="string">"%d x %d = %d\\n"</span>, num, i, num * i);
+    }
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output (num=5, rows=3):</strong><br>5 x 1 = 5<br>5 x 2 = 10<br>5 x 3 = 15</p>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Binary Equivalent (0–255)',
+            `<h1>Lab: Binary Equivalent of a Number</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> num, binary[8] = {0}, i = 7;
+    <span class="func">printf</span>(<span class="string">"Enter a positive number (0-255): "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+
+    <span class="keyword">while</span>(num > 0) {
+        binary[i] = num % 2;
+        num /= 2;
+        i--;
+    }
+
+    <span class="func">printf</span>(<span class="string">"Binary: "</span>);
+    <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; 8; j++) {
+        <span class="func">printf</span>(<span class="string">"%d"</span>, binary[j]);
+    }
+    <span class="func">printf</span>(<span class="string">"\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong> Enter a positive number (0-255): 13 → Binary: 00001101</p>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Arithmetic Operations with switch',
+            `<h1>Lab: Arithmetic Operations (Switch Statement)</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> a, b;
+    <span class="type">char</span> op;
+    <span class="func">printf</span>(<span class="string">"Enter a op b: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d %c %d"</span>, &a, &op, &b);
+
+    <span class="keyword">switch</span>(op) {
+        <span class="keyword">case</span> '+': <span class="func">printf</span>(<span class="string">"%d\\n"</span>, a + b); <span class="keyword">break</span>;
+        <span class="keyword">case</span> '-': <span class="func">printf</span>(<span class="string">"%d\\n"</span>, a - b); <span class="keyword">break</span>;
+        <span class="keyword">case</span> '*': <span class="func">printf</span>(<span class="string">"%d\\n"</span>, a * b); <span class="keyword">break</span>;
+        <span class="keyword">case</span> '/': <span class="keyword">if</span>(b != 0) <span class="func">printf</span>(<span class="string">"%.2f\\n"</span>, (<span class="type">float</span>)a/b);
+                  <span class="keyword">else</span> <span class="func">printf</span>(<span class="string">"Division by zero!\\n"</span>);
+                  <span class="keyword">break</span>;
+        <span class="keyword">case</span> '%': <span class="func">printf</span>(<span class="string">"%d\\n"</span>, a % b); <span class="keyword">break</span>;
+        <span class="keyword">default</span>: <span class="func">printf</span>(<span class="string">"Invalid operator\\n"</span>);
+    }
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Prime Number Check',
+            `<h1>Lab: Check Prime Number</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> num, isPrime = 1;
+    <span class="func">printf</span>(<span class="string">"Enter a number: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+
+    <span class="keyword">if</span>(num &lt;= 1) isPrime = 0;
+    <span class="keyword">else</span> {
+        <span class="keyword">for</span>(<span class="type">int</span> i = 2; i * i &lt;= num; i++) {
+            <span class="keyword">if</span>(num % i == 0) {
+                isPrime = 0;
+                <span class="keyword">break</span>;
+            }
+        }
+    }
+
+    <span class="keyword">if</span>(isPrime) <span class="func">printf</span>(<span class="string">"%d is prime.\\n"</span>, num);
+    <span class="keyword">else</span> <span class="func">printf</span>(<span class="string">"%d is not prime.\\n"</span>, num);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Sum of Digits & Palindrome Check',
+            `<h1>Lab: Sum of Digits & Palindrome</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> num, original, reversed = 0, digitSum = 0;
+    <span class="func">printf</span>(<span class="string">"Enter a positive integer: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &num);
+    original = num;
+
+    <span class="keyword">while</span>(num > 0) {
+        <span class="type">int</span> digit = num % 10;
+        digitSum += digit;
+        reversed = reversed * 10 + digit;
+        num /= 10;
+    }
+
+    <span class="func">printf</span>(<span class="string">"Sum of digits: %d\\n"</span>, digitSum);
+    <span class="keyword">if</span>(original == reversed)
+        <span class="func">printf</span>(<span class="string">"%d is a palindrome.\\n"</span>, original);
+    <span class="keyword">else</span>
+        <span class="func">printf</span>(<span class="string">"%d is NOT a palindrome.\\n"</span>, original);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Fibonacci Sequence Generator',
+            `<h1>Lab: Fibonacci Sequence</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> n, first = 0, second = 1, next;
+    <span class="func">printf</span>(<span class="string">"Enter number of terms: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &n);
+
+    <span class="func">printf</span>(<span class="string">"Fibonacci Sequence: "</span>);
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n; i++) {
+        <span class="keyword">if</span>(i &lt;= 1)
+            next = i;
+        <span class="keyword">else</span> {
+            next = first + second;
+            first = second;
+            second = next;
+        }
+        <span class="func">printf</span>(<span class="string">"%d "</span>, next);
+    }
+    <span class="func">printf</span>(<span class="string">"\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output (n=8):</strong> 0 1 1 2 3 5 8 13</p>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Array Min, Max, Average',
+            `<h1>Lab: Array Min, Max, and Average</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> n;
+    <span class="func">printf</span>(<span class="string">"Enter number of elements: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d"</span>, &n);
+
+    <span class="type">int</span> arr[n];
+    <span class="type">float</span> sum = 0;
+
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n; i++) {
+        <span class="func">scanf</span>(<span class="string">"%d"</span>, &arr[i]);
+        sum += arr[i];
+    }
+
+    <span class="type">int</span> min = arr[0], max = arr[0];
+    <span class="keyword">for</span>(<span class="type">int</span> i = 1; i &lt; n; i++) {
+        <span class="keyword">if</span>(arr[i] &lt; min) min = arr[i];
+        <span class="keyword">if</span>(arr[i] &gt; max) max = arr[i];
+    }
+
+    <span class="func">printf</span>(<span class="string">"Min: %d, Max: %d, Average: %.2f\\n"</span>, min, max, sum/n);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Matrix Addition',
+            `<h1>Lab: Matrix Addition</h1>
+         <pre><code><span class="type">void</span> <span class="func">addMatrices</span>(<span class="type">int</span> A[][10], <span class="type">int</span> B[][10], <span class="type">int</span> C[][10], <span class="type">int</span> r, <span class="type">int</span> c) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; r; i++)
+        <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; c; j++)
+            C[i][j] = A[i][j] + B[i][j];
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> r, c, A[10][10], B[10][10], C[10][10];
+    <span class="func">printf</span>(<span class="string">"Enter rows and cols: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%d %d"</span>, &r, &c);
+    <span class="comment">// Read A and B, then add</span>
+    <span class="func">addMatrices</span>(A, B, C, r, c);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Matrix Multiplication',
+            `<h1>Lab: Matrix Multiplication</h1>
+         <pre><code><span class="type">void</span> <span class="func">multiplyMatrices</span>(<span class="type">int</span> A[][10], <span class="type">int</span> B[][10], <span class="type">int</span> C[][10],
+                     <span class="type">int</span> r1, <span class="type">int</span> c1, <span class="type">int</span> c2) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; r1; i++) {
+        <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; c2; j++) {
+            C[i][j] = 0;
+            <span class="keyword">for</span>(<span class="type">int</span> k = 0; k &lt; c1; k++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;">Requires: columns of A = rows of B. Result has dimensions r1 × c2.</p>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Pointer Array Reading & Display',
+            `<h1>Lab: Reading & Displaying Array via Pointer</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> arr[5];
+    <span class="type">int</span> *ptr = arr;  <span class="comment">// pointer to first element</span>
+
+    <span class="func">printf</span>(<span class="string">"Enter 5 elements: "</span>);
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 5; i++) {
+        <span class="func">scanf</span>(<span class="string">"%d"</span>, ptr + i);  <span class="comment">// same as &arr[i]</span>
+    }
+
+    <span class="func">printf</span>(<span class="string">"Values: "</span>);
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; 5; i++) {
+        <span class="func">printf</span>(<span class="string">"%d "</span>, *(ptr + i));  <span class="comment">// same as arr[i]</span>
+    }
+    <span class="func">printf</span>(<span class="string">"\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Reverse Array via Pointer',
+            `<h1>Lab: Reverse Array Display via Pointer</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> arr[5] = {10, 20, 30, 40, 50};
+    <span class="type">int</span> *ptr = arr;
+
+    <span class="func">printf</span>(<span class="string">"Reverse order: "</span>);
+    <span class="keyword">for</span>(<span class="type">int</span> i = 4; i >= 0; i--) {
+        <span class="func">printf</span>(<span class="string">"%d "</span>, *(ptr + i));
+    }
+    <span class="func">printf</span>(<span class="string">"\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;"><strong>Output:</strong> Reverse order: 50 40 30 20 10</p>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: File Copy with Uppercase Conversion',
+            `<h1>Lab: File Copy with Case Conversion</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+<span class="keyword">#include</span> &lt;ctype.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">FILE</span> *src = <span class="func">fopen</span>(<span class="string">"input.txt"</span>, <span class="string">"r"</span>);
+    <span class="type">FILE</span> *dest = <span class="func">fopen</span>(<span class="string">"output.txt"</span>, <span class="string">"w"</span>);
+    <span class="type">int</span> ch;
+
+    <span class="keyword">while</span>((ch = <span class="func">fgetc</span>(src)) != EOF) {
+        <span class="func">fputc</span>(<span class="func">toupper</span>(ch), dest);
+    }
+
+    <span class="func">fclose</span>(src);
+    <span class="func">fclose</span>(dest);
+    <span class="func">printf</span>(<span class="string">"File copied with uppercase conversion.\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Merge Two Files into Third',
+            `<h1>Lab: Merge Two Files</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">FILE</span> *f1 = <span class="func">fopen</span>(<span class="string">"file1.txt"</span>, <span class="string">"r"</span>);
+    <span class="type">FILE</span> *f2 = <span class="func">fopen</span>(<span class="string">"file2.txt"</span>, <span class="string">"r"</span>);
+    <span class="type">FILE</span> *f3 = <span class="func">fopen</span>(<span class="string">"merged.txt"</span>, <span class="string">"w"</span>);
+    <span class="type">int</span> ch;
+
+    <span class="keyword">while</span>((ch = <span class="func">fgetc</span>(f1)) != EOF)
+        <span class="func">fputc</span>(ch, f3);
+
+    <span class="keyword">while</span>((ch = <span class="func">fgetc</span>(f2)) != EOF)
+        <span class="func">fputc</span>(ch, f3);
+
+    <span class="func">fclose</span>(f1); <span class="func">fclose</span>(f2); <span class="func">fclose</span>(f3);
+    <span class="func">printf</span>(<span class="string">"Files merged successfully.\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: String Insert Substring',
+            `<h1>Lab: Insert Substring</h1>
+         <pre><code><span class="type">void</span> <span class="func">insertSubstring</span>(<span class="type">char</span> mainStr[], <span class="type">char</span> subStr[], <span class="type">int</span> pos) {
+    <span class="type">char</span> temp[200];
+    <span class="type">int</span> mainLen = <span class="func">strlen</span>(mainStr);
+
+    <span class="func">strcpy</span>(temp, mainStr + pos);  <span class="comment">// copy from pos onward</span>
+    <span class="func">strcpy</span>(mainStr + pos, subStr);  <span class="comment">// insert substring</span>
+    <span class="func">strcat</span>(mainStr, temp);  <span class="comment">// append remaining</span>
+}
+
+<span class="comment">// Example: mainStr="HelloWorld", sub="Beautiful ", pos=5</span>
+<span class="comment">// Result: "HelloBeautiful World"</span></code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: String Delete N Characters',
+            `<h1>Lab: Delete N Characters from Position</h1>
+         <pre><code><span class="type">void</span> <span class="func">deleteChars</span>(<span class="type">char</span> str[], <span class="type">int</span> pos, <span class="type">int</span> n) {
+    <span class="type">int</span> len = <span class="func">strlen</span>(str);
+    <span class="comment">// Shift characters left by n positions</span>
+    <span class="keyword">for</span>(<span class="type">int</span> i = pos; i + n &lt;= len; i++) {
+        str[i] = str[i + n];
+    }
+    <span class="comment">// str automatically shortened</span>
+}
+
+<span class="comment">// Example: str="HelloWorld", pos=3, n=4</span>
+<span class="comment">// Delete "loWo" from position 3</span>
+<span class="comment">// Result: "Helrld"</span></code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Palindrome String Check',
+            `<h1>Lab: String Palindrome Check</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+<span class="keyword">#include</span> &lt;string.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">char</span> str[100];
+    <span class="func">printf</span>(<span class="string">"Enter a string: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%s"</span>, str);
+
+    <span class="type">int</span> left = 0, right = <span class="func">strlen</span>(str) - 1;
+    <span class="type">int</span> isPalin = 1;
+
+    <span class="keyword">while</span>(left &lt; right) {
+        <span class="keyword">if</span>(str[left] != str[right]) {
+            isPalin = 0;
+            <span class="keyword">break</span>;
+        }
+        left++;
+        right--;
+    }
+
+    <span class="keyword">if</span>(isPalin) <span class="func">printf</span>(<span class="string">"Palindrome!\\n"</span>);
+    <span class="keyword">else</span> <span class="func">printf</span>(<span class="string">"Not a palindrome.\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Find Character Position in String',
+            `<h1>Lab: Find Character in String</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+<span class="keyword">#include</span> &lt;string.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">char</span> str[100], ch;
+    <span class="func">printf</span>(<span class="string">"Enter string: "</span>);
+    <span class="func">scanf</span>(<span class="string">"%s"</span>, str);
+    <span class="func">printf</span>(<span class="string">"Enter character to find: "</span>);
+    <span class="func">scanf</span>(<span class="string">" %c"</span>, &ch);
+
+    <span class="type">int</span> found = -1;
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; <span class="func">strlen</span>(str); i++) {
+        <span class="keyword">if</span>(str[i] == ch) {
+            found = i;
+            <span class="keyword">break</span>;
+        }
+    }
+
+    <span class="func">printf</span>(<span class="string">"Position: %d\\n"</span>, found);
+    <span class="keyword">return</span> 0;
+}</code></pre>
+         <p style="font-size:13px;color:#64748b;">Returns -1 if character not found.</p>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Count Lines, Words, Characters',
+            `<h1>Lab: Count Lines, Words, Characters</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">char</span> text[1000];
+    <span class="type">int</span> lines = 1, words = 0, chars = 0;
+
+    <span class="func">printf</span>(<span class="string">"Enter text (Ctrl+D to end):\\n"</span>);
+    <span class="func">fgets</span>(text, 1000, stdin);
+
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; text[i] != <span class="string">'\\0'</span>; i++) {
+        chars++;
+        <span class="keyword">if</span>(text[i] == <span class="string">'\\n'</span>) lines++;
+        <span class="keyword">if</span>(text[i] == ' ' || text[i] == <span class="string">'\\n'</span> || text[i] == <span class="string">'\\t'</span>) words++;
+    }
+    <span class="keyword">if</span>(chars > 0 && text[0] != <span class="string">'\\0'</span>) words++;
+
+    <span class="func">printf</span>(<span class="string">"Lines: %d, Words: %d, Characters: %d\\n"</span>, lines, words, chars);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Linear Search (Non-Recursive)',
+            `<h1>Lab: Linear Search Implementation</h1>
+         <pre><code><span class="keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="type">int</span> <span class="func">linearSearch</span>(<span class="type">int</span> arr[], <span class="type">int</span> n, <span class="type">int</span> key) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n; i++) {
+        <span class="keyword">if</span>(arr[i] == key) <span class="keyword">return</span> i;
+    }
+    <span class="keyword">return</span> -1;
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> arr[] = {5, 2, 8, 1, 9, 3};
+    <span class="type">int</span> key = 8;
+    <span class="type">int</span> result = <span class="func">linearSearch</span>(arr, 6, key);
+    <span class="keyword">if</span>(result != -1) <span class="func">printf</span>(<span class="string">"Found at index %d\\n"</span>, result);
+    <span class="keyword">else</span> <span class="func">printf</span>(<span class="string">"Not found.\\n"</span>);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Binary Search (Non-Recursive)',
+            `<h1>Lab: Binary Search Implementation</h1>
+         <pre><code><span class="type">int</span> <span class="func">binarySearch</span>(<span class="type">int</span> arr[], <span class="type">int</span> n, <span class="type">int</span> key) {
+    <span class="type">int</span> left = 0, right = n - 1;
+    <span class="keyword">while</span>(left &lt;= right) {
+        <span class="type">int</span> mid = left + (right - left) / 2;
+        <span class="keyword">if</span>(arr[mid] == key) <span class="keyword">return</span> mid;
+        <span class="keyword">else if</span>(arr[mid] &lt; key) left = mid + 1;
+        <span class="keyword">else</span> right = mid - 1;
+    }
+    <span class="keyword">return</span> -1;
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> sortedArr[] = {2, 5, 8, 12, 16, 23, 38, 45};
+    <span class="type">int</span> key = 23;
+    <span class="type">int</span> result = <span class="func">binarySearch</span>(sortedArr, 8, key);
+    <span class="keyword">if</span>(result != -1) <span class="func">printf</span>(<span class="string">"Found at index %d\\n"</span>, result);
+    <span class="keyword">else</span> <span class="func">printf</span>(<span class="string">"Not found.\\n"</span>);
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Bubble Sort (Ascending)',
+            `<h1>Lab: Bubble Sort Ascending</h1>
+         <pre><code><span class="type">void</span> <span class="func">bubbleSort</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n-1; i++) {
+        <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; n-i-1; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[j+1]) {
+                <span class="type">int</span> temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
+
+<span class="type">int</span> <span class="func">main</span>() {
+    <span class="type">int</span> arr[] = {64, 34, 25, 12, 22, 11, 90};
+    <span class="type">int</span> n = 7;
+    <span class="func">bubbleSort</span>(arr, n);
+    <span class="func">printf</span>(<span class="string">"Sorted: "</span>);
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n; i++) <span class="func">printf</span>(<span class="string">"%d "</span>, arr[i]);
+    <span class="keyword">return</span> 0;
+}</code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Selection Sort (Descending)',
+            `<h1>Lab: Selection Sort Descending</h1>
+         <pre><code><span class="type">void</span> <span class="func">selectionSortDesc</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n-1; i++) {
+        <span class="type">int</span> maxIdx = i;
+        <span class="keyword">for</span>(<span class="type">int</span> j = i+1; j &lt; n; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[maxIdx])
+                maxIdx = j;
+        }
+        <span class="type">int</span> temp = arr[i];
+        arr[i] = arr[maxIdx];
+        arr[maxIdx] = temp;
+    }
+}
+
+<span class="type">int</span> arr[] = {5, 2, 9, 1, 7};
+<span class="func">selectionSortDesc</span>(arr, 5);
+<span class="comment">// Output: 9 7 5 2 1</span></code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Insertion Sort (Ascending)',
+            `<h1>Lab: Insertion Sort Ascending</h1>
+         <pre><code><span class="type">void</span> <span class="func">insertionSort</span>(<span class="type">int</span> arr[], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 1; i &lt; n; i++) {
+        <span class="type">int</span> key = arr[i];
+        <span class="type">int</span> j = i - 1;
+        <span class="keyword">while</span>(j >= 0 && arr[j] > key) {
+            arr[j+1] = arr[j];
+            j--;
+        }
+        arr[j+1] = key;
+    }
+}
+
+<span class="type">int</span> arr[] = {12, 11, 13, 5, 6};
+<span class="func">insertionSort</span>(arr, 5);
+<span class="comment">// Output: 5 6 11 12 13</span></code></pre>`,
+            'LAB');
+
+        addSlide('Lab', 'lab', 'Lab: Sort Array of Names',
+            `<h1>Lab: Sort Array of Names</h1>
+         <pre><code><span class="keyword">#include</span> &lt;string.h&gt;
+
+<span class="type">void</span> <span class="func">sortNames</span>(<span class="type">char</span> names[][50], <span class="type">int</span> n) {
+    <span class="keyword">for</span>(<span class="type">int</span> i = 0; i &lt; n-1; i++) {
+        <span class="keyword">for</span>(<span class="type">int</span> j = 0; j &lt; n-i-1; j++) {
+            <span class="keyword">if</span>(<span class="func">strcmp</span>(names[j], names[j+1]) > 0) {
+                <span class="type">char</span> temp[50];
+                <span class="func">strcpy</span>(temp, names[j]);
+                <span class="func">strcpy</span>(names[j], names[j+1]);
+                <span class="func">strcpy</span>(names[j+1], temp);
+            }
+        }
+    }
+}
+
+<span class="type">char</span> names[][50] = {<span class="string">"Zebra"</span>, <span class="string">"Apple"</span>, <span class="string">"Mango"</span>, <span class="string">"Banana"</span>};
+<span class="func">sortNames</span>(names, 4);
+<span class="comment">// Output: Apple Banana Mango Zebra</span></code></pre>`,
+            'LAB');
+
+        // ==================== SUMMARY & THANK YOU ====================
+        addSlide('Summary', 'intro', 'Course Summary — Key Concepts',
+            `<h1>Complete Course Summary</h1>
+         <div class="grid-2">
+           <div class="card">
+             <h4>UNIT I: Basics & Control Flow</h4>
+             <p style="font-size:13px;">Data types, operators, input/output, if/else, switch, while, for, do-while loops</p>
+           </div>
+           <div class="card">
+             <h4>UNIT II: Functions & Pointers</h4>
+             <p style="font-size:13px;">Function definitions, prototypes, call by value/reference, pointer operations</p>
+           </div>
+           <div class="card">
+             <h4>UNIT III: Arrays & Strings</h4>
+             <p style="font-size:13px;">1D/2D arrays, array functions, searching, sorting, string library</p>
+           </div>
+           <div class="card">
+             <h4>UNIT IV: Recursion & Structures</h4>
+             <p style="font-size:13px;">Recursive functions, struct, union, nested structures</p>
+           </div>
+           <div class="card">
+             <h4>UNIT V: Files & Algorithms</h4>
+             <p style="font-size:13px;">Text/binary files, linear search, binary search, bubble/insertion/selection sort</p>
+           </div>
+           <div class="card">
+             <h4>Lab Skills</h4>
+             <p style="font-size:13px;">All practice programs covering numeric, strings, arrays, files, sorting</p>
+           </div>
+         </div>`,
+            'SUMMARY');
+
+        addSlide('Thank You', 'intro', 'Thank You',
+            `<div style="text-align:center;padding:60px 0;">
+         <h1 style="font-size:48px;margin-bottom:16px;color:#4f46e5;">Thank You</h1>
+         <p style="font-size:20px;color:#64748b;margin-bottom:8px;">Programming for Problem Solving (CS103ES)</p>
+         <p style="font-size:16px;color:#94a3b8;">JNTU Hyderabad · B.Tech CSE (AI & ML) · I Year I Sem</p>
+         <p style="font-size:14px;color:#cbd5e1;margin-top:30px;">260+ Slides · Complete Syllabus Coverage</p>
+       </div>`,
+            'END');
+
+        // ============================================================
+        // RENDER SLIDES
+        // ============================================================
+        const slideArea = document.getElementById('slideArea');
+        const slideCounter = document.getElementById('slideCounter');
+        const progressBar = document.getElementById('progressBar');
+        const unitIndicator = document.getElementById('unitIndicator');
+        const slideTitleHeader = document.getElementById('slideTitle');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        // Build all slides in DOM
+        slides.forEach((slide, index) => {
+            const slideDiv = document.createElement('div');
+            slideDiv.className = `slide ${index === 0 ? 'active' : ''}`;
+            slideDiv.dataset.index = index;
+            slideDiv.dataset.unit = slide.unitLabel;
+
+            const tagSpan = `<span class="slide-tag ${slide.tagClass}">${slide.tag}</span>`;
+            const contentHtml = slide.content;
+
+            slideDiv.innerHTML = tagSpan + contentHtml;
+            slideArea.appendChild(slideDiv);
+        });
+
+        function updateSlide() {
+            const allSlides = document.querySelectorAll('.slide');
+            allSlides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+
+            // Update header
+            slideTitleHeader.textContent = slides[currentSlide].title;
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            unitIndicator.textContent = slides[currentSlide].unitLabel || slides[currentSlide].tag;
+
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Update button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+
+            // Scroll slide content to top
+            const activeSlide = document.querySelector('.slide.active');
+            if (activeSlide) activeSlide.scrollTop = 0;
+
+            // Update URL hash
+            history.replaceState(null, '', `#slide-${currentSlide + 1}`);
+        }
+
+        function goToSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= totalSlides) index = totalSlides - 1;
+            currentSlide = index;
+            updateSlide();
+        }
+
+        prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+            else if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+            else if (e.key === 'Home') goToSlide(0);
+            else if (e.key === 'End') goToSlide(totalSlides - 1);
+            else if (e.key === ' ' && e.target === document.body) {
+                e.preventDefault();
+                goToSlide(currentSlide + 1);
+            } else if (e.key === 'Escape') {
+                goToSlide(0);
+            }
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) goToSlide(currentSlide + 1);
+                else goToSlide(currentSlide - 1);
+            }
+        });
+
+        // Initialize
+        updateSlide();
+
+        // Print slide count
+        console.log(`Total slides: ${totalSlides}`);
+    </script>
+</body>
+</html>
