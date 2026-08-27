@@ -344,6 +344,108 @@ avg = a + b / 2;  // BUG!
 </div>
 </div>
 
+<!-- S9a: Setting Up Your Environment -->
+<div class="slide" data-title="Setting Up Your Environment">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Getting Started</span>
+    <h2 class="section-title">Setting Up Your C Environment 🛠️</h2>
+    <p class="section-subtitle">Before writing code, you need two things: a text editor and a compiler</p>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="card">
+      <div class="card-icon indigo">💻</div>
+      <div class="card-title">Option 1: Online (Easiest!)</div>
+      <div class="card-text">No installation needed. Start coding in 10 seconds!</div>
+      <ul class="feature-list">
+        <li><span class="bullet">✓</span><strong>OnlineGDB</strong> — onlinegdb.com (recommended)</li>
+        <li><span class="bullet">✓</span><strong>Programiz</strong> — programiz.com/c-programming</li>
+        <li><span class="bullet">✓</span><strong>Replit</strong> — replit.com</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-icon emerald">🖥️</div>
+      <div class="card-title">Option 2: On Your Computer</div>
+      <div class="card-text">Install a compiler for offline coding</div>
+      <ul class="feature-list">
+        <li><span class="bullet">1</span><strong>Windows:</strong> Install <span class="ic">MinGW</span> or <span class="ic">Code::Blocks</span></li>
+        <li><span class="bullet">2</span><strong>Mac:</strong> Install <span class="ic">Xcode Command Line Tools</span></li>
+        <li><span class="bullet">3</span><strong>Linux:</strong> Already has <span class="ic">gcc</span>! Open terminal.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="concept-box mt-2">
+    <div class="concept-title">📋 Your First Workflow</div>
+    <div class="concept-text">
+      <strong>Step 1:</strong> Write code in a file called <span class="ic">hello.c</span><br>
+      <strong>Step 2:</strong> Compile: <span class="ic">gcc hello.c -o hello</span><br>
+      <strong>Step 3:</strong> Run: <span class="ic">./hello</span> (Mac/Linux) or <span class="ic">hello.exe</span> (Windows)<br>
+      <strong>Step 4:</strong> See output on screen! 🎉
+    </div>
+  </div>
+  <div class="callout tip mt-1"><strong>💡 Tip for beginners:</strong> Start with an online compiler. Once you're comfortable, switch to a local setup. Don't let setup stop you from learning!</div>
+</div>
+</div>
+
+<!-- S9b: Pseudocode -->
+<div class="slide" data-title="Pseudocode — Think Before You Code">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Problem Solving</span>
+    <h2 class="section-title">Pseudocode: Think Before You Code 📝</h2>
+    <p class="section-subtitle">Write the logic in plain English first, then translate to C</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📋 What is Pseudocode?</div>
+        <div class="concept-text">
+          Pseudocode is <strong>fake code</strong> written in plain English. It helps you plan your program <em>before</em> writing real code.<br><br>
+          <strong>Rules:</strong><br>
+          • No strict syntax — write naturally<br>
+          • One instruction per line<br>
+          • Use indentation for blocks<br>
+          • Focus on logic, not language
+        </div>
+      </div>
+      <div class="analogy-box">
+        <div class="analogy-label">🌍 Analogy</div>
+        <div class="analogy-content">Pseudocode is like writing a <strong>recipe in your own words</strong> before following a cookbook. You plan what to do, then follow the formal steps.</div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb-2">
+        <div class="card-title">Example: Find if a number is even or odd</div>
+        <div class="code-block">
+          <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">pseudocode</span></div>
+          <div class="code-body"><pre>START
+  READ a number from user
+  IF number divided by 2 has remainder 0
+    PRINT "Even"
+  ELSE
+    PRINT "Odd"
+  ENDIF
+STOP</pre></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Now translate to C:</div>
+        <div class="code-block">
+          <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">even_odd.c</span></div>
+          <div class="code-body"><pre>int num;
+scanf("%d", &num);
+if (num % 2 == 0)
+    printf("Even");
+else
+    printf("Odd");</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
 <!-- ████████████████████████████████████████████████ -->
 <!-- PART 1 — C LANGUAGE FUNDAMENTALS               -->
 <!-- ████████████████████████████████████████████████ -->
@@ -989,6 +1091,163 @@ const float G = 9.8;
 </div>
 </div>
 
+<!-- S: Tokens & Keywords -->
+<div class="slide" data-title="Tokens & Keywords in C">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 1 · Fundamentals</span>
+    <h2 class="section-title">Tokens — The Smallest Building Blocks</h2>
+    <p class="section-subtitle">Every C program is made up of tokens — the smallest meaningful pieces</p>
+  </div>
+  <div class="content-grid cols-3 mb-2">
+    <div class="card">
+      <div class="card-icon indigo">🔤</div>
+      <div class="card-title">Keywords (32)</div>
+      <div class="card-text">Reserved words with special meaning: <span class="ic">int</span>, <span class="ic">if</span>, <span class="ic">while</span>, <span class="ic">return</span>. Cannot be used as variable names!</div>
+    </div>
+    <div class="card">
+      <div class="card-icon cyan">📛</div>
+      <div class="card-title">Identifiers</div>
+      <div class="card-text">Names YOU give to variables, functions, arrays: <span class="ic">age</span>, <span class="ic">sum</span>, <span class="ic">main</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon emerald">🔢</div>
+      <div class="card-title">Literals / Constants</div>
+      <div class="card-text">Fixed values written directly: <span class="ic">42</span>, <span class="ic">3.14</span>, <span class="ic">'A'</span>, <span class="ic">"Hello"</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon amber">➕</div>
+      <div class="card-title">Operators</div>
+      <div class="card-text">Symbols for operations: <span class="ic">+</span>, <span class="ic">-</span>, <span class="ic">*</span>, <span class="ic">=</span>, <span class="ic">==</span>, <span class="ic">&&</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon rose">🔣</div>
+      <div class="card-title">Special Symbols</div>
+      <div class="card-text">Brackets, braces, semicolons: <span class="ic">{ }</span>, <span class="ic">( )</span>, <span class="ic">[ ]</span>, <span class="ic">;</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon violet">📝</div>
+      <div class="card-title">Strings</div>
+      <div class="card-text">Text in double quotes: <span class="ic">"Hello World"</span></div>
+    </div>
+  </div>
+  <div class="concept-box">
+    <div class="concept-title">📋 All 32 C Keywords</div>
+    <div class="concept-text font-mono text-sm" style="line-height:2;">
+      <span class="badge indigo">auto</span> <span class="badge indigo">break</span> <span class="badge indigo">case</span> <span class="badge indigo">char</span> <span class="badge indigo">const</span> <span class="badge indigo">continue</span> <span class="badge indigo">default</span> <span class="badge indigo">do</span> <span class="badge indigo">double</span> <span class="badge indigo">else</span> <span class="badge indigo">enum</span> <span class="badge indigo">extern</span> <span class="badge indigo">float</span> <span class="badge indigo">for</span> <span class="badge indigo">goto</span> <span class="badge indigo">if</span> <span class="badge indigo">int</span> <span class="badge indigo">long</span> <span class="badge indigo">register</span> <span class="badge indigo">return</span> <span class="badge indigo">short</span> <span class="badge indigo">signed</span> <span class="badge indigo">sizeof</span> <span class="badge indigo">static</span> <span class="badge indigo">struct</span> <span class="badge indigo">switch</span> <span class="badge indigo">typedef</span> <span class="badge indigo">union</span> <span class="badge indigo">unsigned</span> <span class="badge indigo">void</span> <span class="badge indigo">volatile</span> <span class="badge indigo">while</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Type Casting -->
+<div class="slide" data-title="Type Casting (Implicit & Explicit)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 1 · Fundamentals</span>
+    <h2 class="section-title">Type Casting — Converting Between Types</h2>
+    <p class="section-subtitle">Sometimes you need to convert one data type to another</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🔄 Implicit Casting (Automatic)</div>
+        <div class="concept-text">C automatically converts smaller types to larger types. This is called <strong>widening</strong>.</div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">implicit.c</span></div>
+        <div class="code-body"><pre>int a = 5;
+float b = a;  // int → float (automatic)
+// b is now 5.000000
+
+int x = 5, y = 2;
+float result = x / y;  // ⚠️ Still 2.0!
+// Integer division happens FIRST, then converts</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🎯 Explicit Casting (You force it)</div>
+        <div class="concept-text">You manually convert using <span class="ic">(type)</span> syntax. Use when you need precision.</div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">explicit.c</span></div>
+        <div class="code-body"><pre>int x = 5, y = 2;
+float result = (float)x / y;  // 2.500000 ✓
+// Cast x to float BEFORE division
+
+float pi = 3.14159;
+int truncated = (int)pi;  // 3 (decimal lost!)</pre></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout danger mt-2"><strong>🚫 Common Bug:</strong> <span class="ic">float avg = marks / total;</span> — If both are <span class="ic">int</span>, you get integer division! Fix: <span class="ic">float avg = (float)marks / total;</span></div>
+  <div class="flow-horizontal mt-1">
+    <div class="flow-node blue">char (1B)</div><span class="flow-arrow" style="font-size:20px;">→</span>
+    <div class="flow-node cyan">short (2B)</div><span class="flow-arrow" style="font-size:20px;">→</span>
+    <div class="flow-node violet">int (4B)</div><span class="flow-arrow" style="font-size:20px;">→</span>
+    <div class="flow-node rose">float (4B)</div><span class="flow-arrow" style="font-size:20px;">→</span>
+    <div class="flow-node amber">double (8B)</div>
+  </div>
+</div>
+</div>
+
+<!-- S: Fix The Bugs -->
+<div class="slide" data-title="🐛 Fix The Bugs #1">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 1 · Practice</span>
+    <h2 class="section-title">🐛 Fix The Bugs! (Beginner Edition)</h2>
+    <p class="section-subtitle">Can you spot and fix the errors in each code snippet?</p>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="bug-box">
+      <div class="bug-label">🐛 Bug #1: Missing Something?</div>
+      <div class="code-block"><div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    printf("Hello World")
+    return 0;
+}</pre></div></div>
+      <button class="reveal-btn">👉 Show Fix</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Fix:</strong> Missing semicolon after printf! <span class="ic">printf("Hello World");</span> — Every statement MUST end with <span class="ic">;</span></div>
+      </div>
+    </div>
+    <div class="bug-box">
+      <div class="bug-label">🐛 Bug #2: Wrong Result</div>
+      <div class="code-block"><div class="code-body"><pre>int marks = 85;
+float percentage = marks / 100;
+printf("%.2f%%", percentage);</pre></div></div>
+      <button class="reveal-btn">👉 Show Fix</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Fix:</strong> Integer division! <span class="ic">85/100 = 0</span>. Use <span class="ic">(float)marks / 100</span> or <span class="ic">marks / 100.0</span> to get <strong>0.85</strong></div>
+      </div>
+    </div>
+    <div class="bug-box">
+      <div class="bug-label">🐛 Bug #3: Mysterious Crash</div>
+      <div class="code-block"><div class="code-body"><pre>int age;
+printf("Enter age: ");
+scanf("%d", age);  // 💥 Crashes!</pre></div></div>
+      <button class="reveal-btn">👉 Show Fix</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Fix:</strong> Missing <span class="ic">&</span> in scanf! Must be <span class="ic">scanf("%d", &age);</span> — scanf needs the <strong>address</strong> of the variable.</div>
+      </div>
+    </div>
+    <div class="bug-box">
+      <div class="bug-label">🐛 Bug #4: Nothing Prints!</div>
+      <div class="code-block"><div class="code-body"><pre>int x = 10;
+printf("Value is: %f\n", x);</pre></div></div>
+      <button class="reveal-btn">👉 Show Fix</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Fix:</strong> Wrong format specifier! <span class="ic">x</span> is <span class="ic">int</span>, so use <span class="ic">%d</span> not <span class="ic">%f</span>. <span class="ic">%f</span> is for <span class="ic">float/double</span>.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <!-- S23: Predict the Output #1 -->
 <div class="slide" data-title="🧠 Predict the Output #1">
 <div class="slide-inner">
@@ -1326,6 +1585,283 @@ Total Amount: 12550.00</div>
       <div class="concepts-banner mt-1">
         <span class="cb-label">Concepts:</span>
         <span class="cb-tag">float</span><span class="cb-tag">scanf</span><span class="cb-tag">arithmetic</span><span class="cb-tag">printf %.2f</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Assignment Operators -->
+<div class="slide" data-title="Assignment Operators (+=, -=, *=)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 2 · Operators</span>
+    <h2 class="section-title">Compound Assignment Operators</h2>
+    <p class="section-subtitle">Shorthand for modifying a variable's value</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <table class="styled-table">
+        <thead><tr><th>Shorthand</th><th>Equivalent To</th><th>Example</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>+=</code></td><td><code>a = a + b</code></td><td><code>x += 5</code></td><td>x = x + 5</td></tr>
+          <tr><td><code>-=</code></td><td><code>a = a - b</code></td><td><code>x -= 3</code></td><td>x = x - 3</td></tr>
+          <tr><td><code>*=</code></td><td><code>a = a * b</code></td><td><code>x *= 2</code></td><td>x = x * 2</td></tr>
+          <tr><td><code>/=</code></td><td><code>a = a / b</code></td><td><code>x /= 4</code></td><td>x = x / 4</td></tr>
+          <tr><td><code>%=</code></td><td><code>a = a % b</code></td><td><code>x %= 3</code></td><td>x = x % 3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">compound.c</span></div>
+        <div class="code-body"><pre>int score = 100;
+
+score += 10;   // score = 110
+score -= 20;   // score = 90
+score *= 2;    // score = 180
+score /= 3;    // score = 60
+score %= 7;    // score = 4
+
+printf("Final: %d\n", score); // 4</pre></div>
+      </div>
+      <div class="callout tip mt-1"><strong>💡 Why use them?</strong> Less typing, fewer mistakes, and clearer intent. <span class="ic">count += 1</span> is cleaner than <span class="ic">count = count + 1</span>.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Bitwise Operators -->
+<div class="slide" data-title="Bitwise Operators (Intro)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 2 · Operators</span>
+    <h2 class="section-title">Bitwise Operators — Working with Bits</h2>
+    <p class="section-subtitle">Operators that work on individual binary digits (0s and 1s)</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <table class="styled-table">
+        <thead><tr><th>Operator</th><th>Name</th><th>Example</th><th>Binary</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>&</code></td><td>AND</td><td><code>5 & 3</code></td><td>101 & 011</td><td>001 = <strong>1</strong></td></tr>
+          <tr><td><code>|</code></td><td>OR</td><td><code>5 | 3</code></td><td>101 | 011</td><td>111 = <strong>7</strong></td></tr>
+          <tr><td><code>^</code></td><td>XOR</td><td><code>5 ^ 3</code></td><td>101 ^ 011</td><td>110 = <strong>6</strong></td></tr>
+          <tr><td><code>~</code></td><td>NOT</td><td><code>~5</code></td><td>~00000101</td><td>11111010</td></tr>
+          <tr><td><code>&lt;&lt;</code></td><td>Left Shift</td><td><code>3 &lt;&lt; 2</code></td><td>011 → 1100</td><td><strong>12</strong></td></tr>
+          <tr><td><code>&gt;&gt;</code></td><td>Right Shift</td><td><code>12 &gt;&gt; 2</code></td><td>1100 → 011</td><td><strong>3</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🔢 Quick Trick: Left Shift = Multiply by 2</div>
+        <div class="concept-text">
+          <span class="ic">x &lt;&lt; 1</span> = x × 2<br>
+          <span class="ic">x &lt;&lt; 2</span> = x × 4<br>
+          <span class="ic">x &gt;&gt; 1</span> = x ÷ 2<br><br>
+          <strong>Real use:</strong> Check if even: <span class="ic">if ((n & 1) == 0)</span> — faster than <span class="ic">n % 2</span>!
+        </div>
+      </div>
+      <div class="callout info"><strong>📌 When to use?</strong> Embedded systems, flags, permissions, encryption, and performance-critical code. For now, just understand the basics!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Operator Precedence -->
+<div class="slide" data-title="Operator Precedence & Associativity">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 2 · Operators</span>
+    <h2 class="section-title">Operator Precedence & Associativity</h2>
+    <p class="section-subtitle">Which operation happens first? Just like BODMAS in math!</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <table class="styled-table" style="font-size:13px;">
+        <thead><tr><th>Priority</th><th>Operators</th><th>Direction</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge rose">1 (Highest)</span></td><td><code>() [] -> .</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge amber">2</span></td><td><code>! ~ ++ -- (cast) sizeof & *</code></td><td>Right → Left</td></tr>
+          <tr><td><span class="badge amber">3</span></td><td><code>* / %</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge indigo">4</span></td><td><code>+ -</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge indigo">5</span></td><td><code>&lt;&lt; &gt;&gt;</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge cyan">6</span></td><td><code>&lt; &lt;= &gt; &gt;=</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge cyan">7</span></td><td><code>== !=</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge violet">8-10</span></td><td><code>& ^ |</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge violet">11-12</span></td><td><code>&& ||</code></td><td>Left → Right</td></tr>
+          <tr><td><span class="badge emerald">13</span></td><td><code>?:</code> (ternary)</td><td>Right → Left</td></tr>
+          <tr><td><span class="badge emerald">14</span></td><td><code>= += -= *= /=</code></td><td>Right → Left</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="predict-box">
+        <div class="predict-label">🔮 What does this evaluate to?</div>
+        <div class="code-block"><div class="code-body"><pre>int result = 2 + 3 * 4 - 1;</pre></div></div>
+        <button class="reveal-btn">👉 Show Answer</button>
+        <div class="reveal-content">
+          <div class="callout tip mt-1"><strong>Answer: 13</strong><br>
+          Step 1: <span class="ic">3 * 4 = 12</span> (multiplication first)<br>
+          Step 2: <span class="ic">2 + 12 = 14</span><br>
+          Step 3: <span class="ic">14 - 1 = 13</span></div>
+        </div>
+      </div>
+      <div class="callout warning mt-2"><strong>⚠️ Golden Rule:</strong> When in doubt, use <strong>parentheses ( )</strong>! They make your intent clear and avoid bugs.<br><span class="ic">(a + b) * c</span> is always clearer than <span class="ic">a + b * c</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Expressions vs Statements -->
+<div class="slide" data-title="Expressions vs Statements">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 2 · Operators</span>
+    <h2 class="section-title">Expressions vs Statements</h2>
+    <p class="section-subtitle">Understanding the difference helps you write correct C code</p>
+  </div>
+  <div class="vs-grid">
+    <div class="vs-box">
+      <div class="vs-title">📐 Expression</div>
+      <div class="card-text">A combination of values, variables, and operators that <strong>produces a value</strong>.</div>
+      <div class="code-block mt-1"><div class="code-body"><pre>5 + 3         // evaluates to 8
+a * b         // evaluates to product
+x > 10        // evaluates to 1 or 0
+a = 5         // evaluates to 5</pre></div></div>
+    </div>
+    <div class="vs-divider">vs</div>
+    <div class="vs-box">
+      <div class="vs-title">📝 Statement</div>
+      <div class="card-text">A complete instruction that <strong>performs an action</strong>. Ends with <span class="ic">;</span></div>
+      <div class="code-block mt-1"><div class="code-body"><pre>int x = 10;          // declaration
+printf("Hi");        // function call
+x = x + 5;          // assignment
+return 0;            // return</pre></div></div>
+    </div>
+  </div>
+  <div class="callout info mt-2"><strong>📌 Key Insight:</strong> Every expression can become a statement by adding a semicolon. <span class="ic">a + b</span> is an expression; <span class="ic">a + b;</span> is a statement (though it does nothing useful!). An <strong>expression statement</strong> is the most common type in C.</div>
+</div>
+</div>
+
+<!-- S: Temperature Converter -->
+<div class="slide" data-title="Program: Temperature Converter">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 2 · Program</span>
+    <h2 class="section-title">Program: Temperature Converter 🌡️</h2>
+    <p class="section-subtitle">A complete program using operators, scanf, and printf</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">temperature.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    float celsius, fahrenheit;
+
+    printf("Enter temperature in Celsius: ");
+    scanf("%f", &celsius);
+
+    // Formula: F = (C × 9/5) + 32
+    fahrenheit = (celsius * 9.0 / 5.0) + 32;
+
+    printf("\n%.2f°C = %.2f°F\n", celsius, fahrenheit);
+
+    // Also convert back
+    float back = (fahrenheit - 32) * 5.0 / 9.0;
+    printf("Verification: %.2f°F = %.2f°C\n",
+           fahrenheit, back);
+
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="output-block mb-2">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Enter temperature in Celsius: 37
+          
+37.00°C = 98.60°F
+Verification: 98.60°F = 37.00°C</div>
+      </div>
+      <div class="what-happened">
+        <div class="wh-label">🔍 Why 9.0 / 5.0?</div>
+        <div class="wh-content">
+          If we wrote <span class="ic">9/5</span>, integer division gives <strong>1</strong> (not 1.8)!<br>
+          Using <span class="ic">9.0/5.0</span> forces float division = <strong>1.8</strong> ✓<br><br>
+          <strong>Key formula:</strong> F = C × 1.8 + 32
+        </div>
+      </div>
+      <div class="concepts-banner mt-1">
+        <span class="cb-label">Concepts:</span>
+        <span class="cb-tag">float</span><span class="cb-tag">scanf</span><span class="cb-tag">arithmetic</span><span class="cb-tag">type awareness</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Predict the Output #2 -->
+<div class="slide" data-title="🧠 Predict the Output #2">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 2 · Practice</span>
+    <h2 class="section-title">🧠 Predict the Output #2: Operators</h2>
+    <p class="section-subtitle">Test your understanding of operators and expressions</p>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="predict-box">
+      <div class="predict-label">🔮 Question 1: Compound Assignment</div>
+      <div class="code-block"><div class="code-body"><pre>int x = 10;
+x += 5;
+x *= 2;
+x -= 3;
+printf("%d", x);</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer: 27</strong><br>
+        x=10 → x+=5 → x=15 → x*=2 → x=30 → x-=3 → x=<strong>27</strong></div>
+      </div>
+    </div>
+    <div class="predict-box">
+      <div class="predict-label">🔮 Question 2: Pre vs Post Increment</div>
+      <div class="code-block"><div class="code-body"><pre>int a = 5, b = 5;
+int x = a++;
+int y = ++b;
+printf("x=%d, a=%d\n", x, a);
+printf("y=%d, b=%d\n", y, b);</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer:</strong><br>
+        x=5, a=6 (post: use first, then increment)<br>
+        y=6, b=6 (pre: increment first, then use)</div>
+      </div>
+    </div>
+    <div class="predict-box">
+      <div class="predict-label">🔮 Question 3: Precedence Trap</div>
+      <div class="code-block"><div class="code-body"><pre>int result = 10 + 20 * 3 / 2 - 5;
+printf("%d", result);</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer: 35</strong><br>
+        20*3=60 → 60/2=30 → 10+30=40 → 40-5=<strong>35</strong></div>
+      </div>
+    </div>
+    <div class="predict-box">
+      <div class="predict-label">🔮 Question 4: Logical Operators</div>
+      <div class="code-block"><div class="code-body"><pre>int a = 5, b = 0, c = 10;
+printf("%d\n", a && b);
+printf("%d\n", a || b);
+printf("%d\n", !b);
+printf("%d\n", a > 3 && c < 20);</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer:</strong> 0, 1, 1, 1<br>
+        5&&0=0 (AND needs both true) | 5||0=1 (OR needs one) | !0=1 | (1&&1)=1</div>
       </div>
     </div>
   </div>
@@ -1752,6 +2288,273 @@ int main()
       <div class="concepts-banner mt-1">
         <span class="cb-label">Concepts:</span>
         <span class="cb-tag">modulus</span><span class="cb-tag">&& AND</span><span class="cb-tag">|| OR</span><span class="cb-tag">nested conditions</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Nested if-else -->
+<div class="slide" data-title="Nested if-else">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 3 · Decisions</span>
+    <h2 class="section-title">Nested if-else (if inside if)</h2>
+    <p class="section-subtitle">When you need to check multiple conditions in sequence</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">nested.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int age;
+    char hasID;
+
+    printf("Enter age: ");
+    scanf("%d", &age);
+    printf("Do you have ID? (Y/N): ");
+    scanf(" %c", &hasID);
+
+    if (age >= 18)
+    {
+        if (hasID == 'Y' || hasID == 'y')
+            printf("Welcome! You may enter.\n");
+        else
+            printf("Sorry, you need an ID.\n");
+    }
+    else
+    {
+        printf("Sorry, you must be 18+.\n");
+    }
+
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="output-block mb-2">
+        <div class="output-header">▶ Output (age=20, ID=Y)</div>
+        <div class="output-body">Enter age: 20
+Do you have ID? (Y/N): Y
+Welcome! You may enter.</div>
+      </div>
+      <div class="callout warning"><strong>⚠️ Avoid deep nesting!</strong> More than 2-3 levels makes code hard to read. Use <span class="ic">else if</span> ladders or <span class="ic">&&</span> to flatten conditions when possible.</div>
+      <div class="analogy-box mt-1">
+        <div class="analogy-label">🌍 Analogy</div>
+        <div class="analogy-content">Like airport security: First check <strong>ticket</strong> (outer if), then check <strong>passport</strong> (inner if). Both must pass!</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Ternary Operator -->
+<div class="slide" data-title="Ternary Operator (?:)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 3 · Decisions</span>
+    <h2 class="section-title">The Ternary Operator (?:)</h2>
+    <p class="section-subtitle">A compact one-line if-else for simple conditions</p>
+  </div>
+  <div class="big-question"><span class="ic">condition ? value_if_true : value_if_false</span></div>
+  <div class="two-col mt-2">
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📝 Syntax</div>
+        <div class="concept-text">
+          <span class="ic">result = (condition) ? A : B;</span><br><br>
+          If condition is true → result = A<br>
+          If condition is false → result = B
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-body"><pre>// Using if-else (4 lines):
+int max;
+if (a > b)
+    max = a;
+else
+    max = b;
+
+// Using ternary (1 line!):
+int max = (a > b) ? a : b;</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="code-block mb-2">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">ternary.c</span></div>
+        <div class="code-body"><pre>int age = 20;
+printf("%s\n", (age >= 18) ? "Adult" : "Minor");
+
+int num = 15;
+printf("%s\n", (num % 2 == 0) ? "Even" : "Odd");
+
+// Find max of three:
+int a = 10, b = 25, c = 15;
+int max = (a > b) ? ((a > c) ? a : c)
+                   : ((b > c) ? b : c);
+printf("Max: %d\n", max);  // 25</pre></div>
+      </div>
+      <div class="callout tip"><strong>💡 When to use:</strong> Simple assignments or printf choices. <strong>Don't</strong> nest more than 2 levels — use if-else instead for readability!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Common if-else Pitfalls -->
+<div class="slide" data-title="Common if-else Pitfalls">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 3 · Decisions</span>
+    <h2 class="section-title">⚠️ Common if-else Mistakes</h2>
+    <p class="section-subtitle">These bugs trap every beginner — learn them now to avoid hours of debugging!</p>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="bug-box">
+      <div class="bug-label">🐛 Trap 1: = vs == (Assignment vs Comparison)</div>
+      <div class="code-block"><div class="code-body"><pre>if (x = 5)  // 💥 ASSIGNS 5 to x!
+    printf("This ALWAYS runs!");
+
+// Correct:
+if (x == 5)  // ✓ Compares x with 5</pre></div></div>
+    </div>
+    <div class="bug-box">
+      <div class="bug-label">🐛 Trap 2: Dangling else</div>
+      <div class="code-block"><div class="code-body"><pre>if (a > 0)
+    if (b > 0)
+        printf("Both positive");
+else  // 💥 Goes with INNER if, not outer!
+    printf("A is negative??");</pre></div></div>
+      <div class="callout tip mt-1"><strong>Fix:</strong> Always use <span class="ic">{ }</span> braces, even for single statements!</div>
+    </div>
+    <div class="bug-box">
+      <div class="bug-label">🐛 Trap 3: Semicolon after if</div>
+      <div class="code-block"><div class="code-body"><pre>if (marks > 40);  // 💥 Empty statement!
+{
+    printf("Pass");  // Runs ALWAYS
+}</pre></div></div>
+    </div>
+    <div class="bug-box">
+      <div class="bug-label">🐛 Trap 4: Missing braces</div>
+      <div class="code-block"><div class="code-body"><pre>if (score > 90)
+    printf("Excellent!\n");
+    printf("Grade: A\n");  // 💥 ALWAYS runs!
+// Only 1st line is inside the if!</pre></div></div>
+      <div class="callout tip mt-1"><strong>Fix:</strong> Use <span class="ic">{ }</span> when you have multiple statements inside if!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Menu Calculator -->
+<div class="slide" data-title="Program: Menu Calculator (switch)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 3 · Program</span>
+    <h2 class="section-title">Program: Menu-Driven Calculator 🧮</h2>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">calculator.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    float a, b;
+    char op;
+
+    printf("Enter: num1 operator num2\n");
+    printf("Example: 10 + 5\n");
+    scanf("%f %c %f", &a, &op, &b);
+
+    switch (op)
+    {
+        case '+': printf("= %.2f\n", a + b); break;
+        case '-': printf("= %.2f\n", a - b); break;
+        case '*': printf("= %.2f\n", a * b); break;
+        case '/':
+            if (b != 0)
+                printf("= %.2f\n", a / b);
+            else
+                printf("Error: Divide by 0!\n");
+            break;
+        case '%':
+            printf("= %d\n", (int)a % (int)b);
+            break;
+        default:
+            printf("Invalid operator!\n");
+    }
+
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="output-block mb-2">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Enter: num1 operator num2
+Example: 10 + 5
+10 * 3.5
+= 35.00</div>
+      </div>
+      <div class="what-happened">
+        <div class="wh-label">🔍 Key Concepts Used</div>
+        <div class="wh-content">
+          <ol>
+            <li><strong>switch-case</strong> for clean operator selection</li>
+            <li><strong>Division by zero check</strong> — prevents crash</li>
+            <li><strong>Type casting</strong> for modulus: <span class="ic">(int)a % (int)b</span></li>
+            <li><strong>default</strong> handles invalid operators</li>
+            <li><strong>break</strong> prevents fall-through</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Predict the Output #3 -->
+<div class="slide" data-title="🧠 Predict the Output #3">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 3 · Practice</span>
+    <h2 class="section-title">🧠 Predict the Output #3: Decisions</h2>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="predict-box">
+      <div class="predict-label">🔮 Tricky if-else</div>
+      <div class="code-block"><div class="code-body"><pre>int x = 10;
+if (x > 5)
+    printf("A ");
+    printf("B ");
+if (x > 15)
+    printf("C ");
+else
+    printf("D ");
+printf("E");</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer: A B D E</strong><br>
+        "B" always prints (no braces!). x=10 > 5 → A. x=10 not > 15 → D. Then E.</div>
+      </div>
+    </div>
+    <div class="predict-box">
+      <div class="predict-label">🔮 switch Fall-Through</div>
+      <div class="code-block"><div class="code-body"><pre>int x = 2;
+switch(x) {
+    case 1: printf("One ");
+    case 2: printf("Two ");
+    case 3: printf("Three ");
+    default: printf("Other");
+}</pre></div></div>
+      <button class="reveal-btn">👉 Show Answer</button>
+      <div class="reveal-content">
+        <div class="callout tip mt-1"><strong>Answer: Two Three Other</strong><br>
+        No <span class="ic">break</span> statements! Execution "falls through" to all cases below the matching one.</div>
       </div>
     </div>
   </div>
@@ -2320,6 +3123,305 @@ Reversed: 1221
 </div>
 </div>
 
+<!-- S: break & continue -->
+<div class="slide" data-title="break & continue">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 4 · Loops</span>
+    <h2 class="section-title">break & continue — Loop Control</h2>
+    <p class="section-subtitle">Controlling loop execution flow</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🛑 break — Exit the loop immediately</div>
+        <div class="concept-text">Stops the loop and jumps to the first statement after it.</div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">break.c</span></div>
+        <div class="code-body"><pre>// Find first number divisible by 7
+for (int i = 1; i <= 100; i++)
+{
+    if (i % 7 == 0)
+    {
+        printf("Found: %d\n", i);
+        break;  // Stop searching!
+    }
+}
+// Output: Found: 7</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">⏭️ continue — Skip this iteration</div>
+        <div class="concept-text">Skips the rest of the current iteration and starts the next one.</div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">continue.c</span></div>
+        <div class="code-body"><pre>// Print only odd numbers 1-10
+for (int i = 1; i <= 10; i++)
+{
+    if (i % 2 == 0)
+        continue;  // Skip even numbers
+    printf("%d ", i);
+}
+// Output: 1 3 5 7 9</pre></div>
+      </div>
+    </div>
+  </div>
+  <div class="analogy-box mt-2">
+    <div class="analogy-label">🌍 Analogy</div>
+    <div class="analogy-content"><strong>break</strong> = walk out of the cinema. <strong>continue</strong> = skip one boring scene but stay for the rest of the movie.</div>
+  </div>
+</div>
+</div>
+
+<!-- S: Infinite Loops -->
+<div class="slide" data-title="Infinite Loops (On Purpose!)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 4 · Loops</span>
+    <h2 class="section-title">Infinite Loops — On Purpose! ♾️</h2>
+    <p class="section-subtitle">Loops that run forever — sometimes that's exactly what you want</p>
+  </div>
+  <div class="content-grid cols-3">
+    <div class="card">
+      <div class="card-icon indigo">🔄</div>
+      <div class="card-title">while(1)</div>
+      <div class="code-block mt-1"><div class="code-body"><pre>while (1)
+{
+    // runs forever
+    // use break to exit
+}</pre></div></div>
+    </div>
+    <div class="card">
+      <div class="card-icon cyan">🔄</div>
+      <div class="card-title">for(;;)</div>
+      <div class="code-block mt-1"><div class="code-body"><pre>for (;;)
+{
+    // no init, no condition
+    // no update = forever
+}</pre></div></div>
+    </div>
+    <div class="card">
+      <div class="card-icon violet">📋</div>
+      <div class="card-title">Menu System</div>
+      <div class="code-block mt-1"><div class="code-body"><pre>while (1)
+{
+    printf("1.Add 2.Exit\n");
+    scanf("%d", &choice);
+    if (choice == 2)
+        break;
+}</pre></div></div>
+    </div>
+  </div>
+  <div class="callout warning mt-2"><strong>⚠️ Accidental infinite loops</strong> are bugs! If your program hangs, check: Did you forget to update the loop variable? Did you use <span class="ic">=</span> instead of <span class="ic">==</span> in the condition? Press <strong>Ctrl+C</strong> to force-stop!</div>
+</div>
+</div>
+
+<!-- S: Loop Comparison -->
+<div class="slide" data-title="Loop Comparison: for vs while vs do-while">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 4 · Loops</span>
+    <h2 class="section-title">Which Loop Should I Use? 🤔</h2>
+  </div>
+  <table class="styled-table">
+    <thead><tr><th>Feature</th><th>for</th><th>while</th><th>do-while</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Best When</strong></td><td>Count is known</td><td>Count is unknown</td><td>Must run at least once</td></tr>
+      <tr><td><strong>Condition Check</strong></td><td>Before each iteration</td><td>Before each iteration</td><td>After each iteration</td></tr>
+      <tr><td><strong>Min Executions</strong></td><td>0 (may never run)</td><td>0 (may never run)</td><td><strong>1 (always runs once)</strong></td></tr>
+      <tr><td><strong>Example Use</strong></td><td>Print 1 to N</td><td>Read until EOF</td><td>Menu: ask at least once</td></tr>
+      <tr><td><strong>Syntax</strong></td><td><code>for(i=0;i&lt;n;i++)</code></td><td><code>while(cond)</code></td><td><code>do{...}while(cond);</code></td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip mt-2"><strong>💡 Rule of Thumb:</strong><br>
+  • Know how many times? → <span class="ic">for</span><br>
+  • Don't know how many? → <span class="ic">while</span><br>
+  • Must do it at least once? → <span class="ic">do-while</span></div>
+</div>
+</div>
+
+<!-- S: More Star Patterns -->
+<div class="slide" data-title="More Star Patterns">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 4 · Loops</span>
+    <h2 class="section-title">More Star Patterns ⭐</h2>
+    <p class="section-subtitle">Mastering nested loops through visual patterns</p>
+  </div>
+  <div class="content-grid cols-3">
+    <div class="card">
+      <div class="card-title">Right Triangle</div>
+      <div class="code-block"><div class="code-body"><pre>for(i=1; i<=5; i++) {
+  for(j=1; j<=i; j++)
+    printf("* ");
+  printf("\n");
+}</pre></div></div>
+      <div class="output-block mt-1"><div class="output-body" style="font-family:monospace;">*
+* *
+* * *
+* * * *
+* * * * *</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Inverted Triangle</div>
+      <div class="code-block"><div class="code-body"><pre>for(i=5; i>=1; i--) {
+  for(j=1; j<=i; j++)
+    printf("* ");
+  printf("\n");
+}</pre></div></div>
+      <div class="output-block mt-1"><div class="output-body" style="font-family:monospace;">* * * * *
+* * * *
+* * *
+* *
+*</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Number Triangle</div>
+      <div class="code-block"><div class="code-body"><pre>for(i=1; i<=5; i++) {
+  for(j=1; j<=i; j++)
+    printf("%d ", j);
+  printf("\n");
+}</pre></div></div>
+      <div class="output-block mt-1"><div class="output-body" style="font-family:monospace;">1
+1 2
+1 2 3
+1 2 3 4
+1 2 3 4 5</div></div>
+    </div>
+  </div>
+  <div class="callout info mt-2"><strong>📌 Pattern Strategy:</strong> Outer loop = <strong>rows</strong>. Inner loop = <strong>columns per row</strong>. The relationship between <span class="ic">i</span> and <span class="ic">j</span> determines the shape!</div>
+</div>
+</div>
+
+<!-- S: Sum of Digits -->
+<div class="slide" data-title="Program: Sum of Digits">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 4 · Program</span>
+    <h2 class="section-title">Program: Sum of Digits & Digit Count</h2>
+    <p class="section-subtitle">Extracting digits using % and / operators</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">sum_digits.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int num, sum = 0, count = 0;
+    int original;
+
+    printf("Enter a number: ");
+    scanf("%d", &num);
+    original = num;
+
+    while (num > 0)
+    {
+        int digit = num % 10;  // Extract last digit
+        sum += digit;
+        count++;
+        num = num / 10;        // Remove last digit
+    }
+
+    printf("Number: %d\n", original);
+    printf("Digit count: %d\n", count);
+    printf("Sum of digits: %d\n", sum);
+
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="output-block mb-2">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Enter a number: 9876
+Number: 9876
+Digit count: 4
+Sum of digits: 30</div>
+      </div>
+      <table class="trace-table">
+        <thead><tr><th>Step</th><th>num</th><th>digit</th><th>sum</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>9876</td><td>6</td><td>6</td></tr>
+          <tr><td>2</td><td>987</td><td>7</td><td>13</td></tr>
+          <tr><td>3</td><td>98</td><td>8</td><td>21</td></tr>
+          <tr><td>4</td><td>9</td><td>9</td><td class="highlight-cell">30</td></tr>
+        </tbody>
+      </table>
+      <div class="callout tip mt-1"><strong>💡 Key Pattern:</strong> <span class="ic">% 10</span> = get last digit. <span class="ic">/ 10</span> = remove last digit. This pattern appears in many programs!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: GCD & LCM -->
+<div class="slide" data-title="Program: GCD & LCM">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 4 · Program</span>
+    <h2 class="section-title">Program: GCD & LCM (Euclidean Algorithm)</h2>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">gcd_lcm.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a, b, orig_a, orig_b;
+
+    printf("Enter two numbers: ");
+    scanf("%d %d", &a, &b);
+    orig_a = a;
+    orig_b = b;
+
+    // Euclidean Algorithm for GCD
+    while (b != 0)
+    {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    int gcd = a;
+    int lcm = (orig_a * orig_b) / gcd;
+
+    printf("GCD(%d, %d) = %d\n", orig_a, orig_b, gcd);
+    printf("LCM(%d, %d) = %d\n", orig_a, orig_b, lcm);
+
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="output-block mb-2">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">Enter two numbers: 48 18
+GCD(48, 18) = 6
+LCM(48, 18) = 144</div>
+      </div>
+      <table class="trace-table">
+        <thead><tr><th>Step</th><th>a</th><th>b</th><th>a % b</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>48</td><td>18</td><td>12</td></tr>
+          <tr><td>2</td><td>18</td><td>12</td><td>6</td></tr>
+          <tr><td>3</td><td>12</td><td>6</td><td>0</td></tr>
+          <tr><td>4</td><td>6</td><td class="highlight-cell">0</td><td>GCD = 6</td></tr>
+        </tbody>
+      </table>
+      <div class="concept-box mt-1">
+        <div class="concept-title">📐 Formula</div>
+        <div class="concept-text">LCM = (a × b) / GCD<br>LCM(48, 18) = 864 / 6 = <strong>144</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <!-- ████████████████████████████████████████████████ -->
 <!-- PART 5 — FUNCTIONS                              -->
 <!-- ████████████████████████████████████████████████ -->
@@ -2499,7 +3601,327 @@ After: num = 42</div>
 </div>
 </div>
 
-<!-- ████████████████████████████████████████████████ -->
+<!-- S: Four Types of Functions -->
+<div class="slide" data-title="Four Types of Functions">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 5 · Functions</span>
+    <h2 class="section-title">4 Types of Functions</h2>
+    <p class="section-subtitle">Functions differ in whether they take input (parameters) and give output (return value)</p>
+  </div>
+  <div class="content-grid cols-2">
+    <div class="card" style="border-left: 3px solid var(--accent-indigo);">
+      <div class="card-title" style="color:var(--accent-indigo);">Type 1: No Args, No Return</div>
+      <div class="code-block"><div class="code-body"><pre>void greet()
+{
+    printf("Hello!\n");
+}
+// Call: greet();</pre></div></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-cyan);">
+      <div class="card-title" style="color:var(--accent-cyan);">Type 2: No Args, With Return</div>
+      <div class="code-block"><div class="code-body"><pre>int getAge()
+{
+    int age;
+    scanf("%d", &age);
+    return age;
+}
+// Call: int a = getAge();</pre></div></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-emerald);">
+      <div class="card-title" style="color:var(--accent-emerald);">Type 3: With Args, No Return</div>
+      <div class="code-block"><div class="code-body"><pre>void printSum(int a, int b)
+{
+    printf("Sum = %d\n", a + b);
+}
+// Call: printSum(5, 3);</pre></div></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--accent-rose);">
+      <div class="card-title" style="color:var(--accent-rose);">Type 4: With Args, With Return ⭐</div>
+      <div class="code-block"><div class="code-body"><pre>int add(int a, int b)
+{
+    return a + b;
+}
+// Call: int sum = add(5, 3);</pre></div></div>
+    </div>
+  </div>
+  <div class="callout tip mt-2"><strong>💡 Most common:</strong> Type 4 (args + return) is used most in real programs. <span class="ic">void</span> = "this function returns nothing."</div>
+</div>
+</div>
+
+<!-- S: Function Declaration vs Definition -->
+<div class="slide" data-title="Function Declaration vs Definition">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 5 · Functions</span>
+    <h2 class="section-title">Declaration vs Definition (Prototypes)</h2>
+    <p class="section-subtitle">Why the compiler sometimes needs a "preview" of your function</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">prototype.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+// DECLARATION (prototype) — tells compiler
+// "this function exists, I'll define it later"
+int add(int a, int b);
+
+int main()
+{
+    int result = add(10, 20);  // ✓ Works!
+    printf("Sum = %d\n", result);
+    return 0;
+}
+
+// DEFINITION — the actual code
+int add(int a, int b)
+{
+    return a + b;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📋 Declaration (Prototype)</div>
+        <div class="concept-text">Tells the compiler: "This function exists, takes these parameters, and returns this type." No body needed — just the signature + semicolon.</div>
+      </div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">📋 Definition</div>
+        <div class="concept-text">The actual implementation with the body <span class="ic">{ }</span>. Contains the code that runs when called.</div>
+      </div>
+      <div class="callout warning"><strong>⚠️ Without a prototype:</strong> If you call a function before defining it, the compiler won't know its return type or parameter types — this causes errors or warnings!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Scope of Variables -->
+<div class="slide" data-title="Scope of Variables (Local vs Global)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 5 · Functions</span>
+    <h2 class="section-title">Scope: Where Can a Variable Be Used?</h2>
+    <p class="section-subtitle">A variable's "visibility" depends on where it's declared</p>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">scope.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+int globalVar = 100;  // GLOBAL: visible everywhere
+
+void demo()
+{
+    int localVar = 50;  // LOCAL: only inside demo()
+    printf("Inside demo: global=%d, local=%d\n",
+           globalVar, localVar);
+}
+
+int main()
+{
+    int mainVar = 25;   // LOCAL: only inside main()
+    printf("main: global=%d, mainVar=%d\n",
+           globalVar, mainVar);
+
+    demo();
+
+    // printf("%d", localVar);  // ERROR! Not visible here
+    return 0;
+}</pre></div>
+      </div>
+      <div class="output-block">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">main: global=100, mainVar=25
+Inside demo: global=100, local=50</div>
+      </div>
+    </div>
+    <div>
+      <div class="vs-grid">
+        <div class="vs-box">
+          <div class="vs-title">🌍 Global Variable</div>
+          <ul class="feature-list">
+            <li><span class="bullet">✓</span>Declared outside all functions</li>
+            <li><span class="bullet">✓</span>Visible in ALL functions</li>
+            <li><span class="bullet">✓</span>Lives for entire program</li>
+            <li><span class="bullet">✗</span>Can cause naming conflicts</li>
+          </ul>
+        </div>
+        <div class="vs-divider">vs</div>
+        <div class="vs-box">
+          <div class="vs-title">📦 Local Variable</div>
+          <ul class="feature-list">
+            <li><span class="bullet">✓</span>Declared inside a function</li>
+            <li><span class="bullet">✓</span>Only visible in that function</li>
+            <li><span class="bullet">✓</span>Destroyed when function ends</li>
+            <li><span class="bullet">✓</span>Safer — no side effects</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout tip mt-1"><strong>💡 Best Practice:</strong> Prefer local variables! Global variables make debugging hard because any function can change them.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Storage Classes -->
+<div class="slide" data-title="Storage Classes (auto, static, extern)">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 5 · Functions</span>
+    <h2 class="section-title">Storage Classes</h2>
+    <p class="section-subtitle">How long does a variable live? Where is it stored?</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <table class="styled-table" style="font-size:13px;">
+        <thead><tr><th>Class</th><th>Lifetime</th><th>Scope</th><th>Default Value</th></tr></thead>
+        <tbody>
+          <tr><td><code>auto</code></td><td>Function call</td><td>Local</td><td>Garbage</td></tr>
+          <tr><td><code>static</code></td><td><strong>Entire program</strong></td><td>Local</td><td>0</td></tr>
+          <tr><td><code>extern</code></td><td>Entire program</td><td>Global</td><td>0</td></tr>
+          <tr><td><code>register</code></td><td>Function call</td><td>Local</td><td>Garbage</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">static_demo.c</span></div>
+        <div class="code-body"><pre>void counter()
+{
+    static int count = 0; // Initialized ONCE!
+    count++;
+    printf("Called %d times\n", count);
+}
+
+int main()
+{
+    counter();  // Called 1 times
+    counter();  // Called 2 times
+    counter();  // Called 3 times
+}</pre></div>
+      </div>
+      <div class="callout info mt-1"><strong>📌 static</strong> retains its value between function calls! Regular local variables are re-created every time.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Factorial & Power Functions -->
+<div class="slide" data-title="Program: Factorial & Power Functions">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 5 · Program</span>
+    <h2 class="section-title">Program: Factorial & Power Functions</h2>
+  </div>
+  <div class="two-col code-heavy">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">functions_program.c</span></div>
+        <div class="code-body"><pre>#include &lt;stdio.h&gt;
+
+// Function to calculate factorial
+long factorial(int n)
+{
+    long fact = 1;
+    for (int i = 1; i &lt;= n; i++)
+        fact *= i;
+    return fact;
+}
+
+// Function to calculate power
+double power(double base, int exp)
+{
+    double result = 1;
+    for (int i = 0; i &lt; exp; i++)
+        result *= base;
+    return result;
+}
+
+int main()
+{
+    int num = 5;
+    printf("%d! = %ld\n", num, factorial(num));
+    printf("2^10 = %.0f\n", power(2, 10));
+    printf("3^4 = %.0f\n", power(3, 4));
+    return 0;
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="output-block mb-2">
+        <div class="output-header">▶ Output</div>
+        <div class="output-body">5! = 120
+2^10 = 1024
+3^4 = 81</div>
+      </div>
+      <div class="what-happened">
+        <div class="wh-label">🔍 Why long for factorial?</div>
+        <div class="wh-content">
+          Factorial grows FAST!<br>
+          10! = 3,628,800<br>
+          15! = 1,307,674,368,000<br>
+          Regular <span class="ic">int</span> overflows after 12!<br>
+          Use <span class="ic">long</span> for bigger values.
+        </div>
+      </div>
+      <div class="concepts-banner mt-1">
+        <span class="cb-label">Concepts:</span>
+        <span class="cb-tag">functions</span><span class="cb-tag">return value</span><span class="cb-tag">parameters</span><span class="cb-tag">long type</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- S: Recursion Preview -->
+<div class="slide" data-title="Recursion Preview">
+<div class="slide-inner">
+  <div class="section-header">
+    <span class="section-number">Part 5 · Functions</span>
+    <h2 class="section-title">🔮 Coming Next: Recursion</h2>
+    <p class="section-subtitle">A function that calls itself — the most elegant form of looping</p>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="code-block">
+        <div class="code-header"><div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div><span class="code-filename">sneak_peek.c</span></div>
+        <div class="code-body"><pre>// Iterative (loop):
+long factLoop(int n) {
+    long result = 1;
+    for (int i = 1; i &lt;= n; i++)
+        result *= i;
+    return result;
+}
+
+// Recursive (calls itself!):
+long factRecur(int n) {
+    if (n &lt;= 1) return 1;     // Base case
+    return n * factRecur(n - 1); // Magic!
+}</pre></div>
+      </div>
+    </div>
+    <div>
+      <div class="concept-box mb-2">
+        <div class="concept-title">🧩 How Recursion Works</div>
+        <div class="concept-text">
+          <span class="ic">factRecur(5)</span><br>
+          = 5 × factRecur(4)<br>
+          = 5 × 4 × factRecur(3)<br>
+          = 5 × 4 × 3 × factRecur(2)<br>
+          = 5 × 4 × 3 × 2 × factRecur(1)<br>
+          = 5 × 4 × 3 × 2 × <strong>1</strong> = <strong>120</strong>
+        </div>
+      </div>
+      <div class="callout info"><strong>📌 Every recursive function needs:</strong><br>
+      1. <strong>Base case</strong> — when to stop<br>
+      2. <strong>Recursive call</strong> — smaller version of the same problem<br>
+      We'll cover this in detail in Part 9!</div>
+    </div>
+  </div>
+</div>
+</div>
 
 <!-- ████████████████████████████████████████████████ -->
 <!-- PART 6 — POINTERS & MEMORY ARCHITECTURE         -->
