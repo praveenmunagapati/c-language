@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programming in C — Unit II · Functions &amp; Modular Programming</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050806;
+      --bg2: #0a120c;
+      --phos: #3dffa0;
+      --phos-dim: #1d8f5a;
+      --phos-ghost: rgba(61, 255, 160, .07);
+      --amber: #ffb347;
+      --amber-hot: #ffcc66;
+      --red: #ff5c57;
+      --ink: #c8f5dc;
+      --ink-dim: #6fae8e;
+      --line: rgba(61, 255, 160, .18);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg)
+    }
+
+    body {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--ink);
+      cursor: crosshair
+    }
+
+    /* ---------- CRT atmosphere ---------- */
+    .crt::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .22) 0 1px, transparent 1px 3px);
+      mix-blend-mode: multiply;
+    }
+
+    .crt::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 51;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, .55) 100%);
+    }
+
+    .glow-ring {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 49;
+      box-shadow: inset 0 0 120px rgba(61, 255, 160, .06)
+    }
+
+    /* ---------- Deck ---------- */
+    .deck {
+      position: fixed;
+      inset: 0
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 56px 90px 90px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px);
+      transition: opacity .45s ease, transform .45s ease, visibility .45s;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0)
+    }
+
+    .slide .rv {
+      opacity: 0;
+      transform: translateY(16px)
+    }
+
+    .slide.active .rv {
+      animation: printIn .55s cubic-bezier(.2, .8, .2, 1) forwards
+    }
+
+    .slide.active .rv:nth-child(1),
+    .slide.active .d1 {
+      animation-delay: .08s
+    }
+
+    .slide.active .d2 {
+      animation-delay: .22s
+    }
+
+    .slide.active .d3 {
+      animation-delay: .36s
+    }
+
+    .slide.active .d4 {
+      animation-delay: .50s
+    }
+
+    .slide.active .d5 {
+      animation-delay: .64s
+    }
+
+    .slide.active .d6 {
+      animation-delay: .78s
+    }
+
+    @keyframes printIn {
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ---------- Type ---------- */
+    .kicker {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      letter-spacing: .14em;
+      color: var(--amber);
+      text-transform: uppercase
+    }
+
+    .kicker::before {
+      content: "» ";
+      color: var(--phos-dim)
+    }
+
+    h1 {
+      font-family: 'VT323', monospace;
+      font-weight: 400;
+      font-size: clamp(48px, 6vw, 88px);
+      line-height: .92;
+      color: var(--phos);
+      text-shadow: 0 0 22px rgba(61, 255, 160, .45), 0 0 60px rgba(61, 255, 160, .18);
+    }
+
+    h2 {
+      font-family: 'VT323', monospace;
+      font-weight: 400;
+      font-size: clamp(44px, 4.6vw, 64px);
+      line-height: 1;
+      color: var(--phos);
+      text-shadow: 0 0 16px rgba(61, 255, 160, .35);
+      margin: 6px 0 0;
+    }
+
+    h2 .amber {
+      color: var(--amber);
+      text-shadow: 0 0 16px rgba(255, 179, 71, .35)
+    }
+
+    .sub {
+      color: var(--ink-dim);
+      font-size: 15px;
+      margin-top: 14px;
+      max-width: 660px;
+      line-height: 1.65
+    }
+
+    .rule {
+      height: 1px;
+      background: linear-gradient(90deg, var(--phos) 0%, var(--phos-dim) 45%, transparent 100%);
+      margin: 26px 0 30px;
+      opacity: .6
+    }
+
+    .cols {
+      display: flex;
+      gap: 44px;
+      flex: 1;
+      min-height: 0;
+      align-items: stretch
+    }
+
+    .col {
+      flex: 1;
+      min-width: 0
+    }
+
+    /* ---------- Code terminal ---------- */
+    .term {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .6), 0 0 34px rgba(61, 255, 160, .07), inset 0 0 60px rgba(61, 255, 160, .03);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .term-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(61, 255, 160, .045);
+      font-size: 12px;
+      color: var(--ink-dim);
+      letter-spacing: .1em;
+    }
+
+    .term-head .dots {
+      display: flex;
+      gap: 6px;
+      margin-right: 8px
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--phos-dim);
+      opacity: .5
+    }
+
+    .dot:first-child {
+      background: var(--phos);
+      opacity: .9
+    }
+
+    .term pre {
+      padding: 18px 20px;
+      font-size: 15px;
+      line-height: 1.72;
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--ink);
+      white-space: pre;
+      overflow: auto
+    }
+
+    .kw {
+      color: var(--amber-hot)
+    }
+
+    .fn {
+      color: var(--phos)
+    }
+
+    .st {
+      color: #7ad9ff
+    }
+
+    .cm {
+      color: #4e7a63;
+      font-style: italic
+    }
+
+    .nm {
+      color: #ffd27a
+    }
+
+    .cur {
+      display: inline-block;
+      width: 9px;
+      height: 18px;
+      background: var(--phos);
+      vertical-align: -3px;
+      animation: blink 1s steps(1) infinite
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0
+      }
+    }
+
+    /* ---------- Lists ---------- */
+    ul.tl {
+      list-style: none;
+      font-size: 16px;
+      line-height: 1.6
+    }
+
+    ul.tl li {
+      padding: 9px 0 9px 30px;
+      position: relative;
+      border-bottom: 1px dashed rgba(61, 255, 160, .13)
+    }
+
+    ul.tl li::before {
+      content: ">";
+      position: absolute;
+      left: 4px;
+      color: var(--amber);
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      top: 6px
+    }
+
+    ul.tl b {
+      color: var(--phos);
+      font-weight: 600
+    }
+
+    ul.tl code,
+    p code,
+    td code {
+      background: rgba(61, 255, 160, .09);
+      border: 1px solid var(--line);
+      padding: 1px 7px;
+      border-radius: 4px;
+      color: var(--amber-hot);
+      font-size: .92em;
+    }
+
+    /* ---------- Cards ---------- */
+    .cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap
+    }
+
+    .card {
+      flex: 1;
+      min-width: 180px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(61, 255, 160, .05), transparent 60%);
+      padding: 18px 20px;
+      border-radius: 6px
+    }
+
+    .card .c-label {
+      font-family: 'VT323', monospace;
+      font-size: 26px;
+      color: var(--phos);
+      text-shadow: 0 0 12px rgba(61, 255, 160, .3)
+    }
+
+    .card .c-body {
+      font-size: 13.5px;
+      color: var(--ink-dim);
+      margin-top: 6px;
+      line-height: 1.6
+    }
+
+    .card.amb .c-label {
+      color: var(--amber);
+      text-shadow: 0 0 12px rgba(255, 179, 71, .3)
+    }
+
+    /* ---------- Table ---------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14.5px
+    }
+
+    th {
+      text-align: left;
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--amber);
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--phos-dim);
+      letter-spacing: .05em
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px dashed rgba(61, 255, 160, .15);
+      color: var(--ink)
+    }
+
+    td:first-child {
+      color: var(--amber-hot)
+    }
+
+    tr:hover td {
+      background: var(--phos-ghost)
+    }
+
+    /* ---------- Flow nodes ---------- */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px
+    }
+
+    .fnode {
+      border: 1px solid var(--phos-dim);
+      padding: 14px 22px;
+      border-radius: 6px;
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      color: var(--phos);
+      background: rgba(61, 255, 160, .06);
+      text-shadow: 0 0 10px rgba(61, 255, 160, .3);
+      text-align: center
+    }
+
+    .fnode.amb {
+      border-color: var(--amber);
+      color: var(--amber);
+      background: rgba(255, 179, 71, .06);
+      text-shadow: 0 0 10px rgba(255, 179, 71, .3)
+    }
+
+    .farrow {
+      font-family: 'VT323', monospace;
+      font-size: 30px;
+      color: var(--phos-dim)
+    }
+
+    /* ---------- Def rows / step rows ---------- */
+    .defrow {
+      display: flex;
+      gap: 18px;
+      align-items: baseline;
+      padding: 7px 0;
+      border-bottom: 1px dashed rgba(61, 255, 160, .12)
+    }
+
+    .defrow .dk {
+      width: 170px;
+      flex-shrink: 0;
+      color: var(--amber);
+      font-size: 14.5px
+    }
+
+    .defrow .dv {
+      font-size: 14.5px;
+      color: var(--ink);
+      line-height: 1.55
+    }
+
+    .steprow {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px dashed rgba(61, 255, 160, .13)
+    }
+
+    .stepnum {
+      font-family: 'VT323', monospace;
+      font-size: 34px;
+      color: var(--amber);
+      width: 58px;
+      flex-shrink: 0;
+      text-shadow: 0 0 10px rgba(255, 179, 71, .3)
+    }
+
+    .stepname {
+      width: 180px;
+      flex-shrink: 0;
+      color: var(--phos);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: .05em
+    }
+
+    .stepdesc {
+      font-size: 13.5px;
+      color: var(--ink-dim);
+      line-height: 1.5
+    }
+
+    /* ---------- Flowchart symbols ---------- */
+    .sym {
+      border: 1.5px solid var(--phos);
+      color: var(--phos);
+      background: rgba(61, 255, 160, .06);
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      padding: 6px 18px;
+      text-align: center;
+      white-space: nowrap
+    }
+
+    .sym.pill {
+      border-radius: 999px
+    }
+
+    .sym.para {
+      transform: skewX(-16deg)
+    }
+
+    .sym.para>span {
+      display: inline-block;
+      transform: skewX(16deg)
+    }
+
+    .diamwrap {
+      position: relative;
+      width: 110px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .diamond {
+      position: absolute;
+      width: 54px;
+      height: 54px;
+      transform: rotate(45deg);
+      border: 1.5px solid var(--amber);
+      background: rgba(255, 179, 71, .07)
+    }
+
+    .diamwrap .dtxt {
+      position: relative;
+      z-index: 1;
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      color: var(--amber);
+      text-shadow: 0 0 8px rgba(255, 179, 71, .3)
+    }
+
+    .miniflow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px
+    }
+
+    .branchrow {
+      display: flex;
+      gap: 26px;
+      width: 100%;
+      justify-content: center
+    }
+
+    .blabel {
+      font-size: 12px;
+      letter-spacing: .1em;
+      margin-bottom: 2px
+    }
+
+    /* ---------- HUD ---------- */
+    .hud {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      z-index: 52;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 26px;
+      border-top: 1px solid var(--line);
+      background: rgba(5, 8, 6, .9);
+      font-size: 12px;
+      letter-spacing: .12em;
+      color: var(--ink-dim);
+      backdrop-filter: blur(4px);
+    }
+
+    .hud .sys {
+      display: flex;
+      gap: 22px;
+      align-items: center
+    }
+
+    .hud .pg {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      color: var(--phos)
+    }
+
+    .navbtns {
+      display: flex;
+      gap: 10px
+    }
+
+    .nbtn {
+      font-family: 'VT323', monospace;
+      font-size: 20px;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--phos);
+      padding: 3px 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: .18s
+    }
+
+    .nbtn:hover {
+      background: rgba(61, 255, 160, .14);
+      border-color: var(--phos);
+      box-shadow: 0 0 14px rgba(61, 255, 160, .25)
+    }
+
+    .progress {
+      position: fixed;
+      bottom: 44px;
+      left: 0;
+      height: 2px;
+      background: var(--phos);
+      box-shadow: 0 0 10px rgba(61, 255, 160, .7);
+      z-index: 53;
+      transition: width .4s ease
+    }
+
+    .tick {
+      position: fixed;
+      width: 22px;
+      height: 22px;
+      z-index: 48;
+      opacity: .55
+    }
+
+    .tick.tl {
+      top: 14px;
+      left: 14px;
+      border-top: 1px solid var(--phos);
+      border-left: 1px solid var(--phos)
+    }
+
+    .tick.tr {
+      top: 14px;
+      right: 14px;
+      border-top: 1px solid var(--phos);
+      border-right: 1px solid var(--phos)
+    }
+
+    .tick.bl {
+      bottom: 58px;
+      left: 14px;
+      border-bottom: 1px solid var(--phos);
+      border-left: 1px solid var(--phos)
+    }
+
+    .tick.br {
+      bottom: 58px;
+      right: 14px;
+      border-bottom: 1px solid var(--phos);
+      border-right: 1px solid var(--phos)
+    }
+
+    /* ASCII banner */
+    .ascii {
+      font-family: 'VT323', monospace;
+      color: var(--phos);
+      white-space: pre;
+      line-height: 1.12
+    }
+
+    .ascii.hero {
+      text-shadow: 0 0 16px rgba(61, 255, 160, .55), 0 0 48px rgba(61, 255, 160, .22)
+    }
+
+    .blink-live {
+      color: var(--phos);
+      animation: blink 1.4s steps(1) infinite
+    }
+
+    .footnote {
+      margin-top: auto;
+      font-size: 12px;
+      color: var(--ink-dim);
+      letter-spacing: .08em
+    }
+
+    .footnote::before {
+      content: "// ";
+      color: var(--phos-dim)
+    }
+  </style>
+</head>
+
+<body class="crt">
+  <div class="glow-ring"></div>
+  <div class="tick tl"></div>
+  <div class="tick tr"></div>
+  <div class="tick bl"></div>
+  <div class="tick br"></div>
+
+  <div class="deck" id="deck">
+
+    <!-- ============ 1. TITLE ============ -->
+    <section class="slide">
+      <div class="rv d1 ascii hero" style="font-size:clamp(11px,1.9vw,30px)">
+        <pre>
+███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+█████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+                                                                            </pre>
+      </div>
+      <div style="margin-top:30px" class="rv d2">
+        <div class="kicker">Programming in C · Unit II</div>
+        <h1 style="margin-top:10px">TOP-DOWN DESIGN<br>WITH <span
+            style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">FUNCTIONS</span></h1>
+      </div>
+      <div class="rv d3" style="margin-top:28px;max-width:800px">
+        <div class="rule"></div>
+        <p class="sub">From building programs with existing information, through library functions, structure charts and
+          top-down design — into pointers, the indirection operator, output parameters, scope rules, and full modular
+          programming.</p>
+      </div>
+      <div class="rv d4" style="margin-top:auto;display:flex;gap:30px;align-items:center">
+        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span
+            style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
+      </div>
+    </section>
+
+    <!-- ============ 2. UNIT OBJECTIVES ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">Unit II · objectives</div>
+        <h2>WHY <span class="amber">FUNCTIONS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>$ cat unit02.objectives</div>
+            <pre><span class="fn">[OK]</span> 01 — build programs from existing information
+<span class="fn">[OK]</span> 02 — use standard library functions
+<span class="fn">[OK]</span> 03 — apply top-down design with structure charts
+<span class="fn">[OK]</span> 04 — write functions without arguments
+<span class="fn">[OK]</span> 05 — write functions with input arguments
+<span class="fn">[OK]</span> 06 — understand pointers &amp; the indirection operator
+<span class="fn">[OK]</span> 07 — use output parameters (pass-by-pointer)
+<span class="fn">[OK]</span> 08 — master scope rules for names
+
+<span class="cm">$ exit status: all objectives mapped to slides ✓</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+          <p style="font-family:'VT323';font-size:30px;line-height:1.3;color:var(--phos)">The modular<br>design path:
+          </p>
+          <div class="miniflow" style="align-items:stretch;gap:8px;margin-top:20px">
+            <div class="fnode" style="width:100%">MONOLITHIC<br><span style="font-size:15px;color:var(--ink-dim)">one
+                giant main()</span></div>
+            <div class="farrow">↓</div>
+            <div class="fnode" style="width:100%">TOP-DOWN DESIGN<br><span
+                style="font-size:15px;color:var(--ink-dim)">decompose into sub-problems</span></div>
+            <div class="farrow">↓</div>
+            <div class="fnode amb" style="width:100%">FUNCTIONS<br><span style="font-size:15px">reusable, testable
+                modules</span></div>
+            <div class="farrow" style="color:var(--amber)">↓</div>
+            <div class="fnode amb" style="width:100%">MODULAR PROGRAM<br><span style="font-size:15px">readable ·
+                maintainable</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. BUILDING FROM EXISTING INFO ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">01 · top-down design</div>
+        <h2>BUILDING FROM <span class="amber">EXISTING</span> INFO</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <ul class="tl">
+            <li><b>Reuse before rewrite</b> — if a solved problem is close to your new one, adapt its algorithm and
+              code rather than starting from scratch.</li>
+            <li><b>Modify an existing program</b> — change variable names, adjust computations, add I/O — preserving
+              the tested structure.</li>
+            <li><b>Combine pieces</b> — the standard library and your own past functions are building blocks. Connect
+              them with new logic.</li>
+            <li><b>Case study approach</b> — study a working solution, trace its data flow, then extend it. Never copy
+              blindly — understand every line.</li>
+          </ul>
+        </div>
+        <div class="col rv d3">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>reuse-example.c</div>
+            <pre><span class="cm">/* Original: convert miles → km */</span>
+<span class="kw">double</span> kms = miles * <span class="nm">1.609</span>;
+
+<span class="cm">/* Adapted: convert kg → lbs
+   SAME pattern — different constant */</span>
+<span class="kw">double</span> lbs = kg * <span class="nm">2.205</span>;
+
+<span class="cm">/* Build from library pieces */</span>
+<span class="kw">#include</span> <span class="st">&lt;math.h&gt;</span>
+hypotenuse = <span class="fn">sqrt</span>(<span class="fn">pow</span>(a, <span class="nm">2</span>) + <span class="fn">pow</span>(b, <span class="nm">2</span>));
+<span class="cm">/* sqrt() and pow() already exist —
+   no need to reinvent them */</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. LIBRARY FUNCTIONS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">02 · top-down design</div>
+        <h2>LIBRARY <span class="amber">FUNCTIONS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <table>
+            <tr>
+              <th>Header</th>
+              <th>Function</th>
+              <th>Purpose</th>
+            </tr>
+            <tr>
+              <td>math.h</td>
+              <td><code>sqrt(x)</code></td>
+              <td>square root of x</td>
+            </tr>
+            <tr>
+              <td>math.h</td>
+              <td><code>pow(x,y)</code></td>
+              <td>x raised to power y</td>
+            </tr>
+            <tr>
+              <td>math.h</td>
+              <td><code>fabs(x)</code></td>
+              <td>absolute value (double)</td>
+            </tr>
+            <tr>
+              <td>math.h</td>
+              <td><code>ceil(x) / floor(x)</code></td>
+              <td>round up / down</td>
+            </tr>
+            <tr>
+              <td>stdlib.h</td>
+              <td><code>abs(n)</code></td>
+              <td>absolute value (int)</td>
+            </tr>
+            <tr>
+              <td>ctype.h</td>
+              <td><code>toupper(c)</code></td>
+              <td>char → uppercase</td>
+            </tr>
+          </table>
+          <div class="card" style="margin-top:16px">
+            <div class="c-label">HOW TO USE</div>
+            <div class="c-body"><code>#include</code> the header → call the function → link with <code>-lm</code> (math
+              library on Unix). The compiler sees the <b style="color:var(--phos)">prototype</b> from the header and
+              checks your call.</div>
+          </div>
+        </div>
+        <div class="col rv d3">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>math_demo.c</div>
+            <pre><span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
+<span class="kw">#include</span> <span class="st">&lt;math.h&gt;</span>
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> x = <span class="nm">16.0</span>, y = <span class="nm">2.0</span>;
+
+    <span class="fn">printf</span>(<span class="st">"sqrt(%.0f) = %.1f\n"</span>,
+           x, <span class="fn">sqrt</span>(x));       <span class="cm">→ 4.0</span>
+
+    <span class="fn">printf</span>(<span class="st">"pow(%.0f,%.0f) = %.0f\n"</span>,
+           x, y, <span class="fn">pow</span>(x, y));  <span class="cm">→ 256</span>
+
+    <span class="fn">printf</span>(<span class="st">"ceil(2.3)  = %.0f\n"</span>,
+           <span class="fn">ceil</span>(<span class="nm">2.3</span>));       <span class="cm">→ 3</span>
+
+    <span class="fn">printf</span>(<span class="st">"floor(2.9) = %.0f\n"</span>,
+           <span class="fn">floor</span>(<span class="nm">2.9</span>));      <span class="cm">→ 2</span>
+
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. TOP-DOWN DESIGN ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">03 · top-down design</div>
+        <h2>TOP-DOWN DESIGN &amp; <span class="amber">STRUCTURE CHARTS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <ul class="tl">
+            <li><b>Top-down design</b> — start with the whole problem (the top), decompose it into sub-problems, then
+              refine each sub-problem until every piece is directly codeable.</li>
+            <li><b>Structure chart</b> — a tree diagram showing the call hierarchy: <b>main</b> at the top, helper
+              functions below. Lines show who calls whom.</li>
+            <li><b>Each box = one function</b> — a single, well-defined task. If a function does too much, split it.
+            </li>
+            <li><b>Data flow arrows</b> — show what goes into (↓) and comes out of (↑) each function. Input parameters
+              point down; output parameters point up.</li>
+          </ul>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+          <p style="font-family:'VT323';font-size:22px;color:var(--phos);text-align:center;margin-bottom:16px">
+            STRUCTURE CHART · payroll</p>
+          <div class="miniflow">
+            <div class="fnode" style="width:100%">main()<br><span style="font-size:14px;color:var(--ink-dim)">orchestrate the program</span></div>
+            <div style="display:flex;gap:10px;width:100%">
+              <div style="flex:1;text-align:center">
+                <div class="farrow">↓</div>
+                <div class="fnode" style="width:100%;font-size:20px">get_input()<br><span style="font-size:13px;color:var(--ink-dim)">hours, rate</span></div>
+              </div>
+              <div style="flex:1;text-align:center">
+                <div class="farrow" style="color:var(--amber)">↓</div>
+                <div class="fnode amb" style="width:100%;font-size:20px">compute_pay()<br><span style="font-size:13px">hours,rate→pay</span></div>
+              </div>
+              <div style="flex:1;text-align:center">
+                <div class="farrow">↓</div>
+                <div class="fnode" style="width:100%;font-size:20px">print_result()<br><span style="font-size:13px;color:var(--ink-dim)">display pay</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="footnote" style="text-align:center;margin-top:20px">Each box does ONE job — the program is the sum
+            of its parts.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. FUNCTIONS WITHOUT ARGUMENTS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">04 · functions</div>
+        <h2>FUNCTIONS WITHOUT <span class="amber">ARGUMENTS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>no_args.c</div>
+            <pre><span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
+
+<span class="cm">/* function PROTOTYPE — declaration */</span>
+<span class="kw">void</span> <span class="fn">print_banner</span>(<span class="kw">void</span>);
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="fn">print_banner</span>();  <span class="cm">← call</span>
+    <span class="fn">printf</span>(<span class="st">"Processing...\n"</span>);
+    <span class="fn">print_banner</span>();  <span class="cm">← reuse!</span>
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}
+
+<span class="cm">/* function DEFINITION — body */</span>
+<span class="kw">void</span>
+<span class="fn">print_banner</span>(<span class="kw">void</span>)
+{
+    <span class="fn">printf</span>(<span class="st">"========================\n"</span>);
+    <span class="fn">printf</span>(<span class="st">"  PAYROLL SYSTEM v1.0\n"</span>);
+    <span class="fn">printf</span>(<span class="st">"========================\n"</span>);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="card">
+            <div class="c-label">void RETURN</div>
+            <div class="c-body"><code>void</code> means the function returns nothing — it performs an <b
+                style="color:var(--phos)">action</b> (printing, clearing, etc.) and control returns to the caller.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">void PARAMETER</div>
+            <div class="c-body"><code>(void)</code> in the parameter list means the function takes <b
+                style="color:var(--phos)">no input</b> — it works entirely from internal or global data.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">PROTOTYPE</div>
+            <div class="c-body">Placed before <code>main()</code>, it tells the compiler the function's signature. The
+              definition (body) can appear later — even in another file.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ ORDER MATTERS</div>
+            <div class="c-body">Without a prototype, calling a function before its definition causes a compiler error (or
+              worse, an implicit declaration bug in old C).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 7. FUNCTIONS WITH INPUT ARGUMENTS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">05 · functions</div>
+        <h2>FUNCTIONS WITH <span class="amber">INPUT</span> ARGUMENTS</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>input_args.c</div>
+            <pre><span class="cm">/* prototype: takes two doubles, returns double */</span>
+<span class="kw">double</span> <span class="fn">compute_tax</span>(<span class="kw">double</span> salary, <span class="kw">double</span> rate);
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> sal = <span class="nm">50000.0</span>, r = <span class="nm">0.25</span>;
+    <span class="kw">double</span> tax;
+
+    tax = <span class="fn">compute_tax</span>(sal, r);
+    <span class="cm">/*      ↑ actual arguments   */</span>
+
+    <span class="fn">printf</span>(<span class="st">"Tax = $%.2f\n"</span>, tax);
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}
+
+<span class="kw">double</span>
+<span class="fn">compute_tax</span>(<span class="kw">double</span> salary, <span class="kw">double</span> rate)
+<span class="cm">/*          ↑ formal parameters         */</span>
+{
+    <span class="kw">return</span> (salary * rate);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="defrow">
+            <div class="dk">Actual argument</div>
+            <div class="dv">The value passed at the call site: <code>sal</code>, <code>r</code>. Can be a variable,
+              constant, or expression.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Formal parameter</div>
+            <div class="dv">The local variable that receives the copy: <code>salary</code>, <code>rate</code>. Exists
+              only inside the function.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Pass by value</div>
+            <div class="dv">C copies the argument's value into the parameter. Changing <code>salary</code> inside does
+              <b style="color:var(--phos)">not</b> change <code>sal</code> outside.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Return value</div>
+            <div class="dv"><code>return (expr);</code> sends one value back to the caller. The function's return type
+              must match.</div>
+          </div>
+          <div class="card amb" style="margin-top:10px">
+            <div class="c-label">⚠ TYPE MISMATCH</div>
+            <div class="c-body">If you pass an <code>int</code> where a <code>double</code> is expected, C silently
+              promotes — but passing a <code>double</code> for an <code>int</code> parameter truncates. Watch the
+              warnings.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 8. FUNCTION PROTOTYPES ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">06 · functions</div>
+        <h2>FUNCTION <span class="amber">PROTOTYPES</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>prototype.c</div>
+            <pre><span class="cm">/* PROTOTYPE tells the compiler:
+   1. function name
+   2. return type
+   3. number and type of parameters */</span>
+
+<span class="kw">double</span> <span class="fn">circle_area</span>(<span class="kw">double</span>);
+<span class="cm">/*                        ↑ param name optional */</span>
+<span class="kw">void</span>   <span class="fn">show_result</span>(<span class="kw">double</span> area);
+<span class="cm">/*                        ↑ but encouraged    */</span>
+
+<span class="cm">/* Placed BEFORE main — or in a header file */</span>
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> a = <span class="fn">circle_area</span>(<span class="nm">5.0</span>);
+    <span class="fn">show_result</span>(a);
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}
+
+<span class="cm">/* definitions can appear AFTER main */</span>
+<span class="kw">double</span> <span class="fn">circle_area</span>(<span class="kw">double</span> r)
+{   <span class="kw">return</span> (<span class="nm">3.14159</span> * r * r);   }
+
+<span class="kw">void</span> <span class="fn">show_result</span>(<span class="kw">double</span> area)
+{   <span class="fn">printf</span>(<span class="st">"Area = %.2f\n"</span>, area);  }</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="card">
+            <div class="c-label">WHY PROTOTYPES?</div>
+            <div class="c-body">The compiler needs to know the function's interface <b style="color:var(--phos)">before
+                the call</b>. Without it, it can't check argument count or types.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">HEADER FILES</div>
+            <div class="c-body"><code>stdio.h</code> is full of prototypes: <code>printf</code>, <code>scanf</code>,
+              <code>fopen</code>. Your own <code>.h</code> files do the same for your functions.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">PROTOTYPE ≠ DEFINITION</div>
+            <div class="c-body">The prototype declares the <i>signature</i>; the definition provides the <i>body</i>.
+              Both must agree on return type and parameter types exactly.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 9. ANATOMY OF A FUNCTION CALL ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">07 · functions</div>
+        <h2>ANATOMY OF A <span class="amber">FUNCTION CALL</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="rv d2">
+        <div class="flow">
+          <div class="fnode" style="font-size:20px">main()<br><span
+              style="font-size:13px;color:var(--ink-dim)">tax = compute_tax(sal, r);</span></div>
+          <div class="farrow">──▶</div>
+          <div class="fnode amb" style="font-size:20px">COPY values<br><span style="font-size:13px">sal → salary, r →
+              rate</span></div>
+          <div class="farrow">──▶</div>
+          <div class="fnode" style="font-size:20px">EXECUTE body<br><span
+              style="font-size:13px;color:var(--ink-dim)">salary * rate</span></div>
+          <div class="farrow">──▶</div>
+          <div class="fnode amb" style="font-size:20px">RETURN result<br><span style="font-size:13px">12500.0</span>
+          </div>
+          <div class="farrow">──▶</div>
+          <div class="fnode" style="font-size:20px">RESUME main<br><span
+              style="font-size:13px;color:var(--ink-dim)">tax = 12500.0</span></div>
+        </div>
+      </div>
+      <div class="cols" style="margin-top:26px">
+        <div class="col rv d3">
+          <div class="term">
+            <div class="term-head">call-stack trace</div>
+            <pre><span class="cm">/* Step by step */</span>
+main:  sal = <span class="nm">50000</span>, r = <span class="nm">0.25</span>
+       call <span class="fn">compute_tax</span>(<span class="nm">50000</span>, <span class="nm">0.25</span>)
+         ├── salary = <span class="nm">50000</span>    <span class="cm">← copy of sal</span>
+         ├── rate   = <span class="nm">0.25</span>     <span class="cm">← copy of r</span>
+         └── <span class="kw">return</span> <span class="nm">12500.0</span>   <span class="cm">← sent back</span>
+main:  tax = <span class="nm">12500.0</span>        <span class="cm">← received</span></pre>
+          </div>
+        </div>
+        <div class="col rv d4" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="card">
+            <div class="c-label">STACK FRAME</div>
+            <div class="c-body">Each function call creates a <b style="color:var(--phos)">stack frame</b> — local
+              variables and parameters live there. When the function returns, the frame is destroyed.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ ONE RETURN VALUE</div>
+            <div class="c-body">A C function can return <b>at most one</b> value. Need to return multiple results? Use
+              <b style="color:var(--amber)">output parameters</b> (pointers) — coming soon.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10. POINTERS INTRO ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">01 · pointers &amp; modular</div>
+        <h2>POINTERS — <span class="amber">&amp;</span> AND <span class="amber">*</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>pointers.c — memory model</div>
+            <pre><span class="kw">int</span> x = <span class="nm">42</span>;
+<span class="kw">int</span> *p;       <span class="cm">← p is a pointer-to-int</span>
+
+p = &amp;x;      <span class="cm">← p now holds ADDRESS of x</span>
+
+<span class="cm">/* memory picture:
+   name    addr     value
+   ─────   ──────   ─────
+    x      0x1000    42
+    p      0x1008    0x1000  ← stores x's addr
+*/</span>
+
+<span class="fn">printf</span>(<span class="st">"%d\n"</span>,  x);    <span class="cm">→ 42</span>
+<span class="fn">printf</span>(<span class="st">"%p\n"</span>,  p);    <span class="cm">→ 0x1000</span>
+<span class="fn">printf</span>(<span class="st">"%d\n"</span>, *p);    <span class="cm">→ 42 (dereference)</span>
+
+*p = <span class="nm">99</span>;               <span class="cm">← changes x to 99!</span>
+<span class="fn">printf</span>(<span class="st">"%d\n"</span>,  x);    <span class="cm">→ 99</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="defrow">
+            <div class="dk"><code>&amp;x</code></div>
+            <div class="dv"><b style="color:var(--phos)">Address-of</b> operator — returns the memory address where
+              <code>x</code> is stored. You've used it with <code>scanf</code> all along.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk"><code>int *p</code></div>
+            <div class="dv">Declares <code>p</code> as a <b style="color:var(--phos)">pointer to int</b> — a variable
+              that stores an address of an int.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk"><code>*p</code></div>
+            <div class="dv"><b style="color:var(--phos)">Indirection (dereference)</b> — follows the address to access
+              the value stored there. Read or write through the pointer.</div>
+          </div>
+          <div class="card amb" style="margin-top:10px">
+            <div class="c-label">⚠ UNINITIALIZED POINTER</div>
+            <div class="c-body">Using <code>*p</code> before assigning <code>p = &amp;something</code> accesses random
+              memory — a crash or corruption. Always initialize pointers.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 11. INDIRECTION OPERATOR DEEP DIVE ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">02 · pointers &amp; modular</div>
+        <h2>THE INDIRECTION <span class="amber">OPERATOR</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>indirection.c</div>
+            <pre><span class="kw">int</span>    a = <span class="nm">10</span>,  b = <span class="nm">20</span>;
+<span class="kw">int</span>   *pa = &amp;a, *pb = &amp;b;
+
+<span class="cm">/* read through pointer */</span>
+<span class="kw">int</span> sum = *pa + *pb;     <span class="cm">→ 30</span>
+
+<span class="cm">/* write through pointer */</span>
+*pa = *pa + <span class="nm">5</span>;           <span class="cm">→ a is now 15</span>
+
+<span class="cm">/* redirect the pointer */</span>
+pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
+<span class="fn">printf</span>(<span class="st">"%d\n"</span>, *pa);     <span class="cm">→ 20 (b's value)</span>
+
+<span class="cm">/* pointer to double */</span>
+<span class="kw">double</span>  price = <span class="nm">9.99</span>;
+<span class="kw">double</span> *pp    = &amp;price;
+*pp = *pp * <span class="nm">1.10</span>;        <span class="cm">→ 10% markup</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">TWO MEANINGS OF *</div>
+            <div class="c-body">In a <b style="color:var(--phos)">declaration</b>, <code>int *p</code> means "p is a
+              pointer." In an <b style="color:var(--phos)">expression</b>, <code>*p</code> means "follow the pointer to
+              the value."</div>
+          </div>
+          <div class="card">
+            <div class="c-label">POINTER ARITHMETIC</div>
+            <div class="c-body"><code>*pa + *pb</code> adds the values pointed to, not the addresses.
+              <code>*pa = *pa + 5</code> modifies the original variable through the pointer.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">REDIRECTION</div>
+            <div class="c-body">Changing <code>pa = &amp;b</code> does NOT change <code>a</code>. It just makes
+              <code>pa</code> point somewhere else — a different target.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ * vs &amp;</div>
+            <div class="c-body"><code>&amp;</code> goes from variable → address. <code>*</code> goes from address →
+              variable. They are inverses: <code>*(&amp;x) == x</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 12. FUNCTIONS WITH OUTPUT PARAMETERS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">03 · pointers &amp; modular</div>
+        <h2>FUNCTIONS WITH <span class="amber">OUTPUT</span> PARAMETERS</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>output_params.c</div>
+            <pre><span class="cm">/* Need to return TWO values?
+   Use pointer parameters.    */</span>
+
+<span class="kw">void</span> <span class="fn">separate</span>(<span class="kw">double</span> value,
+             <span class="kw">int</span> *whole_p,
+             <span class="kw">double</span> *frac_p)
+{
+    *whole_p = (<span class="kw">int</span>) value;
+    *frac_p  = value - *whole_p;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">int</span>    w;
+    <span class="kw">double</span> f;
+
+    <span class="fn">separate</span>(<span class="nm">7.85</span>, &amp;w, &amp;f);
+    <span class="cm">/*       ↑     ↑    ↑
+       input   output output   */</span>
+
+    <span class="fn">printf</span>(<span class="st">"%d and %.2f\n"</span>, w, f);
+    <span class="cm">/* → 7 and 0.85 */</span>
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">THE PATTERN</div>
+            <div class="c-body">Pass the <b style="color:var(--phos)">address</b> of the variable you want filled.
+              Inside the function, use <code>*param_p = value;</code> to write through the pointer.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">NAMING CONVENTION</div>
+            <div class="c-body">Suffix pointer parameters with <code>_p</code> or <code>_ptr</code>:
+              <code>result_p</code>, <code>count_p</code>. Instantly signals "this is an output."</div>
+          </div>
+          <div class="card">
+            <div class="c-label">WHY NOT return?</div>
+            <div class="c-body"><code>return</code> gives back one value. With pointers, a function can modify <b
+                style="color:var(--phos)">many</b> variables in the caller's scope.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ FORGOT THE &amp; ?</div>
+            <div class="c-body"><code>separate(7.85, w, f)</code> passes the <i>values</i> of w and f — the function
+              can't write back. Always pass <code>&amp;w, &amp;f</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 13. MULTIPLE CALLS WITH I/O PARAMS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">04 · pointers &amp; modular</div>
+        <h2>MULTIPLE CALLS WITH <span class="amber">I/O PARAMS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>multi_call.c</div>
+            <pre><span class="cm">/* A function with BOTH input and output params */</span>
+<span class="kw">void</span> <span class="fn">scale_and_shift</span>(
+    <span class="kw">double</span>  val,        <span class="cm">← input (copy)</span>
+    <span class="kw">double</span>  factor,     <span class="cm">← input (copy)</span>
+    <span class="kw">double</span> *result_p)   <span class="cm">← output (pointer)</span>
+{
+    *result_p = val * factor + <span class="nm">1.0</span>;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> a, b, c;
+
+    <span class="cm">/* call 1 */</span>
+    <span class="fn">scale_and_shift</span>(<span class="nm">3.0</span>, <span class="nm">2.0</span>, &amp;a); <span class="cm">→ a = 7.0</span>
+
+    <span class="cm">/* call 2: use output as next input */</span>
+    <span class="fn">scale_and_shift</span>(a,   <span class="nm">0.5</span>, &amp;b); <span class="cm">→ b = 4.5</span>
+
+    <span class="cm">/* call 3: same function, different data */</span>
+    <span class="fn">scale_and_shift</span>(b,   <span class="nm">3.0</span>, &amp;c); <span class="cm">→ c = 14.5</span>
+
+    <span class="fn">printf</span>(<span class="st">"%.1f  %.1f  %.1f\n"</span>, a, b, c);
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="card">
+            <div class="c-label">CHAINING CALLS</div>
+            <div class="c-body">The output of one call becomes the input of the next. The function is reused with
+              different data each time — true modularity.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">INPUT vs OUTPUT</div>
+            <div class="c-body"><b style="color:var(--phos)">Input params</b>: passed by value (copy). <b
+                style="color:var(--phos)">Output params</b>: passed by pointer (address). The <code>*</code> in the
+              declaration is the giveaway.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ SAME VARIABLE AS I/O</div>
+            <div class="c-body"><code>scale_and_shift(a, 2.0, &amp;a)</code> is legal — <code>a</code> is read (copied)
+              as input, then overwritten as output. The copy happens first.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 14. SCOPE OF NAMES ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">05 · pointers &amp; modular</div>
+        <h2>SCOPE OF <span class="amber">NAMES</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>scope.c</div>
+            <pre><span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
+
+<span class="kw">int</span> global_count = <span class="nm">0</span>;  <span class="cm">← file scope (global)</span>
+
+<span class="kw">void</span> <span class="fn">increment</span>(<span class="kw">void</span>)
+{
+    <span class="kw">int</span> local = <span class="nm">10</span>;     <span class="cm">← function scope</span>
+    global_count++;
+    <span class="fn">printf</span>(<span class="st">"local=%d, global=%d\n"</span>,
+           local, global_count);
+}
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">int</span> x = <span class="nm">5</span>;          <span class="cm">← main's local</span>
+
+    <span class="fn">increment</span>();         <span class="cm">→ local=10, global=1</span>
+    <span class="fn">increment</span>();         <span class="cm">→ local=10, global=2</span>
+
+    <span class="cm">/* printf("%d", local);  ← ERROR!
+       local is NOT visible here */</span>
+
+    <span class="fn">printf</span>(<span class="st">"x=%d\n"</span>, x); <span class="cm">→ x=5 unchanged</span>
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="defrow">
+            <div class="dk">Local scope</div>
+            <div class="dv">Variables declared inside a function. Born at entry, destroyed at return. Invisible outside.
+            </div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Block scope</div>
+            <div class="dv">Variables declared inside <code>{ }</code> — even inside a loop or if. Destroyed when the
+              block ends.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">File (global) scope</div>
+            <div class="dv">Declared outside all functions. Visible everywhere below the declaration. Lasts the entire
+              program.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Parameter scope</div>
+            <div class="dv">Formal parameters act as local variables inside their function.</div>
+          </div>
+          <div class="card amb" style="margin-top:10px">
+            <div class="c-label">⚠ AVOID GLOBALS</div>
+            <div class="c-body">Global variables make debugging hard — any function can change them. Prefer <b
+                style="color:var(--amber)">local variables + parameters</b>. Globals are a last resort.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 15. FORMAL OUTPUT PARAMS AS ACTUAL ARGS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">06 · pointers &amp; modular</div>
+        <h2>OUTPUT PARAMS AS <span class="amber">ACTUAL ARGS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>pass_through.c</div>
+            <pre><span class="cm">/* Function A gets data via pointer */</span>
+<span class="kw">void</span> <span class="fn">get_data</span>(<span class="kw">double</span> *val_p)
+{
+    <span class="fn">printf</span>(<span class="st">"Enter value> "</span>);
+    <span class="fn">scanf</span>(<span class="st">"%lf"</span>, val_p);
+    <span class="cm">/*           ↑ val_p is ALREADY an address
+       no &amp; needed — val_p IS the address */</span>
+}
+
+<span class="cm">/* Function B passes the pointer through */</span>
+<span class="kw">void</span> <span class="fn">process</span>(<span class="kw">double</span> *result_p)
+{
+    <span class="kw">double</span> temp;
+    <span class="fn">get_data</span>(&amp;temp);
+    *result_p = temp * <span class="nm">2.0</span>;
+    <span class="cm">/* or directly: get_data(result_p); */</span>
+}
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> answer;
+    <span class="fn">process</span>(&amp;answer);
+    <span class="fn">printf</span>(<span class="st">"Doubled: %.2f\n"</span>, answer);
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">PASS-THROUGH</div>
+            <div class="c-body">A pointer parameter is itself an address. You can pass it directly to another function
+              that expects a pointer — <b style="color:var(--phos)">no extra &amp;</b> needed.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">scanf &amp; POINTERS</div>
+            <div class="c-body"><code>scanf("%lf", val_p)</code> — since <code>val_p</code> already holds an address,
+              writing <code>&amp;val_p</code> would be <b style="color:var(--red)">wrong</b> (address of the pointer
+              itself).</div>
+          </div>
+          <div class="card">
+            <div class="c-label">DELEGATION</div>
+            <div class="c-body">Function B delegates to Function A, passing the same pointer. The final result flows
+              all the way back to main — through a chain of pointer forwarding.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ &amp; of a POINTER</div>
+            <div class="c-body"><code>&amp;val_p</code> gives the address of the pointer <i>variable</i>, not the
+              address it stores. This is a pointer-to-a-pointer — rarely what you want here.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 16. COMPLETE MODULAR EXAMPLE ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">07 · pointers &amp; modular</div>
+        <h2>COMPLETE MODULAR <span class="amber">EXAMPLE</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols" style="gap:26px">
+        <div class="col rv d2" style="flex:1.3">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>payroll_modular.c</div>
+            <pre><span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
+
+<span class="cm">/* prototypes */</span>
+<span class="kw">void</span>   <span class="fn">get_input</span>(<span class="kw">double</span> *hours_p, <span class="kw">double</span> *rate_p);
+<span class="kw">double</span> <span class="fn">compute_pay</span>(<span class="kw">double</span> hours, <span class="kw">double</span> rate);
+<span class="kw">void</span>   <span class="fn">display</span>(<span class="kw">double</span> pay);
+
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> hours, rate, pay;
+    <span class="fn">get_input</span>(&amp;hours, &amp;rate);
+    pay = <span class="fn">compute_pay</span>(hours, rate);
+    <span class="fn">display</span>(pay);
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}
+
+<span class="kw">void</span> <span class="fn">get_input</span>(<span class="kw">double</span> *h, <span class="kw">double</span> *r) {
+    <span class="fn">printf</span>(<span class="st">"Hours> "</span>); <span class="fn">scanf</span>(<span class="st">"%lf"</span>, h);
+    <span class="fn">printf</span>(<span class="st">"Rate>  "</span>); <span class="fn">scanf</span>(<span class="st">"%lf"</span>, r);
+}
+
+<span class="kw">double</span> <span class="fn">compute_pay</span>(<span class="kw">double</span> h, <span class="kw">double</span> r) {
+    <span class="kw">if</span> (h &gt; <span class="nm">40.0</span>)
+        <span class="kw">return</span> <span class="nm">40</span>*r + (h-<span class="nm">40</span>)*r*<span class="nm">1.5</span>;
+    <span class="kw">return</span> h * r;
+}
+
+<span class="kw">void</span> <span class="fn">display</span>(<span class="kw">double</span> pay) {
+    <span class="fn">printf</span>(<span class="st">"Pay = $%.2f\n"</span>, pay);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+          <p style="font-family:'VT323';font-size:22px;color:var(--phos);text-align:center;margin-bottom:14px">
+            STRUCTURE CHART</p>
+          <div class="miniflow">
+            <div class="fnode" style="width:100%">main()<br><span style="font-size:14px;color:var(--ink-dim)">orchestrate</span></div>
+            <div style="display:flex;gap:8px;width:100%">
+              <div style="flex:1;text-align:center">
+                <div class="farrow">↓ &amp;h,&amp;r</div>
+                <div class="fnode" style="width:100%;font-size:18px">get_input()<br><span
+                    style="font-size:12px;color:var(--ink-dim)">output: h,r</span></div>
+              </div>
+              <div style="flex:1;text-align:center">
+                <div class="farrow" style="color:var(--amber)">↓ h,r</div>
+                <div class="fnode amb" style="width:100%;font-size:18px">compute_pay()<br><span
+                    style="font-size:12px">returns pay</span></div>
+              </div>
+              <div style="flex:1;text-align:center">
+                <div class="farrow">↓ pay</div>
+                <div class="fnode" style="width:100%;font-size:18px">display()<br><span
+                    style="font-size:12px;color:var(--ink-dim)">prints result</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:20px">
+            <div class="c-label">MODULARITY WINS</div>
+            <div class="c-body">Each function has ONE job. <code>main()</code> is just 4 lines. To change overtime rules,
+              edit only <code>compute_pay()</code>. To switch to GUI output, replace only <code>display()</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 17. PASS BY VALUE vs POINTER ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">08 · pointers &amp; modular</div>
+        <h2>PASS BY <span class="amber">VALUE</span> vs <span class="amber">POINTER</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <table>
+            <tr>
+              <th></th>
+              <th>Pass by Value</th>
+              <th>Pass by Pointer</th>
+            </tr>
+            <tr>
+              <td>What's passed</td>
+              <td>a <b>copy</b> of the data</td>
+              <td>the <b>address</b> of the data</td>
+            </tr>
+            <tr>
+              <td>Syntax (call)</td>
+              <td><code>func(x)</code></td>
+              <td><code>func(&amp;x)</code></td>
+            </tr>
+            <tr>
+              <td>Syntax (param)</td>
+              <td><code>int x</code></td>
+              <td><code>int *x_p</code></td>
+            </tr>
+            <tr>
+              <td>Can modify original?</td>
+              <td><span style="color:var(--red)">No</span></td>
+              <td><span style="color:var(--phos)">Yes — via *x_p</span></td>
+            </tr>
+            <tr>
+              <td>Use for</td>
+              <td>input data</td>
+              <td>output / modifying data</td>
+            </tr>
+            <tr>
+              <td>Safety</td>
+              <td>original is protected</td>
+              <td>original can be changed</td>
+            </tr>
+          </table>
+        </div>
+        <div class="col rv d3">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>swap.c — classic example</div>
+            <pre><span class="cm">/* WRONG — copies only */</span>
+<span class="kw">void</span> <span class="fn">bad_swap</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">int</span> temp = a;
+    a = b;           <span class="cm">← changes local copy</span>
+    b = temp;        <span class="cm">← original untouched</span>
+}
+
+<span class="cm">/* RIGHT — uses pointers */</span>
+<span class="kw">void</span> <span class="fn">swap</span>(<span class="kw">int</span> *a_p, <span class="kw">int</span> *b_p) {
+    <span class="kw">int</span> temp = *a_p;
+    *a_p = *b_p;     <span class="cm">← modifies original</span>
+    *b_p = temp;     <span class="cm">← modifies original</span>
+}
+
+<span class="cm">/* usage */</span>
+<span class="kw">int</span> x = <span class="nm">3</span>, y = <span class="nm">7</span>;
+<span class="fn">swap</span>(&amp;x, &amp;y);
+<span class="cm">/* now x == 7, y == 3 ✓ */</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 18. FUNCTION DESIGN GUIDELINES ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">09 · best practices</div>
+        <h2>FUNCTION DESIGN <span class="amber">GUIDELINES</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="steprow">
+            <div class="stepnum">01</div>
+            <div class="stepname">ONE TASK</div>
+            <div class="stepdesc">Each function should do exactly <b style="color:var(--phos)">one thing</b>. If you
+              can't describe it in one sentence, split it.</div>
+          </div>
+          <div class="steprow">
+            <div class="stepnum">02</div>
+            <div class="stepname">NAME IT WELL</div>
+            <div class="stepdesc">Use verb_noun: <code>compute_tax</code>, <code>get_input</code>,
+              <code>print_report</code>. The name IS the documentation.</div>
+          </div>
+          <div class="steprow">
+            <div class="stepnum">03</div>
+            <div class="stepname">LIMIT PARAMS</div>
+            <div class="stepdesc">Keep parameter lists short (≤ 4–5). Too many? Group related data into a
+              <code>struct</code>.</div>
+          </div>
+          <div class="steprow">
+            <div class="stepnum">04</div>
+            <div class="stepname">NO SIDE EFFECTS</div>
+            <div class="stepdesc">A function that returns a value should not also print or modify globals. Keep I/O
+              separate from computation.</div>
+          </div>
+          <div class="steprow">
+            <div class="stepnum">05</div>
+            <div class="stepname">PROTOTYPE FIRST</div>
+            <div class="stepdesc">Write the prototype before the body — it forces you to think about the interface
+              before the implementation.</div>
+          </div>
+          <div class="steprow">
+            <div class="stepnum">06</div>
+            <div class="stepname">TEST EACH ONE</div>
+            <div class="stepdesc">Write a small <code>main()</code> that calls the function with known inputs. Verify
+              outputs before integrating.</div>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="term">
+            <div class="term-head">checklist.txt</div>
+            <pre><span class="cm">/* ask before writing a function */</span>
+
+<span class="fn">✓</span> What does it DO?  (one sentence)
+<span class="fn">✓</span> What goes IN?     (input params)
+<span class="fn">✓</span> What comes OUT?   (return / output)
+<span class="fn">✓</span> Can I test it alone?
+<span class="fn">✓</span> Can I reuse it?</pre>
+          </div>
+          <div class="card amb">
+            <div class="c-label">RULE OF THUMB</div>
+            <div class="c-body">If a function is longer than one screen (~30 lines), it's probably doing too much. If
+              you need a comment to explain <i>what</i> a section does, that section is a function waiting to be born.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 19. UNIT MAP ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">Load sequence</div>
+        <h2>UNIT II <span class="amber">MAP</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>$ cat unit02.sections</div>
+            <pre>01  top-down/       building from existing info
+02  top-down/       library functions (math.h)
+03  top-down/       structure charts
+04  functions/      without arguments (void)
+05  functions/      with input arguments
+06  functions/      prototypes &amp; declarations
+07  functions/      anatomy of a function call
+08  pointers/       &amp; and * operators
+09  pointers/       indirection operator deep dive
+10  pointers/       output parameters (pass-by-ptr)
+11  pointers/       multiple calls with I/O params
+12  modular/        scope of names (local/global)
+13  modular/        output params as actual args
+14  modular/        complete modular example
+15  modular/        pass by value vs pointer
+16  practices/      function design guidelines</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+          <p style="font-family:'VT323';font-size:30px;line-height:1.3;color:var(--phos)">Two big ideas<br>in this unit:
+          </p>
+          <div style="margin-top:22px">
+            <div class="card amb" style="margin-bottom:14px">
+              <div class="c-label">DECOMPOSITION</div>
+              <div class="c-body">Break the problem into functions. Each function = one box in the structure chart.</div>
+            </div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="c-label">COMMUNICATION</div>
+              <div class="c-body">Functions talk through parameters: input (by value) and output (by pointer).</div>
+            </div>
+            <div class="card">
+              <div class="c-label">ISOLATION</div>
+              <div class="c-body">Scope rules keep each function's data private. Changes are controlled and predictable.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 20. SUMMARY ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">Unit II · complete</div>
+        <h2 style="font-size:clamp(52px,5.6vw,80px)">SESSION <span class="amber">SUMMARY</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="defrow">
+            <div class="dk">Top-Down Design</div>
+            <div class="dv">Decompose problems into sub-problems · structure charts show call hierarchy · reuse library
+              functions (<code>math.h</code>, <code>stdlib.h</code>) before reinventing.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Functions</div>
+            <div class="dv">Prototype before use · <code>void</code> functions for actions · return type functions for
+              computation · actual arguments → formal parameters (by value).</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Pointers</div>
+            <div class="dv"><code>&amp;</code> = address-of · <code>*</code> = dereference · <code>int *p = &amp;x</code> ·
+              <code>*p = 99</code> modifies x through the pointer.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Output Params</div>
+            <div class="dv">Pass <code>&amp;var</code> to let a function modify the caller's variable · enables
+              returning multiple values · pointer forwarding chains calls.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Scope</div>
+            <div class="dv">Local > block > parameter > global. Prefer local. Globals are shared state — use sparingly.
+            </div>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+          <div class="term">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>course — exit status</div>
+            <pre>$ grep -c <span class="st">"learned"</span> unit02.objectives
+<span class="nm">8 / 8</span>   <span class="fn">✓ all objectives covered</span>
+
+<span class="fn">printf</span>(<span class="st">"MODULAR = DECOMPOSE\n"</span>);
+<span class="fn">printf</span>(<span class="st">"         + COMMUNICATE\n"</span>);
+<span class="fn">printf</span>(<span class="st">"         + ISOLATE\n"</span>);
+<span class="kw">return</span> (<span class="nm">0</span>);   <span class="cm">// success ✓</span></pre>
+          </div>
+          <div
+            style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
+            Next: UNIT III — <span style="color:var(--amber)">Arrays &amp; Strings</span> <span
+              class="blink-live">█</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <div class="hud">
+    <div class="sys">
+      <span class="pg" id="pagenum">01 / 20</span>
+      <span>C PROGRAMMING · UNIT II · FUNCTIONS</span>
+      <span style="color:var(--phos-dim)">TTY02</span>
+    </div>
+    <div class="sys">
+      <span>← → · SPACE · CLICK</span>
+      <div class="navbtns">
+        <button class="nbtn" onclick="nav(-1)">PREV</button>
+        <button class="nbtn" onclick="nav(1)">NEXT</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let cur = 0;
+    const pad = n => String(n).padStart(2, '0');
+    function show(i) {
+      slides[cur].classList.remove('active');
+      cur = (i + slides.length) % slides.length;
+      slides[cur].classList.add('active');
+      document.getElementById('pagenum').textContent = pad(cur + 1) + ' / ' + pad(slides.length);
+      document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+    }
+    function nav(d) { show(cur + d); }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nav(1); }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); nav(-1); }
+      if (e.key === 'Home') { show(0); }
+      if (e.key === 'End') { show(slides.length - 1); }
+    });
+    document.getElementById('deck').addEventListener('click', e => {
+      if (e.target.closest('.nbtn')) return;
+      nav(e.clientX > window.innerWidth / 2 ? 1 : -1);
+    });
+    show(0);
+  </script>
+</body>
+
+</html>

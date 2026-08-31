@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programming in C — Unit III · Arrays &amp; Strings</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root{--bg:#050806;--bg2:#0a120c;--phos:#3dffa0;--phos-dim:#1d8f5a;--phos-ghost:rgba(61,255,160,.07);--amber:#ffb347;--amber-hot:#ffcc66;--red:#ff5c57;--ink:#c8f5dc;--ink-dim:#6fae8e;--line:rgba(61,255,160,.18)}*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden;background:var(--bg)}body{font-family:'IBM Plex Mono',monospace;color:var(--ink);cursor:crosshair}.crt::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}.crt::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:51;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%)}.glow-ring{position:fixed;inset:0;pointer-events:none;z-index:49;box-shadow:inset 0 0 120px rgba(61,255,160,.06)}.deck{position:fixed;inset:0}.slide{position:absolute;inset:0;display:flex;flex-direction:column;padding:56px 90px 90px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease,visibility .45s}.slide.active{opacity:1;visibility:visible;transform:translateY(0)}.slide .rv{opacity:0;transform:translateY(16px)}.slide.active .rv{animation:printIn .55s cubic-bezier(.2,.8,.2,1) forwards}.slide.active .rv:nth-child(1),.slide.active .d1{animation-delay:.08s}.slide.active .d2{animation-delay:.22s}.slide.active .d3{animation-delay:.36s}.slide.active .d4{animation-delay:.50s}.slide.active .d5{animation-delay:.64s}.slide.active .d6{animation-delay:.78s}@keyframes printIn{to{opacity:1;transform:translateY(0)}}.kicker{font-family:'VT323',monospace;font-size:24px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase}.kicker::before{content:"» ";color:var(--phos-dim)}h1{font-family:'VT323',monospace;font-weight:400;font-size:clamp(48px,6vw,88px);line-height:.92;color:var(--phos);text-shadow:0 0 22px rgba(61,255,160,.45),0 0 60px rgba(61,255,160,.18)}h2{font-family:'VT323',monospace;font-weight:400;font-size:clamp(44px,4.6vw,64px);line-height:1;color:var(--phos);text-shadow:0 0 16px rgba(61,255,160,.35);margin:6px 0 0}h2 .amber{color:var(--amber);text-shadow:0 0 16px rgba(255,179,71,.35)}.sub{color:var(--ink-dim);font-size:15px;margin-top:14px;max-width:660px;line-height:1.65}.rule{height:1px;background:linear-gradient(90deg,var(--phos) 0%,var(--phos-dim) 45%,transparent 100%);margin:26px 0 30px;opacity:.6}.cols{display:flex;gap:44px;flex:1;min-height:0;align-items:stretch}.col{flex:1;min-width:0}.term{background:var(--bg2);border:1px solid var(--line);border-radius:6px;box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 34px rgba(61,255,160,.07),inset 0 0 60px rgba(61,255,160,.03);display:flex;flex-direction:column;overflow:hidden}.term-head{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--line);background:rgba(61,255,160,.045);font-size:12px;color:var(--ink-dim);letter-spacing:.1em}.term-head .dots{display:flex;gap:6px;margin-right:8px}.dot{width:9px;height:9px;border-radius:50%;background:var(--phos-dim);opacity:.5}.dot:first-child{background:var(--phos);opacity:.9}.term pre{padding:18px 20px;font-size:15px;line-height:1.72;font-family:'IBM Plex Mono',monospace;color:var(--ink);white-space:pre;overflow:auto}.kw{color:var(--amber-hot)}.fn{color:var(--phos)}.st{color:#7ad9ff}.cm{color:#4e7a63;font-style:italic}.nm{color:#ffd27a}.cur{display:inline-block;width:9px;height:18px;background:var(--phos);vertical-align:-3px;animation:blink 1s steps(1) infinite}@keyframes blink{50%{opacity:0}}ul.tl{list-style:none;font-size:16px;line-height:1.6}ul.tl li{padding:9px 0 9px 30px;position:relative;border-bottom:1px dashed rgba(61,255,160,.13)}ul.tl li::before{content:">";position:absolute;left:4px;color:var(--amber);font-family:'VT323',monospace;font-size:22px;top:6px}ul.tl b{color:var(--phos);font-weight:600}ul.tl code,p code,td code{background:rgba(61,255,160,.09);border:1px solid var(--line);padding:1px 7px;border-radius:4px;color:var(--amber-hot);font-size:.92em}.cards{display:flex;gap:20px;flex-wrap:wrap}.card{flex:1;min-width:180px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(61,255,160,.05),transparent 60%);padding:18px 20px;border-radius:6px}.card .c-label{font-family:'VT323',monospace;font-size:26px;color:var(--phos);text-shadow:0 0 12px rgba(61,255,160,.3)}.card .c-body{font-size:13.5px;color:var(--ink-dim);margin-top:6px;line-height:1.6}.card.amb .c-label{color:var(--amber);text-shadow:0 0 12px rgba(255,179,71,.3)}table{width:100%;border-collapse:collapse;font-size:14.5px}th{text-align:left;font-family:'VT323',monospace;font-size:22px;font-weight:400;color:var(--amber);padding:8px 14px;border-bottom:1px solid var(--phos-dim);letter-spacing:.05em}td{padding:9px 14px;border-bottom:1px dashed rgba(61,255,160,.15);color:var(--ink)}td:first-child{color:var(--amber-hot)}tr:hover td{background:var(--phos-ghost)}.flow{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px}.fnode{border:1px solid var(--phos-dim);padding:14px 22px;border-radius:6px;font-family:'VT323',monospace;font-size:24px;color:var(--phos);background:rgba(61,255,160,.06);text-shadow:0 0 10px rgba(61,255,160,.3);text-align:center}.fnode.amb{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,.06);text-shadow:0 0 10px rgba(255,179,71,.3)}.farrow{font-family:'VT323',monospace;font-size:30px;color:var(--phos-dim)}.defrow{display:flex;gap:18px;align-items:baseline;padding:7px 0;border-bottom:1px dashed rgba(61,255,160,.12)}.defrow .dk{width:170px;flex-shrink:0;color:var(--amber);font-size:14.5px}.defrow .dv{font-size:14.5px;color:var(--ink);line-height:1.55}.steprow{display:flex;gap:20px;align-items:center;padding:7px 0;border-bottom:1px dashed rgba(61,255,160,.13)}.stepnum{font-family:'VT323',monospace;font-size:34px;color:var(--amber);width:58px;flex-shrink:0;text-shadow:0 0 10px rgba(255,179,71,.3)}.stepname{width:180px;flex-shrink:0;color:var(--phos);font-size:15px;font-weight:600;letter-spacing:.05em}.stepdesc{font-size:13.5px;color:var(--ink-dim);line-height:1.5}.miniflow{display:flex;flex-direction:column;align-items:center;gap:10px}.hud{position:fixed;bottom:0;left:0;right:0;height:44px;z-index:52;display:flex;align-items:center;justify-content:space-between;padding:0 26px;border-top:1px solid var(--line);background:rgba(5,8,6,.9);font-size:12px;letter-spacing:.12em;color:var(--ink-dim);backdrop-filter:blur(4px)}.hud .sys{display:flex;gap:22px;align-items:center}.hud .pg{font-family:'VT323',monospace;font-size:20px;color:var(--phos)}.navbtns{display:flex;gap:10px}.nbtn{font-family:'VT323',monospace;font-size:20px;background:transparent;border:1px solid var(--line);color:var(--phos);padding:3px 14px;cursor:pointer;border-radius:4px;transition:.18s}.nbtn:hover{background:rgba(61,255,160,.14);border-color:var(--phos);box-shadow:0 0 14px rgba(61,255,160,.25)}.progress{position:fixed;bottom:44px;left:0;height:2px;background:var(--phos);box-shadow:0 0 10px rgba(61,255,160,.7);z-index:53;transition:width .4s ease}.tick{position:fixed;width:22px;height:22px;z-index:48;opacity:.55}.tick.tl{top:14px;left:14px;border-top:1px solid var(--phos);border-left:1px solid var(--phos)}.tick.tr{top:14px;right:14px;border-top:1px solid var(--phos);border-right:1px solid var(--phos)}.tick.bl{bottom:58px;left:14px;border-bottom:1px solid var(--phos);border-left:1px solid var(--phos)}.tick.br{bottom:58px;right:14px;border-bottom:1px solid var(--phos);border-right:1px solid var(--phos)}.ascii{font-family:'VT323',monospace;color:var(--phos);white-space:pre;line-height:1.12}.ascii.hero{text-shadow:0 0 16px rgba(61,255,160,.55),0 0 48px rgba(61,255,160,.22)}.blink-live{color:var(--phos);animation:blink 1.4s steps(1) infinite}.footnote{margin-top:auto;font-size:12px;color:var(--ink-dim);letter-spacing:.08em}.footnote::before{content:"// ";color:var(--phos-dim)}
+  </style>
+</head>
+
+<body class="crt">
+  <div class="glow-ring"></div>
+  <div class="tick tl"></div>
+  <div class="tick tr"></div>
+  <div class="tick bl"></div>
+  <div class="tick br"></div>
+
+  <div class="deck" id="deck">
+
+    <!-- ============ 1. TITLE ============ -->
+    <section class="slide">
+      <div class="rv d1 ascii hero" style="font-size:clamp(11px,1.9vw,30px)">
+        <pre>
+ █████╗ ██████╗ ██████╗  █████╗ ██╗   ██╗███████╗
+██╔══██╗██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝██╔════╝
+███████║██████╔╝██████╔╝███████║ ╚████╔╝ ███████╗
+██╔══██║██╔══██╗██╔══██╗██╔══██║  ╚██╔╝  ╚════██║
+██║  ██║██║  ██║██║  ██║██║  ██║   ██║   ███████║
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+                                                    </pre>
+      </div>
+      <div style="margin-top:30px" class="rv d2">
+        <div class="kicker">Programming in C · Unit III</div>
+        <h1 style="margin-top:10px">ARRAYS &amp;<br><span style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">STRINGS</span></h1>
+      </div>
+      <div class="rv d3" style="margin-top:28px;max-width:800px">
+        <div class="rule"></div>
+        <p class="sub">From declaring arrays and sequential access, through searching and sorting algorithms (linear, binary, bubble, insertion, selection), into string basics, library functions, concatenation, comparison, and arrays of pointers.</p>
+      </div>
+      <div class="rv d4" style="margin-top:auto;display:flex;gap:30px;align-items:center">
+        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
+      </div>
+    </section>
+
+    <!-- ============ 2. OBJECTIVES ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">Unit III · objectives</div>
+        <h2>WHY <span class="amber">ARRAYS &amp; STRINGS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>$ cat unit03.objectives</div>
+            <pre><span class="fn">[OK]</span> 01 — declare and reference arrays
+<span class="fn">[OK]</span> 02 — use for loops for sequential access
+<span class="fn">[OK]</span> 03 — pass array elements &amp; whole arrays to functions
+<span class="fn">[OK]</span> 04 — search arrays (linear &amp; binary)
+<span class="fn">[OK]</span> 05 — sort arrays (bubble, insertion, selection)
+<span class="fn">[OK]</span> 06 — work with parallel arrays &amp; enums
+<span class="fn">[OK]</span> 07 — use multidimensional arrays
+<span class="fn">[OK]</span> 08 — handle strings (char arrays, \0)
+<span class="fn">[OK]</span> 09 — use string library functions
+<span class="fn">[OK]</span> 10 — work with arrays of pointers
+
+<span class="cm">$ exit status: all objectives mapped ✓</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+          <div class="miniflow" style="align-items:stretch;gap:8px">
+            <div class="fnode" style="width:100%">SCALAR VARIABLES<br><span style="font-size:15px;color:var(--ink-dim)">one value each</span></div>
+            <div class="farrow">↓</div>
+            <div class="fnode amb" style="width:100%">ARRAYS<br><span style="font-size:15px">many values, one name</span></div>
+            <div class="farrow" style="color:var(--amber)">↓</div>
+            <div class="fnode amb" style="width:100%">STRINGS<br><span style="font-size:15px">char arrays with \0</span></div>
+            <div class="farrow" style="color:var(--amber)">↓</div>
+            <div class="fnode" style="width:100%">SEARCH &amp; SORT<br><span style="font-size:15px;color:var(--ink-dim)">algorithms on collections</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. DECLARING ARRAYS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">01 · arrays</div>
+        <h2>DECLARING &amp; <span class="amber">REFERENCING</span> ARRAYS</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>arrays.c — declaration</div>
+            <pre><span class="cm">/* declare: type name[SIZE]; */</span>
+<span class="kw">int</span>    scores[<span class="nm">5</span>];          <span class="cm">— 5 integers</span>
+<span class="kw">double</span> temps[<span class="nm">30</span>];           <span class="cm">— 30 doubles</span>
+<span class="kw">char</span>   name[<span class="nm">20</span>];            <span class="cm">— 20 characters</span>
+
+<span class="cm">/* initialize at declaration */</span>
+<span class="kw">int</span> primes[] = {<span class="nm">2</span>,<span class="nm">3</span>,<span class="nm">5</span>,<span class="nm">7</span>,<span class="nm">11</span>};
+<span class="cm">/*          size inferred = 5 */</span>
+
+<span class="cm">/* memory layout (scores):
+   index:  [0]  [1]  [2]  [3]  [4]
+   value:   ?    ?    ?    ?    ?
+           contiguous memory slots */</span>
+
+<span class="cm">/* access by subscript */</span>
+scores[<span class="nm">0</span>] = <span class="nm">85</span>;          <span class="cm">← first element</span>
+scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span class="cm">← last element</span>
+<span class="cm">/* scores[5] → OUT OF BOUNDS! */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="defrow">
+            <div class="dk">Array</div>
+            <div class="dv">A collection of variables of the <b style="color:var(--phos)">same type</b>, stored in contiguous memory, accessed by index.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Index (subscript)</div>
+            <div class="dv">Zero-based: first element = <code>[0]</code>, last = <code>[SIZE-1]</code>.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Size</div>
+            <div class="dv">Fixed at compile time (in standard C). Use <code>#define</code> for the size constant.</div>
+          </div>
+          <div class="card amb" style="margin-top:10px">
+            <div class="c-label">⚠ NO BOUNDS CHECKING</div>
+            <div class="c-body">C does <b>not</b> check array bounds. <code>scores[5]</code> in a size-5 array accesses random memory — a silent bug or crash. Always guard your indices.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. FOR LOOPS & SEQUENTIAL ACCESS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">02 · arrays</div>
+        <h2>FOR LOOPS &amp; <span class="amber">SEQUENTIAL ACCESS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>sequential.c</div>
+            <pre><span class="kw">#define</span> <span class="nm">SIZE</span> <span class="nm">5</span>
+<span class="kw">int</span> scores[<span class="nm">SIZE</span>];
+
+<span class="cm">/* FILL the array */</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">SIZE</span>; i++) {
+    <span class="fn">printf</span>(<span class="st">"Score %d> "</span>, i+<span class="nm">1</span>);
+    <span class="fn">scanf</span>(<span class="st">"%d"</span>, &amp;scores[i]);
+}
+
+<span class="cm">/* PRINT the array */</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">SIZE</span>; i++)
+    <span class="fn">printf</span>(<span class="st">"[%d] = %d\n"</span>, i, scores[i]);
+
+<span class="cm">/* COMPUTE sum */</span>
+<span class="kw">int</span> sum = <span class="nm">0</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">SIZE</span>; i++)
+    sum += scores[i];
+
+<span class="fn">printf</span>(<span class="st">"Average = %.1f\n"</span>,
+       (<span class="kw">double</span>)sum / <span class="nm">SIZE</span>);</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="card">
+            <div class="c-label">PATTERN: TRAVERSE</div>
+            <div class="c-body"><code>for (i = 0; i &lt; SIZE; i++)</code> — the standard loop pattern. Visits every element exactly once, in order.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">&amp;arr[i]</div>
+            <div class="c-body"><code>scanf</code> needs an address. <code>&amp;scores[i]</code> gives the address of the i-th element — just like any other variable.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ OFF-BY-ONE</div>
+            <div class="c-body"><code>i &lt;= SIZE</code> would access <code>scores[SIZE]</code> — one past the end. Always use <code>i &lt; SIZE</code> for zero-based arrays.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. ARRAY ELEMENTS AS FUNCTION ARGS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">03 · arrays</div>
+        <h2>ARRAY ELEMENTS AS <span class="amber">FUNCTION ARGS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>element_args.c</div>
+            <pre><span class="cm">/* a single element — pass by value */</span>
+<span class="kw">void</span> <span class="fn">show</span>(<span class="kw">int</span> val) {
+    <span class="fn">printf</span>(<span class="st">"Value = %d\n"</span>, val);
+}
+
+<span class="cm">/* usage: pass one element */</span>
+<span class="fn">show</span>(scores[<span class="nm">2</span>]);  <span class="cm">← copies scores[2]</span>
+
+<span class="cm">/* to MODIFY an element — pass its address */</span>
+<span class="kw">void</span> <span class="fn">double_it</span>(<span class="kw">int</span> *val_p) {
+    *val_p = *val_p * <span class="nm">2</span>;
+}
+
+<span class="fn">double_it</span>(&amp;scores[<span class="nm">2</span>]);
+<span class="cm">/* scores[2] is now doubled */</span>
+
+<span class="cm">/* key insight:
+   scores[i] is just a regular int variable
+   — same rules as any other int.
+   &amp;scores[i] is its address.             */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="card">
+            <div class="c-label">ELEMENT = VARIABLE</div>
+            <div class="c-body">Each <code>scores[i]</code> acts as an independent <code>int</code>. Pass it by value (copy) or by pointer (address) — the same rules from Unit II.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">BY VALUE</div>
+            <div class="c-body"><code>show(scores[2])</code> copies the value. The function cannot change the original array element.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">BY POINTER</div>
+            <div class="c-body"><code>double_it(&amp;scores[2])</code> passes the address. The function modifies the original element through <code>*val_p</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. WHOLE ARRAY ARGUMENTS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">04 · arrays</div>
+        <h2>PASSING WHOLE <span class="amber">ARRAYS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>array_args.c</div>
+            <pre><span class="kw">#define</span> <span class="nm">SIZE</span> <span class="nm">5</span>
+
+<span class="cm">/* function receives array + its size */</span>
+<span class="kw">double</span> <span class="fn">average</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
+{
+    <span class="kw">int</span> sum = <span class="nm">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n; i++)
+        sum += arr[i];
+    <span class="kw">return</span> (<span class="kw">double</span>)sum / n;
+}
+
+<span class="cm">/* call: pass array name (no brackets) */</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">int</span> scores[<span class="nm">SIZE</span>] = {<span class="nm">85</span>,<span class="nm">90</span>,<span class="nm">78</span>,<span class="nm">92</span>,<span class="nm">88</span>};
+
+    <span class="kw">double</span> avg = <span class="fn">average</span>(scores, <span class="nm">SIZE</span>);
+    <span class="cm">/*                  ↑ passes the ADDRESS
+       of the first element — NOT a copy! */</span>
+
+    <span class="fn">printf</span>(<span class="st">"Average = %.1f\n"</span>, avg);
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">ARRAYS PASS BY REFERENCE</div>
+            <div class="c-body">The array name decays to a pointer to its first element. The function receives the <b style="color:var(--phos)">address</b>, not a copy — changes inside the function affect the original.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">ALWAYS PASS SIZE</div>
+            <div class="c-body">A function receiving <code>int arr[]</code> has no way to know how many elements there are. Always pass the size as a separate parameter.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">EQUIVALENT SYNTAX</div>
+            <div class="c-body"><code>int arr[]</code> and <code>int *arr</code> are identical in parameter lists. Both mean "pointer to int."</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ NO COPY</div>
+            <div class="c-body">Unlike scalars, arrays are <b>never copied</b> when passed. If a function sets <code>arr[0] = 99</code>, the caller's array is changed.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 7. LINEAR SEARCH ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">05 · searching</div>
+        <h2>LINEAR <span class="amber">SEARCH</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>linear_search.c</div>
+            <pre><span class="cm">/* search arr[0..n-1] for target
+   return index if found, -1 if not */</span>
+<span class="kw">int</span> <span class="fn">linear_search</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n,
+                  <span class="kw">int</span> target)
+{
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n; i++) {
+        <span class="kw">if</span> (arr[i] == target)
+            <span class="kw">return</span> i;       <span class="cm">← found!</span>
+    }
+    <span class="kw">return</span> <span class="nm">-1</span>;              <span class="cm">← not found</span>
+}
+
+<span class="cm">/* trace: arr = {3,7,1,9,4}, target = 9
+   i=0: 3≠9  i=1: 7≠9  i=2: 1≠9
+   i=3: 9==9 → return 3  ✓            */</span>
+
+<span class="cm">/* usage */</span>
+<span class="kw">int</span> pos = <span class="fn">linear_search</span>(data, n, key);
+<span class="kw">if</span> (pos == <span class="nm">-1</span>)
+    <span class="fn">printf</span>(<span class="st">"Not found\n"</span>);
+<span class="kw">else</span>
+    <span class="fn">printf</span>(<span class="st">"Found at [%d]\n"</span>, pos);</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div class="card">
+            <div class="c-label">O(n) — LINEAR TIME</div>
+            <div class="c-body">Worst case: check every element. Best case: find it first. Average: n/2 comparisons. Simple but slow for large arrays.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">UNSORTED OK</div>
+            <div class="c-body">Works on <b style="color:var(--phos)">any</b> array — sorted or not. No preprocessing needed.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">RETURN -1 CONVENTION</div>
+            <div class="c-body">Since valid indices are 0..n-1, returning <code>-1</code> is the standard "not found" signal. Always check the return value.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 8. BINARY SEARCH ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">06 · searching</div>
+        <h2>BINARY <span class="amber">SEARCH</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>binary_search.c</div>
+            <pre><span class="cm">/* REQUIRES sorted array */</span>
+<span class="kw">int</span> <span class="fn">binary_search</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n,
+                  <span class="kw">int</span> target)
+{
+    <span class="kw">int</span> lo = <span class="nm">0</span>, hi = n - <span class="nm">1</span>;
+
+    <span class="kw">while</span> (lo &lt;= hi) {
+        <span class="kw">int</span> mid = (lo + hi) / <span class="nm">2</span>;
+
+        <span class="kw">if</span> (arr[mid] == target)
+            <span class="kw">return</span> mid;        <span class="cm">← found</span>
+        <span class="kw">else if</span> (arr[mid] &lt; target)
+            lo = mid + <span class="nm">1</span>;       <span class="cm">← search right</span>
+        <span class="kw">else</span>
+            hi = mid - <span class="nm">1</span>;       <span class="cm">← search left</span>
+    }
+    <span class="kw">return</span> <span class="nm">-1</span>;
+}
+
+<span class="cm">/* trace: {2,5,8,12,16,23,38}, target=23
+   lo=0 hi=6 mid=3: 12&lt;23 → lo=4
+   lo=4 hi=6 mid=5: 23==23 → return 5 ✓ */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">O(log n) — LOGARITHMIC</div>
+            <div class="c-body">Halves the search space each step. 1000 elements → ≤10 comparisons. 1,000,000 → ≤20. Enormously faster than linear.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ MUST BE SORTED</div>
+            <div class="c-body">Binary search on an unsorted array gives <b>wrong results</b>. Sort first, then search — or use linear search if unsorted.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">HOW IT WORKS</div>
+            <div class="c-body">Compare target to middle element. If equal → done. If target is larger → discard left half. If smaller → discard right half. Repeat.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 9. BUBBLE SORT ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">07 · sorting</div>
+        <h2>BUBBLE <span class="amber">SORT</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>bubble_sort.c</div>
+            <pre><span class="kw">void</span> <span class="fn">bubble_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
+{
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n-<span class="nm">1</span>; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = <span class="nm">0</span>; j &lt; n-<span class="nm">1</span>-i; j++) {
+            <span class="kw">if</span> (arr[j] &gt; arr[j+<span class="nm">1</span>]) {
+                <span class="cm">/* swap adjacent */</span>
+                <span class="kw">int</span> temp = arr[j];
+                arr[j]   = arr[j+<span class="nm">1</span>];
+                arr[j+<span class="nm">1</span>] = temp;
+            }
+        }
+    }
+}
+
+<span class="cm">/* trace: {5,3,8,1,2}
+pass 1: 3,5,1,2,|8|  (8 bubbles to end)
+pass 2: 3,1,2,|5|    (5 settles)
+pass 3: 1,2,|3|      (3 settles)
+pass 4: 1,|2|        (done)             */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">HOW IT WORKS</div>
+            <div class="c-body">Compare adjacent elements. If out of order, swap. The largest value <b style="color:var(--phos)">"bubbles"</b> to the end on each pass. Repeat n-1 times.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">O(n²) COMPLEXITY</div>
+            <div class="c-body">Nested loops: outer runs n-1 times, inner shrinks by 1 each pass. Total ≈ n²/2 comparisons. <b>Slow</b> for large arrays, but easy to code and understand.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">STABLE SORT</div>
+            <div class="c-body">Equal elements keep their original order — useful when sorting by multiple criteria.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10. INSERTION SORT ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">08 · sorting</div>
+        <h2>INSERTION <span class="amber">SORT</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>insertion_sort.c</div>
+            <pre><span class="kw">void</span> <span class="fn">insertion_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
+{
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">1</span>; i &lt; n; i++) {
+        <span class="kw">int</span> key = arr[i];
+        <span class="kw">int</span> j   = i - <span class="nm">1</span>;
+
+        <span class="cm">/* shift larger elements right */</span>
+        <span class="kw">while</span> (j &gt;= <span class="nm">0</span> &amp;&amp; arr[j] &gt; key) {
+            arr[j+<span class="nm">1</span>] = arr[j];
+            j--;
+        }
+        arr[j+<span class="nm">1</span>] = key;  <span class="cm">← insert</span>
+    }
+}
+
+<span class="cm">/* trace: {5,3,8,1,2}
+i=1: key=3  shift 5→   [3,5,8,1,2]
+i=2: key=8  no shift    [3,5,8,1,2]
+i=3: key=1  shift 8,5,3 [1,3,5,8,2]
+i=4: key=2  shift 8,5,3 [1,2,3,5,8] ✓ */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">CARD GAME ANALOGY</div>
+            <div class="c-body">Like sorting a hand of cards: pick each card and <b style="color:var(--phos)">insert</b> it into the correct position among the already-sorted cards to its left.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">O(n²) WORST, O(n) BEST</div>
+            <div class="c-body">Worst case (reverse sorted): n²/2 shifts. Best case (already sorted): only n-1 comparisons, zero shifts. <b style="color:var(--phos)">Great for nearly-sorted data</b>.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">SHIFT, NOT SWAP</div>
+            <div class="c-body">Insertion sort <b>shifts</b> elements one position right, then inserts once. Fewer writes than bubble sort's repeated swaps.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 11. SELECTION SORT ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">09 · sorting</div>
+        <h2>SELECTION <span class="amber">SORT</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>selection_sort.c</div>
+            <pre><span class="kw">void</span> <span class="fn">selection_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
+{
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n-<span class="nm">1</span>; i++) {
+        <span class="kw">int</span> min_idx = i;
+
+        <span class="cm">/* find minimum in unsorted portion */</span>
+        <span class="kw">for</span> (<span class="kw">int</span> j = i+<span class="nm">1</span>; j &lt; n; j++) {
+            <span class="kw">if</span> (arr[j] &lt; arr[min_idx])
+                min_idx = j;
+        }
+
+        <span class="cm">/* swap minimum with position i */</span>
+        <span class="kw">int</span> temp     = arr[i];
+        arr[i]       = arr[min_idx];
+        arr[min_idx] = temp;
+    }
+}
+
+<span class="cm">/* trace: {5,3,8,1,2}
+i=0: min=1@[3] swap→ [1,3,8,5,2]
+i=1: min=2@[4] swap→ [1,2,8,5,3]
+i=2: min=3@[4] swap→ [1,2,3,5,8]
+i=3: min=5@[3] no-op [1,2,3,5,8] ✓ */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">HOW IT WORKS</div>
+            <div class="c-body">Find the <b style="color:var(--phos)">minimum</b> in the unsorted portion. Swap it to the front. Repeat for the remaining unsorted portion.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">O(n²) ALWAYS</div>
+            <div class="c-body">Always does n²/2 comparisons, regardless of input order. But only <b style="color:var(--phos)">n-1 swaps</b> — fewest writes of the three basic sorts.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">SORT COMPARISON</div>
+            <div class="c-body"><b>Bubble</b>: simple, many swaps. <b>Insertion</b>: fast on nearly-sorted. <b>Selection</b>: fewest swaps, consistent performance. All O(n²).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 12. PARALLEL ARRAYS & ENUMS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">10 · arrays</div>
+        <h2>PARALLEL ARRAYS &amp; <span class="amber">ENUMS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>parallel.c</div>
+            <pre><span class="cm">/* parallel arrays — same index links data */</span>
+<span class="kw">#define</span> <span class="nm">N</span> <span class="nm">4</span>
+<span class="kw">char</span>   names[<span class="nm">N</span>][<span class="nm">20</span>] = {<span class="st">"Alice"</span>,<span class="st">"Bob"</span>,<span class="st">"Carol"</span>,<span class="st">"Dave"</span>};
+<span class="kw">int</span>    scores[<span class="nm">N</span>]    = {<span class="nm">92</span>, <span class="nm">85</span>, <span class="nm">78</span>, <span class="nm">95</span>};
+<span class="kw">char</span>   grades[<span class="nm">N</span>]    = {<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'A'</span>};
+
+<span class="cm">/* names[i], scores[i], grades[i]
+   all refer to the SAME student */</span>
+
+<span class="cm">/* enumerated types */</span>
+<span class="kw">enum</span> day {SUN, MON, TUE, WED, THU, FRI, SAT};
+<span class="cm">/*        0    1    2    3    4    5    6  */</span>
+
+<span class="kw">enum</span> day today = WED;
+<span class="kw">if</span> (today == SAT || today == SUN)
+    <span class="fn">printf</span>(<span class="st">"Weekend!\n"</span>);
+<span class="kw">else</span>
+    <span class="fn">printf</span>(<span class="st">"Workday %d\n"</span>, today);</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">PARALLEL ARRAYS</div>
+            <div class="c-body">Multiple arrays where index <code>i</code> across all arrays describes one entity. Simpler than structs for small programs.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">enum</div>
+            <div class="c-body">Associates meaningful names with integer constants. <code>SUN=0, MON=1, ...</code> — makes code self-documenting.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ KEEP IN SYNC</div>
+            <div class="c-body">If you sort one parallel array, you must <b>rearrange all</b> the others the same way — or the indices stop matching. Structs avoid this problem.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 13. MULTIDIMENSIONAL ARRAYS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">11 · arrays</div>
+        <h2>MULTIDIMENSIONAL <span class="amber">ARRAYS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>matrix.c</div>
+            <pre><span class="kw">#define</span> <span class="nm">ROWS</span> <span class="nm">3</span>
+<span class="kw">#define</span> <span class="nm">COLS</span> <span class="nm">4</span>
+
+<span class="kw">int</span> matrix[<span class="nm">ROWS</span>][<span class="nm">COLS</span>] = {
+    {<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">4</span>},
+    {<span class="nm">5</span>, <span class="nm">6</span>, <span class="nm">7</span>, <span class="nm">8</span>},
+    {<span class="nm">9</span>,<span class="nm">10</span>,<span class="nm">11</span>,<span class="nm">12</span>}
+};
+
+<span class="cm">/* access: matrix[row][col] */</span>
+matrix[<span class="nm">1</span>][<span class="nm">2</span>] = <span class="nm">77</span>;   <span class="cm">← row 1, col 2</span>
+
+<span class="cm">/* traverse with nested loops */</span>
+<span class="kw">for</span> (<span class="kw">int</span> r = <span class="nm">0</span>; r &lt; <span class="nm">ROWS</span>; r++) {
+    <span class="kw">for</span> (<span class="kw">int</span> c = <span class="nm">0</span>; c &lt; <span class="nm">COLS</span>; c++)
+        <span class="fn">printf</span>(<span class="st">"%4d"</span>, matrix[r][c]);
+    <span class="fn">printf</span>(<span class="st">"\n"</span>);
+}
+
+<span class="cm">/* memory: stored ROW-MAJOR
+   [0][0] [0][1] [0][2] [0][3] [1][0] ... */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">2D = ARRAY OF ARRAYS</div>
+            <div class="c-body"><code>matrix[3][4]</code> is 3 rows, each containing 4 ints. Think of it as a table or grid.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">ROW-MAJOR ORDER</div>
+            <div class="c-body">C stores elements row by row in memory. <code>matrix[0][0..3]</code> are contiguous, then <code>matrix[1][0..3]</code>, etc.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">PASSING TO FUNCTIONS</div>
+            <div class="c-body"><code>void func(int m[][COLS], int rows)</code> — the <b style="color:var(--phos)">column size must be specified</b>; only the first dimension can be omitted.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ INITIALIZATION</div>
+            <div class="c-body">Partial initialization fills remaining elements with 0. <code>int m[3][4] = {{1},{2}}</code> sets m[0][0]=1, m[1][0]=2, rest=0.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 14. STRING BASICS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">01 · strings</div>
+        <h2>STRING <span class="amber">BASICS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>strings.c</div>
+            <pre><span class="cm">/* a string = char array + null terminator */</span>
+<span class="kw">char</span> greeting[<span class="nm">6</span>] = {<span class="st">'H'</span>,<span class="st">'e'</span>,<span class="st">'l'</span>,<span class="st">'l'</span>,<span class="st">'o'</span>,<span class="st">'\0'</span>};
+
+<span class="cm">/* equivalent shorthand */</span>
+<span class="kw">char</span> greeting[] = <span class="st">"Hello"</span>;
+<span class="cm">/*  index: [0][1][2][3][4][5]
+    value:  H   e   l   l   o  \0
+    \0 is added automatically!       */</span>
+
+<span class="cm">/* string I/O */</span>
+<span class="kw">char</span> name[<span class="nm">50</span>];
+<span class="fn">printf</span>(<span class="st">"Name> "</span>);
+<span class="fn">scanf</span>(<span class="st">"%s"</span>, name);   <span class="cm">← no &amp; needed!</span>
+<span class="fn">printf</span>(<span class="st">"Hi, %s!\n"</span>, name);
+
+<span class="cm">/* scanf stops at whitespace
+   "John Doe" → only "John" is read
+   use fgets for full lines          */</span>
+<span class="fn">fgets</span>(name, <span class="nm">50</span>, stdin);</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="defrow">
+            <div class="dk">\0 (null char)</div>
+            <div class="dv">Marks the end of the string. Without it, <code>printf</code> keeps reading past the array — garbage or crash.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">No &amp; for scanf</div>
+            <div class="dv">The array name <b style="color:var(--phos)">is already an address</b>. <code>scanf("%s", name)</code> not <code>&amp;name</code>.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Size = length + 1</div>
+            <div class="dv">"Hello" has 5 characters but needs a 6-element array to hold the <code>\0</code>.</div>
+          </div>
+          <div class="card amb" style="margin-top:10px">
+            <div class="c-label">⚠ BUFFER OVERFLOW</div>
+            <div class="c-body">If the user types more than 49 chars into <code>name[50]</code>, data overwrites adjacent memory. Use <code>fgets(name, 50, stdin)</code> to limit input length.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 15. STRING LIBRARY FUNCTIONS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">02 · strings</div>
+        <h2>STRING LIBRARY <span class="amber">FUNCTIONS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <table>
+            <tr>
+              <th>Function</th>
+              <th>Purpose</th>
+              <th>Header</th>
+            </tr>
+            <tr>
+              <td>strlen(s)</td>
+              <td>length (excluding \0)</td>
+              <td>string.h</td>
+            </tr>
+            <tr>
+              <td>strcpy(dst,src)</td>
+              <td>copy src into dst</td>
+              <td>string.h</td>
+            </tr>
+            <tr>
+              <td>strncpy(d,s,n)</td>
+              <td>copy at most n chars</td>
+              <td>string.h</td>
+            </tr>
+            <tr>
+              <td>strcat(dst,src)</td>
+              <td>append src to dst</td>
+              <td>string.h</td>
+            </tr>
+            <tr>
+              <td>strcmp(a,b)</td>
+              <td>compare: &lt;0, 0, &gt;0</td>
+              <td>string.h</td>
+            </tr>
+            <tr>
+              <td>strchr(s,c)</td>
+              <td>find char c in s</td>
+              <td>string.h</td>
+            </tr>
+          </table>
+          <div class="card amb" style="margin-top:16px">
+            <div class="c-label">⚠ NO = FOR STRINGS</div>
+            <div class="c-body"><code>str1 = str2</code> does NOT copy strings — it copies pointers. Always use <code>strcpy(str1, str2)</code>. Similarly, <code>str1 == str2</code> compares addresses, not content.</div>
+          </div>
+        </div>
+        <div class="col rv d3">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>string_lib.c</div>
+            <pre><span class="kw">#include</span> <span class="st">&lt;string.h&gt;</span>
+
+<span class="kw">char</span> src[] = <span class="st">"Hello"</span>;
+<span class="kw">char</span> dst[<span class="nm">20</span>];
+
+<span class="cm">/* copy */</span>
+<span class="fn">strcpy</span>(dst, src);    <span class="cm">→ dst = "Hello"</span>
+
+<span class="cm">/* length */</span>
+<span class="kw">int</span> len = <span class="fn">strlen</span>(dst); <span class="cm">→ 5 (no \0)</span>
+
+<span class="cm">/* concatenate */</span>
+<span class="fn">strcat</span>(dst, <span class="st">" World"</span>);
+<span class="cm">/* dst = "Hello World" */</span>
+
+<span class="cm">/* compare */</span>
+<span class="kw">if</span> (<span class="fn">strcmp</span>(dst, <span class="st">"Hello World"</span>) == <span class="nm">0</span>)
+    <span class="fn">printf</span>(<span class="st">"Equal!\n"</span>);
+
+<span class="cm">/* safe copy */</span>
+<span class="fn">strncpy</span>(dst, src, <span class="nm">19</span>);
+dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm">← ensure termination</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 16. CONCATENATION & WHOLE-LINE INPUT ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">03 · strings</div>
+        <h2>CONCATENATION &amp; <span class="amber">LINE INPUT</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>concat.c</div>
+            <pre><span class="kw">char</span> first[<span class="nm">30</span>] = <span class="st">"John"</span>;
+<span class="kw">char</span> last[<span class="nm">30</span>]  = <span class="st">"Smith"</span>;
+<span class="kw">char</span> full[<span class="nm">60</span>];
+
+<span class="cm">/* build: "John Smith" */</span>
+<span class="fn">strcpy</span>(full, first);
+<span class="fn">strcat</span>(full, <span class="st">" "</span>);
+<span class="fn">strcat</span>(full, last);
+<span class="fn">printf</span>(<span class="st">"%s\n"</span>, full); <span class="cm">→ John Smith</span>
+
+<span class="cm">/* whole-line input with fgets */</span>
+<span class="kw">char</span> line[<span class="nm">100</span>];
+<span class="fn">printf</span>(<span class="st">"Full name> "</span>);
+<span class="fn">fgets</span>(line, <span class="nm">100</span>, stdin);
+
+<span class="cm">/* fgets includes '\n' — remove it */</span>
+<span class="kw">int</span> len = <span class="fn">strlen</span>(line);
+<span class="kw">if</span> (len &gt; <span class="nm">0</span> &amp;&amp; line[len-<span class="nm">1</span>] == <span class="st">'\n'</span>)
+    line[len-<span class="nm">1</span>] = <span class="st">'\0'</span>;</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">strcat APPENDS</div>
+            <div class="c-body">Finds the <code>\0</code> in dst, starts copying src there. The dst array must be <b style="color:var(--phos)">large enough</b> to hold both strings plus <code>\0</code>.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">fgets vs scanf</div>
+            <div class="c-body"><code>scanf("%s")</code> stops at whitespace. <code>fgets(buf, size, stdin)</code> reads the entire line including spaces — the safe choice for names and sentences.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ NEWLINE IN fgets</div>
+            <div class="c-body"><code>fgets</code> keeps the <code>\n</code> if the line fits. Always strip it before using the string in comparisons or output.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 17. STRING COMPARISON ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">04 · strings</div>
+        <h2>STRING <span class="amber">COMPARISON</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>strcmp_demo.c</div>
+            <pre><span class="cm">/* strcmp(a, b) returns:
+   &lt; 0  if a comes BEFORE b
+     0  if a EQUALS b
+   &gt; 0  if a comes AFTER b
+   (lexicographic / ASCII order)      */</span>
+
+<span class="fn">strcmp</span>(<span class="st">"apple"</span>, <span class="st">"banana"</span>)  <span class="cm">→ &lt;0 (a&lt;b)</span>
+<span class="fn">strcmp</span>(<span class="st">"cat"</span>,   <span class="st">"cat"</span>)     <span class="cm">→  0 (equal)</span>
+<span class="fn">strcmp</span>(<span class="st">"dog"</span>,   <span class="st">"cat"</span>)     <span class="cm">→ &gt;0 (d&gt;c)</span>
+<span class="fn">strcmp</span>(<span class="st">"abc"</span>,   <span class="st">"abcd"</span>)    <span class="cm">→ &lt;0 (shorter)</span>
+<span class="fn">strcmp</span>(<span class="st">"Abc"</span>,   <span class="st">"abc"</span>)     <span class="cm">→ &lt;0 (A=65&lt;a=97)</span>
+
+<span class="cm">/* common pattern: sort strings */</span>
+<span class="kw">if</span> (<span class="fn">strcmp</span>(names[j], names[j+<span class="nm">1</span>]) &gt; <span class="nm">0</span>) {
+    <span class="cm">/* swap names[j] and names[j+1] */</span>
+    <span class="kw">char</span> temp[<span class="nm">50</span>];
+    <span class="fn">strcpy</span>(temp, names[j]);
+    <span class="fn">strcpy</span>(names[j], names[j+<span class="nm">1</span>]);
+    <span class="fn">strcpy</span>(names[j+<span class="nm">1</span>], temp);
+}</pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">LEXICOGRAPHIC ORDER</div>
+            <div class="c-body">Compares character by character using ASCII values. First difference decides the result. Uppercase letters (65-90) come before lowercase (97-122).</div>
+          </div>
+          <div class="card">
+            <div class="c-label">== 0 MEANS EQUAL</div>
+            <div class="c-body"><code>if (strcmp(a, b) == 0)</code> — the standard idiom for testing string equality. Not intuitive, but memorize it.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ NEVER USE == </div>
+            <div class="c-body"><code>str1 == str2</code> compares <b>pointer addresses</b>, not string content. Two strings with identical text at different addresses would be "not equal."</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 18. ARRAYS OF POINTERS ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">05 · strings</div>
+        <h2>ARRAYS OF <span class="amber">POINTERS</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="term" style="height:100%">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>ptr_array.c</div>
+            <pre><span class="cm">/* array of char pointers — each points
+   to a string literal in read-only memory */</span>
+<span class="kw">char</span> *months[] = {
+    <span class="st">"January"</span>,  <span class="st">"February"</span>, <span class="st">"March"</span>,
+    <span class="st">"April"</span>,    <span class="st">"May"</span>,      <span class="st">"June"</span>,
+    <span class="st">"July"</span>,     <span class="st">"August"</span>,   <span class="st">"September"</span>,
+    <span class="st">"October"</span>,  <span class="st">"November"</span>, <span class="st">"December"</span>
+};
+
+<span class="cm">/* access */</span>
+<span class="fn">printf</span>(<span class="st">"%s\n"</span>, months[<span class="nm">0</span>]);  <span class="cm">→ January</span>
+<span class="fn">printf</span>(<span class="st">"%c\n"</span>, months[<span class="nm">3</span>][<span class="nm">0</span>]);<span class="cm">→ A (April)</span>
+
+<span class="cm">/* no wasted space — each string is
+   exactly as long as needed.
+   2D char array would waste space:
+   char months[12][10] — 120 bytes
+   pointer array: 12 pointers + strings */</span>
+
+<span class="cm">/* sorting? just swap the pointers,
+   not the actual string data!          */</span></pre>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="card">
+            <div class="c-label">char *arr[] vs char arr[][]</div>
+            <div class="c-body"><code>char *arr[]</code> — each element is a pointer; strings can differ in length. <code>char arr[N][M]</code> — each row is fixed at M chars, wastes space.</div>
+          </div>
+          <div class="card">
+            <div class="c-label">FAST SORTING</div>
+            <div class="c-body">To sort strings, swap the <b style="color:var(--phos)">pointers</b> (4-8 bytes) instead of copying entire strings (many bytes). Much faster.</div>
+          </div>
+          <div class="card amb">
+            <div class="c-label">⚠ READ-ONLY LITERALS</div>
+            <div class="c-body">String literals like <code>"January"</code> are stored in read-only memory. <code>months[0][0] = 'j'</code> causes undefined behavior. Use <code>char arr[][] = {...}</code> if you need to modify.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 19. SUMMARY ============ -->
+    <section class="slide">
+      <div class="rv d1">
+        <div class="kicker">Unit III · complete</div>
+        <h2 style="font-size:clamp(52px,5.6vw,80px)">SESSION <span class="amber">SUMMARY</span></h2>
+        <div class="rule"></div>
+      </div>
+      <div class="cols">
+        <div class="col rv d2">
+          <div class="defrow">
+            <div class="dk">Arrays</div>
+            <div class="dv">Contiguous, same-type, zero-indexed · <code>int arr[N]</code> · traverse with <code>for(i=0;i&lt;N;i++)</code> · pass to functions by address · no bounds checking.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Searching</div>
+            <div class="dv"><b>Linear</b>: O(n), works on any array. <b>Binary</b>: O(log n), requires sorted array. Return -1 if not found.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Sorting</div>
+            <div class="dv"><b>Bubble</b>: swap adjacent, O(n²). <b>Insertion</b>: shift and insert, O(n²) worst / O(n) best. <b>Selection</b>: find min and swap, O(n²), fewest writes.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Strings</div>
+            <div class="dv">char array + <code>\0</code> · <code>strcpy/strcat/strcmp/strlen</code> · no <code>=</code> or <code>==</code> for strings · <code>fgets</code> for whole lines.</div>
+          </div>
+          <div class="defrow">
+            <div class="dk">Advanced</div>
+            <div class="dv">Parallel arrays · enums · 2D arrays (row-major) · arrays of pointers for variable-length strings.</div>
+          </div>
+        </div>
+        <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+          <div class="term">
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>course — exit status</div>
+            <pre>$ grep -c <span class="st">"learned"</span> unit03.objectives
+<span class="nm">10 / 10</span>   <span class="fn">✓ all objectives covered</span>
+
+<span class="fn">printf</span>(<span class="st">"DATA = ARRAYS + STRINGS\n"</span>);
+<span class="fn">printf</span>(<span class="st">"ALGO = SEARCH + SORT\n"</span>);
+<span class="kw">return</span> (<span class="nm">0</span>);   <span class="cm">// success ✓</span></pre>
+          </div>
+          <div style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
+            Next: UNIT IV — <span style="color:var(--amber)">Recursion, Structures &amp; Unions</span> <span class="blink-live">█</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <div class="hud">
+    <div class="sys">
+      <span class="pg" id="pagenum">01 / 19</span>
+      <span>C PROGRAMMING · UNIT III · ARRAYS &amp; STRINGS</span>
+      <span style="color:var(--phos-dim)">TTY03</span>
+    </div>
+    <div class="sys">
+      <span>← → · SPACE · CLICK</span>
+      <div class="navbtns">
+        <button class="nbtn" onclick="nav(-1)">PREV</button>
+        <button class="nbtn" onclick="nav(1)">NEXT</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides=document.querySelectorAll('.slide');let cur=0;const pad=n=>String(n).padStart(2,'0');function show(i){slides[cur].classList.remove('active');cur=(i+slides.length)%slides.length;slides[cur].classList.add('active');document.getElementById('pagenum').textContent=pad(cur+1)+' / '+pad(slides.length);document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%'}function nav(d){show(cur+d)}document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1)}if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1)}if(e.key==='Home'){show(0)}if(e.key==='End'){show(slides.length-1)}});document.getElementById('deck').addEventListener('click',e=>{if(e.target.closest('.nbtn'))return;nav(e.clientX>window.innerWidth/2?1:-1)});show(0);
+  </script>
+</body>
+
+</html>
