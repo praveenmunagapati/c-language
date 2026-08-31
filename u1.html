@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming in C — Foundations + Unit I</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050806;
+  --bg2:#0a120c;
+  --phos:#3dffa0;
+  --phos-dim:#1d8f5a;
+  --phos-ghost:rgba(61,255,160,.07);
+  --amber:#ffb347;
+  --amber-hot:#ffcc66;
+  --red:#ff5c57;
+  --ink:#c8f5dc;
+  --ink-dim:#6fae8e;
+  --line:rgba(61,255,160,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:'IBM Plex Mono',monospace;color:var(--ink);cursor:crosshair}
+/* ---------- CRT atmosphere ---------- */
+.crt::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);
+  mix-blend-mode:multiply;
+}
+.crt::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:51;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);
+}
+.glow-ring{position:fixed;inset:0;pointer-events:none;z-index:49;box-shadow:inset 0 0 120px rgba(61,255,160,.06)}
+/* ---------- Deck ---------- */
+.deck{position:fixed;inset:0}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:56px 90px 90px;
+  opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:opacity .45s ease,transform .45s ease,visibility .45s;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateY(0)}
+.slide .rv{opacity:0;transform:translateY(16px)}
+.slide.active .rv{animation:printIn .55s cubic-bezier(.2,.8,.2,1) forwards}
+.slide.active .rv:nth-child(1),.slide.active .d1{animation-delay:.08s}
+.slide.active .d2{animation-delay:.22s}
+.slide.active .d3{animation-delay:.36s}
+.slide.active .d4{animation-delay:.50s}
+.slide.active .d5{animation-delay:.64s}
+.slide.active .d6{animation-delay:.78s}
+@keyframes printIn{to{opacity:1;transform:translateY(0)}}
+/* ---------- Type ---------- */
+.kicker{font-family:'VT323',monospace;font-size:24px;letter-spacing:.14em;color:var(--amber);text-transform:uppercase}
+.kicker::before{content:"» ";color:var(--phos-dim)}
+h1{
+  font-family:'VT323',monospace;font-weight:400;
+  font-size:clamp(48px,6vw,88px);line-height:.92;
+  color:var(--phos);
+  text-shadow:0 0 22px rgba(61,255,160,.45),0 0 60px rgba(61,255,160,.18);
+}
+h2{
+  font-family:'VT323',monospace;font-weight:400;
+  font-size:clamp(44px,4.6vw,64px);line-height:1;
+  color:var(--phos);text-shadow:0 0 16px rgba(61,255,160,.35);margin:6px 0 0;
+}
+h2 .amber{color:var(--amber);text-shadow:0 0 16px rgba(255,179,71,.35)}
+.sub{color:var(--ink-dim);font-size:15px;margin-top:14px;max-width:660px;line-height:1.65}
+.rule{height:1px;background:linear-gradient(90deg,var(--phos) 0%,var(--phos-dim) 45%,transparent 100%);margin:26px 0 30px;opacity:.6}
+.cols{display:flex;gap:44px;flex:1;min-height:0;align-items:stretch}
+.col{flex:1;min-width:0}
+/* ---------- Code terminal ---------- */
+.term{
+  background:var(--bg2);border:1px solid var(--line);border-radius:6px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 34px rgba(61,255,160,.07),inset 0 0 60px rgba(61,255,160,.03);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.term-head{
+  display:flex;align-items:center;gap:8px;padding:9px 14px;
+  border-bottom:1px solid var(--line);background:rgba(61,255,160,.045);
+  font-size:12px;color:var(--ink-dim);letter-spacing:.1em;
+}
+.term-head .dots{display:flex;gap:6px;margin-right:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--phos-dim);opacity:.5}
+.dot:first-child{background:var(--phos);opacity:.9}
+.term pre{padding:18px 20px;font-size:15px;line-height:1.72;font-family:'IBM Plex Mono',monospace;color:var(--ink);white-space:pre;overflow:auto}
+.kw{color:var(--amber-hot)}
+.fn{color:var(--phos)}
+.st{color:#7ad9ff}
+.cm{color:#4e7a63;font-style:italic}
+.nm{color:#ffd27a}
+.cur{display:inline-block;width:9px;height:18px;background:var(--phos);vertical-align:-3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+/* ---------- Lists ---------- */
+ul.tl{list-style:none;font-size:16px;line-height:1.6}
+ul.tl li{padding:9px 0 9px 30px;position:relative;border-bottom:1px dashed rgba(61,255,160,.13)}
+ul.tl li::before{content:">";position:absolute;left:4px;color:var(--amber);font-family:'VT323',monospace;font-size:22px;top:6px}
+ul.tl b{color:var(--phos);font-weight:600}
+ul.tl code,p code,td code{
+  background:rgba(61,255,160,.09);border:1px solid var(--line);
+  padding:1px 7px;border-radius:4px;color:var(--amber-hot);font-size:.92em;
+}
+/* ---------- Cards ---------- */
+.cards{display:flex;gap:20px;flex-wrap:wrap}
+.card{flex:1;min-width:180px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(61,255,160,.05),transparent 60%);padding:18px 20px;border-radius:6px}
+.card .c-label{font-family:'VT323',monospace;font-size:26px;color:var(--phos);text-shadow:0 0 12px rgba(61,255,160,.3)}
+.card .c-body{font-size:13.5px;color:var(--ink-dim);margin-top:6px;line-height:1.6}
+.card.amb .c-label{color:var(--amber);text-shadow:0 0 12px rgba(255,179,71,.3)}
+/* ---------- Table ---------- */
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{text-align:left;font-family:'VT323',monospace;font-size:22px;font-weight:400;color:var(--amber);padding:8px 14px;border-bottom:1px solid var(--phos-dim);letter-spacing:.05em}
+td{padding:9px 14px;border-bottom:1px dashed rgba(61,255,160,.15);color:var(--ink)}
+td:first-child{color:var(--amber-hot)}
+tr:hover td{background:var(--phos-ghost)}
+/* ---------- Flow nodes ---------- */
+.flow{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.fnode{border:1px solid var(--phos-dim);padding:14px 22px;border-radius:6px;font-family:'VT323',monospace;font-size:24px;color:var(--phos);background:rgba(61,255,160,.06);text-shadow:0 0 10px rgba(61,255,160,.3);text-align:center}
+.fnode.amb{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,.06);text-shadow:0 0 10px rgba(255,179,71,.3)}
+.farrow{font-family:'VT323',monospace;font-size:30px;color:var(--phos-dim)}
+/* ---------- Def rows / step rows ---------- */
+.defrow{display:flex;gap:18px;align-items:baseline;padding:7px 0;border-bottom:1px dashed rgba(61,255,160,.12)}
+.defrow .dk{width:170px;flex-shrink:0;color:var(--amber);font-size:14.5px}
+.defrow .dv{font-size:14.5px;color:var(--ink);line-height:1.55}
+.steprow{display:flex;gap:20px;align-items:center;padding:7px 0;border-bottom:1px dashed rgba(61,255,160,.13)}
+.stepnum{font-family:'VT323',monospace;font-size:34px;color:var(--amber);width:58px;flex-shrink:0;text-shadow:0 0 10px rgba(255,179,71,.3)}
+.stepname{width:180px;flex-shrink:0;color:var(--phos);font-size:15px;font-weight:600;letter-spacing:.05em}
+.stepdesc{font-size:13.5px;color:var(--ink-dim);line-height:1.5}
+/* ---------- Flowchart symbols ---------- */
+.sym{border:1.5px solid var(--phos);color:var(--phos);background:rgba(61,255,160,.06);font-family:'VT323',monospace;font-size:18px;padding:6px 18px;text-align:center;white-space:nowrap}
+.sym.pill{border-radius:999px}
+.sym.para{transform:skewX(-16deg)}
+.sym.para>span{display:inline-block;transform:skewX(16deg)}
+.diamwrap{position:relative;width:110px;height:70px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.diamond{position:absolute;width:54px;height:54px;transform:rotate(45deg);border:1.5px solid var(--amber);background:rgba(255,179,71,.07)}
+.diamwrap .dtxt{position:relative;z-index:1;font-family:'VT323',monospace;font-size:16px;color:var(--amber);text-shadow:0 0 8px rgba(255,179,71,.3)}
+.symrow{display:flex;align-items:center;gap:20px;padding:9px 0;border-bottom:1px dashed rgba(61,255,160,.13)}
+.symdemo{width:160px;display:flex;justify-content:center;align-items:center;flex-shrink:0;min-height:52px}
+.symname{width:160px;flex-shrink:0;color:var(--phos);font-family:'VT323',monospace;font-size:22px;letter-spacing:.04em}
+.symdesc{font-size:13.5px;color:var(--ink-dim);line-height:1.5}
+.miniflow{display:flex;flex-direction:column;align-items:center;gap:10px}
+.branchrow{display:flex;gap:26px;width:100%;justify-content:center}
+.blabel{font-size:12px;letter-spacing:.1em;margin-bottom:2px}
+/* ---------- HUD ---------- */
+.hud{
+  position:fixed;bottom:0;left:0;right:0;height:44px;z-index:52;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;border-top:1px solid var(--line);
+  background:rgba(5,8,6,.9);font-size:12px;letter-spacing:.12em;color:var(--ink-dim);
+  backdrop-filter:blur(4px);
+}
+.hud .sys{display:flex;gap:22px;align-items:center}
+.hud .pg{font-family:'VT323',monospace;font-size:20px;color:var(--phos)}
+.navbtns{display:flex;gap:10px}
+.nbtn{font-family:'VT323',monospace;font-size:20px;background:transparent;border:1px solid var(--line);color:var(--phos);padding:3px 14px;cursor:pointer;border-radius:4px;transition:.18s}
+.nbtn:hover{background:rgba(61,255,160,.14);border-color:var(--phos);box-shadow:0 0 14px rgba(61,255,160,.25)}
+.progress{position:fixed;bottom:44px;left:0;height:2px;background:var(--phos);box-shadow:0 0 10px rgba(61,255,160,.7);z-index:53;transition:width .4s ease}
+.tick{position:fixed;width:22px;height:22px;z-index:48;opacity:.55}
+.tick.tl{top:14px;left:14px;border-top:1px solid var(--phos);border-left:1px solid var(--phos)}
+.tick.tr{top:14px;right:14px;border-top:1px solid var(--phos);border-right:1px solid var(--phos)}
+.tick.bl{bottom:58px;left:14px;border-bottom:1px solid var(--phos);border-left:1px solid var(--phos)}
+.tick.br{bottom:58px;right:14px;border-bottom:1px solid var(--phos);border-right:1px solid var(--phos)}
+/* ASCII banner */
+.ascii{font-family:'VT323',monospace;color:var(--phos);white-space:pre;line-height:1.12}
+.ascii.hero{text-shadow:0 0 16px rgba(61,255,160,.55),0 0 48px rgba(61,255,160,.22)}
+.blink-live{color:var(--phos);animation:blink 1.4s steps(1) infinite}
+.footnote{margin-top:auto;font-size:12px;color:var(--ink-dim);letter-spacing:.08em}
+.footnote::before{content:"// ";color:var(--phos-dim)}
+</style>
+</head>
+<body class="crt">
+<div class="glow-ring"></div>
+<div class="tick tl"></div><div class="tick tr"></div><div class="tick bl"></div><div class="tick br"></div>
+
+<div class="deck" id="deck">
+
+<!-- ============ 1. TITLE ============ -->
+<section class="slide">
+  <div class="rv d1 ascii hero" style="font-size:clamp(11px,1.9vw,30px)">██╗    ██╗ ███████╗ ██╗       ██████╗  ██████╗  ███╗   ███╗ ███████╗
+██║    ██║ ██╔════╝ ██║      ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝
+██║ █╗ ██║ █████╗   ██║      ██║   ██║ ██╔████╔██║ █████╗
+██║███╗██║ ██╔══╝   ██║      ██║   ██║ ██║╚██╔╝██║ ██╔══╝
+╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗
+ ╚══╝╚══╝  ╚══════╝ ╚══════╝  ╚═════╝   ╚═════╝  ╚═╝     ╚═╝ ╚══════╝</div>
+  <div style="margin-top:30px" class="rv d2">
+    <div class="kicker">Programming in C · Foundations + Unit I</div>
+    <h1 style="margin-top:10px">OVERVIEW<br>OF <span style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">C</span></h1>
+  </div>
+  <div class="rv d3" style="margin-top:28px;max-width:800px">
+    <div class="rule"></div>
+    <p class="sub">From computer fundamentals and program development, through algorithms, flowcharts and structured design — into language elements, variables &amp; data types, executable statements, arithmetic, output formatting, selection structures, and every loop the language offers.</p>
+  </div>
+  <div class="rv d4" style="margin-top:auto;display:flex;gap:30px;align-items:center">
+    <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
+  </div>
+</section>
+
+<!-- ============ 2. COURSE OBJECTIVES ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">Course objectives</div><h2>WHY THIS <span class="amber">COURSE</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term" style="height:100%">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>$ cat course.objectives</div>
+        <pre><span class="fn">[OK]</span> 01 — the fundamentals of computers
+<span class="fn">[OK]</span> 02 — the various steps in program development
+<span class="fn">[OK]</span> 03 — syntax &amp; semantics of the C language
+<span class="fn">[OK]</span> 04 — structured programming approaches
+<span class="fn">[OK]</span> 05 — writing algorithms · drawing flowcharts
+<span class="fn">[OK]</span> 06 — converting algorithms → C programs
+<span class="fn">[OK]</span> 07 — coding &amp; testing a given logic in C
+
+<span class="cm">$ exit status: all objectives mapped to slides ✓</span></pre>
+      </div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+      <p style="font-family:'VT323';font-size:30px;line-height:1.3;color:var(--phos)">The learning<br>path ahead:</p>
+      <div class="miniflow" style="align-items:stretch;gap:8px;margin-top:20px">
+        <div class="fnode" style="width:100%">FUNDAMENTALS<br><span style="font-size:15px;color:var(--ink-dim)">how a computer runs programs</span></div>
+        <div class="farrow">↓</div>
+        <div class="fnode" style="width:100%">DESIGN<br><span style="font-size:15px;color:var(--ink-dim)">algorithms · flowcharts · structure</span></div>
+        <div class="farrow">↓</div>
+        <div class="fnode amb" style="width:100%">IMPLEMENT<br><span style="font-size:15px">the C language · Unit I</span></div>
+        <div class="farrow" style="color:var(--amber)">↓</div>
+        <div class="fnode amb" style="width:100%">VERIFY<br><span style="font-size:15px">compile · test · debug</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. COMPUTER FUNDAMENTALS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">00 · foundations</div><h2>FUNDAMENTALS OF <span class="amber">COMPUTERS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term" style="height:100%">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>$ cat levels.txt — language levels</div>
+        <pre>LEVEL        EXAMPLES            UNDERSTOOD BY
+high-level   C · Python · Java   <span class="fn">humans ✓</span>
+assembly     mov ax, bx          assemblers
+machine      01001100 11100010   <span class="nm">CPU only</span>
+
+<span class="cm">/* translation pipeline */</span>
+C source ──<span class="kw">compiler</span>──▶ assembly ──<span class="kw">assembler</span>──▶ machine
+
+<span class="cm">/* the stored-program concept (von Neumann):
+   instructions live in memory like data —
+   the CPU fetches, decodes, executes them
+   one after another, at incredible speed. */</span></pre>
+      </div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+      <div class="card"><div class="c-label">CPU</div><div class="c-body">The brain: <b style="color:var(--phos)">ALU</b> (arithmetic/logic) + <b style="color:var(--phos)">control unit</b> (fetch–decode–execute cycle).</div></div>
+      <div class="card"><div class="c-label">MEMORY</div><div class="c-body"><b style="color:var(--phos)">RAM</b> — fast, volatile working store. <b style="color:var(--phos)">Disk</b> — slow, permanent. Variables live in RAM.</div></div>
+      <div class="card"><div class="c-label">INPUT / OUTPUT</div><div class="c-body">Keyboard, monitor, files — the interface between the program and the world. In C: <code>scanf</code> / <code>printf</code>.</div></div>
+      <div class="card amb"><div class="c-label">HARDWARE + SOFTWARE</div><div class="c-body">Hardware = the machinery. Software = <b style="color:var(--amber)">programs</b> — finite sequences of instructions. System software (OS, compiler) vs application software.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PROGRAM DEVELOPMENT STEPS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">00 · foundations</div><h2>STEPS IN PROGRAM <span class="amber">DEVELOPMENT</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="steprow"><div class="stepnum">01</div><div class="stepname">ANALYZE</div><div class="stepdesc">Define the problem precisely: given <b style="color:var(--phos)">input</b>, required <b style="color:var(--phos)">output</b>, and the processing that connects them (IPO).</div></div>
+      <div class="steprow"><div class="stepnum">02</div><div class="stepname">DESIGN</div><div class="stepdesc">Devise the method: write the <b style="color:var(--phos)">algorithm</b>, draw the <b style="color:var(--phos)">flowchart</b>. No code yet — logic only.</div></div>
+      <div class="steprow"><div class="stepnum">03</div><div class="stepname">CODE</div><div class="stepdesc">Translate the design into a high-level language — C — following its syntax exactly.</div></div>
+      <div class="steprow"><div class="stepnum">04</div><div class="stepname">COMPILE</div><div class="stepdesc">Run the compiler: source → object code → link with libraries → executable. Fix syntax errors.</div></div>
+      <div class="steprow"><div class="stepnum">05</div><div class="stepname">TEST</div><div class="stepdesc">Execute with carefully chosen data — normal, boundary, invalid. Compare against expected results.</div></div>
+      <div class="steprow"><div class="stepnum">06</div><div class="stepname">DOCUMENT</div><div class="stepdesc">Record the problem, design, and test evidence so others (and future you) can maintain it.</div></div>
+      <div class="steprow"><div class="stepnum">07</div><div class="stepname">MAINTAIN</div><div class="stepdesc">Fix defects discovered in use; adapt to new requirements. The longest phase of a program's life.</div></div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+      <div class="term">
+        <div class="term-head">dev-cycle</div>
+        <pre>analyze → design → code
+            ▲            │
+            │            ▼
+   maintain ◀── test ◀── compile
+   <span class="cm">failures loop you backwards</span></pre>
+      </div>
+      <div class="card amb"><div class="c-label">⚠ NOT A STRAIGHT LINE</div><div class="c-body">A failed test sends you back — to the code, the design, or even the problem analysis. Iteration is normal, not failure.</div></div>
+      <div class="card"><div class="c-label">RULE OF THUMB</div><div class="c-body">The earlier an error is caught, the cheaper it is: a design flaw fixed on paper costs minutes; the same flaw in production costs days.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. ALGORITHMS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">00 · foundations</div><h2>ALGORITHMS — THE <span class="amber">RECIPE</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <p class="sub" style="margin-top:0">An algorithm is a <b style="color:var(--phos)">finite, ordered, unambiguous</b> sequence of steps that transforms input into output and solves the problem. Every valid algorithm has five properties:</p>
+      <div class="defrow"><div class="dk">Input</div><div class="dv">Zero or more quantities supplied before it begins.</div></div>
+      <div class="defrow"><div class="dk">Output</div><div class="dv">At least one result produced — otherwise it solves nothing.</div></div>
+      <div class="defrow"><div class="dk">Definiteness</div><div class="dv">Every step is precisely stated — no ambiguity, ever.</div></div>
+      <div class="defrow"><div class="dk">Finiteness</div><div class="dv">It must terminate after a finite number of steps.</div></div>
+      <div class="defrow"><div class="dk">Effectiveness</div><div class="dv">Each step is basic enough to be carried out exactly.</div></div>
+    </div>
+    <div class="col rv d3">
+      <div class="term" style="height:100%">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>algorithm — largest of three</div>
+        <pre><span class="fn">ALGORITHM</span> LargestOfThree
+<span class="cm">/* stepwise refinement: plain,
+   numbered, language-free */</span>
+
+Step 1: <span class="kw">read</span>  a, b, c
+Step 2: max ← a
+Step 3: <span class="kw">if</span> b &gt; max <span class="kw">then</span> max ← b
+Step 4: <span class="kw">if</span> c &gt; max <span class="kw">then</span> max ← c
+Step 5: <span class="kw">print</span> max
+Step 6: <span class="kw">stop</span>
+
+<span class="cm">/* written in pseudocode —
+   structured English. Any C
+   programmer can translate
+   this directly.          */</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. FLOWCHARTS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">00 · foundations</div><h2>FLOWCHARTS — THE <span class="amber">MAP</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="symrow">
+        <div class="symdemo"><div class="sym pill">START</div></div>
+        <div class="symname">TERMINAL</div><div class="symdesc">Start / Stop — the entry and exit of the flowchart.</div>
+      </div>
+      <div class="symrow">
+        <div class="symdemo"><div class="sym para"><span>INPUT n</span></div></div>
+        <div class="symname">PARALLELOGRAM</div><div class="symdesc">Input / Output — reading data in, printing results out.</div>
+      </div>
+      <div class="symrow">
+        <div class="symdemo"><div class="sym">sum ← a + b</div></div>
+        <div class="symname">PROCESS</div><div class="symdesc">Computation — assignment, calculation, a block of work.</div>
+      </div>
+      <div class="symrow">
+        <div class="symdemo"><div class="diamwrap"><div class="diamond"></div><span class="dtxt">x &gt; 0 ?</span></div></div>
+        <div class="symname">DECISION</div><div class="symdesc">A question with two exits — yes/no, true/false. The branch point.</div>
+      </div>
+      <div class="symrow">
+        <div class="symdemo"><span class="farrow">──▶</span></div>
+        <div class="symname">ARROW</div><div class="symdesc">Flow of control — which step follows which.</div>
+      </div>
+      <div class="symrow" style="border-bottom:none">
+        <div class="symdemo"><div class="sym" style="border-radius:50%;width:34px;padding:6px 0">○</div></div>
+        <div class="symname">CONNECTOR</div><div class="symdesc">Joins flow across the page when arrows would cross.</div>
+      </div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+      <p style="font-family:'VT323';font-size:26px;color:var(--phos);text-align:center;margin-bottom:16px">EXAMPLE · largest of two</p>
+      <div class="miniflow">
+        <div class="sym pill">START</div>
+        <div class="farrow">↓</div>
+        <div class="sym para"><span>INPUT a, b</span></div>
+        <div class="farrow">↓</div>
+        <div class="diamwrap"><div class="diamond"></div><span class="dtxt">a &gt; b ?</span></div>
+        <div class="branchrow">
+          <div style="text-align:center">
+            <div class="blabel" style="color:var(--phos)">yes ↓</div>
+            <div class="sym para"><span>PRINT a</span></div>
+          </div>
+          <div style="text-align:center">
+            <div class="blabel" style="color:var(--amber)">no ↓</div>
+            <div class="sym para"><span>PRINT b</span></div>
+          </div>
+        </div>
+        <div class="farrow">↓ merge</div>
+        <div class="sym pill">STOP</div>
+      </div>
+      <p class="footnote" style="text-align:left;margin-top:20px">One entrance, one exit — every path through the chart ends at STOP.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. STRUCTURED PROGRAMMING ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">00 · foundations</div><h2>STRUCTURED <span class="amber">PROGRAMMING</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <ul class="tl">
+        <li><b>Top-down design</b> — start with the whole problem, decompose into sub-problems, refine each until a step is directly codeable. Big problem → small modules.</li>
+        <li><b>Single entry, single exit</b> — every block has exactly one way in and one way out. Control flow stays readable and traceable.</li>
+        <li><b>Three constructs suffice</b> — Böhm &amp; Jacopini proved any algorithm can be expressed with <b style="color:var(--amber)">sequence, selection, repetition</b> alone.</li>
+        <li><b>No goto</b> — arbitrary jumps create "spaghetti" logic that no one can follow. Structured constructs replace them.</li>
+        <li><b>Divide &amp; verify</b> — test each module independently, then integrate. Correctness composes.</li>
+      </ul>
+    </div>
+    <div class="col rv d3">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>structured-vs-spaghetti.c</div>
+        <pre><span class="cm">/* SPAGHETTI ✗ — where does flow go? */</span>
+  <span class="kw">goto</span> retry;
+  ...
+retry:
+  <span class="fn">scanf</span>(<span class="st">"%d"</span>, &amp;x);
+
+<span class="cm">/* STRUCTURED ✓ — shape of logic
+   is the shape of the code */</span>
+  <span class="kw">do</span> {
+      <span class="fn">scanf</span>(<span class="st">"%d"</span>, &amp;x);
+  } <span class="kw">while</span> (x &lt; <span class="nm">0</span>);
+
+<span class="cm">/* one way in →→ [ block ] →→ one way out */</span></pre>
+      </div>
+      <div class="card" style="margin-top:18px"><div class="c-label">WHY IT MATTERS</div><div class="c-body">C is a structured language — <code>if/else</code>, <code>while</code>, <code>for</code> are the tools. Learning to <i>design</i> structured is learning to <i>write</i> C well.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. ALGORITHM → FLOWCHART → C ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">00 · foundations</div><h2>FROM ALGORITHM TO <span class="amber">C PROGRAM</span></h2><div class="rule"></div></div>
+  <div class="cols" style="gap:26px">
+    <div class="col rv d2" style="flex:.72;display:flex;flex-direction:column;justify-content:center">
+      <p style="font-family:'VT323';font-size:22px;color:var(--phos);text-align:center;margin-bottom:14px">FLOWCHART</p>
+      <div class="miniflow">
+        <div class="sym pill" style="font-size:16px;padding:4px 20px">START</div>
+        <div class="farrow" style="font-size:24px">↓</div>
+        <div class="sym para" style="font-size:16px"><span>INPUT a,b,c</span></div>
+        <div class="farrow" style="font-size:24px">↓</div>
+        <div class="sym" style="font-size:16px">avg ← (a+b+c)/3</div>
+        <div class="farrow" style="font-size:24px">↓</div>
+        <div class="sym para" style="font-size:16px"><span>PRINT avg</span></div>
+        <div class="farrow" style="font-size:24px">↓</div>
+        <div class="sym pill" style="font-size:16px;padding:4px 20px">STOP</div>
+      </div>
+    </div>
+    <div class="col rv d3" style="flex:1">
+      <p style="font-family:'VT323';font-size:22px;color:var(--phos);margin-bottom:14px">PSEUDOCODE</p>
+      <div class="term">
+        <pre style="font-size:13.5px"><span class="fn">ALGORITHM</span> Average3
+
+Step 1: <span class="kw">read</span>  a, b, c
+Step 2: avg ← (a + b + c) / 3
+Step 3: <span class="kw">print</span> avg
+Step 4: <span class="kw">stop</span>
+
+<span class="cm">/* each numbered step maps
+   to ONE statement in C */</span></pre>
+      </div>
+      <div class="card" style="margin-top:16px"><div class="c-label">1 : 1 MAPPING</div><div class="c-body">INPUT → <code>scanf</code> · PROCESS → assignment · PRINT → <code>printf</code>. Translation is mechanical once the design is right.</div></div>
+    </div>
+    <div class="col rv d4" style="flex:1.15">
+      <p style="font-family:'VT323';font-size:22px;color:var(--amber);margin-bottom:14px">C PROGRAM</p>
+      <div class="term">
+        <div class="term-head">average3.c</div>
+        <pre style="font-size:13.5px"><span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="kw">double</span> a, b, c, avg;
+
+    <span class="fn">printf</span>(<span class="st">"Enter 3 marks&gt; "</span>);
+    <span class="fn">scanf</span>(<span class="st">"%lf%lf%lf"</span>,
+          &amp;a, &amp;b, &amp;c);
+
+    avg = (a + b + c) / <span class="nm">3</span>;
+
+    <span class="fn">printf</span>(<span class="st">"Avg = %.2f\n"</span>, avg);
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9. CODING & TESTING ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">00 · foundations</div><h2>CODING &amp; <span class="amber">TESTING</span></h2><div class="rule"></div></div>
+  <div class="rv d2">
+    <div class="flow">
+      <div class="fnode" style="font-size:20px">average.c<br><span style="font-size:13px;color:var(--ink-dim)">source</span></div>
+      <div class="farrow">──▶</div>
+      <div class="fnode amb" style="font-size:20px">COMPILER<br><span style="font-size:13px">cc -c</span></div>
+      <div class="farrow">──▶</div>
+      <div class="fnode" style="font-size:20px">average.o<br><span style="font-size:13px;color:var(--ink-dim)">object code</span></div>
+      <div class="farrow">──▶</div>
+      <div class="fnode amb" style="font-size:20px">LINKER<br><span style="font-size:13px">+ stdio libs</span></div>
+      <div class="farrow">──▶</div>
+      <div class="fnode" style="font-size:20px">a.out<br><span style="font-size:13px;color:var(--ink-dim)">executable</span></div>
+      <div class="farrow">──▶</div>
+      <div class="fnode" style="border-color:var(--amber);color:var(--amber)">RUN + TEST</div>
+    </div>
+  </div>
+  <div class="cols" style="margin-top:26px">
+    <div class="col rv d3">
+      <table>
+        <tr><th>Error type</th><th>Caught when</th><th>Example</th></tr>
+        <tr><td>Syntax</td><td>at compile time</td><td>missing <code>;</code> · unbalanced <code>)</code> · <code>scan</code> instead of <code>scanf</code></td></tr>
+        <tr><td>Runtime</td><td>during execution</td><td>division by zero · input of letters where numbers expected</td></tr>
+        <tr><td>Logic</td><td><span style="color:var(--red)">never automatically</span></td><td><code>avg = a + b + c / 3;</code> — precedence bug, compiles fine, wrong answer</td></tr>
+      </table>
+      <div class="card amb" style="margin-top:18px"><div class="c-label">⚠ LOGIC ERRORS</div><div class="c-body">The compiler sees nothing wrong. Only <b style="color:var(--amber)">testing against known results</b> and desk-checking traces reveal them.</div></div>
+    </div>
+    <div class="col rv d4">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>test-plan.txt</div>
+        <pre><span class="cm">/* choose data that probes edges */</span>
+
+normal:    70 80 90   → expect 80.00
+boundary:  0  0  0    → expect  0.00
+extreme:   100 100 100 → expect 100.00
+invalid:   -5 80 90  → decide: reject or accept?
+
+<span class="cm">/* debugging cycle */</span>
+fail → locate → correct → re-run <span class="kw">ALL</span> tests
+<span class="cm">// a fix can break what worked before</span></pre>
+      </div>
+      <div class="card" style="margin-top:16px"><div class="c-label">VERIFY BEFORE YOU TRUST</div><div class="c-body">A program that compiles is only <i>half</i> a program — correctness is earned at test time, not compile time.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. UNIT MAP ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">Load sequence</div><h2>UNIT MAP<span class="amber">.</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term" style="height:100%">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>$ cat unit01.sections</div>
+        <pre>00  foundations/    computers · dev steps
+01  foundations/    algorithms · flowcharts
+02  foundations/    structured design
+03  foundations/    algorithm→C · coding &amp; testing
+04  overview/       language elements
+05  overview/       variables · data types
+06  overview/       executable statements
+07  overview/       program anatomy
+08  overview/       arithmetic · formatting
+09  selection/      conditions · if · compound
+10  selection/      decision steps in algorithms
+11  repetition/     while · sum &amp; product
+12  repetition/     for · conditional loops
+13  repetition/     loop design · nesting
+14  repetition/     do-while</pre>
+      </div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+      <p style="font-family:'VT323';font-size:30px;line-height:1.3;color:var(--phos)">Three control<br>structures rule<br>them all:</p>
+      <div style="margin-top:22px">
+        <div class="card amb" style="margin-bottom:14px"><div class="c-label">SEQUENCE</div><div class="c-body">Statements execute one after another, top to bottom.</div></div>
+        <div class="card"><div class="c-label">SELECTION</div><div class="c-body">Branch: choose a path based on a condition.</div></div>
+        <div class="card" style="margin-top:14px"><div class="c-label">REPETITION</div><div class="c-body">Loop: repeat a block while a condition holds.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. LANGUAGE ELEMENTS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">01 · overview</div><h2>C LANGUAGE <span class="amber">ELEMENTS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>hello.c — anatomy</div>
+        <pre><span class="cm">/* Converts miles to kilometres */</span>
+<span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>      <span class="cm">← preprocessor directive</span>
+<span class="kw">#define</span> <span class="nm">KM_PER_MILE</span> <span class="nm">1.609</span> <span class="cm">← named constant</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)              <span class="cm">← entry point</span>
+{
+  <span class="kw">double</span> miles, kms;        <span class="cm">← declarations</span>
+  <span class="fn">printf</span>(<span class="st">"Enter miles&gt; "</span>);
+  <span class="fn">scanf</span>(<span class="st">"%lf"</span>, &amp;miles);
+  kms = miles * KM_PER_MILE; <span class="cm">← executable stmt</span>
+  <span class="fn">printf</span>(<span class="st">"%f km\n"</span>, kms); <span class="cm">← \n = escape seq</span>
+  <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+      </div>
+    </div>
+    <div class="col rv d3">
+      <ul class="tl">
+        <li><b>Reserved words</b> — <code>int</code>, <code>double</code>, <code>if</code>, <code>while</code>, <code>return</code> — fixed meaning, lowercase only.</li>
+        <li><b>Identifiers</b> — names for variables &amp; functions. Case-sensitive: <code>Km</code> ≠ <code>km</code>. Letters, digits, <code>_</code>; can't start with a digit.</li>
+        <li><b>Comments</b> — <code>/* ... */</code> between tokens, ignored by compiler.</li>
+        <li><b>Standard library</b> — <code>stdio.h</code> gives <code>printf</code> / <code>scanf</code> prototypes.</li>
+        <li><b>Statements</b> — end with a semicolon <code>;</code>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12. VARIABLES & TYPES ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">02 · overview</div><h2>VARIABLES &amp; <span class="amber">DATA TYPES</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <table>
+        <tr><th>Type</th><th>Stores</th><th>Typical range</th><th>printf/scanf</th></tr>
+        <tr><td>int</td><td>whole numbers</td><td>−2,147,483,648 … 2,147,483,647</td><td>%d</td></tr>
+        <tr><td>char</td><td>one character</td><td>'a', '7', '*'</td><td>%c</td></tr>
+        <tr><td>float</td><td>real (single)</td><td>≈ 7 significant digits</td><td>%f / %f</td></tr>
+        <tr><td>double</td><td>real (double)</td><td>≈ 15 significant digits</td><td>%f / %lf</td></tr>
+      </table>
+      <p class="sub" style="margin-top:18px">A declaration tells the compiler the <b style="color:var(--phos)">name</b> and <b style="color:var(--phos)">type</b> of memory to reserve. A variable can hold only values of its declared type.</p>
+    </div>
+    <div class="col rv d3">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>declare.c</div>
+        <pre><span class="cm">/* declare before use — always */</span>
+<span class="kw">int</span>    item_count;      <span class="cm">— integer</span>
+<span class="kw">char</span>   first_initial;   <span class="cm">— character</span>
+<span class="kw">float</span>  unit_price;
+<span class="kw">double</span> total_salary;
+
+<span class="cm">/* invalid identifiers */</span>
+<span class="kw">int</span> 1st_place;    <span class="cm">// starts with digit ✗</span>
+<span class="kw">int</span> total sales;  <span class="cm">// space ✗</span>
+<span class="kw">int</span> my$money;    <span class="cm">// $ not allowed ✗</span>
+
+<span class="cm">/* good style: meaningful names */</span>
+<span class="kw">int</span> letter_count; <span class="cm">// ✓</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 13. EXECUTABLE STATEMENTS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">03 · overview</div><h2>EXECUTABLE <span class="amber">STATEMENTS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="defrow"><div class="dk">Assignment</div><div class="dv"><code>kms = miles * 1.609;</code> — computes, then stores in the left-side variable. The old value is destroyed.</div></div>
+      <div class="defrow"><div class="dk">Input (scanf)</div><div class="dv"><code>scanf("%lf", &amp;miles);</code> — copies data from keyboard into memory. The <code>&amp;</code> (address-of) is required.</div></div>
+      <div class="defrow"><div class="dk">Output (printf)</div><div class="dv"><code>printf("Value = %d\n", x);</code> — placeholders in the format string are filled by the value list.</div></div>
+      <div class="defrow"><div class="dk">Function call</div><div class="dv"><code>area = find_area(r);</code> — transfer control, return a value, resume here.</div></div>
+      <div class="defrow"><div class="dk">Return</div><div class="dv"><code>return (0);</code> — exits <code>main</code>, 0 signals normal completion to the OS.</div></div>
+    </div>
+    <div class="col rv d3">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>payroll.c</div>
+        <pre><span class="kw">double</span> hours, rate, pay;
+
+<span class="fn">printf</span>(<span class="st">"Hours worked&gt; "</span>);  <span class="cm">// prompt</span>
+<span class="fn">scanf</span>(<span class="st">"%lf"</span>, &amp;hours);
+
+<span class="fn">printf</span>(<span class="st">"Rate per hour&gt; "</span>);
+<span class="fn">scanf</span>(<span class="st">"%lf"</span>, &amp;rate);
+
+pay = hours * rate;         <span class="cm">// assignment</span>
+
+<span class="fn">printf</span>(<span class="st">"Pay = $%f\n"</span>, pay);</pre>
+      </div>
+      <div class="card amb" style="margin-top:18px"><div class="c-label">⚠ ASSIGNMENT ≠ EQUALS</div><div class="c-body">In C, <code>=</code> means "get, then store" — not mathematical equality. It's a <i>copy</i> operation, right to left.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14. GENERAL FORM ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">04 · overview</div><h2>GENERAL FORM OF A <span class="amber">C PROGRAM</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="flow">
+        <div class="fnode">/* comments */</div>
+        <div class="farrow">↓</div>
+        <div class="fnode">#include &lt;stdio.h&gt;<br><span style="font-size:16px;color:var(--ink-dim)">preprocessor directives</span></div>
+        <div class="farrow">↓</div>
+        <div class="fnode amb">int main(void)<br><span style="font-size:16px">function header</span></div>
+        <div class="farrow">↓</div>
+        <div class="fnode">declarations<br><span style="font-size:16px;color:var(--ink-dim)">int x; double y;</span></div>
+        <div class="farrow">↓</div>
+        <div class="fnode">executable statements</div>
+        <div class="farrow">↓</div>
+        <div class="fnode">return (0);<br><span style="font-size:16px;color:var(--ink-dim)">exit status</span></div>
+      </div>
+      <p class="footnote" style="margin-top:22px">Every program must define exactly one <code>main()</code> — execution begins there, always.</p>
+    </div>
+    <div class="col rv d3">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>skeleton.c — boilerplate</div>
+        <pre><span class="cm">/* program description
+   author · date here */</span>
+<span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
+
+<span class="kw">int</span>
+<span class="fn">main</span>(<span class="kw">void</span>)
+{
+    <span class="cm">/* local declarations  */</span>
+    <span class="kw">int</span>    variable_a;
+    <span class="kw">double</span> variable_b;
+
+    <span class="cm">/* statements         */</span>
+    variable_a = <span class="nm">5</span>;
+    variable_b = <span class="nm">2.5</span> * variable_a;
+
+    <span class="fn">printf</span>(<span class="st">"b = %f\n"</span>, variable_b);
+
+    <span class="kw">return</span> (<span class="nm">0</span>);
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 15. ARITHMETIC ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">05 · overview</div><h2>ARITHMETIC <span class="amber">EXPRESSIONS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <table>
+        <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
+        <tr><td>+ −</td><td>add / subtract</td><td>5 + 2.5</td><td>7.5</td></tr>
+        <tr><td>*</td><td>multiply</td><td>3 * 4</td><td>12</td></tr>
+        <tr><td>/</td><td>divide</td><td>5 / 2</td><td><span style="color:var(--red)">2 (int!)</span></td></tr>
+        <tr><td>/</td><td>divide (mixed)</td><td>5 / 2.0</td><td>2.5</td></tr>
+        <tr><td>%</td><td>remainder (ints only)</td><td>5 % 2</td><td>1</td></tr>
+      </table>
+      <div class="card amb" style="margin-top:20px"><div class="c-label">⚠ INTEGER DIVISION TRAP</div><div class="c-body">When <i>both</i> operands are <code>int</code>, <code>/</code> truncates the fraction. Cast or use a real operand: <code>(double)5 / 2</code> → <code>2.5</code>.</div></div>
+    </div>
+    <div class="col rv d3">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>precedence.c</div>
+        <pre><span class="cm">/* precedence, high → low */</span>
+( )                 <span class="cm">1. parentheses</span>
+*  /  %             <span class="cm">2. mult / div / mod</span>
++  −                <span class="cm">3. add / sub</span>
+
+<span class="cm">/* left-to-right for equal precedence */</span>
+<span class="nm">12</span> - <span class="nm">3</span> + <span class="nm">4</span>  →  (<span class="nm">12</span>-<span class="nm">3</span>) + <span class="nm">4</span>  →  <span class="nm">13</span>
+<span class="nm">10</span> / <span class="nm">5</span> * <span class="nm">2</span>  →  (<span class="nm">10</span>/<span class="nm">5</span>) * <span class="nm">2</span>  →  <span class="nm">4</span>
+
+<span class="cm">/* parentheses change everything */</span>
+(<span class="nm">12</span> - <span class="nm">3</span> + <span class="nm">4</span>) * <span class="nm">2</span>   →  <span class="nm">26</span>
+<span class="nm">10</span> / (<span class="nm">5</span> * <span class="nm">2</span>)       →  <span class="nm">1</span>
+
+<span class="cm">/* mixed types: int promoted to double */</span>
+<span class="nm">5</span> * <span class="nm">2.5</span>   →  <span class="nm">12.5</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 16. FORMATTING ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">06 · overview</div><h2>FORMATTING NUMBERS IN <span class="amber">OUTPUT</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>format.c</div>
+        <pre><span class="kw">double</span> num = <span class="nm">123.456789</span>;
+
+<span class="fn">printf</span>(<span class="st">"[%f]"</span>,   num);   <span class="cm">→ [123.456789]</span>
+<span class="fn">printf</span>(<span class="st">"[%.2f]"</span>,  num);   <span class="cm">→ [123.46]</span>
+<span class="fn">printf</span>(<span class="st">"[%9.2f]"</span>, num);   <span class="cm">→ [   123.46]</span>
+<span class="fn">printf</span>(<span class="st">"[%-9.2f]"</span>,num);   <span class="cm">→ [123.46   ]</span>
+<span class="fn">printf</span>(<span class="st">"[%d]"</span>,  <span class="nm">42</span>);      <span class="cm">→ [42]</span>
+<span class="fn">printf</span>(<span class="st">"[%5d]"</span>, <span class="nm">42</span>);      <span class="cm">→ [   42]</span>
+<span class="fn">printf</span>(<span class="st">"[%c]"</span>, <span class="st">'A'</span>);      <span class="cm">→ [A]</span></pre>
+      </div>
+      <div class="card" style="margin-top:18px"><div class="c-label">SPEC %n.mf</div><div class="c-body"><code>%9.2f</code> → field width <b>9</b>, precision <b>2</b> decimals, right-aligned by default; <code>-</code> flips it left. Money output: <code>%.2f</code> is standard.</div></div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+      <div class="card"><div class="c-label">%d</div><div class="c-body">Print an <code>int</code> in decimal. Width <code>%5d</code> pads with spaces.</div></div>
+      <div class="card"><div class="c-label">%f</div><div class="c-body">Print a <code>float</code>/<code>double</code>; default shows 6 decimal places.</div></div>
+      <div class="card"><div class="c-label">%c · %s</div><div class="c-body">A single character, and a string of characters.</div></div>
+      <div class="card amb"><div class="c-label">⚠ MISMATCH</div><div class="c-body">A placeholder must match its value's type — <code>%d</code> with a <code>double</code> prints garbage. No compiler error, just wrong output.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 17. CONDITIONS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">01 · selection structures</div><h2>CONTROL STRUCTURES &amp; <span class="amber">CONDITIONS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <table>
+        <tr><th>Relational</th><th>Meaning</th><th>Logical</th><th>Meaning</th></tr>
+        <tr><td>&lt;  &gt;</td><td>less / greater</td><td>&amp;&amp;</td><td>AND — both true</td></tr>
+        <tr><td>&lt;=  &gt;=</td><td>or equal</td><td>||</td><td>OR — either true</td></tr>
+        <tr><td>==</td><td>equal to</td><td>!</td><td>NOT — invert</td></tr>
+        <tr><td>!=</td><td>not equal</td><td></td><td></td></tr>
+      </table>
+      <p class="sub" style="margin-top:16px">A condition is an <b style="color:var(--phos)">expression</b> that evaluates to <b style="color:var(--phos)">1 (true)</b> or <b style="color:var(--phos)">0 (false)</b>. C has no boolean keyword here — the number <i>is</i> the answer.</p>
+      <div class="card amb" style="margin-top:14px"><div class="c-label">⚠ == vs =</div><div class="c-body"><code>x == 5</code> compares. <code>x = 5</code> assigns and yields 5 (true!) — the classic bug.</div></div>
+    </div>
+    <div class="col rv d3">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>condition.c</div>
+        <pre><span class="kw">int</span> x = <span class="nm">4</span>, y = <span class="nm">9</span>;
+
+x &lt; y              <span class="cm">/* 1 — true  */</span>
+x &gt;= y             <span class="cm">/* 0 — false */</span>
+x == <span class="nm">4</span>            <span class="cm">/* 1         */</span>
+
+<span class="cm">/* short-circuit evaluation */</span>
+(x &gt; <span class="nm">0</span>) &amp;&amp; (y / x &gt; <span class="nm">2</span>)   <span class="cm">// right side only if needed</span>
+(x &lt; <span class="nm">0</span>) || (y % x == <span class="nm">1</span>)   <span class="cm">// || stops at first true</span>
+
+<span class="cm">/* operator precedence */</span>
+!  &gt;  &amp;&amp;  &gt;  ||
+<span class="cm">/* relational beat logical */</span>
+x &gt; <span class="nm">0</span> &amp;&amp; y &gt; <span class="nm">0</span>  ==  (x&gt;<span class="nm">0</span>) &amp;&amp; (y&gt;<span class="nm">0</span>)</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 18. IF ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">02 · selection structures</div><h2>THE <span class="amber">if</span> STATEMENT</h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>grade.c — compound statements</div>
+        <pre><span class="kw">if</span> (score &gt;= <span class="nm">90</span>)
+    grade = <span class="st">'A'</span>;              <span class="cm">// single stmt</span>
+
+<span class="cm">/* compound: braces make ONE block */</span>
+<span class="kw">if</span> (score &lt; <span class="nm">60</span>) {
+    <span class="fn">printf</span>(<span class="st">"Failing\n"</span>);
+    grade    = <span class="st">'F'</span>;
+    failures = failures + <span class="nm">1</span>;
+}
+
+<span class="cm">/* two-way decision */</span>
+<span class="kw">if</span> (x != <span class="nm">0</span>)
+    result = y / x;
+<span class="kw">else</span> {
+    <span class="fn">printf</span>(<span class="st">"Divide by zero!\n"</span>);
+    result = <span class="nm">0</span>;
+}</pre>
+      </div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:18px">
+      <div class="fnode" style="width:100%">condition ?</div>
+      <div style="display:flex;gap:14px">
+        <div style="flex:1;text-align:center">
+          <div class="farrow">true ↓</div>
+          <div class="fnode" style="margin-top:8px">statement₁<br><span style="font-size:14px;color:var(--ink-dim)">then-block</span></div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div class="farrow" style="color:var(--amber)">false ↓</div>
+          <div class="fnode amb" style="margin-top:8px">statement₂<br><span style="font-size:14px">else-block</span></div>
+        </div>
+      </div>
+      <ul class="tl" style="margin-top:10px">
+        <li><b>Compound</b> = braces <code>{ }</code> treat a group as one statement. Dangling statements without braces belong to the <code>if</code> only.</li>
+        <li><b>Indentation</b> is for humans — the compiler only sees braces.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 19. DECISION STEPS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">03 · selection structures</div><h2>DECISION STEPS IN <span class="amber">ALGORITHMS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>pseudocode — overtime pay</div>
+        <pre><span class="fn">IF</span> hours &gt; 40.0
+<span class="fn">THEN</span>
+    pay = 40.0 * rate
+          + (hours − 40.0) * rate * 1.5
+<span class="fn">ELSE</span>
+    pay = hours * rate
+<span class="fn">ENDIF</span>
+
+<span class="cm">/* C translation — 1:1 mapping */</span>
+<span class="kw">if</span> (hours &gt; <span class="nm">40.0</span>)
+    pay = <span class="nm">40.0</span> * rate
+        + (hours − <span class="nm">40.0</span>) * rate * <span class="nm">1.5</span>;
+<span class="kw">else</span>
+    pay = hours * rate;</pre>
+      </div>
+    </div>
+    <div class="col rv d3">
+      <ul class="tl">
+        <li><b>Pseudocode</b> and <b>flowcharts</b> express decisions before code: <code>if/then/else/endif</code> mirrors C's <code>if/else</code> exactly.</li>
+        <li><b>Refinement</b>: solve the simple case first, then add decisions around special cases (boundaries, invalid input).</li>
+        <li><b>Guard pattern</b> — validate input before using it:</li>
+      </ul>
+      <div class="term" style="margin-top:14px">
+        <pre><span class="kw">if</span> (num_employees &lt;= <span class="nm">0</span>) {
+    <span class="fn">printf</span>(<span class="st">"Invalid data\n"</span>);
+} <span class="kw">else</span> {
+    avg = total / num_employees;
+    <span class="fn">printf</span>(<span class="st">"Average = %.2f\n"</span>, avg);
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 20. WHILE ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">01 · repetition &amp; loops</div><h2>THE <span class="amber">while</span> STATEMENT</h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>count.c — counting loop</div>
+        <pre><span class="cm">/* prints 1 .. count      */</span>
+<span class="kw">int</span> count = <span class="nm">5</span>;         <span class="cm">— initialize</span>
+<span class="kw">int</span> i    = <span class="nm">1</span>;
+
+<span class="kw">while</span> (i &lt;= count) {    <span class="cm">— test BEFORE body</span>
+    <span class="fn">printf</span>(<span class="st">"i = %d\n"</span>, i);
+    i = i + <span class="nm">1</span>;         <span class="cm">— update: move forward</span>
+}
+<span class="cm">/* loop exits when i == 6 */</span></pre>
+      </div>
+      <div class="card amb" style="margin-top:16px"><div class="c-label">⚠ INFINITE LOOPS</div><div class="c-body">Forget the <b>update step</b> and the condition never becomes false — the loop runs forever. Every loop needs init + test + update.</div></div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+      <div class="fnode">initialize loop control var</div>
+      <div class="farrow">↓</div>
+      <div class="fnode amb">while (condition) ?</div>
+      <div class="farrow">true ↓ &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--phos-dim)">false → exit loop</span></div>
+      <div class="fnode">body: statements<br><span style="font-size:14px;color:var(--ink-dim)">+ update control var</span></div>
+      <div class="farrow">↺ repeat</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 21. SUM / PRODUCT ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">02 · repetition &amp; loops</div><h2>COMPUTING A SUM OR <span class="amber">PRODUCT</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>accumulator.c</div>
+        <pre><span class="cm">/* SUM: accumulate additions */</span>
+<span class="kw">double</span> sum = <span class="nm">0.0</span>;         <span class="cm">— start at identity</span>
+<span class="kw">int</span>    i;
+<span class="kw">for</span> (i = <span class="nm">1</span>; i &lt;= <span class="nm">10</span>; i = i + <span class="nm">1</span>)
+    sum = sum + i;         <span class="cm">— running total</span>
+<span class="cm">/* sum == 55 */</span>
+
+<span class="cm">/* PRODUCT: accumulate factors */</span>
+<span class="kw">double</span> fact = <span class="nm">1.0</span>;         <span class="cm">— 1, not 0!</span>
+<span class="kw">for</span> (i = <span class="nm">1</span>; i &lt;= <span class="nm">5</span>; i = i + <span class="nm">1</span>)
+    fact = fact * i;       <span class="cm">— 5! = 120</span></pre>
+      </div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="cards">
+        <div class="card" style="width:100%"><div class="c-label">PATTERN · ACCUMULATOR</div><div class="c-body">Initialize the accumulator <b style="color:var(--phos)">outside</b> the loop, then update it inside with the running operation.</div></div>
+        <div class="card amb"><div class="c-label">SUM → 0</div><div class="c-body">Zero is the identity for addition — adding 0 changes nothing.</div></div>
+        <div class="card amb"><div class="c-label">PRODUCT → 1</div><div class="c-body">One is the identity for multiplication. Starting at 0 makes every product 0.</div></div>
+      </div>
+      <p class="footnote" style="margin-top:20px">Trace it: sum = 0 → 1 → 3 → 6 → 10 → … → 55. Small traces prove loops correct.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 22. FOR ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">03 · repetition &amp; loops</div><h2>THE <span class="amber">for</span> STATEMENT</h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>for.c — the three-in-one header</div>
+        <pre><span class="kw">for</span> (<span class="fn">i = 1</span>; <span class="fn">i &lt;= n</span>; <span class="fn">i = i + 1</span>)
+     <span class="cm">└─init──┘└─repeat-cond─┘└──update──┘</span>
+    <span class="fn">printf</span>(<span class="st">"%d\n"</span>, i);
+
+<span class="cm">/* EXACTLY equivalent to: */</span>
+i = <span class="nm">1</span>;
+<span class="kw">while</span> (i &lt;= n) {
+    <span class="fn">printf</span>(<span class="st">"%d\n"</span>, i);
+    i = i + <span class="nm">1</span>;
+}
+
+<span class="cm">/* steps: init → test → body → update → test … */</span>
+<span class="cm">/* update runs AFTER the body, every pass     */</span></pre>
+      </div>
+    </div>
+    <div class="col rv d3">
+      <ul class="tl">
+        <li><b>Best for counting loops</b> — when you know the number of repetitions in advance: init, condition, and update live together on one line, nothing is forgotten.</li>
+        <li><b>Loop-control variable</b> <code>i</code> may be declared in the header: <code>for (int i = 0; …)</code>.</li>
+        <li><b>Never modify</b> the control variable inside the body — let the update expression do it.</li>
+        <li><b>Counting down</b> works too: <code>for (i = n; i &gt;= 1; i = i − 1)</code>.</li>
+        <li><b>Off-by-one</b>: <code>&lt;= n</code> runs n times; <code>&lt; n</code> runs n−1. Decide which you mean.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 23. CONDITIONAL LOOPS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">04 · repetition &amp; loops</div><h2>CONDITIONAL <span class="amber">LOOPS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>sentinel.c</div>
+        <pre><span class="cm">/* loop until a sentinel value arrives */</span>
+<span class="fn">printf</span>(<span class="st">"Enter scores (-1 to stop)&gt; "</span>);
+<span class="fn">scanf</span>(<span class="st">"%d"</span>, &amp;score);
+
+<span class="kw">while</span> (score != <span class="nm">SENTINEL</span>) {  <span class="cm">−1</span>
+    sum   = sum + score;
+    count = count + <span class="nm">1</span>;
+    <span class="fn">scanf</span>(<span class="st">"%d"</span>, &amp;score);   <span class="cm">get next</span>
+}
+avg = sum / count;</pre>
+      </div>
+      <div class="card amb" style="margin-top:16px"><div class="c-label">⚠ PRIMING READ</div><div class="c-body">The first <code>scanf</code> happens <i>before</i> the loop; each pass reads the <i>next</i> value at the end. Both are required — miss one and the loop never advances.</div></div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
+      <div class="card"><div class="c-label">SENTINEL-CONTROLLED</div><div class="c-body">Repeat until a special "end of data" value arrives (e.g. <code>-1</code>, <code>EOF</code>). Count of repetitions unknown up front.</div></div>
+      <div class="card"><div class="c-label">FLAG-CONTROLLED</div><div class="c-body"><code>while (!found) { … }</code> — a 0/1 variable flips when the event occurs.</div></div>
+      <div class="card"><div class="c-label">ENDFILE-CONTROLLED</div><div class="c-body"><code>scanf</code> returns <code>EOF</code> when input ends: <code>while (scanf("%d",&amp;x) != EOF)</code>.</div></div>
+      <div class="card"><div class="c-label">INPUT VALIDATION</div><div class="c-body">Keep asking until the answer is legal: <code>while (x &lt; 0) { re-prompt; }</code></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 24. LOOP DESIGN ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">05 · repetition &amp; loops</div><h2>LOOP <span class="amber">DESIGN</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <p style="font-family:'VT323';font-size:32px;color:var(--phos);line-height:1.25;margin-bottom:18px">Answer three questions,<br>and any loop is correct.</p>
+      <div class="defrow"><div class="dk">1 · Initialize</div><div class="dv">How are the control variable <b>and</b> the accumulators set before the first test?</div></div>
+      <div class="defrow"><div class="dk">2 · Condition</div><div class="dv">What exactly makes the loop continue? When does it <b>stop</b>? What is true at exit?</div></div>
+      <div class="defrow"><div class="dk">3 · Update</div><div class="dv">What changes each pass so progress is guaranteed toward termination?</div></div>
+      <div class="defrow"><div class="dk">Body</div><div class="dv">What work is repeated — and what must stay <i>outside</i> (done once, not n times)?</div></div>
+    </div>
+    <div class="col rv d3">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>design-trace.txt — sum 1..n</div>
+        <pre><span class="cm">/* GOAL: sum of first n integers */</span>
+
+init:    sum = 0,  i = 1          <span class="cm">✓</span>
+cond:    i &lt;= n                   <span class="cm">✓</span>
+update:  i = i + 1                <span class="cm">✓</span>
+body:    sum = sum + i            <span class="cm">✓</span>
+
+<span class="cm">/* trace for n = 3 — desk check */</span>
+
+ pass │  i  │ cond │   sum
+──────┼─────┼──────┼───────
+ init │  1  │  —   │   0
+  1   │  1  │  T   │   1
+  2   │  2  │  T   │   3
+  3   │  3  │  T   │   6
+ exit │  4  │  F   │   6 ✓</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 25. NESTED LOOPS ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">06 · repetition &amp; loops</div><h2>NESTED <span class="amber">LOOPS</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>times_table.c</div>
+        <pre><span class="cm">/* inner loop restarts for EVERY
+   outer pass — total iterations
+   = outer × inner              */</span>
+<span class="kw">int</span> row, col;
+
+<span class="kw">for</span> (row = <span class="nm">1</span>; row &lt;= <span class="nm">5</span>; row = row + <span class="nm">1</span>) {
+    <span class="kw">for</span> (col = <span class="nm">1</span>; col &lt;= <span class="nm">5</span>; col = col + <span class="nm">1</span>) {
+        <span class="fn">printf</span>(<span class="st">"%4d"</span>, row * col);
+    }
+    <span class="fn">printf</span>(<span class="st">"\n"</span>);   <span class="cm">— end of row only</span>
+}</pre>
+      </div>
+      <div class="term" style="margin-top:16px">
+        <div class="term-head">stdout</div>
+        <pre>   1   2   3   4   5
+   2   4   6   8  10
+   3   6   9  12  15
+   4   8  12  16  20
+   5  10  15  20  25</pre>
+      </div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+      <ul class="tl">
+        <li><b>Outer loop</b> controls rows; <b>inner loop</b> fully completes for each single outer pass.</li>
+        <li><b>Use different control variables</b> — <code>row</code> and <code>col</code>, never the same <code>i</code> for both.</li>
+        <li><b>Cost multiplies</b>: 5 × 5 = 25 iterations; 100 × 100 = 10,000. Nested loops get expensive fast.</li>
+        <li><b>Statement placement matters</b> — inside the inner loop repeats every pass; between the loops repeats once per row; outside runs once.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 26. DO-WHILE ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">07 · repetition &amp; loops</div><h2>THE <span class="amber">do-while</span> STATEMENT</h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>validate.c — test at the BOTTOM</div>
+        <pre><span class="kw">do</span> {
+    <span class="fn">printf</span>(<span class="st">"Enter rate (0-10)&gt; "</span>);
+    <span class="fn">scanf</span>(<span class="st">"%lf"</span>, &amp;rate);
+} <span class="kw">while</span> (rate &lt; <span class="nm">0.0</span> || rate &gt; <span class="nm">10.0</span>);
+<span class="cm">/* body first — then the test */</span></pre>
+      </div>
+      <div class="term" style="margin-top:16px">
+        <div class="term-head">syntax</div>
+        <pre><span class="kw">do</span> {
+    statement(s);
+} <span class="kw">while</span> (condition);   <span class="cm">← semicolon!</span></pre>
+      </div>
+      <div class="card amb" style="margin-top:16px"><div class="c-label">⚠ SEMICOLON REQUIRED</div><div class="c-body">The <code>;</code> after <code>while (...)</code> is mandatory — forgetting it is a syntax error.</div></div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
+      <div class="fnode">body: statements</div>
+      <div class="farrow">↓</div>
+      <div class="fnode amb">condition ?</div>
+      <div class="farrow">true ↺ repeat &nbsp;&nbsp;·&nbsp;&nbsp; <span style="color:var(--phos-dim)">false → exit</span></div>
+      <ul class="tl" style="margin-top:10px">
+        <li><b>Post-test loop</b> — the body always runs <b>at least once</b>, even if the condition is false from the start.</li>
+        <li><b>vs. while</b> — <code>while</code> is pre-test (may run zero times); <code>do-while</code> is post-test (runs ≥ once).</li>
+        <li><b>Classic use</b> — input validation and menus: you must ask once before you can test the answer.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 27. SUMMARY ============ -->
+<section class="slide">
+  <div class="rv d1"><div class="kicker">Foundations + Unit I · complete</div><h2 style="font-size:clamp(52px,5.6vw,80px)">SESSION <span class="amber">SUMMARY</span></h2><div class="rule"></div></div>
+  <div class="cols">
+    <div class="col rv d2">
+      <div class="defrow"><div class="dk">Foundations</div><div class="dv">Computer levels · 7 development steps · algorithm properties (input, output, definiteness, finiteness, effectiveness) · flowchart symbols · structured top-down design · compile → test → debug.</div></div>
+      <div class="defrow"><div class="dk">Overview</div><div class="dv">Language elements · declarations &amp; types · executable statements · program form · arithmetic precedence · <code>printf</code> formatting (%d, %n.mf).</div></div>
+      <div class="defrow"><div class="dk">Selection</div><div class="dv">Conditions yield 1/0 · relational &amp; logical operators · <code>if / if-else</code> · compound <code>{ }</code> blocks · decision steps in algorithms.</div></div>
+      <div class="defrow"><div class="dk">Repetition</div><div class="dv"><code>while</code> (pre-test) · accumulators (sum→0, product→1) · <code>for</code> (init; test; update) · sentinel / flag / EOF loops · nested loops · <code>do-while</code> (post-test).</div></div>
+    </div>
+    <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="term">
+        <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>course — exit status</div>
+        <pre>$ grep -c <span class="st">"learned"</span> course.objectives
+<span class="nm">7 / 7</span>   <span class="fn">✓ all objectives covered</span>
+
+<span class="fn">printf</span>(<span class="st">"CONTROL = SEQUENCE + SELECTION\n"</span>);
+<span class="fn">printf</span>(<span class="st">"         + REPETITION\n"</span>);
+<span class="kw">return</span> (<span class="nm">0</span>);   <span class="cm">// success ✓</span></pre>
+      </div>
+      <div style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
+        Next: UNIT II — <span style="color:var(--amber)">Functions &amp; Modular Design</span> <span class="blink-live">█</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="hud">
+  <div class="sys">
+    <span class="pg" id="pagenum">01 / 27</span>
+    <span>C PROGRAMMING · FOUNDATIONS + UNIT I</span>
+    <span style="color:var(--phos-dim)">TTY01</span>
+  </div>
+  <div class="sys">
+    <span>← → · SPACE · CLICK</span>
+    <div class="navbtns">
+      <button class="nbtn" onclick="nav(-1)">PREV</button>
+      <button class="nbtn" onclick="nav(1)">NEXT</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+let cur=0;
+const pad=n=>String(n).padStart(2,'0');
+function show(i){
+  slides[cur].classList.remove('active');
+  cur=(i+slides.length)%slides.length;
+  slides[cur].classList.add('active');
+  document.getElementById('pagenum').textContent=pad(cur+1)+' / '+pad(slides.length);
+  document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%';
+}
+function nav(d){show(cur+d);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();nav(-1);}
+  if(e.key==='Home'){show(0);}
+  if(e.key==='End'){show(slides.length-1);}
+});
+document.getElementById('deck').addEventListener('click',e=>{
+  if(e.target.closest('.nbtn'))return;
+  nav(e.clientX>window.innerWidth/2?1:-1);
+});
+show(0);
+</script>
+</body>
+</html>
