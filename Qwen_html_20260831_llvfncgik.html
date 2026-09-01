@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Programming in C · Units II–IX — Complete Course Deck</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050807;--panel:#0a120d;--line:#1c3a28;--ink:#d3ecda;--dim:#6e8f7b;
+      --grn:#4dff7c;--amb:#ffb454;--red:#ff6d6d;--cyn:#6fd8ff}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);overflow:hidden;
+     font:15px/1.65 "Cascadia Code","Fira Code","JetBrains Mono",Consolas,"Courier New",monospace}
+::selection{background:rgba(77,255,124,.25)}
+.scan{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.45;
+      background:repeating-linear-gradient(0deg,rgba(0,0,0,.15) 0 1px,transparent 1px 3px)}
+#bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grn);
+     box-shadow:0 0 12px var(--grn);z-index:70;transition:width .25s ease}
+.slide{position:fixed;top:0;left:0;right:0;bottom:42px;display:none;
+       padding:52px clamp(20px,7vw,110px) 70px;overflow-y:auto}
+.slide.active{display:block;animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tag{color:var(--dim);font-size:12px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:12px}
+.tag b{color:var(--grn);font-weight:600}
+h1{color:var(--grn);text-shadow:0 0 22px rgba(77,255,124,.4);
+   font-size:clamp(26px,3.8vw,42px);letter-spacing:.05em;margin:8px 0 14px}
+h2{color:var(--grn);text-shadow:0 0 16px rgba(77,255,124,.32);
+   font-size:clamp(19px,2.6vw,30px);letter-spacing:.04em;margin-bottom:16px}
+h3{color:var(--cyn);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin:20px 0 6px}
+.lead{max-width:940px;margin-bottom:14px}
+.lead b,.lead strong{color:var(--grn)}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:14px 18px;margin:12px 0;overflow-x:auto;font-size:13.5px;line-height:1.6;color:#bfe6cb}
+pre.term{border-left:4px solid var(--grn)}
+pre.big{font-size:clamp(6.5px,1.02vw,12.5px);line-height:1.18;color:var(--grn);white-space:pre;
+        text-shadow:0 0 10px rgba(77,255,124,.35);border:none;background:transparent}
+pre.mid{font-size:12.5px;line-height:1.45}
+table{border-collapse:collapse;margin:12px 0;font-size:13.5px}
+th{color:var(--grn);text-align:left;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
+   border-bottom:1px solid var(--grn);padding:6px 16px 6px 0}
+td{border-bottom:1px solid #12281a;padding:6px 16px 6px 0;vertical-align:top}
+tbody tr:hover{background:rgba(77,255,124,.05)}
+.warn{border:1px solid rgba(255,180,84,.35);border-left:4px solid var(--amb);
+      background:rgba(255,180,84,.06);color:#ffdcae;padding:10px 14px;border-radius:6px;margin:12px 0}
+.warn b{color:var(--amb)}
+.tip{border:1px solid var(--line);border-left:4px solid var(--grn);
+     background:rgba(77,255,124,.05);padding:10px 14px;border-radius:6px;margin:12px 0}
+.tip b{color:var(--grn)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px;margin:12px 0;align-items:start}
+.grid>*{min-width:0}
+ul,ol{margin:8px 0 8px 24px}
+li{margin:4px 0}
+li::marker{color:var(--grn)}
+.dim{color:var(--dim)} .grn{color:var(--grn)} .amb{color:var(--amb)}
+.cyn{color:var(--cyn)} .red{color:var(--red)}
+.blink{animation:blink 1.05s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#hud{position:fixed;left:0;right:0;bottom:0;height:42px;z-index:60;display:flex;align-items:center;
+     gap:12px;padding:0 16px;border-top:1px solid var(--line);background:#070d09;
+     color:var(--dim);font-size:11.5px;letter-spacing:.14em}
+#hud .grow{flex:1;text-align:center}
+#hud b{color:var(--grn);font-weight:600}
+#hud button{font:inherit;letter-spacing:.14em;background:none;color:var(--ink);
+     border:1px solid var(--line);border-radius:5px;padding:4px 12px;cursor:pointer}
+#hud button:hover{border-color:var(--grn);color:var(--grn)}
+.zone{position:fixed;top:0;bottom:42px;width:48px;z-index:40;cursor:pointer}
+.zone.l{left:0}.zone.r{right:0}
+.zone.l:hover{background:linear-gradient(90deg,rgba(77,255,124,.06),transparent)}
+.zone.r:hover{background:linear-gradient(270deg,rgba(77,255,124,.06),transparent)}
+@media (max-width:760px){.slide{padding:44px 18px 70px}#hud .grow{display:none}}
+</style>
+</head>
+<body>
+<div class="scan"></div>
+<div id="bar"></div>
+<div class="zone l" title="previous"></div>
+<div class="zone r" title="next"></div>
+
+<!-- ══════════════════ 01 · COVER ══════════════════ -->
+<section class="slide active">
+<pre class="big">██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ██║██║   ██║██╔██╗ ██║
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ██║██║   ██║██║╚██╗██║
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝</pre>
+<h1>Programming in C · Units II–IX</h1>
+<p class="lead">From top-down design with <b>functions</b> and <b>pointers</b>, through <b>arrays</b>, <b>strings</b>
+and <b>recursion</b> — into <b>structures &amp; unions</b>, <b>text &amp; binary files</b> — all the way to
+<b>searching &amp; sorting</b>. Every topic, down to the atom.</p>
+<pre class="term">$ cat units.loaded
+[OK] Unit I    foundations + overview + selection + repetition   ✓ done
+[..] Unit II   top-down design with functions
+[..] Unit III  pointers &amp; modular programming
+[..] Unit IV   arrays
+[..] Unit V    strings
+[..] Unit VI   recursion
+[..] Unit VII  structures &amp; unions
+[..] Unit VIII text &amp; binary file pointers
+[..] Unit IX   searching &amp; sorting
+$ _</pre>
+<p class="lead grn">Press → to boot_<span class="blink">█</span></p>
+</section>
+
+<!-- ══════════════════ 02 · OBJECTIVES ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>00</b> · syllabus</div>
+<h2>COURSE OBJECTIVES</h2>
+<pre class="term">$ cat course.objectives
+[OK] 01 — the fundamentals of computers
+[OK] 02 — the various steps in program development
+[OK] 03 — syntax &amp; semantics of the C language
+[OK] 04 — structured programming approaches
+[OK] 05 — writing algorithms · drawing flowcharts
+[OK] 06 — converting algorithms/flowcharts → C programs
+[OK] 07 — coding &amp; testing a given logic in C
+$ exit status: all objectives mapped to slides ✓</pre>
+<h3>The learning path ahead</h3>
+<pre class="mid">FUNCTIONS (II) ──▶ POINTERS (III) ──▶ ARRAYS (IV) ──▶ STRINGS (V)
+                                                    │
+SEARCHING &amp; SORTING (IX) ◀── FILES (VIII) ◀── STRUCTS/UNIONS (VII) ◀── RECURSION (VI)</pre>
+<div class="tip"><b>WHY THIS ORDER</b> — each unit is built from the one before:
+pointers need addresses, arrays decay to pointers, strings are char arrays,
+files store arrays and structs, and search/sort operates on all of them.</div>
+</section>
+
+<!-- ══════════════════ 03 · UNIT MAP ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>00</b> · syllabus</div>
+<h2>UNIT MAP — $ cat syllabus.txt</h2>
+<pre class="term">II   functions    building from existing info · library functions · top-down design
+                  &amp; structure charts · functions w/o args · functions with input args
+III  pointers     indirection operator · output parameters · multiple calls with
+                  input/output params · scope of names · formal params as actual args
+IV   arrays       declaring &amp; referencing · subscripts · for-loops sequential access
+                  elements as args · array args · searching/sorting · parallel arrays
+                  &amp; enums · multidimensional arrays
+V    strings      basics · assignment &amp; substrings · concatenation &amp; whole-line input
+                  comparison · arrays of pointers
+VI   recursion    the nature of recursion · tracing · mathematical functions
+                  recursion with array &amp; string parameters
+VII  structures   user-defined types · structs as input/output params
+                  structured result values · union types
+VIII files        FILE pointers · text I/O review+ · binary files · searching a database
+IX   search/sort  linear search · binary search
+                  bubble · insertion · selection sort</pre>
+</section>
+
+<!-- ══════════════════ U2-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>BUILDING PROGRAMS FROM EXISTING INFORMATION</h2>
+<p class="lead">Never solve the same problem twice. A program is built by <b>calling</b> pieces that
+already exist — from the <b>library</b> or written by <b>you</b> — and wiring them together in <b>main()</b>.</p>
+<div class="grid">
+<pre>/* reinvent ✗ — fragile, unreadable */
+double root = 1.41421356;   /* hard-coded! */
+double area = 3.14159 * r * r;
+
+/* reuse ✓ — the library does it  */
+#include &lt;math.h&gt;
+double root = sqrt(2.0);
+double area = PI * pow(radius, 2);</pre>
+<div>
+<h3>What reuse buys you</h3>
+<ul>
+<li><b>Reliability</b> — library code is tested by millions of runs</li>
+<li><b>Abstraction</b> — think <i>what</i> (area), not <i>how</i> (formula)</li>
+<li><b>Modularity</b> — small pieces, independently testable</li>
+<li><b>Teamwork</b> — split modules between programmers</li>
+<li><b>Shorter code</b> — one call replaces twenty lines</li>
+</ul>
+</div>
+</div>
+<div class="tip"><b>ABSTRACTION</b> — a function call hides every internal step.
+The caller only needs three facts: <b>name</b>, <b>arguments in</b>, <b>result out</b>.</div>
+</section>
+
+<!-- ══════════════════ U2-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>LIBRARY FUNCTIONS</h2>
+<div class="grid">
+<div>
+<h3>&lt;math.h&gt; — the math toolbox</h3>
+<table>
+<tr><th>function</th><th>meaning</th><th>example</th><th>result</th></tr>
+<tr><td>sqrt(x)</td><td>square root</td><td>sqrt(16.0)</td><td>4.0</td></tr>
+<tr><td>pow(x,y)</td><td>x raised to y</td><td>pow(2.0,10)</td><td>1024.0</td></tr>
+<tr><td>fabs(x)</td><td>absolute value</td><td>fabs(-7.5)</td><td>7.5</td></tr>
+<tr><td>ceil(x)</td><td>round up</td><td>ceil(3.2)</td><td>4.0</td></tr>
+<tr><td>floor(x)</td><td>round down</td><td>floor(3.8)</td><td>3.0</td></tr>
+<tr><td>sin/cos/tan</td><td>trig (radians)</td><td>sin(0.0)</td><td>0.0</td></tr>
+</table>
+</div>
+<pre>#include &lt;math.h&gt;
+#include &lt;ctype.h&gt;
+
+double hyp = sqrt(pow(a, 2) + pow(b, 2));
+double up  = ceil(grade - 0.2);
+char   cap = toupper('q');   /* 'Q'        */
+int    yes = isdigit('7');   /* non-zero   */
+
+/* a call IS an expression —
+   it can live inside a bigger one */
+printf("%f", sqrt(fabs(x)));</pre>
+</div>
+<div class="warn"><b>⚠ TYPES MATTER</b> — math functions take and return <b>double</b>.
+Need an int? Cast explicitly: <b>(int)floor(x)</b>. On some systems link with <b>-lm</b>.</div>
+</section>
+
+<!-- ══════════════════ U2-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>TOP-DOWN DESIGN &amp; STRUCTURE CHARTS</h2>
+<div class="grid">
+<div>
+<h3>The method</h3>
+<ol>
+<li>State the whole task as <b>one module</b>.</li>
+<li>Split it into sub-tasks — each <b>one verb + one object</b> (get_data, compute_pay, print_pay).</li>
+<li>Split again, until every leaf is directly codeable.</li>
+<li>Draw the <b>structure chart</b> before any code.</li>
+</ol>
+<h3>Chart rules</h3>
+<ul>
+<li>one box = exactly one function</li>
+<li>arrows point <b>down</b>: caller → called</li>
+<li>children together do the parent's job</li>
+<li>siblings don't talk to each other — only through the parent</li>
+</ul>
+</div>
+<pre class="mid">              ┌───────────────┐
+              │     main      │
+              └───────┬───────┘
+      ┌───────────────┼───────────────┐
+      ▼               ▼               ▼
+┌────────────┐  ┌─────────────┐  ┌────────────┐
+│  get_data  │  │ compute_pay │  │ print_pay  │
+└────────────┘  └──────┬──────┘  └────────────┘
+                       ▼
+                ┌──────────────┐
+                │ overtime_pay │
+                └──────────────┘</pre>
+</div>
+<div class="tip"><b>WHY IT MATTERS</b> — the finished <b>main()</b> should read like the chart:
+a short list of meaningful calls. If main is a wall of detail, the design failed.</div>
+</section>
+
+<!-- ══════════════════ U2-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>ANATOMY OF A USER-DEFINED FUNCTION</h2>
+<p class="lead">Every function exists in <b>three places</b>: the <b>prototype</b> (promise), the
+<b>definition</b> (body), and the <b>call</b> (use).</p>
+<pre>/* 1 · PROTOTYPE — before main, ends with ; */
+void print_banner(void);
+
+int main(void)
+{
+    print_banner();                  /* 3 · CALL — jumps to definition   */
+    printf("Step 1: read data\n");
+    print_banner();                  /*    runs again, from the top      */
+    return (0);                      /*    resumes here after each call  */
+}
+
+/* 2 · DEFINITION — the actual work       */
+void print_banner(void)
+{
+    printf("=====================\n");
+    printf("   PAYROLL SYSTEM      \n");
+    printf("=====================\n");
+}</pre>
+<div class="warn"><b>⚠ PROTOTYPE FIRST</b> — without it the compiler meets the call blind and cannot
+check argument count/type. Declare every function before you call it.</div>
+</section>
+
+<!-- ══════════════════ U2-5 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>FUNCTIONS WITHOUT ARGUMENTS</h2>
+<div class="grid">
+<pre>void print_instructions(void);
+
+int main(void)
+{
+    print_instructions();   /* no data in */
+    /* ... program ...    */
+    print_instructions();   /* runs fully again */
+    return (0);
+}
+
+void print_instructions(void)
+{
+    printf("1. enter hours\n");
+    printf("2. enter rate \n");
+    printf("3. press enter\n");
+}</pre>
+<div>
+<h3>Atomic facts</h3>
+<ul>
+<li><b>void</b> in the parameter list = accepts <b>nothing</b></li>
+<li>the whole body executes on <b>every call</b>, top to bottom</li>
+<li>returns <b>no value</b> — control just comes back</li>
+<li>variables inside are <b>local</b>: born at entry, dead at exit</li>
+<li><b>void f(void)</b> ≠ <b>void f()</b> — the first explicitly says "no arguments" (use it)</li>
+</ul>
+<pre class="mid">main ──call──▶ [ body runs ] ──return──▶ main
+            (next statement after call)</pre>
+</div>
+</div>
+<div class="tip"><b>USE FOR</b> — banners, menus, instructions, separator lines:
+repeated output that needs no input.</div>
+</section>
+
+<!-- ══════════════════ U2-6 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>FUNCTIONS WITH INPUT ARGUMENTS</h2>
+<div class="grid">
+<pre>/* definition: parameters are local
+   variables that receive the inputs */
+double find_area(double radius)
+{
+    return (3.14159 * radius * radius);
+}
+
+int main(void)
+{
+    double r = 3.0, area;
+
+    area = find_area(r);          /* r → radius */
+    printf("%.2f\n", area);       /* 28.27      */
+
+    /* an expression works too */
+    printf("%.2f\n", find_area(2.0 * r));
+    return (0);
+}</pre>
+<div>
+<table>
+<tr><th>term</th><th>lives</th><th>example</th></tr>
+<tr><td><b>argument</b> (actual)</td><td>at the call</td><td>r, 2.0*r</td></tr>
+<tr><td><b>parameter</b> (formal)</td><td>in the definition</td><td>radius</td></tr>
+</table>
+<pre class="mid">r (3.0) ──copy──▶ radius   [ find_area ]
+                          one-way, at call time</pre>
+<ul>
+<li>data flows <b>in only</b> — changing <b>radius</b> inside never touches <b>r</b></li>
+<li>multiple inputs: comma list <b>f(a, b, c)</b></li>
+</ul>
+</div>
+</div>
+<div class="warn"><b>⚠ MATCH THE PROTOTYPE</b> — count and types must line up. A <b>double</b> passed
+where an <b>int</b> is expected is silently truncated: find_area(2.7) with an int parameter receives 2.</div>
+</section>
+
+<!-- ══════════════════ U2-7 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>return &amp; THE DATA FLOW</h2>
+<pre>double get_net_pay(double hours, double rate)      /* two inputs in */
+{
+    double gross;
+    if (hours &gt; 40.0)
+        gross = 40.0 * rate + (hours - 40.0) * rate * 1.5;
+    else
+        gross = hours * rate;
+    return (gross);            /* exactly one value out */
+}
+
+int main(void)
+{
+    double pay = get_net_pay(45.0, 100.0);   /* pay ← 4750.0 */
+    printf("Pay = %.2f\n", pay);
+    return (0);
+}</pre>
+<div class="grid">
+<pre class="mid">hours ──▶┌───────────────┐
+         │  get_net_pay  │──▶ single value
+rate  ──▶└───────────────┘    back to caller</pre>
+<ul>
+<li><b>return (expr);</b> evaluates, hands the value back, and <b>ends the function immediately</b></li>
+<li>a function returns <b>at most one</b> value (need more? Unit III — output parameters)</li>
+<li><b>void</b> functions may <b>return;</b> with no value, or simply reach <b>}</b></li>
+<li><b>return (0)</b> in main tells the OS "finished normally"</li>
+</ul>
+</div>
+</section>
+
+<!-- ══════════════════ U2-8 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT II</b> · top-down design with functions</div>
+<h2>TOP-DOWN PAYROLL — THE WHOLE PICTURE</h2>
+<div class="grid">
+<pre class="mid">          ┌──────────┐
+          │   main   │
+          └────┬─────┘
+   ┌───────────┼────────────┐
+   ▼           ▼            ▼
+get_data   compute_pay   show_pay</pre>
+<pre>#include &lt;stdio.h&gt;
+
+void   get_data(double *hours, double *rate); /* Unit III: pointers */
+double compute_pay(double hours, double rate);
+void   show_pay(double pay);
+
+int main(void)
+{
+    double h, r, pay;
+
+    get_data(&amp;h, &amp;r);          /* input  module */
+    pay = compute_pay(h, r);   /* process module */
+    show_pay(pay);             /* output module  */
+    return (0);
+}
+
+double compute_pay(double hours, double rate)
+{
+    if (hours &gt; 40.0)
+        return (40.0 * rate + (hours - 40.0) * rate * 1.5);
+    return (hours * rate);
+}</pre>
+</div>
+<div class="tip"><b>READ THE TEST</b> — main reads exactly like the structure chart.
+Design first, code second: each leaf function can now be tested alone.</div>
+</section>
+
+<!-- ══════════════════ U3-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT III</b> · pointers &amp; modular programming</div>
+<h2>MEMORY &amp; ADDRESSES</h2>
+<p class="lead">RAM is a street of numbered cells. Every variable occupies cells; the cell number is its
+<b>address</b>. Every variable therefore has <b>four facts</b>: name, type, value, address.</p>
+<pre class="mid">RAM (zoomed in)
+ address │  1000          1008         1016
+         │  hours = 20.0  rate = 7.5   pay = 150.0
+         └────────── doubles: 8 bytes each ──────────▶</pre>
+<div class="grid">
+<div>
+<ul>
+<li>an address is just a <b>number</b> — so it can be <b>stored in a variable</b></li>
+<li>a variable that stores an address is called a <b>pointer</b></li>
+<li>addresses let a function say: "here is <i>where</i> your data lives — work on it directly"</li>
+</ul>
+</div>
+<pre>double hours = 20.0;
+double *hp;              /* hp will hold the address
+                            of a double            */
+hp = &amp;hours;             /* hp ← 1000 (the address) */</pre>
+</div>
+<div class="tip"><b>THE BIG IDEA</b> — Unit II passed <b>values</b> (copies). Unit III passes
+<b>addresses</b> (the real thing). That one change unlocks output parameters, arrays, strings and files.</div>
+</section>
+
+<!-- ══════════════════ U3-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT III</b> · pointers &amp; modular programming</div>
+<h2>POINTERS &amp; THE INDIRECTION OPERATOR</h2>
+<p class="lead">Two operators rule everything: <b>&amp;</b> means "give me the address of", <b>*</b> means
+"go to the address and use the value there".</p>
+<div class="grid">
+<pre>int  x = 5, y;
+int *p;                  /* pointer to int */
+
+p  = &amp;x;                 /* p ← address of x   */
+y  = *p;                 /* y ← 5  (read thru p) */
+*p = 9;                  /* x is now 9 (write!)  */
+
+printf("%d",  x);        /* 9 */
+printf("%d", *p);        /* 9 — same cell */</pre>
+<pre class="mid">declaration   int *p;     "p may hold the address of an int"
+&amp;x            address-of  → the number of the cell
+*p            dereference → the value inside the cell
+
+   p ─────────▶  x  (5)
+      points at</pre>
+</div>
+<ul>
+<li><b>int *p;</b> — the <b>*</b> binds to the name: p is "pointer to int"</li>
+<li><b>*p</b> and <b>x</b> are now two names for the <b>same memory cell</b> — writing one changes the other</li>
+</ul>
+<div class="warn"><b>⚠ WILD POINTERS</b> — an uninitialized pointer points <i>anywhere</i>.
+<b>*p = 9;</b> on it corrupts unknown memory. Always initialize: <b>int *p = &amp;x;</b> or <b>int *p = NULL;</b></div>
+</section>
+
+<!-- ══════════════════ U3-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT III</b> · pointers &amp; modular programming</div>
+<h2>FUNCTIONS WITH OUTPUT PARAMETERS</h2>
+<p class="lead">C passes arguments <b>by value</b> — a function only ever gets copies, so it cannot
+change the caller's variables… unless it is given their <b>addresses</b>.</p>
+<div class="grid">
+<pre>/* OUTPUT params: caller hands over addresses */
+void get_two(double *a_ptr, double *b_ptr)
+{
+    printf("Enter two numbers&gt; ");
+    scanf("%lf", a_ptr);   /* already an address */
+    scanf("%lf", b_ptr);   /* no &amp; needed here   */
+}
+
+int main(void)
+{
+    double x, y;
+    get_two(&amp;x, &amp;y);       /* &amp; — give the address */
+    printf("%.1f %.1f\n", x, y);   /* changed! */
+    return (0);
+}</pre>
+<pre class="mid">main:  x ?        y ?
+        ▲          ▲
+        │&amp;x        │&amp;y
+   a_ptr┘     b_ptr┘
+get_two writes INTO x and y</pre>
+</div>
+<div class="tip"><b>THE scanf MYSTERY SOLVED</b> — <b>scanf("%lf", &amp;miles)</b> needs <b>&amp;</b> because
+scanf must <i>write into</i> your variable; it can only do that if it receives the address.
+That is exactly the output-parameter pattern.</div>
+</section>
+
+<!-- ══════════════════ U3-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT III</b> · pointers &amp; modular programming</div>
+<h2>swap — BY VALUE ✗ vs BY POINTER ✓</h2>
+<div class="grid">
+<pre>/* ✗ swaps COPIES — m, n untouched */
+void swap_bad(int a, int b)
+{
+    int t = a;
+    a = b;          /* copies only */
+    b = t;
+}
+swap_bad(m, n);     /* m, n unchanged */</pre>
+<pre>/* ✓ swaps the caller's variables  */
+void swap(int *a, int *b)
+{
+    int t = *a;     /* read  the cells */
+    *a = *b;        /* write the cells */
+    *b = t;
+}
+swap(&amp;m, &amp;n);       /* m, n really swap */</pre>
+</div>
+<pre class="mid">before:  m = 3     n = 7            after swap(&amp;m, &amp;n):
+copies version:  m = 3  n = 7  ✗    pointer version:  m = 7  n = 3  ✓</pre>
+<div class="warn"><b>⚠ THE GOLDEN RULE</b> — if a function must <b>change</b> a caller's variable,
+the caller must pass <b>&amp;variable</b> and the function must receive <b>type *parameter</b>.
+Forgetting either side breaks it silently.</div>
+</section>
+
+<!-- ══════════════════ U3-5 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT III</b> · pointers &amp; modular programming</div>
+<h2>MULTIPLE CALLS · INPUT/OUTPUT PARAMETERS</h2>
+<p class="lead">One function, called many times, can feed different data in and accumulate results out —
+the same pointer parameters aim at different cells on each call.</p>
+<pre>/* input: s (value) · output: sum, n (addresses) */
+void add_score(double s, double *sum, int *n)
+{
+    *sum = *sum + s;      /* update caller's total */
+    *n   = *n + 1;        /* update caller's count */
+}
+
+int main(void)
+{
+    double sum = 0.0, score, avg;
+    int n = 0, i;
+
+    for (i = 0; i &lt; 5; i = i + 1) {
+        scanf("%lf", &amp;score);
+        add_score(score, &amp;sum, &amp;n);   /* 5 calls, one pair of accumulators */
+    }
+    avg = sum / n;
+    printf("Average = %.2f\n", avg);
+    return (0);
+}</pre>
+<div class="tip"><b>PATTERN</b> — initialize accumulators <b>in the caller</b>, pass their addresses,
+update through <b>*</b> inside. State lives outside; the function stays pure and reusable.</div>
+</section>
+
+<!-- ══════════════════ U3-6 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT III</b> · pointers &amp; modular programming</div>
+<h2>SCOPE OF NAMES</h2>
+<p class="lead"><b>Scope</b> = the region of the program where a name is visible.
+<b>Lifetime</b> = how long the storage exists.</p>
+<table>
+<tr><th>scope</th><th>declared</th><th>visible</th><th>lifetime</th></tr>
+<tr><td><b>block (local)</b></td><td>inside { }</td><td>from declaration to the closing }</td><td>while the block runs</td></tr>
+<tr><td><b>file (global)</b></td><td>outside all functions</td><td>from declaration to end of file</td><td>whole program run</td></tr>
+</table>
+<pre>int total = 0;               /* GLOBAL — visible everywhere below */
+
+void bump(int step)
+{
+    int total = 5;           /* LOCAL — SHADOWS the global        */
+    total = total + step;    /* touches only the local copy       */
+}                            /* local total dies here; global is still 0 */</pre>
+<div class="grid">
+<ul>
+<li>same name, two variables — the <b>inner one wins</b> inside its block</li>
+<li>each function call gets <b>fresh</b> locals</li>
+<li>parameters are locals of that function</li>
+</ul>
+<div class="warn"><b>⚠ GLOBALS</b> — any function can read/write them, so bugs hide anywhere.
+Prefer locals + parameters; use globals only for truly program-wide constants.</div>
+</div>
+</section>
+
+<!-- ══════════════════ U3-7 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT III</b> · pointers &amp; modular programming</div>
+<h2>FORMAL OUTPUT PARAMETERS AS ACTUAL ARGUMENTS</h2>
+<p class="lead">A pointer received as a <b>formal</b> parameter can itself be passed on as the
+<b>actual</b> argument of another call — no <b>&amp;</b>, no <b>*</b>. Addresses flow down the chain.</p>
+<pre>void read_one(double *p)                 /* lowest level  */
+{
+    scanf("%lf", p);
+}
+
+void read_pair(double *p1, double *p2)   /* middle level  */
+{
+    read_one(p1);     /* formal pointer → actual argument */
+    read_one(p2);
+}
+
+int main(void)
+{
+    double x, y;
+    read_pair(&amp;x, &amp;y);                   /* top level     */
+    printf("%.1f %.1f\n", x, y);
+    return (0);
+}</pre>
+<pre class="mid">main: &amp;x ──▶ p1 ──▶ read_one's p ──▶ scanf writes into x
+one address, three levels — nobody needs to know x exists</pre>
+<div class="tip"><b>WHY</b> — this is how layered programs stay generic: each level just forwards
+addresses. It is also exactly how library functions chain together.</div>
+</section>
+
+<!-- ══════════════════ U4-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>DECLARING &amp; REFERENCING ARRAYS</h2>
+<p class="lead">An <b>array</b> = many values of the <b>same type</b>, one name, chosen by an <b>index</b>.</p>
+<div class="grid">
+<pre>#define N 7
+double temps[N];            /* 7 doubles        */
+int    marks[100];
+
+int small[3]  = {5, 9, 2};  /* initializer list */
+int zeros[4]  = {0};        /* all four = 0     */
+int auto_a[]  = {1, 2, 3};  /* size inferred: 3 */
+
+temps[0] = 30.5;            /* first element    */
+temps[6] = 28.0;            /* last  element    */</pre>
+<pre class="mid">temps in memory — CONTIGUOUS cells:
+ index:  [0]    [1]    [2]    [3]    [4]    [5]    [6]
+       30.5    ..     ..     ..     ..     ..    28.0
+        ▲ first                       last ▲ (N-1, NOT N!)</pre>
+</div>
+<ul>
+<li>size must be a compile-time constant (<b>#define N 7</b> is the classic way)</li>
+<li>indices run <b>0 … N−1</b> — C counts from zero</li>
+<li>uninitialized arrays hold <b>garbage</b> — initialize or fill before use</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U4-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>ARRAY SUBSCRIPTS</h2>
+<p class="lead"><b>a[i]</b> — the subscript is any <b>integer expression</b>: constant, variable, or formula.</p>
+<pre>i = 3;
+small[i]       = 7;                /* small[3]           */
+small[i - 1]   = small[i] + 2;     /* small[2] ← 9       */
+scanf("%d", &amp;small[i]);            /* read into small[3] */
+printf("%d", small[2 * i - 6]);    /* small[0]           */</pre>
+<div class="grid">
+<div>
+<h3>The bounds contract</h3>
+<ul>
+<li>legal: <b>0 … N−1</b> — nothing else</li>
+<li>first element <b>a[0]</b> · last element <b>a[N−1]</b></li>
+<li><b>C performs NO bounds check</b> — the compiler trusts you completely</li>
+</ul>
+</div>
+<pre class="mid">int a[5];
+a[5] = 10;      /* ✗ OUT OF BOUNDS —
+                   writes into somebody else's
+                   memory: silent corruption,
+                   wrong results, later crash */</pre>
+</div>
+<div class="warn"><b>⚠ OFF-BY-ONE</b> — the #1 array bug. <b>for (i = 1; i &lt;= N; …)</b> skips index 0
+and steps off the end. The canonical loop is <b>for (i = 0; i &lt; N; …)</b>.</div>
+</section>
+
+<!-- ══════════════════ U4-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>for LOOPS FOR SEQUENTIAL ACCESS</h2>
+<p class="lead">Arrays and <b>for</b> were made for each other: one counter walks every element.</p>
+<pre>#define N 10
+double t[N], sum, avg;
+int i, above;
+
+/* 1 · INPUT — fill the array */
+for (i = 0; i &lt; N; i = i + 1)
+    scanf("%lf", &amp;t[i]);
+
+/* 2 · PROCESS — reduce to one value */
+sum = 0.0;
+for (i = 0; i &lt; N; i = i + 1)
+    sum = sum + t[i];
+avg = sum / N;
+
+/* 3 · PROCESS again — count a property */
+above = 0;
+for (i = 0; i &lt; N; i = i + 1)
+    if (t[i] &gt; avg) above = above + 1;
+
+/* 4 · OUTPUT — display */
+for (i = 0; i &lt; N; i = i + 1)
+    printf("t[%d] = %.1f\n", i, t[i]);</pre>
+<div class="tip"><b>THE TRINITY</b> — almost every array program is these three passes:
+<b>FILL → PROCESS → DISPLAY</b>. Decide which pass you are writing before you write it.</div>
+</section>
+
+<!-- ══════════════════ U4-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>ARRAY ELEMENTS AS FUNCTION ARGUMENTS</h2>
+<p class="lead">A single element <b>a[i]</b> behaves exactly like an ordinary variable of the base type —
+it is passed <b>by value</b>.</p>
+<pre>double sq  = pow(temps[0], 2.0);     /* element → library function */
+int    ok  = isdigit(phone[0]);      /* element → ctype            */
+printf("%d", marks[i]);              /* element → printf           */
+
+double scaled = scale(temps[i], 1.1);/* element → your function    */
+
+scanf("%lf", &amp;temps[i]);             /* to MODIFY an element,
+                                        pass its ADDRESS           */</pre>
+<div class="grid">
+<div>
+<ul>
+<li>the function receives a <b>copy</b> of the element's value</li>
+<li>changing the parameter inside does <b>not</b> touch <b>a[i]</b></li>
+<li>to write into an element: pass <b>&amp;a[i]</b> (output parameter, Unit III)</li>
+</ul>
+</div>
+<pre class="mid">temps[i] (value) ──copy──▶ parameter
+&amp;temps[i] (address) ────▶ *parameter  (writes back)</pre>
+</div>
+</section>
+
+<!-- ══════════════════ U4-5 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>WHOLE ARRAYS AS ARGUMENTS</h2>
+<pre>double average(const double a[], int n)   /* a[] is really a pointer */
+{
+    double s = 0.0;
+    int i;
+    for (i = 0; i &lt; n; i = i + 1)
+        s = s + a[i];
+    return (s / n);
+}
+
+/* call: name alone — no &amp;, no [] */
+avg = average(temps, N);</pre>
+<div class="grid">
+<div>
+<h3>Atomic facts</h3>
+<ul>
+<li>the array name <b>decays</b> into the address of element 0 — no copy is made</li>
+<li>the function works on the <b>original</b> data: writes persist</li>
+<li>arrays carry <b>no size</b> with them — always pass <b>n</b> too</li>
+<li><b>const</b> = a promise not to modify — the compiler enforces it</li>
+</ul>
+</div>
+<pre class="mid">average(temps, N)
+temps ──address of temps[0]──▶ a ──▶ [original cells]
+N ───────────────────────────▶ n</pre>
+</div>
+<div class="warn"><b>⚠ NO BOUNDS CHECK INSIDE EITHER</b> — if <b>n</b> is bigger than the real array,
+the loop walks into foreign memory. Pass the true size, every time.</div>
+</section>
+
+<!-- ══════════════════ U4-6 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>SEARCHING AN ARRAY — FIRST LOOK</h2>
+<div class="grid">
+<pre>/* linear search: index of key, or -1 */
+int find(const int a[], int n, int key)
+{
+    int i;
+    for (i = 0; i &lt; n; i = i + 1)
+        if (a[i] == key)
+            return (i);      /* found here */
+    return (-1);             /* not found  */
+}</pre>
+<pre>/* index of the maximum element */
+int max_i = 0, i;
+for (i = 1; i &lt; n; i = i + 1)
+    if (a[i] &gt; a[max_i])
+        max_i = i;
+/* a[max_i] is the largest */</pre>
+</div>
+<ul>
+<li>scan element by element until a match — works in <b>any order</b></li>
+<li><b>-1</b> is the conventional "not found" (a legal index is never negative)</li>
+<li>min works the same with <b>&lt;</b>; counting matches: replace return with a counter</li>
+</ul>
+<div class="tip"><b>FULL TREATMENT IN UNIT IX</b> — binary search (needs sorted data, far faster)
+plus the three classic sorting algorithms that make it possible.</div>
+</section>
+
+<!-- ══════════════════ U4-7 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>PARALLEL ARRAYS &amp; ENUMERATED TYPES</h2>
+<div class="grid">
+<div>
+<h3>Parallel arrays</h3>
+<pre class="mid">index │ id[i]  │ name[i]   │ score[i]
+──────┼────────┼───────────┼─────────
+  0   │  101   │ "Asha"    │  88
+  1   │  102   │ "Ravi"    │  72
+  2   │  103   │ "Meera"   │  91</pre>
+<p class="lead dim">Different types, same index = same record. Searching for id 102 gives
+index i, and name[i]/score[i] belong to it. (Unit VII's <b>struct</b> is the cleaner upgrade.)</p>
+</div>
+<pre>/* enumerated type — names for integers */
+typedef enum { SUN, MON, TUE, WED,
+               THU, FRI, SAT } day_t;
+
+day_t today = WED;        /* WED == 3  */
+
+int hours[7];             /* indexed by day */
+hours[MON] = 8;
+hours[SAT] = 0;
+
+if (today == FRI)
+    printf("almost weekend\n");</pre>
+</div>
+<div class="tip"><b>WHY ENUM</b> — readable names instead of magic numbers, the compiler type-checks
+them, and they make perfect array indices and <b>switch</b> cases. SUN=0, MON=1 … unless you assign otherwise.</div>
+</section>
+
+<!-- ══════════════════ U4-8 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IV</b> · arrays</div>
+<h2>MULTIDIMENSIONAL ARRAYS</h2>
+<div class="grid">
+<pre>int grid[3][4];             /* 3 rows × 4 cols */
+grid[r][c]                  /* row, then column */
+
+int m[2][3] = { {1, 2, 3},
+                {4, 5, 6} };
+
+/* nested loops walk the table */
+int r, c;
+for (r = 0; r &lt; 3; r = r + 1) {
+    for (c = 0; c &lt; 4; c = c + 1)
+        grid[r][c] = (r + 1) * (c + 1);
+}</pre>
+<pre class="mid">grid[r][c]      c=0  c=1  c=2  c=3
+        r=0      1    2    3    4
+        r=1      2    4    6    8
+        r=2      3    6    9   12
+
+memory: row-major — row 0 first,
+then row 1, then row 2 (one flat block)</pre>
+</div>
+<ul>
+<li>outer loop = rows, inner loop = columns; total cells = 3 × 4 = 12</li>
+<li>summing everything: nest two loops around <b>total += grid[r][c]</b></li>
+<li>passing to a function: the <b>column count must appear</b> in the parameter —
+<b>void show(int g[][4], int rows);</b> (rows can be left out, cols cannot)</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U5-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT V</b> · strings</div>
+<h2>STRING BASICS</h2>
+<p class="lead">C has no string type. A string is a <b>char array</b> ending in the terminator
+<b>'\0'</b> (value 0). Every rule of strings follows from that one fact.</p>
+<div class="grid">
+<pre>char word[] = "hello";    /* h e l l o \0 : 6 bytes */
+char city[20];
+
+strcpy(city, "Pune");     /* copy, not =            */
+printf("%s", city);       /* prints until '\0'      */
+printf("%d", (int)strlen(word));  /* 5 — \0 not counted */
+
+char ch = word[1];        /* 'e' — it IS an array   */</pre>
+<pre class="mid">word in memory:
+ index: [0] [1] [2] [3] [4] [5]
+         h   e   l   l   o  \0   ← terminator
+                          ▲ strlen stops here</pre>
+</div>
+<ul>
+<li><b>"hello"</b> is a string literal (double quotes); <b>'h'</b> is one char (single quotes)</li>
+<li>the array must have room for the text <b>plus</b> the '\0'</li>
+<li><b>strlen</b> counts characters before '\0'; <b>sizeof word</b> counts bytes (6)</li>
+</ul>
+<div class="warn"><b>⚠ ARRAYS ARE NOT ASSIGNABLE</b> — <b>city = "Pune";</b> is illegal.
+Copying a string is always a loop or <b>strcpy</b>.</div>
+</section>
+
+<!-- ══════════════════ U5-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT V</b> · strings</div>
+<h2>string.h — ASSIGNMENT &amp; SUBSTRINGS</h2>
+<pre>#include &lt;string.h&gt;
+
+char dest[30], src[] = "Programming";
+
+strcpy(dest, src);               /* full copy incl. '\0'        */
+printf("%d", (int)strlen(dest)); /* 11                          */
+
+/* SUBSTRING — copy len chars starting at position start */
+char sub[10];
+int start = 3, len = 4;
+strncpy(sub, src + start, len);  /* src+start = &amp;src[start]     */
+sub[len] = '\0';                 /* terminate it yourself!      */
+printf("%s", sub);               /* "gram"                      */</pre>
+<table>
+<tr><th>function</th><th>does</th><th>watch out</th></tr>
+<tr><td>strcpy(d, s)</td><td>copy whole string</td><td>d must be big enough</td></tr>
+<tr><td>strncpy(d, s, n)</td><td>copy at most n chars</td><td>may skip '\0' — add it</td></tr>
+<tr><td>strlen(s)</td><td>length before '\0'</td><td>size_t, not int</td></tr>
+</table>
+<div class="warn"><b>⚠ OVERFLOW</b> — if dest is smaller than src, strcpy writes past the end and
+corrupts memory. Size the buffer for the <b>worst case + 1</b> for '\0'.</div>
+</section>
+
+<!-- ══════════════════ U5-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT V</b> · strings</div>
+<h2>CONCATENATION &amp; WHOLE-LINE INPUT</h2>
+<div class="grid">
+<pre>/* CONCATENATION — join strings end to end */
+char full[40] = "Ada ";       /* room to grow */
+strcat(full, "Lovelace");
+printf("%s", full);           /* "Ada Lovelace" */
+
+/* dest must already be a valid string:
+   strcat starts at dest's '\0'             */</pre>
+<pre>/* WHOLE-LINE INPUT — spaces included */
+char line[80];
+printf("Full name&gt; ");
+fgets(line, sizeof line, stdin);
+line[strcspn(line, "\n")] = '\0';  /* strip newline */
+
+/* scanf("%s", ...) stops at the FIRST
+   space — fgets reads the whole line     */</pre>
+</div>
+<table>
+<tr><th>function</th><th>reads</th><th>safe?</th></tr>
+<tr><td>scanf("%s", s)</td><td>one word, no spaces</td><td>no size limit — risky</td></tr>
+<tr><td>fgets(s, n, stdin)</td><td>whole line (≤ n−1 chars)</td><td>✓ always '\0', never overflows</td></tr>
+<tr><td>gets(s)</td><td>line, any length</td><td class="red">✗ REMOVED from the language — never use</td></tr>
+</table>
+<div class="tip"><b>RULE</b> — for keyboard lines, <b>fgets</b> is the only acceptable choice.</div>
+</section>
+
+<!-- ══════════════════ U5-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT V</b> · strings</div>
+<h2>STRING COMPARISON</h2>
+<pre>int r = strcmp(a, b);          /* compares character by character */
+
+if (strcmp(ans, "yes") == 0)
+    printf("confirmed\n");
+if (strcmp(name, "Zoe") &gt; 0)
+    printf("later in the dictionary\n");</pre>
+<table>
+<tr><th>result</th><th>meaning</th></tr>
+<tr><td>r &lt; 0</td><td>a comes <b>before</b> b (dictionary order)</td></tr>
+<tr><td>r == 0</td><td>a and b are <b>identical</b></td></tr>
+<tr><td>r &gt; 0</td><td>a comes <b>after</b> b</td></tr>
+</table>
+<div class="grid">
+<div class="warn"><b>⚠ == COMPARES ADDRESSES</b> — two different arrays holding "yes" are
+<b>never</b> <b>a == b</b> (they live at different addresses). Equality of content is <b>ONLY strcmp(...) == 0</b>.</div>
+<pre class="mid">"cat" vs "car":
+  c == c   ✓
+  a == a   ✓
+  t &gt;  r   → strcmp &gt; 0
+
+'A' (65) &lt; 'a' (97) — case matters!</pre>
+</div>
+<div class="tip"><b>Case-insensitive?</b> Standard C has no portable function — convert both strings
+with <b>tolower()</b> in a loop first, then strcmp.</div>
+</section>
+
+<!-- ══════════════════ U5-5 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT V</b> · strings</div>
+<h2>ARRAYS OF POINTERS</h2>
+<pre>const char *planets[] = { "Mercury", "Venus", "Earth", "Mars" };
+int i;
+
+for (i = 0; i &lt; 4; i = i + 1)
+    printf("%s\n", planets[i]);
+
+printf("%s\n", planets[2]);    /* "Earth" */</pre>
+<div class="grid">
+<pre class="mid">planets[0] ──▶ "Mercury"
+planets[1] ──▶ "Venus"      (literals stored
+planets[2] ──▶ "Earth"       once, read-only)
+planets[3] ──▶ "Mars"</pre>
+<div>
+<h3>vs char planets[4][8]</h3>
+<ul>
+<li>2-D char array: fixed rectangle — "Mars" wastes 4 cells, "Mercury" wouldn't fit</li>
+<li>pointer array: <b>ragged</b> — each string is exactly its length</li>
+<li>sorting strings: swap the <b>pointers</b> (cheap), never the characters</li>
+</ul>
+</div>
+</div>
+<div class="tip"><b>USE FOR</b> — menus, lists of names, month/day tables:
+<b>const char *months[] = {"Jan","Feb",...}; printf("%s", months[m]);</b></div>
+</section>
+
+<!-- ══════════════════ U6-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VI</b> · recursion</div>
+<h2>THE NATURE OF RECURSION</h2>
+<p class="lead">A recursive function solves a problem by calling <b>itself</b> on a <b>smaller</b>
+version of the same problem — until the problem is trivial enough to answer directly.</p>
+<div class="grid">
+<pre>int fact(int n)
+{
+    if (n &lt;= 1)                /* BASE CASE   */
+        return (1);            /* answer known */
+
+    return (n * fact(n - 1));  /* RECURSIVE   */
+}                              /* step: smaller n */
+
+printf("%d", fact(4));         /* 24 */</pre>
+<div>
+<h3>The two laws</h3>
+<ol>
+<li><b>Base case</b> — at least one case answered <i>without</i> another call</li>
+<li><b>Progress</b> — every recursive call moves strictly closer to the base case</li>
+</ol>
+<h3>Think of it as</h3>
+<p class="dim">fact(4) = 4 × fact(3)<br>
+fact(3) = 3 × fact(2)<br>
+fact(2) = 2 × fact(1)<br>
+fact(1) = 1 &nbsp;← the ground floor</p>
+</div>
+</div>
+<div class="warn"><b>⚠ STACK OVERFLOW</b> — miss the base case (or fail to shrink) and the function
+calls itself forever, eating memory until the program crashes. Every path must reach the base.</div>
+</section>
+
+<!-- ══════════════════ U6-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VI</b> · recursion</div>
+<h2>TRACING A RECURSIVE FUNCTION</h2>
+<p class="lead">Every call gets its own <b>stack frame</b> — private copies of parameters and locals.
+Frames are <b>LIFO</b>: the last one called is the first to return.</p>
+<div class="grid">
+<pre class="mid">fact(4)
+ └─ 4 * fact(3)
+      └─ 3 * fact(2)
+           └─ 2 * fact(1)
+                └─ returns 1        ◀ base reached
+              returns 2 * 1 = 2
+          returns 3 * 2 = 6
+      returns 4 * 6 = 24            ◀ answers flow back UP</pre>
+<pre class="mid">CALL STACK over time
+push  fact(4)
+push  fact(3)
+push  fact(2)
+push  fact(1) ── returns 1
+pop   fact(2) ── returns 2
+pop   fact(3) ── returns 6
+pop   fact(4) ── returns 24  ✓</pre>
+</div>
+<ul>
+<li>the four <b>n</b>'s are <b>four different variables</b> — one per frame; n=4's copy waits while n=3 runs</li>
+<li>nothing is multiplied until the base case returns — then results unwind in reverse</li>
+<li>desk-check recursion exactly this way: draw the frames, push down, pop up</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U6-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VI</b> · recursion</div>
+<h2>RECURSIVE MATHEMATICAL FUNCTIONS</h2>
+<pre>double power(double x, int n)        /* xⁿ */
+{
+    if (n == 0) return (1.0);        /* base        */
+    return (x * power(x, n - 1));    /* xⁿ = x·xⁿ⁻¹ */
+}
+
+int gcd(int a, int b)                /* Euclid — elegant recursion */
+{
+    if (b == 0) return (a);
+    return (gcd(b, a % b));          /* gcd(48,18) → 6 */
+}
+
+int fib(int n)                       /* 0 1 1 2 3 5 8 13 ... */
+{
+    if (n &lt;= 1) return (n);
+    return (fib(n - 1) + fib(n - 2));/* TWO calls — beware */
+}</pre>
+<div class="warn"><b>⚠ THE fib TRAP</b> — fib(n-1) + fib(n-2) recomputes the same values again and
+again: exponential work. For real Fibonacci use a loop (O(n)). Recursion must <i>earn</i> its keep —
+when it mirrors the problem (gcd, tree walks) it shines; when it doesn't, iterate.</div>
+</section>
+
+<!-- ══════════════════ U6-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VI</b> · recursion</div>
+<h2>RECURSION WITH ARRAYS &amp; STRINGS</h2>
+<p class="lead">Arrays and strings shrink beautifully: drop the first element, recurse on the rest.</p>
+<div class="grid">
+<pre>/* sum of an array, recursively */
+int sum_arr(const int a[], int n)
+{
+    if (n == 0) return (0);            /* empty = 0 */
+    return (a[0] + sum_arr(a + 1, n - 1));
+}
+/* a + 1 = "the array without its first element" */</pre>
+<pre>/* print a string backwards */
+void print_rev(const char s[], int n)
+{
+    if (n == 0) return;
+    print_rev(s + 1, n - 1);   /* go deeper FIRST */
+    putchar(s[0]);             /* print on the way back */
+}
+/* print_rev("cat",3) → "tac" */</pre>
+</div>
+<ul>
+<li>base cases: <b>n == 0</b> for arrays, <b>'\0'</b> / n == 0 for strings</li>
+<li>work <b>before</b> the call prints forward; work <b>after</b> the call runs in reverse</li>
+<li>recursive <b>binary search</b> is next unit's star — split the array in half, recurse into one half (Unit IX)</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U7-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VII</b> · structures &amp; unions</div>
+<h2>USER-DEFINED STRUCTURE TYPES</h2>
+<p class="lead">Arrays group the <b>same</b> type; a <b>struct</b> bundles <b>different</b> types under one name —
+the C answer to a record.</p>
+<pre>struct employee {
+    int    id;
+    char   name[30];
+    double rate;
+};                              /* note the semicolon */
+
+struct employee e1;             /* a variable of that type */
+e1.id = 101;                    /* dot operator            */
+strcpy(e1.name, "Asha");        /* array member → strcpy   */
+e1.rate = 250.0;
+
+typedef struct employee employee_t;             /* alias   */
+employee_t e2 = { 102, "Ravi", 300.0 };         /* init    */</pre>
+<div class="grid">
+<pre class="mid">e1 in memory:
+┌────────┬──────────────────────┬──────────┐
+│ id int │ name char[30]        │ rate dbl │
+└────────┴──────────────────────┴──────────┘
+ members laid out in order (compiler may pad)</pre>
+<ul>
+<li>define the type once, declare many variables of it</li>
+<li><b>.</b> selects a member; each member is an ordinary variable of its own type</li>
+<li><b>typedef</b> lets you write <b>employee_t e;</b> instead of <b>struct employee e;</b></li>
+</ul>
+</div>
+</section>
+
+<!-- ══════════════════ U7-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VII</b> · structures &amp; unions</div>
+<h2>STRUCTURES AS INPUT/OUTPUT PARAMETERS</h2>
+<div class="grid">
+<pre>/* INPUT — by value: a safe COPY */
+void show_emp(employee_t e)
+{
+    printf("%d %s %.2f\n",
+           e.id, e.name, e.rate);
+}
+show_emp(e1);</pre>
+<pre>/* OUTPUT — by pointer: write INTO caller's struct */
+void read_emp(employee_t *ep)
+{
+    scanf("%d",   &amp;ep-&gt;id);
+    scanf("%29s", ep-&gt;name);
+    scanf("%lf",  &amp;ep-&gt;rate);
+}
+read_emp(&amp;e1);</pre>
+</div>
+<table>
+<tr><th>operator</th><th>used on</th><th>example</th></tr>
+<tr><td><b>.</b></td><td>a struct variable</td><td>e1.id</td></tr>
+<tr><td><b>-&gt;</b></td><td>a pointer to struct</td><td>ep-&gt;id &nbsp;≡&nbsp; (*ep).id</td></tr>
+</table>
+<div class="warn"><b>⚠ CHOOSE WISELY</b> — pass-by-value is safe but copies <b>every byte</b>;
+for big structs or when the function must modify data, pass the address.
+Note <b>&amp;ep-&gt;id</b>: the &amp; binds to the member, not the pointer.</div>
+</section>
+
+<!-- ══════════════════ U7-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VII</b> · structures &amp; unions</div>
+<h2>FUNCTIONS WITH STRUCTURED RESULT VALUES</h2>
+<pre>struct point { double x, y; };
+
+struct point midpoint(struct point p, struct point q)
+{
+    struct point m;
+    m.x = (p.x + q.x) / 2.0;
+    m.y = (p.y + q.y) / 2.0;
+    return (m);                  /* WHOLE struct by value ✓ */
+}
+
+struct point a = {0, 0}, b = {4, 6};
+struct point c = midpoint(a, b); /* c = (2, 3) */</pre>
+<div class="grid">
+<div>
+<ul>
+<li>a function may <b>return a struct</b> — the caller receives a full copy</li>
+<li>this is the sanctioned way to get <b>multiple results</b> from one call</li>
+<li>arrays <b>cannot</b> be returned this way — wrap one in a struct if you must</li>
+</ul>
+</div>
+<pre>/* alternative style: output parameter */
+void midpoint_p(struct point p, struct point q,
+                struct point *out)
+{
+    out-&gt;x = (p.x + q.x) / 2.0;
+    out-&gt;y = (p.y + q.y) / 2.0;
+}</pre>
+</div>
+<div class="tip"><b>RETURN vs OUTPUT POINTER</b> — return reads naturally for one result bundle;
+output pointers shine when the caller already owns the destination (e.g. filling array slots).</div>
+</section>
+
+<!-- ══════════════════ U7-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VII</b> · structures &amp; unions</div>
+<h2>UNION TYPES</h2>
+<pre>union value {
+    int    i;        /* all three members share the SAME bytes */
+    double d;
+    char   c;
+};
+
+union value v;
+v.d = 65.0;            /* write ONE member  */
+printf("%d", v.i);     /* read same bytes as int — reinterpret */</pre>
+<div class="grid">
+<table>
+<tr><th></th><th>struct</th><th>union</th></tr>
+<tr><td>memory</td><td>each member its own block</td><td><b>one shared block</b></td></tr>
+<tr><td>size</td><td>sum of members (+padding)</td><td>largest member</td></tr>
+<tr><td>members valid</td><td>all at once</td><td>only the <b>last written</b></td></tr>
+</table>
+<pre class="mid">union value v;    sizeof(v) == sizeof(double)
+┌────────────────────────────┐
+│ i / d / c  — same 8 bytes  │
+└────────────────────────────┘</pre>
+</div>
+<ul>
+<li>writing one member <b>overwrites</b> the others — read only what you last wrote</li>
+<li>classic pattern: a <b>tag</b> field beside the union tells which member is live —
+<b>struct token { int kind; union { int num; char op; } v; };</b></li>
+<li>saves memory when only one variant is ever needed at a time</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U8-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VIII</b> · text &amp; binary file pointers</div>
+<h2>FILE POINTERS &amp; TEXT I/O</h2>
+<pre>#include &lt;stdio.h&gt;
+FILE *fp;
+
+fp = fopen("marks.txt", "w");          /* OPEN — mode decides */
+if (fp == NULL) {                      /* ALWAYS check          */
+    printf("cannot open file\n");
+    return (1);
+}
+fprintf(fp, "%d %.2f\n", id, marks);   /* printf → into the file */
+fscanf(fp, "%d %lf", &amp;id, &amp;marks);     /* scanf  ← from the file */
+fclose(fp);                            /* CLOSE — flush + release */</pre>
+<table>
+<tr><th>mode</th><th>meaning</th><th>if file exists</th></tr>
+<tr><td>"r"</td><td>read</td><td>must exist, or NULL</td></tr>
+<tr><td>"w"</td><td>write</td><td>erased and recreated</td></tr>
+<tr><td>"a"</td><td>append</td><td>new data goes at the end</td></tr>
+<tr><td>"rb" / "wb"</td><td>binary read / write</td><td>no text conversion</td></tr>
+<tr><td>"r+" / "w+"</td><td>read + write</td><td>both directions</td></tr>
+</table>
+<div class="tip"><b>FILE *</b> is a handle the stdio library uses to track your file — you never touch
+its internals, you just pass it to every I/O call.</div>
+</section>
+
+<!-- ══════════════════ U8-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VIII</b> · text &amp; binary file pointers</div>
+<h2>CHARACTER &amp; LINE I/O</h2>
+<div class="grid">
+<pre>/* char by char — copy file to screen */
+FILE *fp = fopen("data.txt", "r");
+int ch;                    /* int! EOF must fit */
+while ((ch = fgetc(fp)) != EOF)
+    fputc(ch, stdout);
+fclose(fp);</pre>
+<pre>/* line by line — the workhorse */
+char line[100];
+FILE *fp = fopen("log.txt", "r");
+while (fgets(line, sizeof line, fp) != NULL)
+    fputs(line, stdout);
+fclose(fp);</pre>
+</div>
+<table>
+<tr><th>read</th><th>write</th><th>unit</th><th>end signal</th></tr>
+<tr><td>fgetc(fp)</td><td>fputc(c, fp)</td><td>one character</td><td>EOF</td></tr>
+<tr><td>fgets(s, n, fp)</td><td>fputs(s, fp)</td><td>one line/string</td><td>NULL</td></tr>
+<tr><td>fscanf(fp, …)</td><td>fprintf(fp, …)</td><td>formatted items</td><td>≠ expected count</td></tr>
+</table>
+<div class="warn"><b>⚠ TEST THE RETURN, NOT feof</b> — loop on what the read function returns
+(<b>!= EOF</b>, <b>!= NULL</b>). feof only tells you <i>after</i> you already tried to read.</div>
+</section>
+
+<!-- ══════════════════ U8-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VIII</b> · text &amp; binary file pointers</div>
+<h2>BINARY FILES</h2>
+<p class="lead">Text files store readable characters; <b>binary files</b> store the exact bytes of
+memory — faster, smaller, and structs go in and out unchanged.</p>
+<div class="grid">
+<pre>/* WRITE one struct as raw bytes */
+FILE *fp = fopen("emp.dat", "wb");
+employee_t e = {101, "Asha", 250.0};
+fwrite(&amp;e, sizeof e, 1, fp);
+fclose(fp);</pre>
+<pre>/* READ records until none remain */
+FILE *fp = fopen("emp.dat", "rb");
+employee_t e;
+while (fread(&amp;e, sizeof e, 1, fp) == 1)
+    printf("%d %s %.2f\n",
+           e.id, e.name, e.rate);
+fclose(fp);</pre>
+</div>
+<ul>
+<li><b>fwrite(addr, item_size, count, fp)</b> / <b>fread(...)</b> — fread returns items actually read:
+loop until it is 0</li>
+<li>whole arrays at once: <b>fwrite(arr, sizeof arr[0], N, fp);</b></li>
+<li>random access: <b>fseek(fp, k * sizeof e, SEEK_SET);</b> jumps straight to record k —
+then one fread. No scanning needed.</li>
+</ul>
+<div class="tip"><b>WHEN BINARY</b> — databases of structs, images, anything where text formatting
+would just slow you down and change the values.</div>
+</section>
+
+<!-- ══════════════════ U8-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT VIII</b> · text &amp; binary file pointers</div>
+<h2>SEARCHING A DATABASE</h2>
+<pre>/* sequential search through a binary file — linear search logic */
+int found = 0, target = 102;
+employee_t e;
+FILE *fp = fopen("emp.dat", "rb");
+
+rewind(fp);                                  /* back to record 0 */
+while (!found &amp;&amp; fread(&amp;e, sizeof e, 1, fp) == 1)
+    if (e.id == target)
+        found = 1;                           /* e holds the match */
+
+if (found) printf("found: %s\n", e.name);
+else       printf("record not found\n");
+fclose(fp);</pre>
+<div class="grid">
+<div>
+<ul>
+<li>O(n) — every record may have to be read, exactly like linear search on an array</li>
+<li>works on unsorted data</li>
+</ul>
+</div>
+<pre class="mid">speed-up: an INDEX file
+key 101 → offset 0
+key 102 → offset 48    ──▶ fseek + fread
+key 103 → offset 96        = direct access
+sorted index → binary search on disk</pre>
+</div>
+<div class="tip"><b>THE BRIDGE</b> — Unit IX's algorithms apply unchanged: file scan = linear search;
+index + sorted keys = binary search. Same logic, new storage.</div>
+</section>
+
+<!-- ══════════════════ U9-1 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IX</b> · searching &amp; sorting</div>
+<h2>LINEAR SEARCH</h2>
+<div class="grid">
+<pre>int linear_search(const int a[], int n, int key)
+{
+    int i;
+    for (i = 0; i &lt; n; i = i + 1)
+        if (a[i] == key)
+            return (i);      /* found at i */
+    return (-1);             /* not found  */
+}</pre>
+<pre class="mid">key = 7 in [3 9 7 2]
+i=0  3 == 7 ? no
+i=1  9 == 7 ? no
+i=2  7 == 7 ? YES → return 2</pre>
+</div>
+<table>
+<tr><th>case</th><th>comparisons</th></tr>
+<tr><td>best — first element</td><td>1</td></tr>
+<tr><td>average</td><td>n / 2</td></tr>
+<tr><td>worst — absent or last</td><td>n</td></tr>
+</table>
+<ul>
+<li>works on <b>any</b> array — sorted or not</li>
+<li>growth is <b>O(n)</b>: double the data, double the work</li>
+<li>fine for small n; for big sorted data see binary search</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U9-2 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IX</b> · searching &amp; sorting</div>
+<h2>BINARY SEARCH</h2>
+<p class="lead"><b>Requirement: the array must be SORTED.</b> Compare the middle, throw away half, repeat.</p>
+<div class="grid">
+<pre>int binary_search(const int a[], int n, int key)
+{
+    int lo = 0, hi = n - 1, mid;
+    while (lo &lt;= hi) {
+        mid = (lo + hi) / 2;
+        if (a[mid] == key) return (mid);
+        if (a[mid] &lt; key) lo = mid + 1; /* right half */
+        else              hi = mid - 1; /* left  half */
+    }
+    return (-1);
+}</pre>
+<pre class="mid">key = 23 in [5 11 17 23 31 40]
+lo=0 hi=5 → mid=2  a=17 &lt; 23 → lo=3
+lo=3 hi=5 → mid=4  a=31 &gt; 23 → hi=3
+lo=3 hi=3 → mid=3  a=23 == 23 ✓ return 3
+3 probes instead of up to 6</pre>
+</div>
+<table>
+<tr><th>n</th><th>max probes (log₂n + 1)</th></tr>
+<tr><td>1,024</td><td>≤ 11</td></tr>
+<tr><td>1,000,000</td><td>≤ 20</td></tr>
+</table>
+<div class="tip"><b>O(log n)</b> — each probe halves the search space. This is why we bother sorting:
+one O(n log n) sort buys thousands of O(log n) searches.</div>
+</section>
+
+<!-- ══════════════════ U9-3 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IX</b> · searching &amp; sorting</div>
+<h2>BUBBLE SORT</h2>
+<p class="lead">Walk the array swapping out-of-order neighbours; the largest value
+<b>bubbles</b> to the end each pass. n−1 passes finish the job.</p>
+<div class="grid">
+<pre>void bubble_sort(int a[], int n)
+{
+    int pass, i, tmp;
+    for (pass = 0; pass &lt; n - 1; pass = pass + 1)
+        for (i = 0; i &lt; n - 1 - pass; i = i + 1)
+            if (a[i] &gt; a[i + 1]) {
+                tmp     = a[i];
+                a[i]    = a[i + 1];
+                a[i+1]  = tmp;
+            }
+}</pre>
+<pre class="mid">[5 2 8 1]
+pass 1: (5,2)swap (5,8)no (8,1)swap → [2 5 1 8]
+pass 2: (2,5)no   (5,1)swap          → [2 1 5 8]
+pass 3: (2,1)swap                    → [1 2 5 8] ✓
+each pass locks one more element at the end</pre>
+</div>
+<ul>
+<li><b>O(n²)</b> — the nested loops make comparisons grow as n²</li>
+<li>optimization: a <b>swapped</b> flag — if a whole pass swaps nothing, the array is already sorted; stop early</li>
+<li>stable: equal values never cross each other</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U9-4 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IX</b> · searching &amp; sorting</div>
+<h2>INSERTION SORT</h2>
+<p class="lead">Sort like playing cards: take the next element, slide bigger ones right,
+<b>insert</b> it into its place. The left part is always sorted.</p>
+<div class="grid">
+<pre>void insertion_sort(int a[], int n)
+{
+    int i, j, key;
+    for (i = 1; i &lt; n; i = i + 1) {
+        key = a[i];              /* card in hand */
+        j = i - 1;
+        while (j &gt;= 0 &amp;&amp; a[j] &gt; key) {
+            a[j + 1] = a[j];     /* shift right  */
+            j = j - 1;
+        }
+        a[j + 1] = key;          /* drop it in   */
+    }
+}</pre>
+<pre class="mid">[4 2 7 1]
+i=1 key=2 → shift 4      → [2 4 7 1]
+i=2 key=7 → nothing moves → [2 4 7 1]
+i=3 key=1 → shift 7,4,2  → [1 2 4 7] ✓</pre>
+</div>
+<ul>
+<li><b>O(n²)</b> worst case (reverse order) — but <b>O(n)</b> on nearly-sorted data, the best of the simple sorts</li>
+<li>stable, in-place, online (can sort as data arrives)</li>
+<li>the practical choice for small n — even big libraries switch to it inside fancy sorts</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U9-5 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IX</b> · searching &amp; sorting</div>
+<h2>SELECTION SORT</h2>
+<p class="lead">Repeatedly <b>select the minimum</b> of the unsorted part and swap it to the front —
+the sorted prefix grows by one each pass.</p>
+<div class="grid">
+<pre>void selection_sort(int a[], int n)
+{
+    int i, j, min, tmp;
+    for (i = 0; i &lt; n - 1; i = i + 1) {
+        min = i;                       /* assume   */
+        for (j = i + 1; j &lt; n; j = j + 1)
+            if (a[j] &lt; a[min])
+                min = j;               /* hunt min */
+        tmp    = a[i];                 /* swap to  */
+        a[i]   = a[min];               /* the front*/
+        a[min] = tmp;
+    }
+}</pre>
+<pre class="mid">[29 10 14 37]
+i=0 min=10 → swap → [10 29 14 37]
+i=1 min=14 → swap → [10 14 29 37]
+i=2 min=29 → self → [10 14 29 37] ✓</pre>
+</div>
+<ul>
+<li>always <b>O(n²)</b> comparisons — even on sorted input</li>
+<li>but at most <b>n−1 swaps</b> — the winner when writing data is expensive</li>
+<li>simple to prove correct: after pass i, the first i+1 slots hold the i+1 smallest values, in order</li>
+</ul>
+</section>
+
+<!-- ══════════════════ U9-6 ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>UNIT IX</b> · searching &amp; sorting</div>
+<h2>COMPLEXITY SHOWDOWN</h2>
+<table>
+<tr><th>technique</th><th>best</th><th>average</th><th>worst</th><th>requires</th></tr>
+<tr><td>linear search</td><td>1</td><td>n/2</td><td>n</td><td>nothing</td></tr>
+<tr><td>binary search</td><td>1</td><td>log n</td><td>log n</td><td><b>sorted</b> array</td></tr>
+<tr><td>bubble sort</td><td>n (with flag)</td><td>n²</td><td>n²</td><td>—</td></tr>
+<tr><td>insertion sort</td><td>n</td><td>n²</td><td>n²</td><td>—</td></tr>
+<tr><td>selection sort</td><td>n²</td><td>n²</td><td>n²</td><td>—</td></tr>
+</table>
+<div class="grid">
+<div class="tip"><b>RULE OF THUMB 1</b> — sort once, search many times: the sort pays for itself.
+Unsorted + linear is fine for tiny data; sorted + binary wins the moment n grows.</div>
+<div class="tip"><b>RULE OF THUMB 2</b> — n ≤ 50: any O(n²) sort is invisible. n = 100,000:
+n² is ten <b>billion</b> operations — choose wisely, or wait for lunch.</div>
+</div>
+<pre class="mid">n = 1,000          n² = 1,000,000            log₂n ≈ 10
+n = 100,000        n² = 10,000,000,000  vs   log₂n ≈ 17
+                        ▲ minutes                    ▲ microseconds</pre>
+</section>
+
+<!-- ══════════════════ SUMMARY ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>∎</b> · course complete</div>
+<h2>SESSION SUMMARY — ALL UNITS</h2>
+<div class="grid">
+<pre class="term">I    foundations     dev cycle · algorithms · flowcharts
+                     sequence + selection + repetition
+II   functions       reuse · prototype/definition/call
+                     structure charts · arguments · return
+III  pointers        &amp; and * · output parameters · scope
+                     formal params as actual args
+IV   arrays          0-based · fill→process→display
+                     pass array + n · parallel · enum · 2-D
+V    strings         '\0' rules · strcpy/strcat/strcmp
+                     fgets · arrays of pointers</pre>
+<pre class="term">VI   recursion       base case + smaller call
+                     stack frames · arrays &amp; strings
+VII  structs/unions  bundle types · . and -&gt;
+                     structured returns · shared memory
+VIII files           FILE * · modes · text vs binary
+                     fread/fwrite · database search
+IX   search/sort     linear O(n) · binary O(log n)
+                     bubble · insertion · selection O(n²)</pre>
+</div>
+<div class="tip"><b>ONE SENTENCE</b> — C gives you addresses, arrays, functions and files;
+discipline (top-down design, testing, tracing) turns them into correct programs.</div>
+</section>
+
+<!-- ══════════════════ EXIT ══════════════════ -->
+<section class="slide">
+<div class="tag"><b>∎</b> · exit status</div>
+<h2>COURSE — EXIT STATUS</h2>
+<pre class="term">$ grep -c "learned" syllabus.txt
+9 / 9 units ✓   all topics covered
+
+$ ./final_words
+printf("MASTERY  = FUNCTIONS + POINTERS + ARRAYS + STRINGS\n");
+printf("         + RECURSION + STRUCTURES + FILES\n");
+printf("         + SEARCHING &amp; SORTING\n");
+printf("METHOD   = design → code → compile → test → debug → repeat\n");
+return (0);   // success ✓</pre>
+<pre class="mid">Unit I ─▶ II ─▶ III ─▶ IV ─▶ V ─▶ VI ─▶ VII ─▶ VIII ─▶ IX  ✓
+foundations                                        searching &amp; sorting</pre>
+<p class="lead grn">compile · test · debug · repeat — the loop never ends.<span class="blink">█</span></p>
+</section>
+
+<!-- ══════════════════ HUD ══════════════════ -->
+<div id="hud">
+<span><b id="cur">01</b> / <span id="tot">51</span></span>
+<span class="grow">C PROGRAMMING · UNITS II–IX · TTY01 · ← → · SPACE · CLICK</span>
+<button id="prev">PREV</button>
+<button id="next">NEXT</button>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let idx=0;
+const cur=document.getElementById('cur'),
+      tot=document.getElementById('tot'),
+      bar=document.getElementById('bar');
+tot.textContent=String(slides.length).padStart(2,'0');
+
+function render(){
+  slides.forEach((s,k)=>s.classList.toggle('active',k===idx));
+  cur.textContent=String(idx+1).padStart(2,'0');
+  bar.style.width=((idx+1)/slides.length*100)+'%';
+  slides[idx].scrollTop=0;
+}
+function go(n){ idx=Math.max(0,Math.min(slides.length-1,n)); render(); }
+
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'||e.key==='Enter'){e.preventDefault();go(idx+1);}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'||e.key==='Backspace'){e.preventDefault();go(idx-1);}
+  else if(e.key==='Home'){go(0);}
+  else if(e.key==='End'){go(slides.length-1);}
+});
+document.getElementById('next').onclick=()=>go(idx+1);
+document.getElementById('prev').onclick=()=>go(idx-1);
+document.querySelector('.zone.l').onclick=()=>go(idx-1);
+document.querySelector('.zone.r').onclick=()=>go(idx+1);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Algorithm Decision Graph — Where / When / How</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      background: #0b1020;
+      color: #e5e7eb;
+    }
+
+    h1 {
+      margin: 14px 18px 6px;
+      font-size: 22px;
+    }
+
+    .sub {
+      margin: 0 18px 10px;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .controls {
+      margin: 0 18px 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    input {
+      min-width: 420px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #374151;
+      background: #111827;
+      color: #f9fafb;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #374151;
+      background: #1f2937;
+      color: #f9fafb;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #374151;
+    }
+
+    #result {
+      margin: 0 18px 10px;
+      padding: 12px;
+      border: 1px solid #374151;
+      background: #111827;
+      border-radius: 12px;
+      min-height: 24px;
+      line-height: 1.45;
+    }
+
+    svg {
+      background: radial-gradient(circle at center, #111827 0%, #0b1020 70%);
+      border-top: 1px solid #1f2937;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .legend {
+      margin: 10px 18px;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .legend span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <h1>Algorithm Decision Graph</h1>
+  <div class="sub">
+    WHERE: problem signals → WHAT: algorithm → HOW: click nodes → EXAMPLES: dataset problems
+  </div>
+
+  <div class="controls">
+    <input id="search" placeholder="Try: subarray sum, top k, prerequisites, intervals, shortest path, substring, dp, sql" />
+    <button onclick="applySearch()">Recommend</button>
+    <button onclick="clearSearch()">Clear</button>
+  </div>
+
+  <div id="result">Click a node or search a problem pattern.</div>
+
+  <svg width="1400" height="860"></svg>
+
+  <div class="legend">
+    <span style="background:#f97316"></span>Root
+    &nbsp;&nbsp;
+    <span style="background:#3b82f6"></span>WHERE / Signal
+    &nbsp;&nbsp;
+    <span style="background:#22c55e"></span>WHAT / Algorithm
+    &nbsp;&nbsp;
+    <span style="background:#eab308"></span>Example Problem
+  </div>
+
+  <script>
+    function N(id, group, label, when = "", how = "", where = "") {
+      return { id, group, label, when, how, where };
+    }
+
+    function L(source, target) {
+      return { source, target };
+    }
+
+    const nodes = [
+      // ROOT
+      N("root", "root", "New Problem", "Start here", "Identify input structure, constraints, and goal", "All problems"),
+
+      // WHERE SIGNALS
+      N("array", "signal", "Array / Sequence", "Input is a list of values", "Scan, index, window, prefix, sort, DP", "Two Sum, Move Zeroes, Maximum Subarray"),
+      N("string", "signal", "String", "Input is characters/text", "Window, stack, trie, DP, parsing", "Longest Substring, Decode String"),
+      N("sorted", "signal", "Sorted / Ordered", "Data has order", "Binary search, two pointers", "Find First and Last Position"),
+      N("contiguous", "signal", "Contiguous Segment", "Subarray / substring / window", "Sliding window, prefix sum", "Minimum Window Substring"),
+      N("pairs", "signal", "Pairs / Triplets", "Need two or more matching items", "Hash lookup, two pointers", "Two Sum, 3Sum"),
+      N("graphSignal", "signal", "Graph / Relations", "Nodes, edges, dependencies, connectivity", "BFS, DFS, Union-Find, Topological Sort, Dijkstra", "Course Schedule, Word Ladder"),
+      N("treeSignal", "signal", "Tree", "Hierarchy / rooted structure", "DFS, BFS, tree DP", "Binary Tree Maximum Path Sum"),
+      N("matrix", "signal", "Matrix / Grid", "2D cells / board / map", "DFS, BFS, DP, prefix sum", "Number of Islands"),
+      N("intervals", "signal", "Intervals / Events", "Start/end times, overlaps", "Sort, sweep line, heap", "Merge Intervals, Meeting Rooms II"),
+      N("design", "signal", "Stream / Design", "Online operations, API design", "Hash + linked list, heap, queue, trie", "LRU Cache, Find Median from Data Stream"),
+      N("database", "signal", "Database Rows", "SQL tables, groups, ranks, windows", "JOIN, GROUP BY, LAG/LEAD, RANK", "Consecutive Numbers, Active Users"),
+      N("choices", "signal", "Choices / Subsets / Permutations", "Select, arrange, partition", "Backtracking, bitmask DP", "Subsets, Permutations"),
+      N("ranges", "signal", "Range Query / Update", "Many range sums / updates", "Prefix sum, BIT, segment tree", "Range Sum Query - Mutable"),
+      N("optimize", "signal", "Optimize / Count", "Max/min/count ways", "DP, greedy, binary search answer", "Coin Change, Koko Eating Bananas"),
+
+      // WHAT ALGORITHMS
+      N("hash", "algorithm", "Hash Map", "Need O(1) lookup, count, grouping, seen state", "Store key → index/count/value; query before insert", "Two Sum, Subarray Sum Equals K, Group Anagrams"),
+      N("twoPointers", "algorithm", "Two Pointers", "Need pair search, partition, shrink/expand indices", "Move left/right based on condition", "3Sum, Move Zeroes, Boats to Save People"),
+      N("window", "algorithm", "Sliding Window", "Need best/count valid contiguous segment", "Expand right, shrink left while invalid", "Longest Substring Without Repeating Characters, Minimum Window Substring"),
+      N("prefix", "algorithm", "Prefix Sum / XOR", "Need range sum/xor/count quickly", "prefix[i] = cumulative value; range = prefix[r] - prefix[l]", "Subarray Sum Equals K, XOR Queries of a Subarray"),
+      N("sorting", "algorithm", "Sorting", "Need local structure, greedy order, intervals", "Sort by value/start/end/frequency/ratio", "Merge Intervals, Largest Number, Boats to Save People"),
+      N("binarySearch", "algorithm", "Binary Search", "Sorted data or monotonic boundary", "Maintain lo/hi; discard half each step", "Find First and Last Position, Median of Two Sorted Arrays"),
+      N("binaryAnswer", "algorithm", "Binary Search on Answer", "Minimum capacity/speed/days/threshold", "Guess value; feasibility check; shrink answer range", "Koko Eating Bananas, Capacity To Ship Packages Within D Days"),
+      N("stack", "algorithm", "Stack", "Nested structure, undo, parsing, matching", "Push pending state; pop when resolved", "Valid Parentheses, Decode String, Number of Atoms"),
+      N("monotonicStack", "algorithm", "Monotonic Stack", "Next greater/smaller, boundaries, rectangles", "Keep increasing/decreasing stack; pop when broken", "Largest Rectangle in Histogram, Trapping Rain Water"),
+      N("heap", "algorithm", "Heap / Priority Queue", "Need current max/min/top K/dynamic extreme", "Push candidates; pop extreme", "Top K Frequent Elements, Find Median from Data Stream"),
+      N("queue", "algorithm", "Queue", "FIFO processing, BFS, streams", "Enqueue states; dequeue in arrival order", "Rotting Oranges, Number of Recent Calls"),
+      N("bfs", "algorithm", "BFS", "Shortest steps, layer-by-layer search", "Visit current layer, then next layer", "Word Ladder, Shortest Path in Binary Matrix"),
+      N("dfs", "algorithm", "DFS", "Explore paths, components, tree traversal", "Mark visited, recurse, backtrack if needed", "Number of Islands, Max Area of Island"),
+      N("backtracking", "algorithm", "Backtracking", "Generate all valid choices with pruning", "Choose → explore → undo", "Subsets, Permutations, Combination Sum"),
+      N("dp", "algorithm", "Dynamic Programming", "Overlapping choices, optimal value/count ways", "Define state + transition + base case + order", "Coin Change, House Robber, Edit Distance"),
+      N("greedy", "algorithm", "Greedy", "Local choice is globally safe", "Sort/choose best current option; prove exchange argument", "Jump Game, Gas Station, Task Scheduler"),
+      N("unionFind", "algorithm", "Union-Find", "Connectivity, components, grouping", "find(x), union(x,y), count components", "Number of Provinces, Accounts Merge"),
+      N("topological", "algorithm", "Topological Sort", "Dependencies / prerequisites / DAG order", "Kahn indegree queue or DFS postorder", "Course Schedule, Parallel Courses III"),
+      N("trie", "algorithm", "Trie", "Prefix search, autocomplete, word dictionary", "Insert/search character-by-character", "Implement Trie, Word Search II"),
+      N("segment", "algorithm", "Segment Tree / BIT", "Dynamic range query/update", "Point update + range query in O(log n)", "Range Sum Query - Mutable, Count of Smaller Numbers After Self"),
+      N("bitmask", "algorithm", "Bitmask DP / Bits", "Subset state, XOR, small n", "Represent subset as integer; transition by adding bits", "Smallest Sufficient Team, Shortest Path to Get All Keys"),
+      N("sql", "algorithm", "SQL Window / Aggregation", "Rows, groups, ranks, consecutive patterns", "JOIN, GROUP BY, HAVING, LAG/LEAD, RANK", "Consecutive Numbers, Rank Scores, Active Users"),
+      N("dijkstra", "algorithm", "Dijkstra / Shortest Path", "Weighted graph minimum cost", "Priority queue by distance; relax edges", "Network Delay Time, Cheapest Flights Within K Stops"),
+      N("sweep", "algorithm", "Sweep Line", "Events over time/position", "Convert intervals to start/end events; sort and scan", "Meeting Rooms II, Car Pooling"),
+      N("linkedList", "algorithm", "Linked List Surgery", "Pointer rewiring, reverse, merge, cache order", "Save next, rewire prev/next, use dummy head", "Reverse Linked List, LRU Cache"),
+
+      // EXAMPLE PROBLEMS
+      N("twoSum", "problem", "Two Sum", "Find pair adding to target", "Hash complement lookup", "Array, Hash Table"),
+      N("subarraySumK", "problem", "Subarray Sum Equals K", "Count subarrays sum K", "Prefix sum + hash count", "Array, Prefix Sum"),
+      N("longestSubstring", "problem", "Longest Substring Without Repeating Characters", "Longest valid substring", "Sliding window + frequency map", "String, Sliding Window"),
+      N("koko", "problem", "Koko Eating Bananas", "Minimum feasible speed", "Binary search answer + feasibility", "Binary Search"),
+      N("largestRectangle", "problem", "Largest Rectangle in Histogram", "Max rectangle area", "Monotonic stack boundaries", "Monotonic Stack"),
+      N("trappingRain", "problem", "Trapping Rain Water", "Water between boundaries", "Two pointers or monotonic stack", "Two Pointers / Monotonic Stack"),
+      N("wordLadder", "problem", "Word Ladder", "Minimum transformations", "BFS over word states", "BFS"),
+      N("rottingOranges", "problem", "Rotting Oranges", "Spread layer by layer", "Multi-source BFS", "BFS"),
+      N("courseSchedule", "problem", "Course Schedule", "Can finish prerequisites?", "Topological cycle detection", "Topological Sort"),
+      N("parallelCoursesIII", "problem", "Parallel Courses III", "Longest DAG path", "Topological DP", "Topological Sort"),
+      N("numberOfIslands", "problem", "Number of Islands", "Count grid components", "DFS/BFS flood fill", "Matrix, Graph"),
+      N("accountsMerge", "problem", "Accounts Merge", "Group connected emails", "Union-Find + hash map", "Union-Find"),
+      N("lruCache", "problem", "LRU Cache", "O(1) get/put + recency", "Hash map + doubly linked list", "Design"),
+      N("insertDeleteGetRandom", "problem", "Insert Delete GetRandom O(1)", "O(1) insert/delete/random", "Array + hash index map", "Design"),
+      N("findMedianStream", "problem", "Find Median from Data Stream", "Streaming median", "Two heaps", "Heap"),
+      N("mergeKLists", "problem", "Merge k Sorted Lists", "Merge many sorted streams", "Min-heap of heads", "Heap, Linked List"),
+      N("topKFrequent", "problem", "Top K Frequent Elements", "Best K frequencies", "Hash count + heap/bucket", "Heap, Hash Map"),
+      N("mergeIntervals", "problem", "Merge Intervals", "Overlap merging", "Sort by start + linear merge", "Sorting, Intervals"),
+      N("meetingRoomsII", "problem", "Meeting Rooms II", "Minimum rooms", "Sort events or heap end times", "Sweep Line, Heap"),
+      N("coinChange", "problem", "Coin Change", "Minimum coins", "DP over amount", "DP"),
+      N("editDistance", "problem", "Edit Distance", "Minimum string edits", "2D prefix DP", "DP"),
+      N("houseRobber", "problem", "House Robber", "Max non-adjacent sum", "Sequence DP", "DP"),
+      N("climbingStairs", "problem", "Climbing Stairs", "Count ways", "DP / Fibonacci", "DP"),
+      N("jumpGame", "problem", "Jump Game", "Reachability", "Greedy farthest reach", "Greedy"),
+      N("gasStation", "problem", "Gas Station", "Circular greedy", "Track surplus, restart when negative", "Greedy"),
+      N("taskScheduler", "problem", "Task Scheduler", "Schedule with cooldown", "Frequency + greedy/heap", "Greedy, Heap"),
+      N("subsets", "problem", "Subsets", "All subsets", "Backtracking or bitmask", "Backtracking"),
+      N("permutations", "problem", "Permutations", "All arrangements", "Backtracking choose/undo", "Backtracking"),
+      N("combinationSum", "problem", "Combination Sum", "Choose combinations", "Backtracking with remaining target", "Backtracking"),
+      N("smallestSufficientTeam", "problem", "Smallest Sufficient Team", "Cover skills with minimum people", "Bitmask DP", "Bitmask DP"),
+      N("shortestPathKeys", "problem", "Shortest Path to Get All Keys", "Stateful shortest path", "BFS + key bitmask", "BFS + Bitmask"),
+      N("implementTrie", "problem", "Implement Trie", "Prefix tree design", "Trie nodes with children", "Trie"),
+      N("wordSearchII", "problem", "Word Search II", "Many words in grid", "Trie + DFS", "Trie, DFS"),
+      N("rangeSumMutable", "problem", "Range Sum Query - Mutable", "Dynamic range sums", "Segment tree or BIT", "Segment Tree"),
+      N("countSmallerAfterSelf", "problem", "Count of Smaller Numbers After Self", "Inversion/rank queries", "BIT/segment tree/merge sort", "Segment Tree"),
+      N("consecutiveNumbers", "problem", "Consecutive Numbers", "Repeated rows in order", "LAG/LEAD or self join", "SQL"),
+      N("rankScores", "problem", "Rank Scores", "Ranking rows", "DENSE_RANK/RANK", "SQL"),
+      N("activeUsers", "problem", "Active Users", "Consecutive login pattern", "Window functions + grouping", "SQL"),
+      N("networkDelay", "problem", "Network Delay Time", "Weighted reach time", "Dijkstra", "Graph"),
+      N("cheapestFlights", "problem", "Cheapest Flights Within K Stops", "Constrained cheapest path", "Dijkstra/DP with stops", "Dijkstra"),
+      N("pathMinEffort", "problem", "Path With Minimum Effort", "Minimize max edge difference", "Dijkstra / binary search + BFS", "Dijkstra"),
+      N("reverseLinkedList", "problem", "Reverse Linked List", "Pointer reversal", "Iterate and rewire next", "Linked List"),
+      N("mergeTwoLists", "problem", "Merge Two Sorted Lists", "Merge sorted lists", "Dummy head + pointer compare", "Linked List"),
+      N("decodeString", "problem", "Decode String", "Nested encoded string", "Stack of count/context", "Stack"),
+      N("numberOfAtoms", "problem", "Number of Atoms", "Nested chemical formula", "Stack parser + counts", "Stack"),
+      N("validParentheses", "problem", "Valid Parentheses", "Bracket matching", "Stack push/pop", "Stack"),
+      N("xorQueries", "problem", "XOR Queries of a Subarray", "Range XOR", "Prefix XOR", "Prefix Sum"),
+      N("canMakePalindrome", "problem", "Can Make Palindrome from Substring", "Odd/even char counts", "Prefix parity bitmask", "Prefix + Bitmask"),
+      N("countFixedBounds", "problem", "Count Subarrays With Fixed Bounds", "Count valid subarrays", "Window + last min/max/invalid positions", "Sliding Window"),
+      N("boats", "problem", "Boats to Save People", "Pair weights under limit", "Sort + two pointers", "Two Pointers, Greedy"),
+      N("threeSum", "problem", "3Sum", "Triplets sum zero", "Sort + two pointers", "Two Pointers"),
+      N("moveZeroes", "problem", "Move Zeroes", "Partition array", "Slow/fast pointer", "Two Pointers"),
+      N("findFirstLast", "problem", "Find First and Last Position", "Boundary search", "Two binary searches", "Binary Search"),
+      N("medianTwoSorted", "problem", "Median of Two Sorted Arrays", "Partition two arrays", "Binary search partition", "Binary Search")
+    ];
+
+    const links = [
+      // Root to signals
+      L("root", "array"),
+      L("root", "string"),
+      L("root", "sorted"),
+      L("root", "contiguous"),
+      L("root", "pairs"),
+      L("root", "graphSignal"),
+      L("root", "treeSignal"),
+      L("root", "matrix"),
+      L("root", "intervals"),
+      L("root", "design"),
+      L("root", "database"),
+      L("root", "choices"),
+      L("root", "ranges"),
+      L("root", "optimize"),
+
+      // Signals to algorithms
+      L("array", "hash"),
+      L("array", "twoPointers"),
+      L("array", "prefix"),
+      L("array", "sorting"),
+      L("array", "dp"),
+      L("array", "heap"),
+      L("array", "segment"),
+
+      L("string", "window"),
+      L("string", "stack"),
+      L("string", "trie"),
+      L("string", "dp"),
+      L("string", "greedy"),
+
+      L("sorted", "binarySearch"),
+      L("sorted", "twoPointers"),
+
+      L("contiguous", "window"),
+      L("contiguous", "prefix"),
+      L("contiguous", "monotonicStack"),
+
+      L("pairs", "hash"),
+      L("pairs", "twoPointers"),
+      L("pairs", "sorting"),
+
+      L("graphSignal", "bfs"),
+      L("graphSignal", "dfs"),
+      L("graphSignal", "unionFind"),
+      L("graphSignal", "topological"),
+      L("graphSignal", "dijkstra"),
+
+      L("treeSignal", "dfs"),
+      L("treeSignal", "bfs"),
+      L("treeSignal", "dp"),
+
+      L("matrix", "dfs"),
+      L("matrix", "bfs"),
+      L("matrix", "dp"),
+      L("matrix", "prefix"),
+
+      L("intervals", "sorting"),
+      L("intervals", "sweep"),
+      L("intervals", "heap"),
+
+      L("design", "hash"),
+      L("design", "heap"),
+      L("design", "stack"),
+      L("design", "queue"),
+      L("design", "linkedList"),
+      L("design", "trie"),
+
+      L("database", "sql"),
+
+      L("choices", "backtracking"),
+      L("choices", "bitmask"),
+      L("choices", "dp"),
+
+      L("ranges", "prefix"),
+      L("ranges", "segment"),
+
+      L("optimize", "dp"),
+      L("optimize", "greedy"),
+      L("optimize", "binaryAnswer"),
+      L("optimize", "dijkstra"),
+
+      // Algorithms to examples
+      L("hash", "twoSum"),
+      L("hash", "subarraySumK"),
+      L("hash", "accountsMerge"),
+      L("hash", "topKFrequent"),
+      L("hash", "insertDeleteGetRandom"),
+
+      L("twoPointers", "threeSum"),
+      L("twoPointers", "moveZeroes"),
+      L("twoPointers", "boats"),
+      L("twoPointers", "trappingRain"),
+
+      L("window", "longestSubstring"),
+      L("window", "countFixedBounds"),
+
+      L("prefix", "subarraySumK"),
+      L("prefix", "xorQueries"),
+      L("prefix", "canMakePalindrome"),
+
+      L("sorting", "mergeIntervals"),
+      L("sorting", "boats"),
+      L("sorting", "threeSum"),
+
+      L("binarySearch", "findFirstLast"),
+      L("binarySearch", "medianTwoSorted"),
+
+      L("binaryAnswer", "koko"),
+
+      L("stack", "validParentheses"),
+      L("stack", "decodeString"),
+      L("stack", "numberOfAtoms"),
+
+      L("monotonicStack", "largestRectangle"),
+      L("monotonicStack", "trappingRain"),
+
+      L("heap", "topKFrequent"),
+      L("heap", "findMedianStream"),
+      L("heap", "mergeKLists"),
+      L("heap", "meetingRoomsII"),
+      L("heap", "taskScheduler"),
+
+      L("queue", "rottingOranges"),
+
+      L("bfs", "wordLadder"),
+      L("bfs", "rottingOranges"),
+      L("bfs", "shortestPathKeys"),
+
+      L("dfs", "numberOfIslands"),
+      L("dfs", "wordSearchII"),
+
+      L("backtracking", "subsets"),
+      L("backtracking", "permutations"),
+      L("backtracking", "combinationSum"),
+
+      L("dp", "coinChange"),
+      L("dp", "editDistance"),
+      L("dp", "houseRobber"),
+      L("dp", "climbingStairs"),
+      L("dp", "parallelCoursesIII"),
+
+      L("greedy", "jumpGame"),
+      L("greedy", "gasStation"),
+      L("greedy", "taskScheduler"),
+      L("greedy", "boats"),
+
+      L("unionFind", "accountsMerge"),
+      L("unionFind", "numberOfIslands"),
+
+      L("topological", "courseSchedule"),
+      L("topological", "parallelCoursesIII"),
+
+      L("trie", "implementTrie"),
+      L("trie", "wordSearchII"),
+
+      L("segment", "rangeSumMutable"),
+      L("segment", "countSmallerAfterSelf"),
+
+      L("bitmask", "smallestSufficientTeam"),
+      L("bitmask", "shortestPathKeys"),
+      L("bitmask", "canMakePalindrome"),
+
+      L("sql", "consecutiveNumbers"),
+      L("sql", "rankScores"),
+      L("sql", "activeUsers"),
+
+      L("dijkstra", "networkDelay"),
+      L("dijkstra", "cheapestFlights"),
+      L("dijkstra", "pathMinEffort"),
+
+      L("sweep", "meetingRoomsII"),
+
+      L("linkedList", "lruCache"),
+      L("linkedList", "reverseLinkedList"),
+      L("linkedList", "mergeTwoLists"),
+      L("linkedList", "mergeKLists")
+    ];
+
+    const graph = { nodes, links };
+    const byId = Object.fromEntries(graph.nodes.map(n => [n.id, n]));
+
+    const width = 1400;
+    const height = 860;
+
+    const svg = d3.select("svg");
+    const container = svg.append("g");
+
+    svg.call(
+      d3.zoom()
+        .scaleExtent([0.35, 2.5])
+        .on("zoom", (event) => {
+          container.attr("transform", event.transform);
+        })
+    );
+
+    const color = {
+      root: "#f97316",
+      signal: "#3b82f6",
+      algorithm: "#22c55e",
+      problem: "#eab308"
+    };
+
+    const radius = {
+      root: 18,
+      signal: 13,
+      algorithm: 12,
+      problem: 8
+    };
+
+    const simulation = d3.forceSimulation(graph.nodes)
+      .force("link", d3.forceLink(graph.links).id(d => d.id).distance(75).strength(0.65))
+      .force("charge", d3.forceManyBody().strength(-220))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collide", d3.forceCollide().radius(d => radius[d.group] + 12));
+
+    const link = container.append("g")
+      .selectAll("line")
+      .data(graph.links)
+      .join("line")
+      .attr("stroke", "#4b5563")
+      .attr("stroke-opacity", 0.35)
+      .attr("stroke-width", 1.15);
+
+    const node = container.append("g")
+      .selectAll("g")
+      .data(graph.nodes)
+      .join("g")
+      .call(drag(simulation))
+      .on("click", (event, d) => showDetails(d));
+
+    node.append("circle")
+      .attr("r", d => radius[d.group] || 8)
+      .attr("fill", d => color[d.group] || "#9ca3af")
+      .attr("stroke", "#0b1020")
+      .attr("stroke-width", 2);
+
+    node.append("text")
+      .text(d => d.label)
+      .attr("x", 0)
+      .attr("y", d => (radius[d.group] || 8) + 13)
+      .attr("text-anchor", "middle")
+      .attr("font-size", d => d.group === "problem" ? "8px" : "10px")
+      .attr("fill", "#e5e7eb")
+      .style("pointer-events", "none");
+
+    node.append("title")
+      .text(d => [
+        d.label,
+        d.when ? `WHERE/WHEN: ${d.when}` : "",
+        d.how ? `HOW: ${d.how}` : "",
+        d.where ? `USED IN: ${d.where}` : ""
+      ].filter(Boolean).join("\n"));
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    function drag(sim) {
+      function dragstarted(event, d) {
+        if (!event.active) sim.alphaTarget(0.18).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+
+      function dragended(event, d) {
+        if (!event.active) sim.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }
+
+      return d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
+    }
+
+    function showDetails(d) {
+      const result = document.getElementById("result");
+      result.innerHTML = `
+        <strong>${d.label}</strong><br/>
+        <strong>WHERE / WHEN:</strong> ${d.when || "—"}<br/>
+        <strong>HOW:</strong> ${d.how || "—"}<br/>
+        <strong>USED IN:</strong> ${d.where || "—"}
+      `;
+    }
+
+    const getId = x => typeof x === "object" ? x.id : x;
+
+    const keywordRules = [
+      {
+        pattern: /subarray.*sum|prefix|range sum|cumulative/i,
+        algos: ["prefix", "hash"],
+        reason: "Range accumulation or prefix relation"
+      },
+      {
+        pattern: /substring|window|at most|at least|contiguous|longest valid/i,
+        algos: ["window", "hash"],
+        reason: "Contiguous segment with a validity constraint"
+      },
+      {
+        pattern: /pair|two sum|triplet|3sum|complement/i,
+        algos: ["hash", "twoPointers", "sorting"],
+        reason: "Find matching pairs/triplets"
+      },
+      {
+        pattern: /sorted|binary search|first.*last|median.*sorted|insert position/i,
+        algos: ["binarySearch"],
+        reason: "Ordered search boundary"
+      },
+      {
+        pattern: /minimum.*(speed|capacity|days|threshold|limit)|maximize.*minimum|smallest divisor|koko/i,
+        algos: ["binaryAnswer"],
+        reason: "Feasibility is monotonic over answer space"
+      },
+      {
+        pattern: /parentheses|decode|expression|nested|brackets/i,
+        algos: ["stack"],
+        reason: "Nested structure needs delayed resolution"
+      },
+      {
+        pattern: /next greater|next smaller|histogram|rectangle|trap|boundary dominance/i,
+        algos: ["monotonicStack"],
+        reason: "Next dominating boundary"
+      },
+      {
+        pattern: /top k|kth largest|kth smallest|median stream|merge k/i,
+        algos: ["heap"],
+        reason: "Dynamic extreme/current best"
+      },
+      {
+        pattern: /shortest path|shortest steps|minimum moves|word ladder|rotting|level order/i,
+        algos: ["bfs", "queue"],
+        reason: "Layer-by-layer shortest unweighted distance"
+      },
+      {
+        pattern: /island|grid|matrix|flood|region|board/i,
+        algos: ["dfs", "bfs", "unionFind"],
+        reason: "Grid cells form implicit graph components"
+      },
+      {
+        pattern: /course|prerequisite|dependency|dependencies|order|dag/i,
+        algos: ["topological"],
+        reason: "Dependencies require DAG ordering"
+      },
+      {
+        pattern: /connected|component|merge accounts|redundant|grouping/i,
+        algos: ["unionFind", "dfs", "bfs"],
+        reason: "Connectivity/grouping"
+      },
+      {
+        pattern: /interval|meeting|overlap|event|schedule/i,
+        algos: ["sorting", "sweep", "heap"],
+        reason: "Interval overlap/event processing"
+      },
+      {
+        pattern: /subset|permutation|combination|choose|arrange|partition/i,
+        algos: ["backtracking", "bitmask", "dp"],
+        reason: "Enumerate or optimize choices"
+      },
+      {
+        pattern: /dp|dynamic programming|count ways|maximize|minimize|longest|minimum cost|optimal/i,
+        algos: ["dp", "greedy", "binaryAnswer"],
+        reason: "Optimization/counting over states"
+      },
+      {
+        pattern: /greedy|jump game|gas station|boats|task scheduler|local choice/i,
+        algos: ["greedy"],
+        reason: "Local safe choice"
+      },
+      {
+        pattern: /prefix search|autocomplete|trie|dictionary|word search ii/i,
+        algos: ["trie"],
+        reason: "Shared prefixes"
+      },
+      {
+        pattern: /range query|range update|mutable|segment tree|binary indexed tree|bit\b/i,
+        algos: ["segment", "prefix"],
+        reason: "Dynamic range operations"
+      },
+      {
+        pattern: /sql|database|consecutive.*numbers|rank|salary|window function|lag|lead/i,
+        algos: ["sql"],
+        reason: "Ordered row state/aggregation"
+      },
+      {
+        pattern: /xor|bit|mask|bitmask|parity/i,
+        algos: ["bitmask", "prefix"],
+        reason: "Compact bit state or prefix XOR"
+      },
+      {
+        pattern: /weighted.*path|network delay|cheapest|minimum effort|dijkstra/i,
+        algos: ["dijkstra"],
+        reason: "Weighted shortest path"
+      },
+      {
+        pattern: /cache|lru|stream|design|data structure|random/i,
+        algos: ["hash", "linkedList", "heap", "trie"],
+        reason: "Combine structures for operation constraints"
+      },
+      {
+        pattern: /linked list|reverse list|merge list|swap nodes/i,
+        algos: ["linkedList"],
+        reason: "Pointer rewiring"
+      }
+    ];
+
+    function applySearch() {
+      const q = document.getElementById("search").value.trim().toLowerCase();
+      const matchedAlgorithms = new Set();
+      const matchedProblems = new Set();
+      const reasons = new Set();
+
+      if (!q) {
+        clearSearch();
+        return;
+      }
+
+      keywordRules.forEach(rule => {
+        if (rule.pattern.test(q)) {
+          rule.algos.forEach(a => matchedAlgorithms.add(a));
+          reasons.add(rule.reason);
+        }
+      });
+
+      graph.nodes.forEach(n => {
+        if (n.group === "algorithm" && n.label.toLowerCase().includes(q)) {
+          matchedAlgorithms.add(n.id);
+          reasons.add("Direct algorithm match");
+        }
+
+        if (n.group === "problem" && n.label.toLowerCase().includes(q)) {
+          matchedProblems.add(n.id);
+          reasons.add("Direct problem match");
+        }
+      });
+
+      graph.links.forEach(l => {
+        const s = getId(l.source);
+        const t = getId(l.target);
+
+        if (matchedProblems.has(t) && byId[s]?.group === "algorithm") {
+          matchedAlgorithms.add(s);
+        }
+      });
+
+      graph.links.forEach(l => {
+        const s = getId(l.source);
+        const t = getId(l.target);
+
+        if (matchedAlgorithms.has(s) && byId[t]?.group === "problem") {
+          matchedProblems.add(t);
+        }
+      });
+
+      const matchedNodes = new Set(["root"]);
+      matchedAlgorithms.forEach(id => matchedNodes.add(id));
+      matchedProblems.forEach(id => matchedNodes.add(id));
+
+      graph.links.forEach(l => {
+        const s = getId(l.source);
+        const t = getId(l.target);
+
+        if (matchedAlgorithms.has(t) && byId[s]?.group === "signal") {
+          matchedNodes.add(s);
+        }
+      });
+
+      node.attr("opacity", d => matchedNodes.has(d.id) ? 1 : 0.12);
+      link.attr("stroke-opacity", l => {
+        const s = l.source.id;
+        const t = l.target.id;
+        return matchedNodes.has(s) && matchedNodes.has(t) ? 0.9 : 0.05;
+      });
+
+      const result = document.getElementById("result");
+
+      if (matchedAlgorithms.size === 0) {
+        result.innerHTML = `
+          No direct match. Try keywords like:<br/>
+          <em>subarray sum, substring, top k, prerequisites, intervals, shortest path, bitmask, sql, cache, monotonic stack</em>
+        `;
+      } else {
+        const algoNames = [...matchedAlgorithms].map(id => byId[id].label).join(", ");
+        result.innerHTML = `
+          <strong>Recommended algorithms:</strong> ${algoNames}<br/>
+          <strong>Why:</strong> ${[...reasons].join("; ")}<br/>
+          <strong>Example problems highlighted:</strong> ${matchedProblems.size || 0}
+        `;
+      }
+    }
+
+    function clearSearch() {
+      document.getElementById("search").value = "";
+      node.attr("opacity", 1);
+      link.attr("stroke-opacity", 0.35);
+      document.getElementById("result").textContent = "Click a node or search a problem pattern.";
+    }
+  </script>
+</body>
+</html>

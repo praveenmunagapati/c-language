@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROGRAMMING IN C · UNIT I · ATOMIC EDITION</title>
+<style>
+:root{
+  --bg:#070b11; --panel:#0d1420; --line:#1d2836; --fg:#d7e2ee;
+  --green:#5df08a; --dim:#7f96ac; --amber:#ffd166; --red:#ff6e6e;
+  --cyan:#7dd3fc; --mono:'Cascadia Code','Fira Mono','JetBrains Mono',Consolas,'Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--mono);overflow:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px);}
+#bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--green);z-index:60;transition:width .2s}
+#counter{position:fixed;top:12px;right:20px;color:var(--dim);font-size:13px;z-index:60;letter-spacing:2px}
+.slide{display:none;position:absolute;inset:0;overflow-y:auto;padding:52px 7vw 76px}
+.slide.active{display:block}
+.tag{color:var(--dim);font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px}
+h1,h2{color:#fff;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+h2{font-size:clamp(22px,3.2vw,36px);margin-bottom:18px}
+h2::before{content:"▮ ";color:var(--green)}
+h3{color:var(--green);font-size:15px;letter-spacing:2px;text-transform:uppercase;margin:16px 0 8px}
+p,li{font-size:15px;line-height:1.65;color:#b9c9da}
+.lead{color:#cfe0f0;font-size:16px;max-width:980px;margin-bottom:16px}
+pre{font-family:var(--mono);white-space:pre;line-height:1.5}
+.banner{color:var(--green);font-size:clamp(6px,1.35vw,15px);text-shadow:0 0 14px rgba(93,240,138,.35);margin:2vh 0}
+.term{background:#050a08;border:1px solid #143822;color:var(--green);padding:16px 18px;border-radius:8px;font-size:14px;overflow-x:auto}
+.c{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--cyan);padding:14px 18px;border-radius:8px;font-size:14px;color:#cfe3ff;overflow-x:auto}
+.c .t{color:#6e88a6}
+.flow{color:var(--amber);font-size:14px;background:var(--panel);border:1px dashed #3a4a2a;border-radius:8px;padding:14px 18px;overflow-x:auto}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:start}
+.grid64{display:grid;grid-template-columns:1.4fr .9fr;gap:20px;align-items:start}
+.grid46{display:grid;grid-template-columns:.9fr 1.4fr;gap:20px;align-items:start}
+@media(max-width:900px){.grid,.grid3,.grid64,.grid46{grid-template-columns:1fr}}
+table.t{border-collapse:collapse;width:100%;font-size:13.5px;margin:8px 0}
+table.t th{color:var(--amber);text-align:left;border-bottom:2px solid var(--line);padding:6px 10px;letter-spacing:1px;text-transform:uppercase;font-size:12px}
+table.t td{border-bottom:1px solid var(--line);padding:6px 10px;color:#c3d3e3;vertical-align:top}
+table.t tr:hover td{background:#101a29}
+.warn,.tip,.note{border-left:4px solid;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14px;line-height:1.6}
+.warn{border-color:var(--red);background:rgba(255,110,110,.07)}
+.tip{border-color:var(--green);background:rgba(93,240,138,.07)}
+.note{border-color:var(--cyan);background:rgba(125,211,252,.07)}
+.warn b{color:var(--red)}.tip b{color:var(--green)}.note b{color:var(--cyan)}
+.chip{display:inline-block;border:1px solid var(--line);background:var(--panel);color:var(--cyan);padding:2px 10px;border-radius:999px;font-size:12.5px;margin:3px 4px 3px 0}
+.hl{color:var(--amber);font-weight:700}
+.kw{color:var(--cyan);font-weight:700}
+.ok{color:var(--green)}
+.bad{color:var(--red)}
+.pg{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:var(--dim);font-size:12px;letter-spacing:3px;z-index:60}
+.keys{position:fixed;bottom:14px;right:20px;color:#3d5068;font-size:11px;letter-spacing:2px;z-index:60}
+.big{font-size:clamp(40px,7vw,84px);color:var(--green);text-shadow:0 0 26px rgba(93,240,138,.4)}
+ul.cl{list-style:none}
+ul.cl li{padding-left:22px;position:relative;margin:6px 0}
+ul.cl li::before{content:"▸";position:absolute;left:0;color:var(--green)}
+ul.cl2 li::before{content:"◆";color:var(--amber)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin-top:0}
+kbd{border:1px solid var(--line);border-bottom-width:3px;border-radius:5px;padding:1px 7px;background:#0f1826;color:var(--fg);font-size:12px}
+.step-n{display:inline-block;border:1px solid var(--green);color:var(--green);border-radius:6px;padding:1px 9px;margin-right:10px;font-weight:700}
+hr.sep{border:none;border-top:1px dashed var(--line);margin:16px 0}
+</style>
+</head>
+<body>
+<div id="bar"></div><div id="counter"></div>
+
+<!-- ═══════════════════ 01 · COVER ═══════════════════ -->
+<section class="slide active">
+<pre class="banner">
+ ██████╗   ██████╗  ██████╗   ██████╗   ██████╗
+██╔════╝  ██╔══██╗ ██╔══██╗ ██╔═══██╗ ██╔════╝
+██║       ██████╔╝ ██████╔╝ ██║   ██║ ██║  ███╗
+██║       ██╔═══╝  ██╔══██╗ ██║   ██║ ██║   ██║
+╚██████╗  ██║      ██║  ██║ ╚██████╔╝ ╚██████╔╝
+ ╚═════╝  ╚═╝      ╚═╝  ╚═╝  ╚═════╝   ╚═════╝
+</pre>
+<h1 style="font-size:clamp(20px,3vw,34px)">Programming in C · Unit I · <span class="hl">Atomic Edition</span></h1>
+<p class="lead">From computer fundamentals and program development, through algorithms, flowcharts
+and structured design — into language elements, variables &amp; data types, executable statements,
+arithmetic, output formatting, selection structures, and every loop the language offers.
+Every concept, split to the atom.</p>
+<div class="term">$ ./course --unit 1 --depth atomic
+[OK] loading foundations ............ done
+[OK] loading overview of C ........... done
+[OK] loading selection structures .... done
+[OK] loading repetition &amp; loops ...... done
+[OK] 88 slides mounted
+$ Press <span class="hl">→</span> to boot_</div>
+<div class="pg">01 / 88</div>
+</section>
+
+<!-- ═══════════════════ 02 · OBJECTIVES ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · foundations</div>
+<h2>Course Objectives</h2>
+<div class="grid64">
+<div class="term">$ cat course.objectives
+[OK] 01 — understand the fundamentals of computers
+[OK] 02 — understand the various steps in program development
+[OK] 03 — learn the syntax &amp; semantics of the C language
+[OK] 04 — learn structured programming approaches
+[OK] 05 — write algorithms · draw flowcharts
+[OK] 06 — convert algorithms/flowcharts → C programs
+[OK] 07 — code &amp; test a given logic in C
+$ exit status: all objectives mapped to slides ✓</div>
+<div>
+<h3>WHY THESE SEVEN</h3>
+<p>Objectives 01–02 build the <span class="hl">mental model</span>. 03–04 teach the
+<span class="hl">discipline</span>. 05–07 are the <span class="hl">craft</span>: design on paper,
+then translate, then verify. C rewards exactly this order — design first, code second.</p>
+<div class="tip"><b>RULE OF THUMB —</b> every slide in this deck traces back to one of these seven lines.</div>
+</div>
+</div>
+<div class="pg">02 / 88</div>
+</section>
+
+<!-- ═══════════════════ 03 · LEARNING PATH ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · foundations</div>
+<h2>The Learning Path</h2>
+<div class="grid64">
+<div class="flow">FUNDAMENTALS  how a computer runs programs
+      ↓
+DESIGN        algorithms · flowcharts · structure
+      ↓
+IMPLEMENT     the C language · Unit I  ◀── YOU ARE HERE
+      ↓
+VERIFY        compile · test · debug
+      ↓
+MODULARIZE    functions · pointers · arrays (Unit II+)
+      ↓
+MASTER        strings · recursion · structures · files · searching · sorting</div>
+<div>
+<h3>THE FULL COURSE MAP</h3>
+<span class="chip">I · Foundations + Overview + Selection + Loops</span>
+<span class="chip">II · Top-Down Design with Functions</span>
+<span class="chip">III · Pointers &amp; Modular Programming</span>
+<span class="chip">IV · Arrays</span>
+<span class="chip">V · Strings</span>
+<span class="chip">VI · Recursion</span>
+<span class="chip">VII · Structures &amp; Unions</span>
+<span class="chip">VIII · Text &amp; Binary Files</span>
+<span class="chip">IX · Searching &amp; Sorting</span>
+<div class="note"><b>THREE CONSTRUCTS RULE THEM ALL —</b> SEQUENCE · SELECTION · REPETITION.
+Everything in this unit is a variation on those three.</div>
+</div>
+</div>
+<div class="pg">03 / 88</div>
+</section>
+
+<!-- ═══════════════════ 04 · WHAT IS A COMPUTER ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · fundamentals of computers</div>
+<h2>What Is a Computer?</h2>
+<p class="lead">An electronic machine that <span class="hl">accepts data</span> (input),
+<span class="hl">processes</span> it by executing a stored sequence of instructions (program),
+and <span class="hl">produces information</span> (output) — at incredible speed, with zero judgment.
+It does <em>exactly</em> what it is told. Nothing more. Nothing less.</p>
+<div class="grid3">
+<div class="card"><h3>INPUT</h3><p>Raw facts &amp; figures: keystrokes, mouse clicks, file contents, sensor readings.
+The <b>data</b> the program will transform.</p></div>
+<div class="card"><h3>PROCESS</h3><p>The CPU executes instructions one after another — arithmetic, comparisons,
+decisions. This is where your <b>program</b> lives and runs.</p></div>
+<div class="card"><h3>OUTPUT</h3><p>The processed result: numbers on screen, printed reports, saved files.
+<b>Information</b> — data with meaning.</p></div>
+</div>
+<div class="flow">input ──▶ [ PROCESSING UNIT (CPU + memory) ] ──▶ output
+                 ▲
+                 │ stored program: instructions sit in memory
+                 │ and are fetched &amp; executed one by one</div>
+<div class="note"><b>GIGO —</b> Garbage In, Garbage Out. The machine never questions your data.
+Validating input is <em>your</em> job (you'll write that code with loops — slide 84).</div>
+<div class="pg">04 / 88</div>
+</section>
+
+<!-- ═══════════════════ 05 · LANGUAGE LEVELS ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · fundamentals of computers</div>
+<h2>Computer Languages — The Levels</h2>
+<p class="lead">Humans think in words; the CPU thinks in voltages. Programming languages are a
+<span class="hl">ladder of abstraction</span> between the two.</p>
+<table class="t">
+<tr><th>Level</th><th>Examples</th><th>Understood by</th><th>Abstraction</th></tr>
+<tr><td><span class="kw">High-level</span></td><td>C · Python · Java</td><td>humans ✓ (after translation)</td><td>one statement → many machine ops</td></tr>
+<tr><td><span class="kw">Assembly</span></td><td><code>mov ax, bx</code> · <code>add r1, r2</code></td><td>assembler</td><td>1 statement ≈ 1 machine op</td></tr>
+<tr><td><span class="kw">Machine</span></td><td><code>01001100 11100010</code></td><td>CPU only</td><td>none — raw opcodes</td></tr>
+</table>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h3>WHY C IS "HIGH-LEVEL"</h3>
+<p>You write <code>pay = hours * rate;</code> — one readable line. The machine needs many
+load/multiply/store steps to do it. The <b>compiler</b> performs that expansion for you.</p></div>
+<div class="card"><h3>WHY C IS ALSO "LOW-LEVEL"</h3>
+<p>C exposes memory addresses, pointer arithmetic and byte-sized types. That is why it powers
+operating systems, compilers and embedded firmware.</p></div>
+</div>
+<div class="pg">05 / 88</div>
+</section>
+
+<!-- ═══════════════════ 06 · TRANSLATION PIPELINE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · fundamentals of computers</div>
+<h2>Translation — Source → Machine Code</h2>
+<div class="flow">C source (.c) ──compiler──▶ assembly (.s) ──assembler──▶ machine code (.o)
+                                                              │
+                                     linker + libraries ──────▶ executable
+</div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h3>COMPILER</h3><p>Translates the <b>whole program</b> at once, from high-level C to
+assembly/object code. Reports <span class="hl">syntax errors</span> before anything runs.
+C is a <em>compiled</em> language.</p></div>
+<div class="card"><h3>ASSEMBLER</h3><p>Converts each assembly instruction into its exact binary opcode —
+a 1-to-1 mechanical translation.</p></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>THE STORED-PROGRAM CONCEPT (VON NEUMANN)</h3>
+<p>Instructions live in memory <b>side by side with data</b>. The CPU fetches, decodes and executes
+them one after another. Your <code>.c</code> file becomes numbers in RAM — indistinguishable in kind
+from the numbers they compute on.</p></div>
+<div class="tip"><b>KEY INSIGHT —</b> "running a program" = the CPU walking through memory,
+instruction by instruction. Everything else in this course is about writing those instructions correctly.</div>
+<div class="pg">06 / 88</div>
+</section>
+
+<!-- ═══════════════════ 07 · CPU ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · fundamentals of computers</div>
+<h2>The CPU — The Brain</h2>
+<div class="grid64">
+<div>
+<h3>TWO PARTS INSIDE</h3>
+<table class="t">
+<tr><th>Part</th><th>Job</th></tr>
+<tr><td><span class="kw">ALU</span> — Arithmetic Logic Unit</td><td>Does the math (+ − × ÷) and the comparisons (&lt; &gt; ==)</td></tr>
+<tr><td><span class="kw">CU</span> — Control Unit</td><td>Directs traffic: fetches instructions, decodes them, tells the ALU/memory what to do</td></tr>
+</table>
+<h3>REGISTERS (TINY, FAST, INSIDE THE CPU)</h3>
+<p>Handful of ultra-fast storage cells the ALU works on directly. Variables must travel
+memory → register → ALU and back.</p>
+</div>
+<div class="flow">THE FETCH–DECODE–EXECUTE CYCLE
+  ┌──────────────────────────┐
+  │ 1. FETCH   opcode from   │
+  │            memory (PC→IR)│
+  │ 2. DECODE  what does it  │
+  │            mean?         │
+  │ 3. EXECUTE do it (ALU /  │
+  │            memory r/w)   │
+  │ 4. PC ← next address     │
+  └────────────┬─────────────┘
+               ↺ billions of times / second</div>
+</div>
+<div class="note"><b>CLOCK SPEED —</b> each tick of the clock advances the cycle. A 3 GHz CPU cycles
+3,000,000,000 times per second. Your loop's condition is checked on some of those ticks.</div>
+<div class="pg">07 / 88</div>
+</section>
+
+<!-- ═══════════════════ 08 · MEMORY ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · fundamentals of computers</div>
+<h2>Memory — Where Variables Live</h2>
+<table class="t">
+<tr><th>Store</th><th>Speed</th><th>Volatility</th><th>Holds</th></tr>
+<tr><td><span class="kw">Registers</span></td><td>fastest</td><td>volatile</td><td>the value the ALU is touching <em>right now</em></td></tr>
+<tr><td><span class="kw">RAM</span> (main memory)</td><td>fast</td><td>volatile — lost at power off</td><td>your program + its variables while running</td></tr>
+<tr><td><span class="kw">Disk / SSD</span></td><td>slow</td><td>permanent</td><td>files: source code, saved data, executables</td></tr>
+</table>
+<div class="grid" style="margin-top:12px">
+<div class="card"><h3>RAM AS A GRID OF CELLS</h3>
+<p>Memory is a long street of numbered <b>bytes</b>. Every byte has an <span class="hl">address</span>.
+Declaring <code>int x;</code> reserves cells and gives them a name — the compiler remembers which
+address <code>x</code> means.</p></div>
+<div class="flow">addresses:  … 1000 1001 1002 1003 1004 …
+contents:   … [  x  x  x  x ][  y  y  …]
+                 ▲              ▲
+                 int x          double y
+RAM is a street; variables are named houses;
+addresses are house numbers.</div>
+</div>
+<div class="tip"><b>WHY YOU'LL CARE —</b> the <code>&amp;</code> in <code>scanf("%d",&amp;x)</code> means
+"the <em>address</em> of x". Pointers (Unit III) are nothing but addresses treated as values.</div>
+<div class="pg">08 / 88</div>
+</section>
+
+<!-- ═══════════════════ 09 · INPUT / OUTPUT ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · fundamentals of computers</div>
+<h2>Input / Output — The Interface to the World</h2>
+<div class="grid3">
+<div class="card"><h3>INPUT DEVICES</h3><p>keyboard · mouse · scanner · microphone · network · file.
+Data flows <b>world → memory</b>.</p></div>
+<div class="card"><h3>OUTPUT DEVICES</h3><p>monitor · printer · speakers · file · network.
+Results flow <b>memory → world</b>.</p></div>
+<div class="card"><h3>IN C</h3><p>Everything is a <b>stream</b> of characters.
+<code>scanf</code> pulls from the input stream; <code>printf</code> pushes to the output stream.</p></div>
+</div>
+<div class="c" style="margin-top:14px"><span class="t">/* the two workhorses of this unit */</span>
+scanf("%lf", &amp;miles);            <span class="t">/* read a double from the keyboard   */</span>
+printf("Pay = $%.2f\n", pay);    <span class="t">/* write formatted text to the screen */</span></div>
+<div class="warn"><b>CONSOLE ≠ SCREEN ONLY —</b> the "terminal" is an abstraction: the same
+<code>scanf/printf</code> code can be redirected to files by the OS
+(<code>./a.out &lt; data.txt &gt; out.txt</code>). Streams hide the device. You'll exploit this for EOF loops (slide 78).</div>
+<div class="pg">09 / 88</div>
+</section>
+
+<!-- ═══════════════════ 10 · HARDWARE VS SOFTWARE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · fundamentals of computers</div>
+<h2>Hardware vs Software</h2>
+<div class="grid">
+<div class="card"><h3>HARDWARE — THE MACHINERY</h3>
+<p>Everything you can physically touch: CPU, RAM chips, disk, keyboard, monitor, buses.
+Fixed behaviour, built in silicon.</p></div>
+<div class="card"><h3>SOFTWARE — THE INSTRUCTIONS</h3>
+<p>A <span class="hl">finite, ordered sequence of instructions</span> telling the hardware what to do.
+Intangible, infinitely changeable. Programs are software.</p></div>
+</div>
+<table class="t" style="margin-top:14px">
+<tr><th>Kind</th><th>Purpose</th><th>Examples</th></tr>
+<tr><td><span class="kw">System software</span></td><td>runs the machine itself; platform for everything else</td><td>operating systems (Linux, Windows), <b>compilers</b>, device drivers</td></tr>
+<tr><td><span class="kw">Application software</span></td><td>solves user problems directly</td><td>word processors, games, <b>the C programs you will write</b></td></tr>
+</table>
+<div class="flow">hardware  ◀── driven by ──  system software  ◀── hosted on ──  application software
+   silicon        OS + compiler                      your .c programs</div>
+<div class="tip"><b>WHERE C FITS —</b> the C compiler is system software; your compiled program becomes
+application software. You are learning the tool that builds both layers.</div>
+<div class="pg">10 / 88</div>
+</section>
+
+<!-- ═══════════════════ 11 · 7 STEPS OVERVIEW ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2>The 7 Steps of Program Development</h2>
+<table class="t">
+<tr><th>#</th><th>Phase</th><th>One-line essence</th><th>Artefact produced</th></tr>
+<tr><td>01</td><td><span class="kw">ANALYZE</span></td><td>define the problem precisely</td><td>IPO specification</td></tr>
+<tr><td>02</td><td><span class="kw">DESIGN</span></td><td>devise the method — logic only, no code</td><td>algorithm + flowchart</td></tr>
+<tr><td>03</td><td><span class="kw">CODE</span></td><td>translate design into C, syntax exact</td><td>source file (.c)</td></tr>
+<tr><td>04</td><td><span class="kw">COMPILE</span></td><td>source → object → link → executable</td><td>a.out / .exe</td></tr>
+<tr><td>05</td><td><span class="kw">TEST</span></td><td>run with chosen data, compare results</td><td>test evidence</td></tr>
+<tr><td>06</td><td><span class="kw">DOCUMENT</span></td><td>record problem, design &amp; tests</td><td>documentation</td></tr>
+<tr><td>07</td><td><span class="kw">MAINTAIN</span></td><td>fix defects, adapt to change</td><td>new versions… forever</td></tr>
+</table>
+<div class="note"><b>NEXT —</b> one slide per step. Each slide = one atom of the process.
+Slides 12–18.</div>
+<div class="pg">11 / 88</div>
+</section>
+
+<!-- ═══════════════════ 12 · STEP 1 ANALYZE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2><span class="step-n">01</span>Analyze — Define the Problem</h2>
+<p class="lead">Before any solution: nail down <span class="hl">given input</span>,
+<span class="hl">required output</span>, and the <span class="hl">processing</span> connecting them — the
+<b>IPO</b> of the problem. A vague problem guarantees a wrong program.</p>
+<div class="grid3">
+<div class="card"><h3>I — INPUT</h3><p>What data arrives? What types? What ranges? What is invalid?
+<em>e.g. three exam marks, 0–100 each.</em></p></div>
+<div class="card"><h3>P — PROCESSING</h3><p>What rules transform input to output?
+<em>e.g. average = (m1+m2+m3)/3; pass if ≥ 50.</em></p></div>
+<div class="card"><h3>O — OUTPUT</h3><p>What exactly must appear, in what format?
+<em>e.g. "Avg = 82.33" with 2 decimals.</em></p></div>
+</div>
+<div class="flow">IPO for the "average of 3 marks" problem
+INPUT:  mark1, mark2, mark3        (real numbers, 0 ≤ mark ≤ 100)
+PROCESS: avg ← (mark1 + mark2 + mark3) / 3
+OUTPUT: avg printed with 2 decimal places</div>
+<div class="warn"><b>SKIP THIS AND PAY LATER —</b> most "logic errors" are really analysis errors:
+the code perfectly solves a problem nobody asked. Minutes spent here save days at slide 18.</div>
+<div class="pg">12 / 88</div>
+</section>
+
+<!-- ═══════════════════ 13 · STEP 2 DESIGN ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2><span class="step-n">02</span>Design — Logic Before Code</h2>
+<p class="lead">Devise the method with two language-free tools: the <span class="hl">algorithm</span>
+(numbered steps) and the <span class="hl">flowchart</span> (picture of the flow).
+<span class="hl">No C syntax here — logic only.</span></p>
+<div class="grid">
+<div class="card"><h3>WHY DESIGN ON PAPER?</h3>
+<ul class="cl">
+<li>cheap to fix — erase &amp; redraw</li>
+<li>forces you to face every branch <em>before</em> the compiler does it for you</li>
+<li>translates 1-to-1 into C later (slide 27)</li>
+<li>readable by non-programmers for review</li>
+</ul></div>
+<div class="card"><h3>DESIGN TOOLS OF THIS UNIT</h3>
+<ul class="cl">
+<li>pseudocode — structured English (slides 21–22)</li>
+<li>flowcharts — 6 symbols (slides 23–24)</li>
+<li>stepwise refinement — big problem → small steps</li>
+<li>desk-checking — trace with sample data by hand</li>
+</ul></div>
+</div>
+<div class="tip"><b>MEASURE OF A GOOD DESIGN —</b> you can state, for every input, exactly which path it takes
+and what output emerges. If you can't, the design isn't done.</div>
+<div class="pg">13 / 88</div>
+</section>
+
+<!-- ═══════════════════ 14 · STEP 3 CODE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2><span class="step-n">03</span>Code — Translate to C</h2>
+<p class="lead">Turn the design into C source, following the language's <span class="hl">syntax exactly</span>.
+Translation is mechanical once the design is right — each algorithm step maps to one statement.</p>
+<div class="grid64">
+<div class="card"><h3>THE TRANSLATION DICTIONARY</h3>
+<table class="t">
+<tr><th>Design element</th><th>C construct</th></tr>
+<tr><td>read input</td><td><code>scanf(...)</code></td></tr>
+<tr><td>compute / assign</td><td><code>variable = expression;</code></td></tr>
+<tr><td>print output</td><td><code>printf(...)</code></td></tr>
+<tr><td>if / then / else</td><td><code>if (...) ... else ...</code></td></tr>
+<tr><td>repeat while</td><td><code>while / for / do-while</code></td></tr>
+<tr><td>start / stop</td><td><code>main() { ... return 0; }</code></td></tr>
+</table></div>
+<div class="card"><h3>CODING RULES OF THUMB</h3>
+<ul class="cl">
+<li>meaningful identifier names (<code>total_marks</code>, not <code>tm</code>)</li>
+<li>indent to show structure — braces are truth, indentation is honesty</li>
+<li>comment the <em>why</em>, not the <em>what</em></li>
+<li>one idea per line; never cram statements</li>
+</ul></div>
+</div>
+<div class="pg">14 / 88</div>
+</section>
+
+<!-- ═══════════════════ 15 · STEP 4 COMPILE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2><span class="step-n">04</span>Compile — Build the Executable</h2>
+<div class="flow">average.c ──▶ PREPROCESS (#include pasted in)
+          ──▶ COMPILER   (syntax check → object code)      average.o
+          ──▶ LINKER     (join printf/scanf from libraries) a.out
+          ──▶ ready to RUN</div>
+<table class="t" style="margin-top:12px">
+<tr><th>Stage</th><th>What happens</th><th>Failure looks like</th></tr>
+<tr><td>Preprocess</td><td><code>#include &lt;stdio.h&gt;</code> textually inserted; <code>#define</code>s expanded</td><td>missing header file</td></tr>
+<tr><td>Compile</td><td>syntax verified; C → object code</td><td><code>error: expected ';' before '}'</code></td></tr>
+<tr><td>Link</td><td>your code + library functions merged</td><td><code>undefined reference to printg</code> (typo!)</td></tr>
+</table>
+<div class="warn"><b>NO EXECUTABLE UNTIL ZERO ERRORS —</b> warnings may pass; errors stop the build.
+Read error messages <span class="hl">top-down</span>: the first error usually explains all the later ones.</div>
+<div class="pg">15 / 88</div>
+</section>
+
+<!-- ═══════════════════ 16 · STEP 5 TEST ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2><span class="step-n">05</span>Test — Earn Correctness</h2>
+<p class="lead">Execute with <span class="hl">carefully chosen data</span> and compare against expected results.
+A program that merely compiles is only half a program.</p>
+<table class="t">
+<tr><th>Data class</th><th>Why chosen</th><th>Example for "average of marks"</th></tr>
+<tr><td><span class="kw">Normal</span></td><td>typical everyday case</td><td>70 80 90 → expect 80.00</td></tr>
+<tr><td><span class="kw">Boundary</span></td><td>edges of valid ranges</td><td>0 0 0 → expect 0.00 · 100 100 100 → 100.00</td></tr>
+<tr><td><span class="kw">Extreme</span></td><td>stress limits</td><td>huge values, long inputs</td></tr>
+<tr><td><span class="kw">Invalid</span></td><td>decide: reject or handle?</td><td>-5 80 90 · letters where numbers expected</td></tr>
+</table>
+<div class="grid" style="margin-top:10px">
+<div class="card"><h3>BLACK-BOX VIEW</h3><p>You test <b>behaviour against the spec</b> from slide 12 — not the code's insides.
+Every promised output, every promised rejection.</p></div>
+<div class="card"><h3>DESK-CHECKING</h3><p>Trace the algorithm by hand with sample data <em>before</em> running it.
+Catches logic errors the compiler never sees (slide 30).</p></div>
+</div>
+<div class="pg">16 / 88</div>
+</section>
+
+<!-- ═══════════════════ 17 · STEP 6 DOCUMENT ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2><span class="step-n">06</span>Document — Write It Down</h2>
+<div class="grid">
+<div class="card"><h3>WHAT TO RECORD</h3>
+<ul class="cl">
+<li>problem statement &amp; IPO spec</li>
+<li>algorithm / flowchart used</li>
+<li>test data + observed results</li>
+<li>known limitations &amp; assumptions</li>
+<li>in-code comments on tricky logic</li>
+</ul></div>
+<div class="card"><h3>WHO READS IT</h3>
+<ul class="cl">
+<li>the next maintainer</li>
+<li>your team, reviewing your logic</li>
+<li><span class="hl">future you</span> — in six months you are a stranger to your own code</li>
+</ul></div>
+</div>
+<div class="c" style="margin-top:12px">/* ----------------------------------------------
+   avg3.c — average of three exam marks
+   author : you          date : today
+   input  : 3 marks (0..100)     output : average
+   ---------------------------------------------- */
+#include &lt;stdio.h&gt;</div>
+<div class="tip"><b>DOCUMENTATION IS NOT DECORATION —</b> it is the difference between software and code
+fragments. Cheap now, priceless during maintenance.</div>
+<div class="pg">17 / 88</div>
+</section>
+
+<!-- ═══════════════════ 18 · STEP 7 MAINTAIN ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2><span class="step-n">07</span>Maintain — The Longest Phase</h2>
+<p class="lead">Real programs live for years. Maintenance means <span class="hl">fixing defects discovered in use</span>
+and <span class="hl">adapting to new requirements</span>. Most of the lifetime cost of software happens here.</p>
+<table class="t">
+<tr><th>Maintenance type</th><th>Trigger</th><th>Example</th></tr>
+<tr><td>Corrective</td><td>a bug surfaces in production</td><td>average wrong when marks are decimals</td></tr>
+<tr><td>Adaptive</td><td>environment changes</td><td>marks now out of 200, not 100</td></tr>
+<tr><td>Perfective</td><td>new feature requested</td><td>"also print pass/fail"</td></tr>
+</table>
+<div class="warn"><b>THE CHEAPER-TO-FIX-LAW —</b> an error caught at <b>analysis</b> costs a pencil stroke.
+The same error caught at <b>testing</b> costs an hour. Caught by a <b>user</b>, it costs days —
+plus trust. The earlier an error is caught, the cheaper it is.</div>
+<div class="pg">18 / 88</div>
+</section>
+
+<!-- ═══════════════════ 19 · NOT A STRAIGHT LINE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · steps in program development</div>
+<h2>The Cycle Is Not a Straight Line</h2>
+<div class="flow">          analyze ──▶ design ──▶ code
+             ▲                      │
+             │                      ▼
+   maintain ◀── document ◀── test ◀── compile
+        │                     │
+        └── new requirements  └── failure loops you BACKWARDS:
+                feed back         test fail → re-code
+                                  test fail → re-design
+                                  test fail → re-analyze (ouch)</div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h3>ITERATION IS NORMAL</h3><p>A failed test is not failure — it is the cycle working.
+Every backward arrow makes the program stronger. Expect many passes.</p></div>
+<div class="card"><h3>DEBUGGING CYCLE</h3>
+<div class="flow" style="border:none;background:none;padding:4px">fail → locate → correct → re-run ALL tests
+(a fix can break what worked before)</div></div>
+</div>
+<div class="note"><b>VERIFY BEFORE YOU TRUST —</b> correctness is earned at <span class="hl">test time</span>,
+never at compile time. Compilation proves syntax; only tests probe logic.</div>
+<div class="pg">19 / 88</div>
+</section>
+
+<!-- ═══════════════════ 20 · ALGORITHM DEFINITION ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · algorithms</div>
+<h2>Algorithms — The Recipe</h2>
+<p class="lead">An algorithm is a <span class="hl">finite, ordered, unambiguous sequence of steps</span>
+that transforms input into output and solves the problem. A recipe for a machine that has
+zero intuition but perfect obedience.</p>
+<table class="t">
+<tr><th>Property</th><th>Meaning</th></tr>
+<tr><td><span class="kw">Input</span></td><td>zero or more quantities supplied before it begins</td></tr>
+<tr><td><span class="kw">Output</span></td><td>at least one result produced — otherwise it solves nothing</td></tr>
+<tr><td><span class="kw">Definiteness</span></td><td>every step precisely stated — no ambiguity, ever</td></tr>
+<tr><td><span class="kw">Finiteness</span></td><td>must terminate after a finite number of steps</td></tr>
+<tr><td><span class="kw">Effectiveness</span></td><td>each step basic enough to be carried out exactly</td></tr>
+</table>
+<div class="warn"><b>"SORT THE NUMBERS NICELY" ✗ —</b> not an algorithm: vague verb, undefined order.
+"Compare each pair, swap if out of order, repeat until no swap occurred" ✓ — definite, effective, finite.</div>
+<div class="pg">20 / 88</div>
+</section>
+
+<!-- ═══════════════════ 21 · ALGORITHM LARGEST OF 3 ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · algorithms</div>
+<h2>Algorithm — Largest of Three</h2>
+<div class="grid">
+<div class="term">ALGORITHM LargestOfThree
+Step 1: read  a, b, c
+Step 2: max ← a
+Step 3: if b &gt; max then max ← b
+Step 4: if c &gt; max then max ← c
+Step 5: print max
+Step 6: stop
+
+/* plain, numbered, language-free.
+   Any C programmer can translate
+   this directly. */</div>
+<div>
+<h3>THE IDEA — "KING OF THE HILL"</h3>
+<p>Assume the first value is the champion (<code>max ← a</code>). Let each remaining value challenge it.
+The survivor is the answer. Works for 3 values or 3 million.</p>
+<h3>DESK-CHECK (a=5, b=9, c=2)</h3>
+<table class="t">
+<tr><th>step</th><th>max</th></tr>
+<tr><td>2</td><td>5</td></tr>
+<tr><td>3 (9&gt;5)</td><td>9</td></tr>
+<tr><td>4 (2&gt;9? no)</td><td>9 ✓</td></tr>
+</table>
+</div>
+</div>
+<div class="tip"><b>PATTERN TO KEEP —</b> "assume first, challenge with the rest" is the universal
+maximum/minimum algorithm. You'll reuse it inside loops (slide 72+).</div>
+<div class="pg">21 / 88</div>
+</section>
+
+<!-- ═══════════════════ 22 · ALGORITHM AVERAGE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · algorithms</div>
+<h2>Algorithm — Average of Three (Pseudocode)</h2>
+<div class="grid">
+<div class="term">ALGORITHM Average3
+Step 1: read  a, b, c
+Step 2: avg ← (a + b + c) / 3
+Step 3: print avg
+Step 4: stop
+
+/* pseudocode = structured English.
+   Each numbered step will map to
+   ONE statement in C. */</div>
+<div>
+<h3>PSEUDOCODE CONVENTIONS USED HERE</h3>
+<ul class="cl">
+<li><code>←</code> means "assign into"</li>
+<li><code>read</code> / <code>print</code> = I/O steps</li>
+<li><code>IF … THEN … ELSE … ENDIF</code> = decisions</li>
+<li><code>WHILE … DO … ENDWHILE</code> = loops</li>
+<li>indentation shows grouping — no braces yet</li>
+</ul>
+<h3>WHY WRITE IT FIRST</h3>
+<p>The average formula hides a precedence trap (<code>a+b+c/3</code> ✗).
+On paper the parentheses are obvious; in hurried code they are forgotten.</p>
+</div>
+</div>
+<div class="pg">22 / 88</div>
+</section>
+
+<!-- ═══════════════════ 23 · FLOWCHART SYMBOLS ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · flowcharts</div>
+<h2>Flowcharts — The Map (6 Symbols)</h2>
+<table class="t">
+<tr><th>Shape</th><th>Name</th><th>Meaning</th></tr>
+<tr><td><code>[ START ]</code></td><td><span class="kw">Terminal</span></td><td>entry and exit of the flowchart</td></tr>
+<tr><td><code>▱ input n</code></td><td><span class="kw">Parallelogram</span></td><td>input / output — reading data in, printing results out</td></tr>
+<tr><td><code>[ sum ← a+b ]</code></td><td><span class="kw">Process</span></td><td>computation — assignment, calculation, a block of work</td></tr>
+<tr><td><code>◇ x &gt; 0 ?</code></td><td><span class="kw">Decision</span></td><td>a question with two exits — yes/no, true/false</td></tr>
+<tr><td><code>──▶</code></td><td><span class="kw">Arrow</span></td><td>flow of control — which step follows which</td></tr>
+<tr><td><code>○</code></td><td><span class="kw">Connector</span></td><td>joins flow across the page when arrows would cross</td></tr>
+</table>
+<div class="note"><b>ONE IN, ONE OUT —</b> every well-formed chart has exactly one START and one STOP,
+and every path through it ends at STOP. If a path dead-ends, the <em>design</em> is broken — fix it here, not in code.</div>
+<div class="pg">23 / 88</div>
+</section>
+
+<!-- ═══════════════════ 24 · FLOWCHART EXAMPLE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · flowcharts</div>
+<h2>Flowchart — Largest of Two</h2>
+<div class="grid64">
+<div class="flow">        START
+          ↓
+      INPUT a, b
+          ↓
+      ◇ a &gt; b ?
+     yes ↓    ↘ no
+   PRINT a   PRINT b
+         ↙     ↓
+        (merge)
+          ↓
+         STOP</div>
+<div>
+<h3>READING THE CHART</h3>
+<ul class="cl">
+<li>one entrance, one exit</li>
+<li>the decision diamond splits into exactly two branches</li>
+<li>both branches merge before STOP — nothing repeats, nothing skips</li>
+</ul>
+<h3>CHART → CODE PREVIEW</h3>
+<div class="c">if (a &gt; b)
+    printf("%d", a);
+else
+    printf("%d", b);</div>
+<p>The diamond becomes <code>if/else</code>. Every flowchart construct has a C twin.</p>
+</div>
+</div>
+<div class="pg">24 / 88</div>
+</section>
+
+<!-- ═══════════════════ 25 · STRUCTURED PROGRAMMING ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · structured design</div>
+<h2>Structured Programming — The Discipline</h2>
+<table class="t">
+<tr><th>Principle</th><th>What it demands</th></tr>
+<tr><td><span class="kw">Top-down design</span></td><td>start with the whole problem, decompose into sub-problems, refine each until directly codeable. Big problem → small modules.</td></tr>
+<tr><td><span class="kw">Single entry, single exit</span></td><td>every block has exactly one way in and one way out. Control flow stays readable and traceable.</td></tr>
+<tr><td><span class="kw">Three constructs suffice</span></td><td>Böhm &amp; Jacopini proved any algorithm can be expressed with <b>sequence, selection, repetition</b> alone.</td></tr>
+<tr><td><span class="kw">No goto</span></td><td>arbitrary jumps create "spaghetti" logic no one can follow. Structured constructs replace them.</td></tr>
+<tr><td><span class="kw">Divide &amp; verify</span></td><td>test each module independently, then integrate. Correctness composes.</td></tr>
+</table>
+<div class="tip"><b>WHY IT MATTERS —</b> C <em>is</em> a structured language: <code>if/else</code>, <code>while</code>,
+<code>for</code> are its native tools. Learning to design structured <em>is</em> learning to write C well.
+Top-down design returns as <span class="hl">functions</span> in Unit II.</div>
+<div class="pg">25 / 88</div>
+</section>
+
+<!-- ═══════════════════ 26 · SPAGHETTI VS STRUCTURED ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · structured design</div>
+<h2>Spaghetti vs Structured</h2>
+<div class="grid">
+<div>
+<h3 class="bad">SPAGHETTI ✗</h3>
+<div class="c">goto retry;
+...
+retry:
+scanf("%d", &amp;x);
+...
+if (bad) goto retry;</div>
+<p>Where does flow go? Everywhere. Jumps tangle the code into a bowl of noodles —
+impossible to read, test or fix.</p>
+</div>
+<div>
+<h3 class="ok">STRUCTURED ✓</h3>
+<div class="c">do {
+    scanf("%d", &amp;x);
+} while (x &lt; 0);</div>
+<p>The <b>shape of the logic is the shape of the code</b>.
+One way in → <code>[ block ]</code> → one way out. Indentation tells the truth.</p>
+</div>
+</div>
+<div class="flow">structured block:          spaghetti flow:
+    │                       │    ↗ ↘
+    ▼                       ▼──▶?──▶?
+ ┌─────┐                      ↖ ↙ ↗
+ │block│                       ?──▶?
+ └─────┘
+    │
+    ▼</div>
+<div class="pg">26 / 88</div>
+</section>
+
+<!-- ═══════════════════ 27 · ALGORITHM → C MAPPING ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · from algorithm to C program</div>
+<h2>Algorithm → C — The 1:1 Mapping</h2>
+<div class="grid3">
+<div class="term">ALGORITHM Average3
+Step 1: read  a, b, c
+Step 2: avg ← (a+b+c)/3
+Step 3: print avg
+Step 4: stop</div>
+<div class="flow">PSEUDOCODE STEP      C STATEMENT
+read  a,b,c      →   scanf("%lf%lf%lf",...)
+avg ← (a+b+c)/3  →   avg = (a+b+c)/3;
+print avg        →   printf("%.2f", avg);
+stop             →   return (0);
+
+INPUT→scanf · PROCESS→assignment
+PRINT→printf · 1:1, mechanical.</div>
+<div class="c">#include &lt;stdio.h&gt;
+int main(void)
+{
+  double a, b, c, avg;
+  scanf("%lf%lf%lf",
+        &amp;a, &amp;b, &amp;c);
+  avg = (a+b+c) / 3;
+  printf("%.2f\n", avg);
+  return (0);
+}</div>
+</div>
+<div class="tip"><b>TRANSLATION IS MECHANICAL ONCE THE DESIGN IS RIGHT —</b> if converting to C feels hard,
+the <em>algorithm</em> is unfinished. Go back to slide 13, not forward into hackery.</div>
+<div class="pg">27 / 88</div>
+</section>
+
+<!-- ═══════════════════ 28 · AVERAGE3.C FULL ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · from algorithm to C program</div>
+<h2>The Complete Program — average3.c</h2>
+<div class="grid64">
+<div class="c">/* average3.c — average of 3 marks */
+#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    double a, b, c, avg;   <span class="t">/* declarations   */</span>
+
+    printf("Enter 3 marks&gt; ");
+    scanf("%lf%lf%lf", &amp;a, &amp;b, &amp;c);
+
+    avg = (a + b + c) / 3; <span class="t">/* note the ( ) ! */</span>
+
+    printf("Avg = %.2f\n", avg);
+    return (0);
+}</div>
+<div>
+<h3>LINE-BY-LINE DUTY</h3>
+<ul class="cl">
+<li><code>#include</code> — tells the preprocessor to paste <em>stdio.h</em>'s prototypes</li>
+<li><code>int main(void)</code> — execution always begins here</li>
+<li>declarations reserve typed memory before use</li>
+<li><code>printf</code> prompt → <code>scanf</code> reads three doubles</li>
+<li>assignment computes and stores</li>
+<li><code>%.2f</code> formats to 2 decimals; <code>\n</code> ends the line</li>
+<li><code>return (0)</code> — "finished normally" to the OS</li>
+</ul>
+<div class="term">$ cc average3.c
+$ ./a.out
+Enter 3 marks&gt; 70 80 90
+Avg = 80.00</div>
+</div>
+</div>
+<div class="pg">28 / 88</div>
+</section>
+
+<!-- ═══════════════════ 29 · COMPILE RUN PIPELINE ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · coding &amp; testing</div>
+<h2>From Source to Running Program</h2>
+<div class="flow">average3.c ──▶ COMPILER (cc -c) ──▶ average3.o ──▶ LINKER + stdio libs ──▶ a.out ──▶ RUN + TEST
+   source          syntax check        object code        resolve printf/scanf     executable   execute w/ data</div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><h3>COMPILE TIME</h3><p>The program is <b>not running</b> — the compiler is reading your text,
+checking grammar. Syntax errors die here, cheaply.</p></div>
+<div class="card"><h3>RUN TIME</h3><p>The executable exists and the CPU is executing it. Now mistakes cost more:
+crashes, wrong answers, weird output.</p></div>
+</div>
+<div class="note"><b>COMPILE–RUN IS A LOOP, NOT A LADDER —</b> in practice you'll edit → compile → run → read →
+edit dozens of times per program. Keep the cycle short; re-run <span class="hl">all</span> tests after every fix.</div>
+<div class="pg">29 / 88</div>
+</section>
+
+<!-- ═══════════════════ 30 · ERROR TYPES ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · coding &amp; testing</div>
+<h2>The Three Kinds of Errors</h2>
+<table class="t">
+<tr><th>Error type</th><th>Caught when</th><th>Example</th><th>Who notices</th></tr>
+<tr><td><span class="kw">Syntax</span></td><td>at compile time</td><td>missing <code>;</code> · unbalanced <code>)</code> · <code>scan</code> instead of <code>scanf</code></td><td>compiler — refuses to build</td></tr>
+<tr><td><span class="kw">Runtime</span></td><td>during execution</td><td>division by zero · letters where numbers expected</td><td>OS / runtime — crash or bad value</td></tr>
+<tr><td><span class="kw">Logic</span></td><td><b>never automatically</b></td><td><code>avg = a + b + c / 3;</code> — precedence bug, compiles fine, wrong answer</td><td>only testing &amp; desk-checking</td></tr>
+</table>
+<div class="warn"><b>LOGIC ERRORS ARE THE DANGEROUS ONES —</b> the compiler sees nothing wrong; the program runs
+smoothly and hands the user a confidently wrong number. Only tests against <span class="hl">known results</span>
+and hand-traces reveal them.</div>
+<div class="flow">severity ladder:   syntax (loud, cheap)  →  runtime (noisy)  →  logic (silent, expensive)</div>
+<div class="pg">30 / 88</div>
+</section>
+
+<!-- ═══════════════════ 31 · TEST PLAN ═══════════════════ -->
+<section class="slide">
+<div class="tag">00 · coding &amp; testing</div>
+<h2>A Real Test Plan — test-plan.txt</h2>
+<div class="grid">
+<div class="term">/* choose data that probes edges */
+normal:    70 80 90    → expect  80.00
+boundary:  0  0  0     → expect   0.00
+extreme:   100 100 100 → expect 100.00
+invalid:   -5 80 90    → decide: reject or accept?
+
+/* debugging cycle */
+fail → locate → correct → re-run ALL tests
+// a fix can break what worked before</div>
+<div>
+<h3>READING THE PLAN</h3>
+<ul class="cl">
+<li>each line = one test case: data in, expectation out</li>
+<li>boundaries expose off-by-one and range mistakes</li>
+<li>the "invalid" line forces an <em>analysis decision</em> (slide 12): guard or accept?</li>
+<li>after every fix, the <b>whole</b> list runs again — regression testing</li>
+</ul>
+<div class="tip"><b>HABIT —</b> write the test plan <em>before</em> the code. Then coding becomes the
+pursuit of a green test list.</div>
+</div>
+</div>
+<div class="pg">31 / 88</div>
+</section>
+
+<!-- ═══════════════════ 32 · WHY C + CHARACTER SET ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C</div>
+<h2>Welcome to C — Why It, and What It's Made Of</h2>
+<div class="grid64">
+<div>
+<h3>WHY C STILL RULES</h3>
+<ul class="cl">
+<li>born at Bell Labs (1972, Dennis Ritchie) to build <b>UNIX</b></li>
+<li>small, fast, close to the hardware</li>
+<li>mother tongue: C++, Java, C#, JS all borrow its syntax</li>
+<li>OS kernels, compilers, embedded systems, databases</li>
+<li>learning C = learning how computers actually work</li>
+</ul>
+</div>
+<div>
+<h3>THE C CHARACTER SET — ITS ALPHABET</h3>
+<table class="t">
+<tr><th>Class</th><th>Members</th></tr>
+<tr><td>Letters</td><td>A–Z, a–z (case-sensitive!)</td></tr>
+<tr><td>Digits</td><td>0–9</td></tr>
+<tr><td>Special</td><td><code>~ ` ! @ # % ^ &amp; * ( ) - + = { } [ ] : ; ' " | \ &lt; &gt; , . ? / _</code></td></tr>
+<tr><td>Whitespace</td><td>space, tab, newline — separators, mostly ignored</td></tr>
+</table>
+</div>
+</div>
+<div class="note"><b>ATOMIC VIEW —</b> characters → tokens → statements → program. The next slides climb
+that ladder one rung at a time.</div>
+<div class="pg">32 / 88</div>
+</section>
+
+<!-- ═══════════════════ 33 · TOKENS ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C</div>
+<h2>Tokens — The Smallest Meaningful Units</h2>
+<p class="lead">A <span class="hl">token</span> is an indivisible building block of a statement —
+a word, a number, an operator. The compiler splits your source into tokens before it can
+understand anything.</p>
+<div class="c">pay = hours * rate;     <span class="t">/* 5 tokens: pay · = · hours · * · rate · (;) */</span></div>
+<table class="t">
+<tr><th>Token class</th><th>Examples</th><th>Role</th></tr>
+<tr><td><span class="kw">Keywords</span></td><td><code>int  if  while  return</code></td><td>reserved words — fixed meaning (slide 34)</td></tr>
+<tr><td><span class="kw">Identifiers</span></td><td><code>pay  hours  main</code></td><td>names you invent (slide 35)</td></tr>
+<tr><td><span class="kw">Constants</span></td><td><code>42  3.14  'A'  "hi"</code></td><td>fixed literal values (slide 41)</td></tr>
+<tr><td><span class="kw">Operators</span></td><td><code>=  *  +  &gt;  &amp;&amp;</code></td><td>actions on values (slides 47–52)</td></tr>
+<tr><td><span class="kw">Strings</span></td><td><code>"Enter miles&gt; "</code></td><td>character sequences for text</td></tr>
+<tr><td><span class="kw">Special symbols</span></td><td><code>;  ,  ( )  { }  #</code></td><td>punctuation — structure &amp; separators</td></tr>
+</table>
+<div class="tip"><b>MENTAL MODEL —</b> tokens are to C what words are to English: sentences (statements)
+only make sense when the words are valid and in the right order.</div>
+<div class="pg">33 / 88</div>
+</section>
+
+<!-- ═══════════════════ 34 · KEYWORDS ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C</div>
+<h2>Keywords — The Reserved Words</h2>
+<p class="lead">C keeps <span class="hl">32 keywords</span> for itself. Each has a fixed meaning;
+all are lowercase; <b>none may be used as variable names</b>.</p>
+<div class="term">auto   double  int      struct    break   else    long     switch
+case   enum    register typedef   char    extern  return   union
+const  float   short    unsigned  continue for   signed   void
+default goto   sizeof   volatile  do      if      static   while</div>
+<div class="grid" style="margin-top:12px">
+<div class="card"><h3>THE ONES YOU'LL MEET IN UNIT I</h3>
+<p><code>int · char · float · double</code> (types) · <code>if · else</code> (selection) ·
+<code>while · for · do</code> (loops) · <code>return</code> (exit function) · <code>const</code> (read-only).</p></div>
+<div class="card"><h3>TRAP</h3>
+<div class="c">int return;   <span class="t">/* ✗ keyword as name      */</span>
+int Double;   <span class="t">/* ✓ legal but evil — case */</span>
+int double;   <span class="t">/* ✗ keyword, lowercase    */</span></div></div>
+</div>
+<div class="pg">34 / 88</div>
+</section>
+
+<!-- ═══════════════════ 35 · IDENTIFIERS ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C</div>
+<h2>Identifiers — Names You Invent</h2>
+<p class="lead">An identifier names a variable, function, or label. You choose them —
+but the language sets hard rules.</p>
+<div class="grid">
+<div class="card"><h3>THE RULES</h3>
+<ul class="cl">
+<li>letters, digits, underscore <code>_</code> only</li>
+<li><b>must not start with a digit</b></li>
+<li>case-sensitive: <code>Km</code> ≠ <code>km</code> ≠ <code>KM</code></li>
+<li>no spaces, no <code>$</code>, no punctuation</li>
+<li>must not be a keyword (slide 34)</li>
+</ul></div>
+<div class="card"><h3>JUDGE FOR YOURSELF</h3>
+<table class="t">
+<tr><th>Identifier</th><th>Verdict</th></tr>
+<tr><td><code>letter_count</code></td><td class="ok">✓ meaningful + legal</td></tr>
+<tr><td><code>totalMarks</code></td><td class="ok">✓ legal (mixed case)</td></tr>
+<tr><td><code>1st_place</code></td><td class="bad">✗ starts with digit</td></tr>
+<tr><td><code>total sales</code></td><td class="bad">✗ contains space</td></tr>
+<tr><td><code>my$money</code></td><td class="bad">✗ <code>$</code> not allowed</td></tr>
+<tr><td><code>while</code></td><td class="bad">✗ keyword</td></tr>
+</table></div>
+</div>
+<div class="tip"><b>STYLE LAW —</b> legal ≠ good. <code>avg_mark</code> beats <code>am</code>.
+Names are for the reader; the compiler doesn't care.</div>
+<div class="pg">35 / 88</div>
+</section>
+
+<!-- ═══════════════════ 36 · COMMENTS + PREPROCESSOR ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C</div>
+<h2>Comments &amp; Preprocessor Directives</h2>
+<div class="grid">
+<div class="card"><h3>COMMENTS — FOR HUMANS ONLY</h3>
+<div class="c">/* block comment: anything
+   between these markers is
+   ignored by the compiler   */
+// line comment: to end of line</div>
+<ul class="cl">
+<li>may appear between any tokens</li>
+<li>never compiled, never executed</li>
+<li>use them for the <em>why</em>, documentation headers, section banners</li>
+</ul></div>
+<div class="card"><h3>PREPROCESSOR — BEFORE COMPILATION</h3>
+<div class="c">#include &lt;stdio.h&gt;     <span class="t">/* paste a header  */</span>
+#define KM_PER_MILE 1.609 <span class="t">/* named constant  */</span></div>
+<ul class="cl">
+<li>lines starting with <code>#</code> are <b>directives</b>, not C statements — no semicolon</li>
+<li>the preprocessor edits your source <em>before</em> the compiler sees it</li>
+<li><code>#include</code> pulls in library prototypes (<code>printf</code>, <code>scanf</code>)</li>
+<li><code>#define</code> creates a symbolic constant (slide 41)</li>
+</ul></div>
+</div>
+<div class="pg">36 / 88</div>
+</section>
+
+<!-- ═══════════════════ 37 · ANATOMY hello.c ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C</div>
+<h2>Anatomy of a C Program — hello/miles.c</h2>
+<div class="grid64">
+<div class="c">/* Converts miles to kilometres  */ <span class="t">← comment</span>
+#include &lt;stdio.h&gt;              <span class="t">← preprocessor directive</span>
+#define KM_PER_MILE 1.609        <span class="t">← named constant</span>
+
+int main(void)                   <span class="t">← entry point</span>
+{
+    double miles, kms;           <span class="t">← declarations</span>
+
+    printf("Enter miles&gt; ");
+    scanf("%lf", &amp;miles);        <span class="t">← input statement</span>
+
+    kms = miles * KM_PER_MILE;   <span class="t">← executable stmt</span>
+
+    printf("%f km\n", kms);      <span class="t">← \n = escape seq</span>
+    return (0);                  <span class="t">← exit status</span>
+}</div>
+<div>
+<h3>SIX ORGANS, ONE BODY</h3>
+<ul class="cl">
+<li><b>comment</b> — purpose for humans</li>
+<li><b>#include</b> — borrows <code>printf/scanf</code> prototypes</li>
+<li><b>#define</b> — magic number gets a name</li>
+<li><b>main()</b> — execution begins here, always</li>
+<li><b>declarations</b> — typed memory reserved</li>
+<li><b>statements</b> — each ends with <code>;</code></li>
+</ul>
+<div class="note"><b>STATEMENTS END WITH A SEMICOLON —</b> a missing <code>;</code> is the single most common
+first-semester syntax error. Braces <code>{ }</code> group statements into blocks.</div>
+</div>
+</div>
+<div class="pg">37 / 88</div>
+</section>
+
+<!-- ═══════════════════ 38 · VARIABLES ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · variables</div>
+<h2>Variables — Named Boxes in Memory</h2>
+<p class="lead">A variable is a <span class="hl">named memory location</span> whose value can change
+while the program runs. Declaring one asks the compiler to reserve cells of the right size
+and remember the name.</p>
+<div class="grid">
+<div class="flow">int count = 5;
+
+name:  count          ← identifier (slide 35)
+type:  int            ← what kind of value fits
+value: 5              ← current contents
+addr:  1024 …         ← where in RAM (compiler's problem, for now)</div>
+<div>
+<h3>THREE ATOMIC TRUTHS</h3>
+<ul class="cl">
+<li>a variable holds <b>only</b> values of its declared type</li>
+<li>assignment <b>replaces</b> the old value — the box keeps its name, loses its past</li>
+<li>uninitialized variables contain <b>garbage</b> — never read before writing</li>
+</ul>
+<div class="warn"><b>GARBAGE IN, GOD KNOWS OUT —</b>
+<code>int x; printf("%d", x);</code> prints whatever bit pattern the cell happened to hold.</div>
+</div>
+</div>
+<div class="pg">38 / 88</div>
+</section>
+
+<!-- ═══════════════════ 39 · DATA TYPES ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · variables</div>
+<h2>Data Types — The Big Four</h2>
+<table class="t">
+<tr><th>Type</th><th>Stores</th><th>Typical range / precision</th><th>printf / scanf</th><th>Size (typical)</th></tr>
+<tr><td><span class="kw">int</span></td><td>whole numbers</td><td>−2,147,483,648 … 2,147,483,647</td><td><code>%d</code> / <code>%d</code></td><td>4 bytes</td></tr>
+<tr><td><span class="kw">char</span></td><td>one character</td><td>'a' · '7' · '*' (stored as a small integer)</td><td><code>%c</code> / <code> %c</code></td><td>1 byte</td></tr>
+<tr><td><span class="kw">float</span></td><td>real (single precision)</td><td>≈ 7 significant digits</td><td><code>%f</code> / <code>%f</code></td><td>4 bytes</td></tr>
+<tr><td><span class="kw">double</span></td><td>real (double precision)</td><td>≈ 15 significant digits</td><td><code>%f</code> / <code>%lf</code></td><td>8 bytes</td></tr>
+</table>
+<div class="grid" style="margin-top:10px">
+<div class="card"><h3>CHOOSING A TYPE</h3>
+<ul class="cl">
+<li>counting / ids → <code>int</code></li>
+<li>single letter/grade/digit char → <code>char</code></li>
+<li>money, science, averages → <code>double</code> (default real choice)</li>
+</ul></div>
+<div class="card"><h3>WHY TYPES MATTER</h3>
+<p>The type decides <b>storage size</b>, <b>allowed operations</b>, and <b>how bits are interpreted</b>.
+<code>%</code> works on ints only; <code>/</code> behaves differently for ints vs doubles (slide 48).</p></div>
+</div>
+<div class="pg">39 / 88</div>
+</section>
+
+<!-- ═══════════════════ 40 · DECLARATIONS ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · variables</div>
+<h2>Declarations — Reserve Before You Use</h2>
+<p class="lead">A declaration tells the compiler <span class="hl">the name and the type</span> of memory
+to reserve. Every variable must be declared <b>before</b> it is used — usually at the top of the block.</p>
+<div class="grid">
+<div class="c">/* declare before use — always */
+int    item_count;      <span class="t">/* whole number  */</span>
+char   first_initial;   <span class="t">/* one character */</span>
+float  unit_price;      <span class="t">/* real, 7 digits*/</span>
+double total_salary;    <span class="t">/* real, 15 digits*/</span>
+
+/* declare AND initialize */
+int    count   = 0;
+double price   = 9.99;
+char   grade   = 'A';
+
+/* several of one type */
+int a, b, c;            <span class="t">/* three ints    */</span></div>
+<div>
+<h3>ANATOMY OF A DECLARATION</h3>
+<div class="flow">type   name   = initial value ;
+ │      │              │
+ │      │              └─ optional starting value
+ │      └─ identifier (rules, slide 35)
+ └─ int | char | float | double</div>
+<div class="warn"><b>INITIALIZE AT BIRTH —</b> <code>int count = 0;</code> costs nothing and kills an entire
+class of garbage-value bugs. Accumulators <em>must</em> start known (slides 72–73).</div>
+</div>
+</div>
+<div class="pg">40 / 88</div>
+</section>
+
+<!-- ═══════════════════ 41 · CONSTANTS + ESCAPES ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · variables</div>
+<h2>Constants &amp; Escape Sequences</h2>
+<div class="grid">
+<div class="card"><h3>CONSTANTS — VALUES THAT NEVER CHANGE</h3>
+<div class="c">#define KM_PER_MILE 1.609   <span class="t">/* preprocessor: text-swap */</span>
+const double PI = 3.14159;  <span class="t">/* typed, read-only variable */</span>
+42   3.14   'A'   "hello"   <span class="t">/* literals in the code      */</span></div>
+<ul class="cl">
+<li>magic numbers (<code>miles * 1.609</code>) → named constants (<code>miles * KM_PER_MILE</code>)</li>
+<li><code>#define</code>: ALL_CAPS name, no semicolon, no type</li>
+<li>change once at the top, updates everywhere</li>
+</ul></div>
+<div class="card"><h3>ESCAPE SEQUENCES — INVISIBLE CHARACTERS</h3>
+<table class="t">
+<tr><th>Seq</th><th>Effect</th></tr>
+<tr><td><code>\n</code></td><td>newline</td></tr>
+<tr><td><code>\t</code></td><td>horizontal tab</td></tr>
+<tr><td><code>\\</code></td><td>backslash</td></tr>
+<tr><td><code>\"</code></td><td>double quote</td></tr>
+<tr><td><code>\'</code></td><td>single quote</td></tr>
+<tr><td><code>\0</code></td><td>null — end of string (Unit V)</td></tr>
+</table></div>
+</div>
+<div class="pg">41 / 88</div>
+</section>
+
+<!-- ═══════════════════ 42 · EXECUTABLE STATEMENT KINDS ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · executable statements</div>
+<h2>Executable Statements — The Five Kinds</h2>
+<table class="t">
+<tr><th>Kind</th><th>What it does</th><th>Shape</th></tr>
+<tr><td><span class="kw">Assignment</span></td><td>compute, then store into the left variable</td><td><code>kms = miles * 1.609;</code></td></tr>
+<tr><td><span class="kw">Input</span></td><td>copy keyboard data into memory</td><td><code>scanf("%lf", &amp;miles);</code></td></tr>
+<tr><td><span class="kw">Output</span></td><td>format values into text on screen</td><td><code>printf("Value = %d\n", x);</code></td></tr>
+<tr><td><span class="kw">Function call</span></td><td>transfer control, get a value back, resume here</td><td><code>area = find_area(r);</code></td></tr>
+<tr><td><span class="kw">Return</span></td><td>exit the current function; from <code>main</code>, exit the program</td><td><code>return (0);</code></td></tr>
+</table>
+<div class="note"><b>DECLARATION ≠ EXECUTION —</b> <code>int x;</code> reserves memory; <code>x = 5;</code> does work.
+Declarations build the stage; executable statements perform the play. Selection &amp; loops
+(slides 56–86) decide <em>which</em> statements run and <em>how often</em>.</div>
+<div class="pg">42 / 88</div>
+</section>
+
+<!-- ═══════════════════ 43 · ASSIGNMENT ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · executable statements</div>
+<h2>Assignment — Get, Then Store</h2>
+<div class="grid64">
+<div>
+<div class="c">kms = miles * 1.609;
+
+/* 1. evaluate the RIGHT side completely
+      (miles * 1.609 → a value)
+   2. STORE that value into the LEFT side
+      (the variable kms)
+   3. the old value of kms is destroyed */</div>
+<h3>RIGHT → LEFT, ALWAYS</h3>
+<p>The right side may be any expression (a whole computation). The left side must be
+a single variable — a destination, never a formula.</p>
+<div class="c">x = x + 1;   <span class="t">/* legal! read x, add 1, store back */</span>
+x + 1 = y;   <span class="t">/* ✗ nonsense — no destination      */</span></div>
+</div>
+<div>
+<div class="warn"><b>ASSIGNMENT ≠ EQUALS —</b> in C, <code>=</code> means "copy, right to left" — it is an
+<em>action</em>, not a mathematical claim. <code>x = x + 1</code> is algebra heresy but perfect C:
+it increments x. Mathematical equality is <code>==</code> (slide 60).</div>
+<div class="flow">kms = miles * 1.609
+  ▲              │
+  │   store      │ evaluate
+  └──────────────┘
+destination    computation</div>
+</div>
+</div>
+<div class="pg">43 / 88</div>
+</section>
+
+<!-- ═══════════════════ 44 · SCANF ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · executable statements</div>
+<h2>scanf — Reading Input</h2>
+<div class="grid64">
+<div>
+<div class="c">scanf("%lf", &amp;miles);
+      │      │
+      │      └─ &amp; = "address of" — WHERE to store
+      └─ format: WHAT type to expect (%d %lf %c)
+
+scanf("%d%d", &amp;a, &amp;b);   <span class="t">/* two ints, whitespace apart */</span></div>
+<h3>THE &amp; IS NOT OPTIONAL</h3>
+<p><code>scanf</code> must write into your variable — it needs the variable's <b>address</b>.
+Forget <code>&amp;</code> and the program writes to a random location → crash or garbage.</p>
+</div>
+<div>
+<h3>HOW INPUT ARRIVES</h3>
+<ul class="cl">
+<li>user types, presses Enter — the stream delivers characters</li>
+<li>whitespace (spaces, tabs, newlines) separates values</li>
+<li>conversion: characters → int/double/char per the format</li>
+</ul>
+<div class="warn"><b>TYPE MATCH OR DIE —</b> reading letters into <code>%d</code> fails: the value is left
+unchanged and input clogs. Later you'll check <code>scanf</code>'s return value to detect this (loops, slide 78).</div>
+</div>
+</div>
+<div class="pg">44 / 88</div>
+</section>
+
+<!-- ═══════════════════ 45 · PRINTF ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · executable statements</div>
+<h2>printf — Writing Output</h2>
+<div class="grid64">
+<div>
+<div class="c">printf("Value = %d\n", x);
+       │        │   │   │
+       │        │   │   └─ value list: fills placeholders,
+       │        │   │      left to right
+       │        │   └─ \n newline escape
+       │        └─ placeholder for an int
+       └─ format string: literal text + holes
+
+printf("Pay = $%.2f\n", pay);   <span class="t">/* money, 2 decimals */</span>
+printf("%d + %d = %d\n", a, b, a+b);</div>
+</div>
+<div>
+<h3>THE CONTRACT</h3>
+<ul class="cl">
+<li>placeholders in the format string are filled by the value list — <b>in order, one-to-one</b></li>
+<li>everything else in the quotes prints literally</li>
+<li><code>printf</code> adds <b>no newline by itself</b> — <code>\n</code> is your responsibility</li>
+<li>prompts: <code>printf("Enter miles&gt; ");</code> — no <code>\n</code>, so the user types on the same line</li>
+</ul>
+<div class="note"><b>FORMAT DEEP-DIVE AHEAD —</b> specifiers (slide 53), widths &amp; precisions (slide 54),
+mismatch disasters (slide 55).</div>
+</div>
+</div>
+<div class="pg">45 / 88</div>
+</section>
+
+<!-- ═══════════════════ 46 · RETURN + GENERAL FORM ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · program anatomy</div>
+<h2>return — and the General Form of a C Program</h2>
+<div class="grid46">
+<div class="flow">/* comments                */
+        ↓
+#include &lt;stdio.h&gt;        preprocessor
+        ↓
+int main(void)            function header
+        ↓
+{                         opening brace
+    declarations          int x; double y;
+        ↓
+    executable statements …work…
+        ↓
+    return (0);           exit status
+}                         closing brace</div>
+<div>
+<h3>return (0);</h3>
+<p>Exits <code>main</code> and hands status <span class="hl">0 = normal completion</span> back to the OS.
+Non-zero means "something failed" — scripts and tests can check it.
+Execution begins at <code>main</code>, always, and there is exactly one per program.</p>
+<h3>THE BOILERPLATE YOU WILL TYPE 100 TIMES</h3>
+<div class="c">/* description · author · date */
+#include &lt;stdio.h&gt;
+int main(void)
+{
+    /* declarations */
+    /* statements   */
+    return (0);
+}</div>
+</div>
+</div>
+<div class="pg">46 / 88</div>
+</section>
+
+<!-- ═══════════════════ 47 · ARITHMETIC OPERATORS ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · arithmetic</div>
+<h2>Arithmetic Operators</h2>
+<table class="t">
+<tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
+<tr><td><code>+  −</code></td><td>add / subtract</td><td><code>5 + 2.5</code></td><td>7.5</td></tr>
+<tr><td><code>*</code></td><td>multiply</td><td><code>3 * 4</code></td><td>12</td></tr>
+<tr><td><code>/</code></td><td>divide (two ints)</td><td><code>5 / 2</code></td><td><span class="hl">2</span> — truncated!</td></tr>
+<tr><td><code>/</code></td><td>divide (mixed/real)</td><td><code>5 / 2.0</code></td><td>2.5</td></tr>
+<tr><td><code>%</code></td><td>remainder (ints only)</td><td><code>5 % 2</code></td><td>1</td></tr>
+</table>
+<div class="grid" style="margin-top:10px">
+<div class="card"><h3>MODULO % — THE REMAINDER</h3>
+<p><code>17 % 5 → 2</code> · <code>10 % 2 → 0</code> · works on <b>integers only</b>.
+Superpowers: even/odd tests (<code>n % 2</code>), extracting last digit (<code>n % 10</code>),
+wrapping indices.</p></div>
+<div class="card"><h3>NO POWER OPERATOR</h3>
+<p>C has no <code>**</code>. Multiply by hand (<code>x*x*x</code>) or use <code>pow()</code> from
+<code>math.h</code> later. Writing <code>a^b</code> is a bitwise XOR, not a power — classic trap.</p></div>
+</div>
+<div class="pg">47 / 88</div>
+</section>
+
+<!-- ═══════════════════ 48 · INTEGER DIVISION TRAP ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · arithmetic</div>
+<h2>The Integer Division Trap</h2>
+<p class="lead">When <span class="hl">both operands are int</span>, <code>/</code> silently
+<span class="hl">throws away the fractional part</span>. No rounding — truncation toward zero.</p>
+<div class="grid">
+<div class="c">5 / 2        →  2      <span class="t">/* 0.5 lost   */</span>
+1 / 2        →  0      <span class="t">/* !!!        */</span>
+7 / 3        →  2
+-7 / 2       →  -3     <span class="t">/* toward 0? C99: -3 */</span>
+
+5 / 2.0      →  2.5    <span class="t">/* one real operand → real result */</span>
+(double)5/2  →  2.5    <span class="t">/* cast first operand             */</span></div>
+<div>
+<div class="warn"><b>THE CLASSIC WRONG AVERAGE —</b>
+<div class="c">int a=70, b=80, c=90;
+int avg = (a+b+c) / 3;   <span class="t">/* 240/3 = 80 ✓ luck  */</span>
+int av2 = (a+b+c) / 4;   <span class="t">/* 240/4 = 60, but
+                            true avg is 80! ✗    */</span></div></div>
+<div class="tip"><b>THE FIX —</b> make at least one operand real: <code>(a+b+c) / 3.0</code>, or cast:
+<code>(double)(a+b+c) / 3</code>. Cast <em>before</em> dividing, not after.</div>
+</div>
+</div>
+<div class="pg">48 / 88</div>
+</section>
+
+<!-- ═══════════════════ 49 · PRECEDENCE ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · arithmetic</div>
+<h2>Precedence &amp; Associativity — Who Binds First</h2>
+<div class="grid64">
+<div>
+<table class="t">
+<tr><th>Rank</th><th>Operators</th><th>Associativity</th></tr>
+<tr><td>1 (highest)</td><td><code>( )</code> parentheses</td><td>left → right</td></tr>
+<tr><td>2</td><td>unary <code>-  (type)  ++  --</code></td><td>right → left</td></tr>
+<tr><td>3</td><td><code>*  /  %</code></td><td>left → right</td></tr>
+<tr><td>4</td><td><code>+  −</code></td><td>left → right</td></tr>
+<tr><td>5 (lowest here)</td><td><code>=</code> assignment</td><td>right → left</td></tr>
+</table>
+<div class="note"><b>ASSOCIATIVITY —</b> when two operators of equal rank meet
+(<code>12 - 3 + 4</code>), the direction decides: left-to-right → <code>(12-3)+4</code>.</div>
+</div>
+<div class="flow">12 - 3 + 4   →  (12-3) + 4   →  13
+10 / 5 * 2   →  (10/5) * 2   →  4
+10 / 5 % 2   →  (10/5) % 2   →  0
+
+/* parentheses change everything */
+(12 - 3 + 4) * 2   →  26
+10 / (5 * 2)       →  1
+
+/* mixed types: int promoted to double */
+5 * 2.5   →  12.5</div>
+</div>
+<div class="tip"><b>WHEN IN DOUBT, PARENTHESIZE —</b> <code>(a+b+c)/3</code> is never wrong, always readable,
+and immune to precedence doubt.</div>
+<div class="pg">49 / 88</div>
+</section>
+
+<!-- ═══════════════════ 50 · EVALUATION EXAMPLES ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · arithmetic</div>
+<h2>Worked Evaluations — Trace Like the Compiler</h2>
+<div class="c">int a = 11, b = 4;   double d = 2.0;
+
+a / b          →  2            <span class="t">/* int ÷ int truncates        */</span>
+a % b          →  3            <span class="t">/* 11 = 2*4 + 3               */</span>
+a / d          →  5.5          <span class="t">/* int promoted to double     */</span>
+a + b * 2      →  19           <span class="t">/* * before +                 */</span>
+(a + b) * 2    →  30           <span class="t">/* parentheses win            */</span>
+a - b - 2      →  5            <span class="t">/* (a-b)-2, left-to-right     */</span>
+a % b + b / 2  →  3 + 2 = 5    <span class="t">/* % and / before +           */</span>
+-a + b         →  -7           <span class="t">/* unary minus binds tight    */</span></div>
+<div class="grid" style="margin-top:12px">
+<div class="card"><h3>DESK-CHECK DISCIPLINE</h3>
+<p>Cover the right column. Compute each line by hand, then reveal. Every miss is a
+precedence rule you now own.</p></div>
+<div class="card"><h3>WRITING EXPRESSIONS SAFELY</h3>
+<ul class="cl">
+<li>one operator per thought</li>
+<li>parentheses around every sub-intent</li>
+<li>never <code>a+++b</code> style trickery</li>
+</ul></div>
+</div>
+<div class="pg">50 / 88</div>
+</section>
+
+<!-- ═══════════════════ 51 · TYPE CONVERSION & CAST ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · arithmetic</div>
+<h2>Type Conversion &amp; the Cast</h2>
+<div class="grid">
+<div class="card"><h3>IMPLICIT — THE COMPILER PROMOTES</h3>
+<div class="c">5 * 2.5        <span class="t">/* int→double, result double: 12.5 */</span>
+char c = 'A';
+c + 1          <span class="t">/* char promoted to int: 66        */</span>
+int i = 3.99;  <span class="t">/* double→int TRUNCATES: i == 3    */</span></div>
+<p>Rank ladder: <code>char → int → float → double</code>. In mixed expressions, the smaller
+type climbs to the bigger one <em>before</em> the operation.</p></div>
+<div class="card"><h3>EXPLICIT — THE CAST</h3>
+<div class="c">(double) total / count   <span class="t">/* force real division */</span>
+(int) 3.99               <span class="t">/* → 3, truncation      */</span>
+(int)(x + 0.5)           <span class="t">/* round to nearest int */</span></div>
+<p>Form: <code>(type) expression</code>. The cast converts a <b>copy</b> — the original
+variable is untouched.</p></div>
+</div>
+<div class="warn"><b>NARROWING LOSES DATA —</b> double → int drops the fraction silently.
+<code>int i = 2.999;</code> gives 2, not 3, and the compiler may not even warn. Cast consciously.</div>
+<div class="pg">51 / 88</div>
+</section>
+
+<!-- ═══════════════════ 52 · ++ -- AND COMPOUND ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · arithmetic</div>
+<h2>Increment, Decrement, Compound Assignment</h2>
+<div class="grid">
+<div class="card"><h3>++ AND --</h3>
+<div class="c">i = i + 1;   /* the long way      */
+i++;         /* same: increment   */
+i--;         /* same: decrement   */
+
+/* prefix vs postfix (atomic view) */
+int i = 5, a, b;
+a = i++;   /* a=5, then i→6  : value THEN step */
+b = ++i;   /* i→7, then b=7  : step THEN value */</div></div>
+<div class="card"><h3>COMPOUND ASSIGNMENT</h3>
+<div class="c">sum = sum + i;   →   sum += i;
+fact = fact * i; →   fact *= i;
+n = n / 10;      →   n /= 10;
+r = r % 2;       →   r %= 2;</div>
+<p>Every <code>op=</code> means "apply op with the right side, store back".
+These are the native shorthand of accumulators (slides 72–73) and loop updates (slide 74).</p></div>
+</div>
+<div class="warn"><b>ONE CHANGE PER STATEMENT —</b> never write <code>y = x++ + ++x;</code>. Two modifications of
+<code>x</code> in one statement = undefined behaviour territory and unreadable code. Split it.</div>
+<div class="pg">52 / 88</div>
+</section>
+
+<!-- ═══════════════════ 53 · FORMAT SPECIFIERS ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · formatting output</div>
+<h2>printf Format Specifiers</h2>
+<table class="t">
+<tr><th>Spec</th><th>Prints</th><th>Notes</th></tr>
+<tr><td><code>%d</code></td><td>an <code>int</code> in decimal</td><td><code>printf("%d", 42) → 42</code></td></tr>
+<tr><td><code>%f</code></td><td><code>float</code>/<code>double</code></td><td>default shows <b>6</b> decimal places</td></tr>
+<tr><td><code>%lf</code></td><td>double (scanf) / also fine in printf (C99+)</td><td>scanf for double <em>requires</em> <code>%lf</code></td></tr>
+<tr><td><code>%c</code></td><td>one character</td><td><code>printf("%c", 'A') → A</code></td></tr>
+<tr><td><code>%s</code></td><td>a string of characters</td><td>preview of Unit V</td></tr>
+<tr><td><code>%%</code></td><td>a literal % sign</td><td><code>printf("50%%") → 50%</code></td></tr>
+</table>
+<div class="c">int n = 42;  double pi = 3.14159;  char g = 'A';
+printf("%d %f %c\n", n, pi, g);
+→  42 3.141590 A</div>
+<div class="note"><b>PLACEHOLDER = HOLE —</b> each <code>%</code> hole consumes exactly one value from the list,
+in order. The format string is a contract; the next two slides show how to write its fine print.</div>
+<div class="pg">53 / 88</div>
+</section>
+
+<!-- ═══════════════════ 54 · WIDTH & PRECISION ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · formatting output</div>
+<h2>Field Width &amp; Precision — %n.mf</h2>
+<div class="grid64">
+<div class="c">double num = 123.456789;
+printf("[%f]",    num);  → [123.456789]
+printf("[%.2f]",  num);  → [123.46]      <span class="t">/* rounds */</span>
+printf("[%9.2f]", num);  → [   123.46]   <span class="t">/* pad L  */</span>
+printf("[%-9.2f]",num);  → [123.46   ]   <span class="t">/* pad R  */</span>
+printf("[%d]",   42);    → [42]
+printf("[%5d]",  42);    → [   42]
+printf("[%c]",  'A');    → [A]</div>
+<div>
+<h3>DECODING %9.2f</h3>
+<div class="flow">%  9  .  2  f
+│  │     │   └─ floating point
+│  │     └─ precision: 2 decimals
+│  └─ field width: 9 columns total
+└─ conversion marker</div>
+<ul class="cl">
+<li>default alignment: <b>right</b>; a leading <code>-</code> flips it left</li>
+<li>too-small width? the field <b>expands</b> — never truncates</li>
+<li>money output: <code>%.2f</code> is the standard</li>
+</ul>
+</div>
+</div>
+<div class="pg">54 / 88</div>
+</section>
+
+<!-- ═══════════════════ 55 · FORMAT MISMATCH ═══════════════════ -->
+<section class="slide">
+<div class="tag">01 · overview of C · formatting output</div>
+<h2>The Format Mismatch Bug</h2>
+<p class="lead">A placeholder must match its value's type. If it doesn't — <span class="hl">no compiler
+error</span>. Just wrong, garbage output at runtime. printf blindly reinterprets the bits.</p>
+<div class="grid">
+<div class="c">double salary = 45000.50;
+printf("%d\n", salary);   <span class="t">/* ✗ %d wants int bits;
+                             reads the double's bits as an
+                             int → prints garbage like 0    */</span>
+int age = 20;
+printf("%f\n", age);      <span class="t">/* ✗ same disease, other side */</span>
+
+printf("%f\n", salary);   <span class="t">/* ✓ type matches specifier   */</span></div>
+<div>
+<div class="warn"><b>SILENT &amp; FREE —</b> mismatches compile without complaint. The bug ships.
+Check every <code>%</code> against its value: <code>%d↔int</code>, <code>%f↔double</code>, <code>%c↔char</code>.</div>
+<div class="tip"><b>DEFENSE —</b> read each printf line as a table: specifier 1 ↔ value 1, specifier 2 ↔ value 2.
+Counts <em>and</em> types must both match.</div>
+</div>
+</div>
+<div class="pg">55 / 88</div>
+</section>
+
+<!-- ═══════════════════ 56 · THREE CONTROL STRUCTURES ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>Control Structures — The Three and Only Three</h2>
+<p class="lead">Every program ever written, in any language, is woven from exactly three patterns.
+Master these three shapes and you can read any flowchart, any algorithm, any C program.</p>
+<div class="grid3">
+<div class="card"><h3>1 · SEQUENCE</h3>
+<div class="flow">S1
+↓
+S2
+↓
+S3</div>
+<p>Statements execute one after another, top to bottom. The default. Slides 42–55 were pure sequence.</p></div>
+<div class="card"><h3>2 · SELECTION</h3>
+<div class="flow">  ◇ cond?
+ ↙      ↘
+SA      SB
+ ↘      ↙
+  merge</div>
+<p>Branch: choose a path based on a condition. <code>if · if-else · switch</code>. This section.</p></div>
+<div class="card"><h3>3 · REPETITION</h3>
+<div class="flow">  ◇ cond?
+ ↙yes   ↘no
+body    exit
+ │
+ ↺ back to cond</div>
+<p>Loop: repeat a block while a condition holds. <code>while · for · do-while</code>. Next section.</p></div>
+</div>
+<div class="tip"><b>BÖHM &amp; JACOPINI (1966) —</b> proved these three suffice for <em>any</em> algorithm.
+That theorem is your permission slip to never use <code>goto</code>.</div>
+<div class="pg">56 / 88</div>
+</section>
+
+<!-- ═══════════════════ 57 · CONDITIONS + RELATIONAL ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>Conditions &amp; Relational Operators</h2>
+<p class="lead">A condition is an expression that evaluates to <span class="hl">1 (true)</span> or
+<span class="hl">0 (false)</span>. C has no boolean keyword here — <b>the number is the answer</b>.</p>
+<div class="grid64">
+<table class="t">
+<tr><th>Relational</th><th>Meaning</th><th>Example</th><th>Value</th></tr>
+<tr><td><code>&lt;</code></td><td>less than</td><td><code>4 &lt; 9</code></td><td>1</td></tr>
+<tr><td><code>&gt;</code></td><td>greater than</td><td><code>4 &gt; 9</code></td><td>0</td></tr>
+<tr><td><code>&lt;=</code></td><td>less or equal</td><td><code>4 &lt;= 4</code></td><td>1</td></tr>
+<tr><td><code>&gt;=</code></td><td>greater or equal</td><td><code>4 &gt;= 5</code></td><td>0</td></tr>
+<tr><td><code>==</code></td><td>equal to</td><td><code>x == 4</code></td><td>1 if x is 4</td></tr>
+<tr><td><code>!=</code></td><td>not equal</td><td><code>x != 0</code></td><td>1 if x isn't 0</td></tr>
+</table>
+<div class="c">int x = 4, y = 9;
+x &lt; y     /* 1 — true  */
+x &gt;= y    /* 0 — false */
+x == 4    /* 1         */
+'A' &lt; 'B' /* 1 — chars compare as numbers */</div>
+</div>
+<div class="note"><b>ANY VALUE CAN BE TESTED —</b> in C, <code>if (x)</code> means <code>if (x != 0)</code>.
+Zero is false; <em>any</em> non-zero is true. You'll meet this idiom constantly.</div>
+<div class="pg">57 / 88</div>
+</section>
+
+<!-- ═══════════════════ 58 · LOGICAL OPERATORS ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>Logical Operators — Combining Conditions</h2>
+<div class="grid64">
+<table class="t">
+<tr><th>Logical</th><th>Meaning</th></tr>
+<tr><td><code>&amp;&amp;</code></td><td>AND — true when <b>both</b> sides true</td></tr>
+<tr><td><code>||</code></td><td>OR — true when <b>either</b> side true</td></tr>
+<tr><td><code>!</code></td><td>NOT — inverts: <code>!1→0</code>, <code>!0→1</code></td></tr>
+</table>
+<div class="c">/* range check: 0 ≤ rate ≤ 10 */
+(rate &gt;= 0.0) &amp;&amp; (rate &lt;= 10.0)
+
+/* either failure triggers */
+(x &lt; 0) || (y &lt; 0)
+
+/* invert */
+if (!done) { keep_going(); }</div>
+</div>
+<div>
+<h3>TRUTH TABLES</h3>
+<table class="t">
+<tr><th>A</th><th>B</th><th>A&amp;&amp;B</th><th>A||B</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+<div class="warn"><b>ENGLISH LIES —</b> "if marks fail in maths <em>or</em> physics" is
+<code>m &lt; 40 || p &lt; 40</code>, and "pass in <em>both</em>" is <code>&amp;&amp;</code>. Translate carefully:
+human "or" sometimes means and!</div>
+</div>
+</div>
+<div class="pg">58 / 88</div>
+</section>
+
+<!-- ═══════════════════ 59 · SHORT-CIRCUIT + PRECEDENCE ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>Short-Circuit Evaluation &amp; Logical Precedence</h2>
+<div class="grid">
+<div class="card"><h3>SHORT-CIRCUIT — LAZY LOGIC</h3>
+<div class="c">(x &gt; 0) &amp;&amp; (y / x &gt; 2)
+/* right side evaluated ONLY if left is
+   true — if x ≤ 0, division never runs,
+   no divide-by-zero crash! */
+
+(x &lt; 0) || (y % x == 1)
+/* || stops at the FIRST true side */</div>
+<p><code>&amp;&amp;</code> quits at first false · <code>||</code> quits at first true. This is a feature:
+put the cheap/safe test first.</p></div>
+<div class="card"><h3>PRECEDENCE OF CONDITIONS</h3>
+<div class="flow">tightest:  !
+           relational  &lt; &gt; &lt;= &gt;=
+           equality    == !=
+           &amp;&amp;
+loosest:   ||
+assignment  =  (looser still)</div>
+<div class="c">x &gt; 0 &amp;&amp; y &gt; 0   ==   (x&gt;0) &amp;&amp; (y&gt;0)
+!a &amp;&amp; b          ==   (!a) &amp;&amp; b</div></div>
+</div>
+<div class="tip"><b>PARENTHESES ARE FREE —</b> <code>(a &amp;&amp; b) || c</code> states your intent louder than any
+precedence table. Write for the reader six months from now.</div>
+<div class="pg">59 / 88</div>
+</section>
+
+<!-- ═══════════════════ 60 · == VS = ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>== vs = — The Classic Bug</h2>
+<div class="grid">
+<div>
+<div class="c">x == 5    /* COMPARE: "is x equal to 5?"
+             → yields 1 or 0, changes nothing */
+
+x = 5     /* ASSIGN: store 5 into x,
+             → and the expression ITSELF
+               yields the value 5            */</div>
+<div class="warn"><b>THE BUG —</b>
+<div class="c">if (x = 5) { ... }   <span class="t">/* meant ==, wrote =  */</span></div>
+Compiles fine. Assigns 5 to x. The condition becomes 5 — non-zero — <b>always true</b>.
+The branch runs every single time. Silent. Permanent. Humbling.</div>
+</div>
+<div>
+<h3>READING ORDER DEFENSE</h3>
+<ul class="cl">
+<li><code>=</code> has a variable on its left — a destination</li>
+<li><code>==</code> has values on both sides — a question</li>
+<li>inside <code>if (...)</code> you almost always want a question</li>
+</ul>
+<div class="tip"><b>YOODA STYLE (OPTIONAL) —</b> writing <code>if (5 == x)</code> makes the typo
+<code>if (5 = x)</code> a compile error (can't assign to a constant). Some teams swear by it.</div>
+</div>
+</div>
+<div class="pg">60 / 88</div>
+</section>
+
+<!-- ═══════════════════ 61 · THE if STATEMENT ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>The if Statement — One-Way Decision</h2>
+<div class="grid64">
+<div>
+<div class="c">if (condition)
+    statement;          <span class="t">/* runs ONLY if condition is true */</span>
+
+/* with a block */
+if (score &gt;= 90)
+    grade = 'A';</div>
+<h3>THE SHAPE</h3>
+<div class="flow">      condition ?
+      ↙true    ↘false
+statement₁    (skip)
+      ↘        ↙
+      merge — flow continues</div>
+</div>
+<div>
+<h3>SEMANTICS, ATOMICALLY</h3>
+<ul class="cl">
+<li>evaluate the expression in <code>( )</code></li>
+<li>non-zero → true → execute the statement</li>
+<li>zero → false → skip it entirely</li>
+<li>flow merges afterwards — nothing repeats</li>
+</ul>
+<div class="c">if (hours &gt; 40)
+    printf("Overtime!\n");
+printf("Done\n");   <span class="t">/* ALWAYS runs — it's
+                       OUTSIDE the if        */</span></div>
+<div class="warn"><b>NO SEMICOLON AFTER if (cond) —</b> and remember: only the <em>one</em> next statement
+belongs to the if unless braces say otherwise (slide 63).</div>
+</div>
+</div>
+<div class="pg">61 / 88</div>
+</section>
+
+<!-- ═══════════════════ 62 · THE if-else STATEMENT ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>if-else — The Two-Way Decision</h2>
+<div class="grid64">
+<div>
+<div class="c">if (condition)
+    statement₁          <span class="t">/* then-block */</span>
+else
+    statement₂          <span class="t">/* else-block */</span></div>
+<h3>THE SHAPE</h3>
+<div class="flow">      condition ?
+     ↙true      ↘false
+statement₁    statement₂
+     ↘          ↙
+      merge — exactly ONE ran</div>
+</div>
+<div>
+<h3>GUARANTEES</h3>
+<ul class="cl">
+<li>exactly one of the two branches executes — never both, never neither</li>
+<li><code>else</code> has no condition of its own: it means "otherwise"</li>
+<li>the condition still needs its parentheses</li>
+</ul>
+<div class="c">if (x != 0)
+    result = y / x;
+else
+    printf("Divide by zero!\n");</div>
+<div class="note"><b>DESIGN ECHO —</b> this is the flowchart decision diamond (slide 23) wearing C syntax.
+Pseudocode's <code>IF…THEN…ELSE…ENDIF</code> maps 1:1.</div>
+</div>
+</div>
+<div class="pg">62 / 88</div>
+</section>
+
+<!-- ═══════════════════ 63 · COMPOUND STATEMENTS ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>Compound Statements — Braces Make One Block</h2>
+<div class="grid">
+<div class="c">/* one statement per branch? no braces needed */
+if (score &gt;= 90)
+    grade = 'A';
+
+/* several statements? braces make them ONE */
+if (score &lt; 60) {
+    printf("Failing\n");
+    grade    = 'F';
+    failures = failures + 1;
+}
+
+/* two-way, both blocks compound */
+if (x != 0) {
+    result = y / x;
+    printf("Quotient = %f\n", result);
+} else {
+    printf("Divide by zero!\n");
+    result = 0;
+}</div>
+<div>
+<h3>THE RULE</h3>
+<ul class="cl">
+<li><code>{ }</code> group any number of statements into a <b>single</b> compound statement</li>
+<li>without braces, only the <em>first</em> statement after <code>if</code>/<code>else</code> belongs to it</li>
+<li>declarations may live inside a block</li>
+</ul>
+<div class="warn"><b>THE DANGLING STATEMENT —</b>
+<div class="c">if (x &gt; 0)
+    a = 1;
+    b = 2;   <span class="t">/* looks "inside" — ISN'T.
+                runs unconditionally!    */</span></div>
+Indentation is for humans — the compiler only sees braces.</div>
+<div class="tip"><b>TEAM RULE —</b> always brace multi-statement branches; many teams brace even single ones.
+Braces never hurt.</div>
+</div>
+</div>
+<div class="pg">63 / 88</div>
+</section>
+
+<!-- ═══════════════════ 64 · if-else-if LADDER ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>The if-else-if Ladder — Many-Way Decisions</h2>
+<div class="grid64">
+<div class="c">/* grade from score */
+if (score &gt;= 90)
+    grade = 'A';
+else if (score &gt;= 80)
+    grade = 'B';
+else if (score &gt;= 70)
+    grade = 'C';
+else if (score &gt;= 60)
+    grade = 'D';
+else
+    grade = 'F';</div>
+<div>
+<h3>HOW THE LADDER FALLS</h3>
+<ul class="cl">
+<li>tests run <b>top to bottom</b>; the first true one wins</li>
+<li>all lower rungs are skipped — exactly one branch fires</li>
+<li>the final <code>else</code> catches everything left ("otherwise")</li>
+<li>because of the cascade, rung 2 silently knows <code>score &lt; 90</code> — no need to test it again</li>
+</ul>
+<div class="flow">≥90? ──yes──▶ A
+ │no
+≥80? ──yes──▶ B
+ │no
+≥70? ──yes──▶ C
+ │no
+≥60? ──yes──▶ D
+ │no
+      └────▶ F</div>
+</div>
+</div>
+<div class="note"><b>ORDER MATTERS —</b> writing <code>&gt;= 60</code> first would swallow every passing score.
+Test from the most restrictive end.</div>
+<div class="pg">64 / 88</div>
+</section>
+
+<!-- ═══════════════════ 65 · NESTED if + DANGLING ELSE ═══════════════════ -->
+<section class="slide">
+<div class="tag">02 · selection structures</div>
+<h2>Nested if — and the Dangling-else Rule</h2>
+<div class="grid">
+<div class="card"><h3>NESTING — DECISIONS INSIDE DECISIONS</h3>
+<div class="c">if (x &gt; 0) {
+    if (x % 2 == 0)
+        printf("positive even\n");
+    else
+        printf("positive odd\n");
+}</div>
+<p>Each level hal

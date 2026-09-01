@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Programming in C — The Giant Deck · Complete 5-Unit Curriculum (162 Slides)</title>
-  <meta name="description" content="Complete C Programming course covering Fundamentals, Functions, Arrays & Strings, Recursion & Structures, Files & Sorting — 162 slides across 5 units.">
+  <meta name="description"
+    content="Complete C Programming course covering Fundamentals, Functions, Arrays & Strings, Recursion & Structures, Files & Sorting — 162 slides across 5 units.">
   <link
     href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
     rel="stylesheet">
   <style>
-
     :root {
       --bg: #050806;
       --bg2: #0a120c;
@@ -873,7 +873,7 @@
       font-size: 13px !important;
       line-height: 1.55 !important
     }
-  
+
 
     /* Flowchart & Branching from Unit 2 */
     .branchrow {
@@ -1235,7 +1235,8 @@
       backdrop-filter: blur(8px);
     }
 
-    .hud-left, .hud-right {
+    .hud-left,
+    .hud-right {
       display: flex;
       gap: 14px;
       align-items: center;
@@ -1321,7 +1322,6 @@
       opacity: .6;
       z-index: 3;
     }
-
   </style>
 </head>
 
@@ -1389,7 +1389,8 @@
       </button>
     </div>
     <div style="padding:16px 20px;border-top:1px solid var(--line);background:rgba(0,0,0,.3)">
-      <button class="hud-btn amber-btn" style="width:100%;justify-content:center" onclick="openJumpModal(); closeNav();">
+      <button class="hud-btn amber-btn" style="width:100%;justify-content:center"
+        onclick="openJumpModal(); closeNav();">
         ⚡ JUMP TO SPECIFIC SLIDE
       </button>
     </div>
@@ -1398,7 +1399,8 @@
   <!-- ========== QUICK SLIDE JUMP MODAL ========== -->
   <div class="jump-modal" id="jumpModal">
     <h3>⚡ GO TO SLIDE (1 – 162)</h3>
-    <input type="number" id="jumpInput" class="jump-input" min="1" max="162" placeholder="Slide #" onkeydown="if(event.key==='Enter')executeJump();">
+    <input type="number" id="jumpInput" class="jump-input" min="1" max="162" placeholder="Slide #"
+      onkeydown="if(event.key==='Enter')executeJump();">
     <div class="jump-actions">
       <button class="hud-btn" onclick="closeJumpModal()">CANCEL</button>
       <button class="hud-btn amber-btn" onclick="executeJump()">GO ▶</button>
@@ -1412,16 +1414,46 @@
       <button class="unit-nav-close" onclick="closeShortcutsModal()">✕</button>
     </h3>
     <table class="sc-table">
-      <tr><td><kbd>→</kbd> or <kbd>SPACE</kbd> or <kbd>PgDn</kbd></td><td>Next slide</td></tr>
-      <tr><td><kbd>←</kbd> or <kbd>PgUp</kbd></td><td>Previous slide</td></tr>
-      <tr><td><kbd>HOME</kbd></td><td>Master portal slide (001)</td></tr>
-      <tr><td><kbd>END</kbd></td><td>Final summary slide (162)</td></tr>
-      <tr><td><kbd>1</kbd> – <kbd>5</kbd></td><td>Instant jump to Unit I – V</td></tr>
-      <tr><td><kbd>M</kbd></td><td>Toggle Unit Navigator drawer</td></tr>
-      <tr><td><kbd>J</kbd> or <kbd>G</kbd></td><td>Jump to slide number dialog</td></tr>
-      <tr><td><kbd>F</kbd></td><td>Toggle Fullscreen mode</td></tr>
-      <tr><td><kbd>?</kbd></td><td>Show / hide this shortcuts cheat-sheet</td></tr>
-      <tr><td><kbd>ESC</kbd></td><td>Close any active drawer or modal</td></tr>
+      <tr>
+        <td><kbd>→</kbd> or <kbd>SPACE</kbd> or <kbd>PgDn</kbd></td>
+        <td>Next slide</td>
+      </tr>
+      <tr>
+        <td><kbd>←</kbd> or <kbd>PgUp</kbd></td>
+        <td>Previous slide</td>
+      </tr>
+      <tr>
+        <td><kbd>HOME</kbd></td>
+        <td>Master portal slide (001)</td>
+      </tr>
+      <tr>
+        <td><kbd>END</kbd></td>
+        <td>Final summary slide (162)</td>
+      </tr>
+      <tr>
+        <td><kbd>1</kbd> – <kbd>5</kbd></td>
+        <td>Instant jump to Unit I – V</td>
+      </tr>
+      <tr>
+        <td><kbd>M</kbd></td>
+        <td>Toggle Unit Navigator drawer</td>
+      </tr>
+      <tr>
+        <td><kbd>J</kbd> or <kbd>G</kbd></td>
+        <td>Jump to slide number dialog</td>
+      </tr>
+      <tr>
+        <td><kbd>F</kbd></td>
+        <td>Toggle Fullscreen mode</td>
+      </tr>
+      <tr>
+        <td><kbd>?</kbd></td>
+        <td>Show / hide this shortcuts cheat-sheet</td>
+      </tr>
+      <tr>
+        <td><kbd>ESC</kbd></td>
+        <td>Close any active drawer or modal</td>
+      </tr>
     </table>
   </div>
 
@@ -1442,7 +1474,8 @@
       </div>
       <div class="rv d2" style="margin-top:14px">
         <div class="kicker">COMPLETE 5-UNIT CURRICULUM · 162 ATOMIC SLIDES</div>
-        <h1 style="margin-top:6px;font-size:clamp(36px,4.5vw,66px)">PROGRAMMING IN C — <span style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">THE GIANT DECK</span></h1>
+        <h1 style="margin-top:6px;font-size:clamp(36px,4.5vw,66px)">PROGRAMMING IN C — <span
+            style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">THE GIANT DECK</span></h1>
         <div class="rule" style="margin:16px 0 18px"></div>
       </div>
 
@@ -1450,37 +1483,45 @@
         <div class="unit-card" onclick="goToUnit(0)">
           <div class="uc-badge"><span>UNIT I</span> <span class="uc-count">94 SLIDES · 002–095</span></div>
           <div class="uc-title">FUNDAMENTALS</div>
-          <div class="uc-desc">Computers, programs, structured design, syntax, types, I/O, operators, and control loops (if, while, for, do-while).</div>
+          <div class="uc-desc">Computers, programs, structured design, syntax, types, I/O, operators, and control loops
+            (if, while, for, do-while).</div>
         </div>
 
         <div class="unit-card" onclick="goToUnit(1)">
           <div class="uc-badge"><span>UNIT II</span> <span class="uc-count">20 SLIDES · 096–115</span></div>
           <div class="uc-title">FUNCTIONS</div>
-          <div class="uc-desc">Top-down modular design, function prototypes, pass-by-value/pointer, scope, and storage classes.</div>
+          <div class="uc-desc">Top-down modular design, function prototypes, pass-by-value/pointer, scope, and storage
+            classes.</div>
         </div>
 
         <div class="unit-card" onclick="goToUnit(2)">
           <div class="uc-badge"><span>UNIT III</span> <span class="uc-count">19 SLIDES · 116–134</span></div>
           <div class="uc-title">ARRAYS & STRINGS</div>
-          <div class="uc-desc">1D/2D arrays, memory layouts, sequential access, char arrays, string.h, and pointer array tables.</div>
+          <div class="uc-desc">1D/2D arrays, memory layouts, sequential access, char arrays, string.h, and pointer array
+            tables.</div>
         </div>
 
         <div class="unit-card" onclick="goToUnit(3)">
           <div class="uc-badge"><span>UNIT IV</span> <span class="uc-count">14 SLIDES · 135–148</span></div>
           <div class="uc-title">RECURSION & STRUCTS</div>
-          <div class="uc-desc">Call stacks, base cases, mathematical & string recursion, typedef struct, dot/arrow ops, and union types.</div>
+          <div class="uc-desc">Call stacks, base cases, mathematical & string recursion, typedef struct, dot/arrow ops,
+            and union types.</div>
         </div>
 
         <div class="unit-card" onclick="goToUnit(4)">
           <div class="uc-badge"><span>UNIT V</span> <span class="uc-count">14 SLIDES · 149–162</span></div>
           <div class="uc-title">FILES & SEARCH/SORT</div>
-          <div class="uc-desc">Text/binary file I/O, fopen, fread, fseek, sequential files, linear/binary search, bubble/insertion/selection sort.</div>
+          <div class="uc-desc">Text/binary file I/O, fopen, fread, fseek, sequential files, linear/binary search,
+            bubble/insertion/selection sort.</div>
         </div>
       </div>
 
-      <div class="rv d4" style="margin-top:auto;display:flex;gap:24px;align-items:center;flex-wrap:wrap;padding-top:14px">
+      <div class="rv d4"
+        style="margin-top:auto;display:flex;gap:24px;align-items:center;flex-wrap:wrap;padding-top:14px">
         <span style="font-family:'VT323';font-size:24px;color:var(--phos)">
-          Press <span style="color:var(--amber)">SPACE / →</span> to start · Keys <span style="color:var(--amber)">1–5</span> jump to Unit · <span style="color:var(--amber)">M</span> opens menu · <span style="color:var(--amber)">?</span> for shortcuts
+          Press <span style="color:var(--amber)">SPACE / →</span> to start · Keys <span
+            style="color:var(--amber)">1–5</span> jump to Unit · <span style="color:var(--amber)">M</span> opens menu ·
+          <span style="color:var(--amber)">?</span> for shortcuts
         </span>
         <span class="cur"></span>
       </div>
@@ -1491,13 +1532,17 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
 
     <section class="slide" data-unit="0" data-mod="BOOT">
-      <div class="rv d1 ascii hero" style="font-size:clamp(10px,1.75vw,28px)">██╗ ██╗ ███████╗ ██╗ ██████╗ ██████╗ ███╗
-        ███╗ ███████╗
-        ██║ ██║ ██╔════╝ ██║ ██╔════╝ ██╔═══██╗ ████╗ ████║ ██╔════╝
-        ██║ █╗ ██║ █████╗ ██║ ██║ ██║ ██╔████╔██║ █████╗
-        ██║███╗██║ ██╔══╝ ██║ ██║ ██║ ██║╚██╔╝██║ ██╔══╝
-        ╚███╔███╔╝ ███████╗ ███████╗ ╚██████╗ ╚██████╔╝ ██║ ╚═╝ ██║ ███████╗
-        ╚══╝╚══╝ ╚══════╝ ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝ ╚═╝ ╚══════╝</div>
+      <div class="rv d1 ascii hero" style="font-size:clamp(10px,1.75vw,28px)">
+        <pre>
+██╗    ██╗███████╗██╗      ██████╗  ██████╗ ███╗   ███╗███████╗
+██║    ██║██╔════╝██║     ██╔════╝ ██╔═══██╗████╗ ████║██╔════╝
+██║ █╗ ██║█████╗  ██║     ██║      ██║   ██║██╔████╔██║█████╗  
+██║███╗██║██╔══╝  ██║     ██║      ██║   ██║██║╚██╔╝██║██╔══╝  
+╚███╔███╔╝███████╗███████╗╚██████╗ ╚██████╔╝██║ ╚═╝ ██║███████╗
+ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+      </pre>
+
+      </div>
       <div style="margin-top:26px" class="rv d2">
         <div class="kicker">Programming in C · Complete Foundations + Unit I</div>
         <h1 style="margin-top:8px">THE ATOMIC<br>DECK<span class="amber">_</span></h1>
@@ -1675,7 +1720,8 @@
             <div class="c-label">VON NEUMANN IDEA</div>
             <div class="c-body">The <b style="color:var(--phos)">stored-program concept</b>: instructions live in memory
               like data. The machine can be re-tasked by loading new instructions — that's what makes it a
-              <i>computer</i>, not a calculator.</div>
+              <i>computer</i>, not a calculator.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:10px">
@@ -2332,7 +2378,8 @@ gross pay, displayed with 2 decimals
           <div class="defrow">
             <div class="dk">Loader</div>
             <div class="dv">At <i>run</i> time: copies the executable into RAM, sets up the stack, jumps to
-              <code>main</code>.</div>
+              <code>main</code>.
+            </div>
           </div>
         </div>
         <div class="col rv d4">
@@ -2459,7 +2506,8 @@ invalid:   −5h           → ? (design said re-ask)</pre>
           <div class="card amb">
             <div class="c-label">MAINTENANCE ≈ 60–80% OF LIFETIME COST</div>
             <div class="c-body">Real programs outlive their authors. The longest phase of the cycle is everything
-              <i>after</i> delivery.</div>
+              <i>after</i> delivery.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">CORRECTIVE</div>
@@ -3068,7 +3116,8 @@ Avg=80.00
             <div class="vk">BEHIND THE SCENES</div>
             <div class="vv">Each character is stored as a number (ASCII): <code>'A'=65</code>, <code>'a'=97</code>,
               <code>'0'=48</code>. That difference of 32 is why upper/lower case are <b
-                style="color:var(--phos)">different characters</b> — and different identifiers.</div>
+                style="color:var(--phos)">different characters</b> — and different identifiers.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
@@ -3126,12 +3175,14 @@ Avg=80.00
           <div class="defrow">
             <div class="dk">5 · Operators</div>
             <div class="dv">Symbols that compute — <code>+</code> <code>*</code> <code>=</code> <code>&lt;</code>
-              <code>&amp;&amp;</code>.</div>
+              <code>&amp;&amp;</code>.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">6 · Punctuators</div>
             <div class="dv">Structure markers — <code>;</code> <code>,</code> <code>( )</code> <code>{ }</code>
-              <code>#</code>.</div>
+              <code>#</code>.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
@@ -3205,7 +3256,8 @@ goto return</span>
             <div class="c-label">YOU NEED ~12 NOW</div>
             <div class="c-body">For all of Unit I:
               <code>int double char void if else while for do return const sizeof</code>. The rest belong to later
-              units.</div>
+              units.
+            </div>
           </div>
           <div class="vocab">
             <div class="vk">MEMORIZE BY MEANING</div>
@@ -3331,7 +3383,8 @@ goto return</span>
             <div class="vk">'7' ≠ 7</div>
             <div class="vv"><code>'7'</code> is the <b style="color:var(--phos)">character</b> with code 55;
               <code>7</code> is the <b style="color:var(--phos)">number</b>. <code>'7' − '0' = 7</code> converts one to
-              the other.</div>
+              the other.
+            </div>
           </div>
           <div class="vocab">
             <div class="vk">'A' ≠ "A"</div>
@@ -3457,7 +3510,8 @@ kms = miles * KM_PER_MILE;
             <div class="vk">WHY YOU NEED IT</div>
             <div class="vv">The compiler must know each function's name, return type, and parameter types <i>before</i>
               you call it. <code>stdio.h</code> carries those <b style="color:var(--phos)">prototypes</b> for
-              <code>printf</code>, <code>scanf</code>, <code>putchar</code>, <code>getchar</code>…</div>
+              <code>printf</code>, <code>scanf</code>, <code>putchar</code>, <code>getchar</code>…
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">&lt;stdio.h&gt;</div>
@@ -3525,7 +3579,8 @@ area = <span class="nm">3.14159</span> * r * r;</pre>
             <div class="c-label">⚠ IT IS DUMB TEXT</div>
             <div class="c-body">No memory, no type, no arithmetic — pure find-and-replace. <code>#define SQ 2+3</code>
               makes <code>10*SQ</code> become <code>10*2+3 = 23</code>, not <code>50</code>. Parenthesize:
-              <code>#define SQ (2+3)</code>.</div>
+              <code>#define SQ (2+3)</code>.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
@@ -3546,7 +3601,8 @@ area = <span class="nm">3.14159</span> * r * r;</pre>
           <div class="card">
             <div class="c-label">vs const</div>
             <div class="c-body"><code>const double rate = 1.5;</code> is typed &amp; checked by the compiler;
-              <code>#define</code> is blind text. Both are legal — know which tool you're holding.</div>
+              <code>#define</code> is blind text. Both are legal — know which tool you're holding.
+            </div>
           </div>
         </div>
       </div>
@@ -3645,7 +3701,8 @@ x = <span class="nm">5</span>;  <span class="cm">// set x — to end of line</sp
             <div class="c-label">COMMENT PHILOSOPHY</div>
             <div class="c-body">Explain <b style="color:var(--phos)">why</b>, never what.
               <code>i = i + 1; // add one to i</code> is noise; <code>rate * 1.5; // overtime per HR policy</code> is
-              gold.</div>
+              gold.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">WHITESPACE RULE</div>
@@ -3655,7 +3712,8 @@ x = <span class="nm">5</span>;  <span class="cm">// set x — to end of line</sp
           <div class="card">
             <div class="c-label">WHERE IT MATTERS</div>
             <div class="c-body"><code>int x</code> ≠ <code>intx</code> — whitespace <i>separates tokens</i>. Inside
-              <code>"a b"</code> it's data, not separator.</div>
+              <code>"a b"</code> it's data, not separator.
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ INDENTATION LIES</div>
@@ -3911,7 +3969,8 @@ grade = grade + <span class="nm">1</span>;      <span class="cm">/* now 'B' (66)
             <div class="c-label">⚠ 'A' ≠ "A"</div>
             <div class="c-body"><code>'A'</code> is one byte, type <code>char</code>. <code>"A"</code> is a <b
                 style="color:var(--amber)">string</b>: two bytes — <code>'A'</code> plus the invisible terminator
-              <code>'\0'</code>. Assigning one to the other is a type error the compiler may only warn about.</div>
+              <code>'\0'</code>. Assigning one to the other is a type error the compiler may only warn about.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">CHAR ARITHMETIC</div>
@@ -4174,7 +4233,8 @@ x*x - <span class="nm">2</span>          <span class="cm">/* ≈ 4.4e-16, not 0 
           <div class="card" style="margin-top:14px">
             <div class="c-label">THE SEMICOLON</div>
             <div class="c-body">Statement terminator, like a period in prose. Directives (<code>#include</code>) and the
-              <code>{ }</code> of a block itself take <b style="color:var(--phos)">no</b> semicolon.</div>
+              <code>{ }</code> of a block itself take <b style="color:var(--phos)">no</b> semicolon.
+            </div>
           </div>
         </div>
       </div>
@@ -4317,7 +4377,8 @@ avg = (<span class="kw">double</span>)(a+b)/<span class="nm">2</span>; <span cla
             <div class="c-label">SHORTHAND (PREVIEW)</div>
             <div class="c-body"><code>x += 5</code> ≡ <code>x = x+5</code> · <code>x -= 2</code> · <code>x *= 3</code> ·
               <code>x /= 2</code> · <code>x %= 10</code>. And <code>i++</code> ≡ <code>i = i+1</code> — the loop
-              workhorse.</div>
+              workhorse.
+            </div>
           </div>
         </div>
       </div>
@@ -4378,7 +4439,8 @@ avg = (<span class="kw">double</span>)(a+b)/<span class="nm">2</span>; <span cla
             <div class="c-label">⚠ WHY &amp; IS MANDATORY</div>
             <div class="c-body">C passes <b style="color:var(--amber)">by value</b> — without <code>&amp;</code>, scanf
               would get a <i>copy</i> of the variable and could never write into the real cell.
-              <code>scanf("%lf", miles)</code> compiles with a warning and corrupts memory at run time.</div>
+              <code>scanf("%lf", miles)</code> compiles with a warning and corrupts memory at run time.
+            </div>
           </div>
           <div class="memrow" style="justify-content:center">
             <div class="mem amb">
@@ -4456,7 +4518,8 @@ avg = (<span class="kw">double</span>)(a+b)/<span class="nm">2</span>; <span cla
           <div class="card" style="margin-top:14px">
             <div class="c-label">printf NEVER ADDS SPACES</div>
             <div class="c-body">Unlike some languages — <code>printf("%d",5); printf("%d",6);</code> prints
-              <code>56</code>. You control every character; <code>\n</code> is your only line break.</div>
+              <code>56</code>. You control every character; <code>\n</code> is your only line break.
+            </div>
           </div>
         </div>
       </div>
@@ -4511,7 +4574,8 @@ avg = (<span class="kw">double</span>)(a+b)/<span class="nm">2</span>; <span cla
             <div class="vk">WHY ESCAPES EXIST</div>
             <div class="vv"><code>\n</code> is untypeable (Enter ends the line, it isn't a printable symbol);
               <code>"</code> would end the string. The backslash says: <b style="color:var(--phos)">"the next character
-                means something special."</b></div>
+                means something special."</b>
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
@@ -4579,7 +4643,8 @@ avg = (<span class="kw">double</span>)(a+b)/<span class="nm">2</span>; <span cla
           <div class="defrow">
             <div class="dk">Order is law</div>
             <div class="dv">Comments → directives → (functions) → main. The preprocessor runs before the compiler, so
-              <code>#include</code> must precede every use.</div>
+              <code>#include</code> must precede every use.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">In main</div>
@@ -4746,7 +4811,8 @@ i = i - <span class="nm">1</span>;    ≡  i--;   <span class="cm">/* −1  */</
           <div class="card amb" style="margin-top:14px">
             <div class="c-label">⚠ THE AVERAGE BUG</div>
             <div class="c-body"><code>avg = (a+b+c) / 3;</code> with int inputs yields a truncated result. Fix with
-              <code>/ 3.0</code> or a cast — the #1 beginner bug in exams.</div>
+              <code>/ 3.0</code> or a cast — the #1 beginner bug in exams.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
@@ -4771,7 +4837,8 @@ n % <span class="nm">2</span> == <span class="nm">1</span>   <span class="cm">/*
           <div class="card" style="margin-top:14px">
             <div class="c-label">DIVISION OF LABOR</div>
             <div class="c-body"><code>/</code> gives the quotient, <code>%</code> gives the remainder — for
-              <code>a = q·b + r</code>: <code>q = a/b</code>, <code>r = a%b</code>. Two halves of one operation.</div>
+              <code>a = q·b + r</code>: <code>q = a/b</code>, <code>r = a%b</code>. Two halves of one operation.
+            </div>
           </div>
         </div>
       </div>
@@ -4864,7 +4931,8 @@ a = b = <span class="nm">5</span>;  →  a = (b = <span class="nm">5</span>);</p
             <div class="c-label">⚠ WHEN IN DOUBT — PARENTHESIZE</div>
             <div class="c-body">Don't memorize ranks; <b style="color:var(--amber)">write your intent</b>.
               <code>rate * 1.5 + base</code> vs <code>base + rate*1.5</code> — same value, but only parentheses say what
-              you <i>meant</i> for the reader.</div>
+              you <i>meant</i> for the reader.
+            </div>
           </div>
         </div>
       </div>
@@ -5035,7 +5103,8 @@ Cherry       100</span></pre>
           <div class="card">
             <div class="c-label">COLS LINE UP</div>
             <div class="c-body">Fixed precision + fixed width = decimal points align vertically — combine with
-              <code>%10.2f</code> for receipts, marksheets, ledgers.</div>
+              <code>%10.2f</code> for receipts, marksheets, ledgers.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">OTHER REAL SPECS</div>
@@ -5121,7 +5190,8 @@ statement_2;
             <div class="vk">THE ATOMIC IDEA OF M2</div>
             <div class="vv">A program becomes <i>smart</i> the moment it can <b style="color:var(--phos)">choose</b> —
               react differently to different data. Selection is that power, and it all hangs on one micro-concept: the
-              <b style="color:var(--phos)">condition</b>.</div>
+              <b style="color:var(--phos)">condition</b>.
+            </div>
           </div>
         </div>
       </div>
@@ -5186,7 +5256,8 @@ x + <span class="nm">1</span>        <span class="cm">/* 5 — a plain number:
           <div class="card">
             <div class="c-label">WHERE CONDITIONS LIVE</div>
             <div class="c-body">Inside the <code>( )</code> of <code>if</code>, <code>while</code>, <code>for</code>,
-              <code>do-while</code> — always parentheses, always an int result.</div>
+              <code>do-while</code> — always parentheses, always an int result.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">BUILDING BLOCKS</div>
@@ -5265,7 +5336,8 @@ x + <span class="nm">1</span>        <span class="cm">/* 5 — a plain number:
             <div class="c-label">⚠ OPERANDS ARE COMPARED AS VALUES</div>
             <div class="c-body"><code>3 &lt; 5</code> compares the <b style="color:var(--amber)">numbers</b>, but
               <code>"abc" == "abc"</code> compares <b style="color:var(--red)">pointers</b>, not letters — usually
-              false! Strings need <code>strcmp</code> (later unit). Reals: avoid <code>==</code> (atom 41).</div>
+              false! Strings need <code>strcmp</code> (later unit). Reals: avoid <code>==</code> (atom 41).
+            </div>
           </div>
           <div class="term">
             <div class="term-head">range test — the classic mistake</div>
@@ -5282,7 +5354,8 @@ x + <span class="nm">1</span>        <span class="cm">/* 5 — a plain number:
           <div class="card">
             <div class="c-label">PRECEDENCE</div>
             <div class="c-body">Relational operators bind <b style="color:var(--phos)">looser than arithmetic</b>:
-              <code>a + b &gt; c</code> means <code>(a+b) &gt; c</code> — the natural reading is the right one.</div>
+              <code>a + b &gt; c</code> means <code>(a+b) &gt; c</code> — the natural reading is the right one.
+            </div>
           </div>
         </div>
       </div>
@@ -5346,7 +5419,8 @@ x + <span class="nm">1</span>        <span class="cm">/* 5 — a plain number:
             <div class="vk">PLAIN ENGLISH</div>
             <div class="dv"><code>&amp;&amp;</code> — <b style="color:var(--phos)">AND</b>: both must be true ·
               <code>||</code> — <b style="color:var(--phos)">OR</b>: at least one · <code>!</code> — <b
-                style="color:var(--phos)">NOT</b>: flips.</div>
+                style="color:var(--phos)">NOT</b>: flips.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
@@ -5523,7 +5597,8 @@ y != <span class="nm">10</span>       →          → <span class="nm">1</span>
             <div class="c-label">⚠ ! OUTRANKS EVERYTHING</div>
             <div class="c-body"><code>!found &amp;&amp; i &lt; n</code> parses as
               <code>(!found) &amp;&amp; (i&lt;n)</code> — usually what you meant. But <code>!x == y</code> means
-              <code>(!x) == y</code>, almost never intended. Parenthesize.</div>
+              <code>(!x) == y</code>, almost never intended. Parenthesize.
+            </div>
           </div>
         </div>
       </div>
@@ -5555,7 +5630,8 @@ y != <span class="nm">10</span>       →          → <span class="nm">1</span>
             <div class="c-label">⚠ WHY THE COMPILER STAYS SILENT</div>
             <div class="c-body"><code>x = 5</code> is a perfectly legal expression whose value is 5 — legal inside
               <code>if( )</code>. Most compilers emit only a soft warning: <i>"suggest parentheses around assignment
-                used as truth value"</i>. <b style="color:var(--amber)">Read your warnings.</b></div>
+                used as truth value"</i>. <b style="color:var(--amber)">Read your warnings.</b>
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
@@ -5667,7 +5743,8 @@ y != <span class="nm">10</span>       →          → <span class="nm">1</span>
             <div class="vk">DEFINITION</div>
             <div class="dv">Braces fuse any number of statements into <b style="color:var(--phos)">one compound
                 statement</b> — a single unit wherever one statement is allowed: after <code>if</code>,
-              <code>else</code>, <code>while</code>, <code>for</code>.</div>
+              <code>else</code>, <code>while</code>, <code>for</code>.
+            </div>
           </div>
           <div class="term" style="margin-top:12px">
             <div class="term-head">grade.c</div>
@@ -5788,7 +5865,8 @@ y != <span class="nm">10</span>       →          → <span class="nm">1</span>
           <div class="card amb" style="margin-top:12px">
             <div class="c-label">⚠ ORDER MATTERS — DESCENDING</div>
             <div class="c-body">Tests must go from <b style="color:var(--amber)">highest to lowest</b>. With
-              <code>&gt;=60</code> first, a mark of 95 happily grades itself 'D' and never reaches the A test.</div>
+              <code>&gt;=60</code> first, a mark of 95 happily grades itself 'D' and never reaches the A test.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
@@ -5845,7 +5923,8 @@ y != <span class="nm">10</span>       →          → <span class="nm">1</span>
           <div class="vocab" style="margin-top:12px">
             <div class="vk">THE VOCABULARY MAP</div>
             <div class="dv">IF/THEN/ELSE/ENDIF → <code>if { } else { }</code> · the flowchart diamond → the
-              <code>if ( )</code> test · labeled exits → then/else blocks.</div>
+              <code>if ( )</code> test · labeled exits → then/else blocks.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
@@ -6099,7 +6178,8 @@ i = <span class="nm">1</span>;
             <div class="c-label">⚠ EXIT CONDITION THINKING</div>
             <div class="c-body">The loop continues <i>while</i> true — students often write the <b
                 style="color:var(--amber)">stop</b> condition by mistake. "loop until i &gt; 5" becomes
-              <code>while (i &lt;= 5)</code> — negate it.</div>
+              <code>while (i &lt;= 5)</code> — negate it.
+            </div>
           </div>
         </div>
       </div>
@@ -6641,7 +6721,8 @@ i = <span class="nm">1</span>;                       <span class="cm">/* ① */<
             <div class="c-label">THE RULE OF THUMB</div>
             <div class="c-body">"Do this <b style="color:var(--phos)">n times</b>" → <code>for</code>. "Do this <b
                 style="color:var(--phos)">until something happens</b>" → <code>while</code>. When either works,
-              <code>for</code> keeps the loop machinery impossible to forget.</div>
+              <code>for</code> keeps the loop machinery impossible to forget.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
@@ -6862,7 +6943,8 @@ Average = 80.00
             <div class="dv">A <b style="color:var(--phos)">priming read</b> fetches the first value <i>before</i> the
               loop so the first test has something to test; a <b style="color:var(--phos)">get-next read</b> at the
               <i>end</i> of the body fetches each subsequent value. <b style="color:var(--amber)">Two reads. Both.
-                Always.</b></div>
+                Always.</b>
+            </div>
           </div>
           <div class="miniflow" style="margin-top:16px">
             <div class="fnode">scanf → PRIME</div>
@@ -6911,7 +6993,8 @@ Average = 80.00
             <div class="vk">THE SECRET OF scanf</div>
             <div class="dv"><code>scanf</code> <b style="color:var(--phos)">returns the count of items read</b> —
               <code>1</code> on success, <code>0</code> on mismatch, <code>EOF (−1)</code> when input ends. That return
-              value <i>is</i> the loop condition.</div>
+              value <i>is</i> the loop condition.
+            </div>
           </div>
           <div class="term" style="margin-top:12px">
             <div class="term-head">eof.c</div>
@@ -6950,7 +7033,8 @@ Average = 80.00
           <div class="card">
             <div class="c-label">EOF = −1</div>
             <div class="c-body">A special constant from <code>stdio.h</code> meaning "no more input". It's a
-              <i>status</i>, not a character — it can't be typed, only triggered by file-end or the Ctrl-D signal.</div>
+              <i>status</i>, not a character — it can't be typed, only triggered by file-end or the Ctrl-D signal.
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ == 1 IS SAFER THAN != EOF</div>
@@ -7010,7 +7094,8 @@ i = <span class="nm">0</span>;
             <div class="c-label">⚠ THE DOUBLE CONDITION</div>
             <div class="c-body"><code>!found &amp;&amp; i &lt; SIZE</code> — <b style="color:var(--amber)">order is
                 load-bearing</b>: stop searching either because we found it <i>or</i> ran out of data. Drop the
-              <code>i &lt; SIZE</code> guard and you read past the array (crash/garbage).</div>
+              <code>i &lt; SIZE</code> guard and you read past the array (crash/garbage).
+            </div>
           </div>
           <div class="card">
             <div class="c-label">WHY NOT break?</div>
@@ -7432,7 +7517,8 @@ sum/count when count==0
           <div class="card">
             <div class="c-label">USE WHEN "AT LEAST ONCE" IS INHERENT</div>
             <div class="c-body">Menus · input validation · retry-a-failed-operation — any structure where the first ask
-              <b style="color:var(--phos)">must happen</b> before any test can exist.</div>
+              <b style="color:var(--phos)">must happen</b> before any test can exist.
+            </div>
           </div>
         </div>
       </div>
@@ -7827,19 +7913,23 @@ hypotenuse = <span class="fn">sqrt</span>(<span class="fn">pow</span>(a, <span c
           <p style="font-family:'VT323';font-size:22px;color:var(--phos);text-align:center;margin-bottom:16px">
             STRUCTURE CHART · payroll</p>
           <div class="miniflow">
-            <div class="fnode" style="width:100%">main()<br><span style="font-size:14px;color:var(--ink-dim)">orchestrate the program</span></div>
+            <div class="fnode" style="width:100%">main()<br><span
+                style="font-size:14px;color:var(--ink-dim)">orchestrate the program</span></div>
             <div style="display:flex;gap:10px;width:100%">
               <div style="flex:1;text-align:center">
                 <div class="farrow">↓</div>
-                <div class="fnode" style="width:100%;font-size:20px">get_input()<br><span style="font-size:13px;color:var(--ink-dim)">hours, rate</span></div>
+                <div class="fnode" style="width:100%;font-size:20px">get_input()<br><span
+                    style="font-size:13px;color:var(--ink-dim)">hours, rate</span></div>
               </div>
               <div style="flex:1;text-align:center">
                 <div class="farrow" style="color:var(--amber)">↓</div>
-                <div class="fnode amb" style="width:100%;font-size:20px">compute_pay()<br><span style="font-size:13px">hours,rate→pay</span></div>
+                <div class="fnode amb" style="width:100%;font-size:20px">compute_pay()<br><span
+                    style="font-size:13px">hours,rate→pay</span></div>
               </div>
               <div style="flex:1;text-align:center">
                 <div class="farrow">↓</div>
-                <div class="fnode" style="width:100%;font-size:20px">print_result()<br><span style="font-size:13px;color:var(--ink-dim)">display pay</span></div>
+                <div class="fnode" style="width:100%;font-size:20px">print_result()<br><span
+                    style="font-size:13px;color:var(--ink-dim)">display pay</span></div>
               </div>
             </div>
           </div>
@@ -7901,7 +7991,8 @@ hypotenuse = <span class="fn">sqrt</span>(<span class="fn">pow</span>(a, <span c
           </div>
           <div class="card amb">
             <div class="c-label">⚠ ORDER MATTERS</div>
-            <div class="c-body">Without a prototype, calling a function before its definition causes a compiler error (or
+            <div class="c-body">Without a prototype, calling a function before its definition causes a compiler error
+              (or
               worse, an implicit declaration bug in old C).</div>
           </div>
         </div>
@@ -7956,7 +8047,8 @@ hypotenuse = <span class="fn">sqrt</span>(<span class="fn">pow</span>(a, <span c
           <div class="defrow">
             <div class="dk">Pass by value</div>
             <div class="dv">C copies the argument's value into the parameter. Changing <code>salary</code> inside does
-              <b style="color:var(--phos)">not</b> change <code>sal</code> outside.</div>
+              <b style="color:var(--phos)">not</b> change <code>sal</code> outside.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">Return value</div>
@@ -8020,7 +8112,8 @@ hypotenuse = <span class="fn">sqrt</span>(<span class="fn">pow</span>(a, <span c
           <div class="card">
             <div class="c-label">HEADER FILES</div>
             <div class="c-body"><code>stdio.h</code> is full of prototypes: <code>printf</code>, <code>scanf</code>,
-              <code>fopen</code>. Your own <code>.h</code> files do the same for your functions.</div>
+              <code>fopen</code>. Your own <code>.h</code> files do the same for your functions.
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">PROTOTYPE ≠ DEFINITION</div>
@@ -8039,8 +8132,8 @@ hypotenuse = <span class="fn">sqrt</span>(<span class="fn">pow</span>(a, <span c
       </div>
       <div class="rv d2">
         <div class="flow">
-          <div class="fnode" style="font-size:20px">main()<br><span
-              style="font-size:13px;color:var(--ink-dim)">tax = compute_tax(sal, r);</span></div>
+          <div class="fnode" style="font-size:20px">main()<br><span style="font-size:13px;color:var(--ink-dim)">tax =
+              compute_tax(sal, r);</span></div>
           <div class="farrow">──▶</div>
           <div class="fnode amb" style="font-size:20px">COPY values<br><span style="font-size:13px">sal → salary, r →
               rate</span></div>
@@ -8051,8 +8144,8 @@ hypotenuse = <span class="fn">sqrt</span>(<span class="fn">pow</span>(a, <span c
           <div class="fnode amb" style="font-size:20px">RETURN result<br><span style="font-size:13px">12500.0</span>
           </div>
           <div class="farrow">──▶</div>
-          <div class="fnode" style="font-size:20px">RESUME main<br><span
-              style="font-size:13px;color:var(--ink-dim)">tax = 12500.0</span></div>
+          <div class="fnode" style="font-size:20px">RESUME main<br><span style="font-size:13px;color:var(--ink-dim)">tax
+              = 12500.0</span></div>
         </div>
       </div>
       <div class="cols" style="margin-top:26px">
@@ -8077,7 +8170,8 @@ main:  tax = <span class="nm">12500.0</span>        <span class="cm">← receive
           <div class="card amb">
             <div class="c-label">⚠ ONE RETURN VALUE</div>
             <div class="c-body">A C function can return <b>at most one</b> value. Need to return multiple results? Use
-              <b style="color:var(--amber)">output parameters</b> (pointers) — coming soon.</div>
+              <b style="color:var(--amber)">output parameters</b> (pointers) — coming soon.
+            </div>
           </div>
         </div>
       </div>
@@ -8118,7 +8212,8 @@ p = &amp;x;      <span class="cm">← p now holds ADDRESS of x</span>
           <div class="defrow">
             <div class="dk"><code>&amp;x</code></div>
             <div class="dv"><b style="color:var(--phos)">Address-of</b> operator — returns the memory address where
-              <code>x</code> is stored. You've used it with <code>scanf</code> all along.</div>
+              <code>x</code> is stored. You've used it with <code>scanf</code> all along.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk"><code>int *p</code></div>
@@ -8179,12 +8274,14 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
           <div class="card">
             <div class="c-label">POINTER ARITHMETIC</div>
             <div class="c-body"><code>*pa + *pb</code> adds the values pointed to, not the addresses.
-              <code>*pa = *pa + 5</code> modifies the original variable through the pointer.</div>
+              <code>*pa = *pa + 5</code> modifies the original variable through the pointer.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">REDIRECTION</div>
             <div class="c-body">Changing <code>pa = &amp;b</code> does NOT change <code>a</code>. It just makes
-              <code>pa</code> point somewhere else — a different target.</div>
+              <code>pa</code> point somewhere else — a different target.
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ * vs &amp;</div>
@@ -8241,7 +8338,8 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
           <div class="card">
             <div class="c-label">NAMING CONVENTION</div>
             <div class="c-body">Suffix pointer parameters with <code>_p</code> or <code>_ptr</code>:
-              <code>result_p</code>, <code>count_p</code>. Instantly signals "this is an output."</div>
+              <code>result_p</code>, <code>count_p</code>. Instantly signals "this is an output."
+            </div>
           </div>
           <div class="card">
             <div class="c-label">WHY NOT return?</div>
@@ -8494,7 +8592,8 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
           <p style="font-family:'VT323';font-size:22px;color:var(--phos);text-align:center;margin-bottom:14px">
             STRUCTURE CHART</p>
           <div class="miniflow">
-            <div class="fnode" style="width:100%">main()<br><span style="font-size:14px;color:var(--ink-dim)">orchestrate</span></div>
+            <div class="fnode" style="width:100%">main()<br><span
+                style="font-size:14px;color:var(--ink-dim)">orchestrate</span></div>
             <div style="display:flex;gap:8px;width:100%">
               <div style="flex:1;text-align:center">
                 <div class="farrow">↓ &amp;h,&amp;r</div>
@@ -8515,7 +8614,8 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
           </div>
           <div class="card" style="margin-top:20px">
             <div class="c-label">MODULARITY WINS</div>
-            <div class="c-body">Each function has ONE job. <code>main()</code> is just 4 lines. To change overtime rules,
+            <div class="c-body">Each function has ONE job. <code>main()</code> is just 4 lines. To change overtime
+              rules,
               edit only <code>compute_pay()</code>. To switch to GUI output, replace only <code>display()</code>.</div>
           </div>
         </div>
@@ -8613,13 +8713,15 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
             <div class="stepnum">02</div>
             <div class="stepname">NAME IT WELL</div>
             <div class="stepdesc">Use verb_noun: <code>compute_tax</code>, <code>get_input</code>,
-              <code>print_report</code>. The name IS the documentation.</div>
+              <code>print_report</code>. The name IS the documentation.
+            </div>
           </div>
           <div class="steprow">
             <div class="stepnum">03</div>
             <div class="stepname">LIMIT PARAMS</div>
             <div class="stepdesc">Keep parameter lists short (≤ 4–5). Too many? Group related data into a
-              <code>struct</code>.</div>
+              <code>struct</code>.
+            </div>
           </div>
           <div class="steprow">
             <div class="stepnum">04</div>
@@ -8696,7 +8798,8 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
           <div style="margin-top:22px">
             <div class="card amb" style="margin-bottom:14px">
               <div class="c-label">DECOMPOSITION</div>
-              <div class="c-body">Break the problem into functions. Each function = one box in the structure chart.</div>
+              <div class="c-body">Break the problem into functions. Each function = one box in the structure chart.
+              </div>
             </div>
             <div class="card" style="margin-bottom:14px">
               <div class="c-label">COMMUNICATION</div>
@@ -8732,8 +8835,10 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
           </div>
           <div class="defrow">
             <div class="dk">Pointers</div>
-            <div class="dv"><code>&amp;</code> = address-of · <code>*</code> = dereference · <code>int *p = &amp;x</code> ·
-              <code>*p = 99</code> modifies x through the pointer.</div>
+            <div class="dv"><code>&amp;</code> = address-of · <code>*</code> = dereference ·
+              <code>int *p = &amp;x</code> ·
+              <code>*p = 99</code> modifies x through the pointer.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">Output Params</div>
@@ -8784,14 +8889,18 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
       </div>
       <div style="margin-top:30px" class="rv d2">
         <div class="kicker">Programming in C · Unit III</div>
-        <h1 style="margin-top:10px">ARRAYS &amp;<br><span style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">STRINGS</span></h1>
+        <h1 style="margin-top:10px">ARRAYS &amp;<br><span
+            style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">STRINGS</span></h1>
       </div>
       <div class="rv d3" style="margin-top:28px;max-width:800px">
         <div class="rule"></div>
-        <p class="sub">From declaring arrays and sequential access, through searching and sorting algorithms (linear, binary, bubble, insertion, selection), into string basics, library functions, concatenation, comparison, and arrays of pointers.</p>
+        <p class="sub">From declaring arrays and sequential access, through searching and sorting algorithms (linear,
+          binary, bubble, insertion, selection), into string basics, library functions, concatenation, comparison, and
+          arrays of pointers.</p>
       </div>
       <div class="rv d4" style="margin-top:auto;display:flex;gap:30px;align-items:center">
-        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
+        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span
+            style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
       </div>
     </section>
 
@@ -8804,7 +8913,8 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>$ cat unit03.objectives</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>$ cat unit03.objectives</div>
             <pre><span class="fn">[OK]</span> 01 — declare and reference arrays
 <span class="fn">[OK]</span> 02 — use for loops for sequential access
 <span class="fn">[OK]</span> 03 — pass array elements &amp; whole arrays to functions
@@ -8821,13 +8931,17 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
           <div class="miniflow" style="align-items:stretch;gap:8px">
-            <div class="fnode" style="width:100%">SCALAR VARIABLES<br><span style="font-size:15px;color:var(--ink-dim)">one value each</span></div>
+            <div class="fnode" style="width:100%">SCALAR VARIABLES<br><span
+                style="font-size:15px;color:var(--ink-dim)">one value each</span></div>
             <div class="farrow">↓</div>
-            <div class="fnode amb" style="width:100%">ARRAYS<br><span style="font-size:15px">many values, one name</span></div>
+            <div class="fnode amb" style="width:100%">ARRAYS<br><span style="font-size:15px">many values, one
+                name</span></div>
             <div class="farrow" style="color:var(--amber)">↓</div>
-            <div class="fnode amb" style="width:100%">STRINGS<br><span style="font-size:15px">char arrays with \0</span></div>
+            <div class="fnode amb" style="width:100%">STRINGS<br><span style="font-size:15px">char arrays with \0</span>
+            </div>
             <div class="farrow" style="color:var(--amber)">↓</div>
-            <div class="fnode" style="width:100%">SEARCH &amp; SORT<br><span style="font-size:15px;color:var(--ink-dim)">algorithms on collections</span></div>
+            <div class="fnode" style="width:100%">SEARCH &amp; SORT<br><span
+                style="font-size:15px;color:var(--ink-dim)">algorithms on collections</span></div>
           </div>
         </div>
       </div>
@@ -8842,7 +8956,8 @@ pa = &amp;b;                 <span class="cm">→ pa now points to b</span>
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>arrays.c — declaration</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>arrays.c — declaration</div>
             <pre><span class="cm">/* declare: type name[SIZE]; */</span>
 <span class="kw">int</span>    scores[<span class="nm">5</span>];          <span class="cm">— 5 integers</span>
 <span class="kw">double</span> temps[<span class="nm">30</span>];           <span class="cm">— 30 doubles</span>
@@ -8866,7 +8981,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="defrow">
             <div class="dk">Array</div>
-            <div class="dv">A collection of variables of the <b style="color:var(--phos)">same type</b>, stored in contiguous memory, accessed by index.</div>
+            <div class="dv">A collection of variables of the <b style="color:var(--phos)">same type</b>, stored in
+              contiguous memory, accessed by index.</div>
           </div>
           <div class="defrow">
             <div class="dk">Index (subscript)</div>
@@ -8878,7 +8994,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
           </div>
           <div class="card amb" style="margin-top:10px">
             <div class="c-label">⚠ NO BOUNDS CHECKING</div>
-            <div class="c-body">C does <b>not</b> check array bounds. <code>scores[5]</code> in a size-5 array accesses random memory — a silent bug or crash. Always guard your indices.</div>
+            <div class="c-body">C does <b>not</b> check array bounds. <code>scores[5]</code> in a size-5 array accesses
+              random memory — a silent bug or crash. Always guard your indices.</div>
           </div>
         </div>
       </div>
@@ -8893,7 +9010,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>sequential.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>sequential.c</div>
             <pre><span class="kw">#define</span> <span class="nm">SIZE</span> <span class="nm">5</span>
 <span class="kw">int</span> scores[<span class="nm">SIZE</span>];
 
@@ -8919,15 +9037,18 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
           <div class="card">
             <div class="c-label">PATTERN: TRAVERSE</div>
-            <div class="c-body"><code>for (i = 0; i &lt; SIZE; i++)</code> — the standard loop pattern. Visits every element exactly once, in order.</div>
+            <div class="c-body"><code>for (i = 0; i &lt; SIZE; i++)</code> — the standard loop pattern. Visits every
+              element exactly once, in order.</div>
           </div>
           <div class="card">
             <div class="c-label">&amp;arr[i]</div>
-            <div class="c-body"><code>scanf</code> needs an address. <code>&amp;scores[i]</code> gives the address of the i-th element — just like any other variable.</div>
+            <div class="c-body"><code>scanf</code> needs an address. <code>&amp;scores[i]</code> gives the address of
+              the i-th element — just like any other variable.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ OFF-BY-ONE</div>
-            <div class="c-body"><code>i &lt;= SIZE</code> would access <code>scores[SIZE]</code> — one past the end. Always use <code>i &lt; SIZE</code> for zero-based arrays.</div>
+            <div class="c-body"><code>i &lt;= SIZE</code> would access <code>scores[SIZE]</code> — one past the end.
+              Always use <code>i &lt; SIZE</code> for zero-based arrays.</div>
           </div>
         </div>
       </div>
@@ -8942,7 +9063,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>element_args.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>element_args.c</div>
             <pre><span class="cm">/* a single element — pass by value */</span>
 <span class="kw">void</span> <span class="fn">show</span>(<span class="kw">int</span> val) {
     <span class="fn">printf</span>(<span class="st">"Value = %d\n"</span>, val);
@@ -8968,15 +9090,18 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
           <div class="card">
             <div class="c-label">ELEMENT = VARIABLE</div>
-            <div class="c-body">Each <code>scores[i]</code> acts as an independent <code>int</code>. Pass it by value (copy) or by pointer (address) — the same rules from Unit II.</div>
+            <div class="c-body">Each <code>scores[i]</code> acts as an independent <code>int</code>. Pass it by value
+              (copy) or by pointer (address) — the same rules from Unit II.</div>
           </div>
           <div class="card">
             <div class="c-label">BY VALUE</div>
-            <div class="c-body"><code>show(scores[2])</code> copies the value. The function cannot change the original array element.</div>
+            <div class="c-body"><code>show(scores[2])</code> copies the value. The function cannot change the original
+              array element.</div>
           </div>
           <div class="card amb">
             <div class="c-label">BY POINTER</div>
-            <div class="c-body"><code>double_it(&amp;scores[2])</code> passes the address. The function modifies the original element through <code>*val_p</code>.</div>
+            <div class="c-body"><code>double_it(&amp;scores[2])</code> passes the address. The function modifies the
+              original element through <code>*val_p</code>.</div>
           </div>
         </div>
       </div>
@@ -8991,7 +9116,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>array_args.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>array_args.c</div>
             <pre><span class="kw">#define</span> <span class="nm">SIZE</span> <span class="nm">5</span>
 
 <span class="cm">/* function receives array + its size */</span>
@@ -9020,19 +9146,25 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">ARRAYS PASS BY REFERENCE</div>
-            <div class="c-body">The array name decays to a pointer to its first element. The function receives the <b style="color:var(--phos)">address</b>, not a copy — changes inside the function affect the original.</div>
+            <div class="c-body">The array name decays to a pointer to its first element. The function receives the <b
+                style="color:var(--phos)">address</b>, not a copy — changes inside the function affect the original.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">ALWAYS PASS SIZE</div>
-            <div class="c-body">A function receiving <code>int arr[]</code> has no way to know how many elements there are. Always pass the size as a separate parameter.</div>
+            <div class="c-body">A function receiving <code>int arr[]</code> has no way to know how many elements there
+              are. Always pass the size as a separate parameter.</div>
           </div>
           <div class="card">
             <div class="c-label">EQUIVALENT SYNTAX</div>
-            <div class="c-body"><code>int arr[]</code> and <code>int *arr</code> are identical in parameter lists. Both mean "pointer to int."</div>
+            <div class="c-body"><code>int arr[]</code> and <code>int *arr</code> are identical in parameter lists. Both
+              mean "pointer to int."</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ NO COPY</div>
-            <div class="c-body">Unlike scalars, arrays are <b>never copied</b> when passed. If a function sets <code>arr[0] = 99</code>, the caller's array is changed.</div>
+            <div class="c-body">Unlike scalars, arrays are <b>never copied</b> when passed. If a function sets
+              <code>arr[0] = 99</code>, the caller's array is changed.
+            </div>
           </div>
         </div>
       </div>
@@ -9047,7 +9179,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>linear_search.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>linear_search.c</div>
             <pre><span class="cm">/* search arr[0..n-1] for target
    return index if found, -1 if not */</span>
 <span class="kw">int</span> <span class="fn">linear_search</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n,
@@ -9075,15 +9208,18 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
           <div class="card">
             <div class="c-label">O(n) — LINEAR TIME</div>
-            <div class="c-body">Worst case: check every element. Best case: find it first. Average: n/2 comparisons. Simple but slow for large arrays.</div>
+            <div class="c-body">Worst case: check every element. Best case: find it first. Average: n/2 comparisons.
+              Simple but slow for large arrays.</div>
           </div>
           <div class="card">
             <div class="c-label">UNSORTED OK</div>
-            <div class="c-body">Works on <b style="color:var(--phos)">any</b> array — sorted or not. No preprocessing needed.</div>
+            <div class="c-body">Works on <b style="color:var(--phos)">any</b> array — sorted or not. No preprocessing
+              needed.</div>
           </div>
           <div class="card amb">
             <div class="c-label">RETURN -1 CONVENTION</div>
-            <div class="c-body">Since valid indices are 0..n-1, returning <code>-1</code> is the standard "not found" signal. Always check the return value.</div>
+            <div class="c-body">Since valid indices are 0..n-1, returning <code>-1</code> is the standard "not found"
+              signal. Always check the return value.</div>
           </div>
         </div>
       </div>
@@ -9098,7 +9234,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>binary_search.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>binary_search.c</div>
             <pre><span class="cm">/* REQUIRES sorted array */</span>
 <span class="kw">int</span> <span class="fn">binary_search</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n,
                   <span class="kw">int</span> target)
@@ -9126,15 +9263,18 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">O(log n) — LOGARITHMIC</div>
-            <div class="c-body">Halves the search space each step. 1000 elements → ≤10 comparisons. 1,000,000 → ≤20. Enormously faster than linear.</div>
+            <div class="c-body">Halves the search space each step. 1000 elements → ≤10 comparisons. 1,000,000 → ≤20.
+              Enormously faster than linear.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ MUST BE SORTED</div>
-            <div class="c-body">Binary search on an unsorted array gives <b>wrong results</b>. Sort first, then search — or use linear search if unsorted.</div>
+            <div class="c-body">Binary search on an unsorted array gives <b>wrong results</b>. Sort first, then search —
+              or use linear search if unsorted.</div>
           </div>
           <div class="card">
             <div class="c-label">HOW IT WORKS</div>
-            <div class="c-body">Compare target to middle element. If equal → done. If target is larger → discard left half. If smaller → discard right half. Repeat.</div>
+            <div class="c-body">Compare target to middle element. If equal → done. If target is larger → discard left
+              half. If smaller → discard right half. Repeat.</div>
           </div>
         </div>
       </div>
@@ -9149,7 +9289,8 @@ scores[<span class="nm">4</span>] = <span class="nm">92</span>;          <span c
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>bubble_sort.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>bubble_sort.c</div>
             <pre><span class="kw">void</span> <span class="fn">bubble_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
 {
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n-<span class="nm">1</span>; i++) {
@@ -9174,15 +9315,18 @@ pass 4: 1,|2|        (done)             */</span></pre>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">HOW IT WORKS</div>
-            <div class="c-body">Compare adjacent elements. If out of order, swap. The largest value <b style="color:var(--phos)">"bubbles"</b> to the end on each pass. Repeat n-1 times.</div>
+            <div class="c-body">Compare adjacent elements. If out of order, swap. The largest value <b
+                style="color:var(--phos)">"bubbles"</b> to the end on each pass. Repeat n-1 times.</div>
           </div>
           <div class="card amb">
             <div class="c-label">O(n²) COMPLEXITY</div>
-            <div class="c-body">Nested loops: outer runs n-1 times, inner shrinks by 1 each pass. Total ≈ n²/2 comparisons. <b>Slow</b> for large arrays, but easy to code and understand.</div>
+            <div class="c-body">Nested loops: outer runs n-1 times, inner shrinks by 1 each pass. Total ≈ n²/2
+              comparisons. <b>Slow</b> for large arrays, but easy to code and understand.</div>
           </div>
           <div class="card">
             <div class="c-label">STABLE SORT</div>
-            <div class="c-body">Equal elements keep their original order — useful when sorting by multiple criteria.</div>
+            <div class="c-body">Equal elements keep their original order — useful when sorting by multiple criteria.
+            </div>
           </div>
         </div>
       </div>
@@ -9197,7 +9341,8 @@ pass 4: 1,|2|        (done)             */</span></pre>
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>insertion_sort.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>insertion_sort.c</div>
             <pre><span class="kw">void</span> <span class="fn">insertion_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
 {
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">1</span>; i &lt; n; i++) {
@@ -9223,15 +9368,18 @@ i=4: key=2  shift 8,5,3 [1,2,3,5,8] ✓ */</span></pre>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">CARD GAME ANALOGY</div>
-            <div class="c-body">Like sorting a hand of cards: pick each card and <b style="color:var(--phos)">insert</b> it into the correct position among the already-sorted cards to its left.</div>
+            <div class="c-body">Like sorting a hand of cards: pick each card and <b style="color:var(--phos)">insert</b>
+              it into the correct position among the already-sorted cards to its left.</div>
           </div>
           <div class="card">
             <div class="c-label">O(n²) WORST, O(n) BEST</div>
-            <div class="c-body">Worst case (reverse sorted): n²/2 shifts. Best case (already sorted): only n-1 comparisons, zero shifts. <b style="color:var(--phos)">Great for nearly-sorted data</b>.</div>
+            <div class="c-body">Worst case (reverse sorted): n²/2 shifts. Best case (already sorted): only n-1
+              comparisons, zero shifts. <b style="color:var(--phos)">Great for nearly-sorted data</b>.</div>
           </div>
           <div class="card amb">
             <div class="c-label">SHIFT, NOT SWAP</div>
-            <div class="c-body">Insertion sort <b>shifts</b> elements one position right, then inserts once. Fewer writes than bubble sort's repeated swaps.</div>
+            <div class="c-body">Insertion sort <b>shifts</b> elements one position right, then inserts once. Fewer
+              writes than bubble sort's repeated swaps.</div>
           </div>
         </div>
       </div>
@@ -9246,7 +9394,8 @@ i=4: key=2  shift 8,5,3 [1,2,3,5,8] ✓ */</span></pre>
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>selection_sort.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>selection_sort.c</div>
             <pre><span class="kw">void</span> <span class="fn">selection_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
 {
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n-<span class="nm">1</span>; i++) {
@@ -9275,15 +9424,19 @@ i=3: min=5@[3] no-op [1,2,3,5,8] ✓ */</span></pre>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">HOW IT WORKS</div>
-            <div class="c-body">Find the <b style="color:var(--phos)">minimum</b> in the unsorted portion. Swap it to the front. Repeat for the remaining unsorted portion.</div>
+            <div class="c-body">Find the <b style="color:var(--phos)">minimum</b> in the unsorted portion. Swap it to
+              the front. Repeat for the remaining unsorted portion.</div>
           </div>
           <div class="card">
             <div class="c-label">O(n²) ALWAYS</div>
-            <div class="c-body">Always does n²/2 comparisons, regardless of input order. But only <b style="color:var(--phos)">n-1 swaps</b> — fewest writes of the three basic sorts.</div>
+            <div class="c-body">Always does n²/2 comparisons, regardless of input order. But only <b
+                style="color:var(--phos)">n-1 swaps</b> — fewest writes of the three basic sorts.</div>
           </div>
           <div class="card amb">
             <div class="c-label">SORT COMPARISON</div>
-            <div class="c-body"><b>Bubble</b>: simple, many swaps. <b>Insertion</b>: fast on nearly-sorted. <b>Selection</b>: fewest swaps, consistent performance. All O(n²).</div>
+            <div class="c-body"><b>Bubble</b>: simple, many swaps. <b>Insertion</b>: fast on nearly-sorted.
+              <b>Selection</b>: fewest swaps, consistent performance. All O(n²).
+            </div>
           </div>
         </div>
       </div>
@@ -9298,7 +9451,8 @@ i=3: min=5@[3] no-op [1,2,3,5,8] ✓ */</span></pre>
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>parallel.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>parallel.c</div>
             <pre><span class="cm">/* parallel arrays — same index links data */</span>
 <span class="kw">#define</span> <span class="nm">N</span> <span class="nm">4</span>
 <span class="kw">char</span>   names[<span class="nm">N</span>][<span class="nm">20</span>] = {<span class="st">"Alice"</span>,<span class="st">"Bob"</span>,<span class="st">"Carol"</span>,<span class="st">"Dave"</span>};
@@ -9322,15 +9476,18 @@ i=3: min=5@[3] no-op [1,2,3,5,8] ✓ */</span></pre>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">PARALLEL ARRAYS</div>
-            <div class="c-body">Multiple arrays where index <code>i</code> across all arrays describes one entity. Simpler than structs for small programs.</div>
+            <div class="c-body">Multiple arrays where index <code>i</code> across all arrays describes one entity.
+              Simpler than structs for small programs.</div>
           </div>
           <div class="card">
             <div class="c-label">enum</div>
-            <div class="c-body">Associates meaningful names with integer constants. <code>SUN=0, MON=1, ...</code> — makes code self-documenting.</div>
+            <div class="c-body">Associates meaningful names with integer constants. <code>SUN=0, MON=1, ...</code> —
+              makes code self-documenting.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ KEEP IN SYNC</div>
-            <div class="c-body">If you sort one parallel array, you must <b>rearrange all</b> the others the same way — or the indices stop matching. Structs avoid this problem.</div>
+            <div class="c-body">If you sort one parallel array, you must <b>rearrange all</b> the others the same way —
+              or the indices stop matching. Structs avoid this problem.</div>
           </div>
         </div>
       </div>
@@ -9345,7 +9502,8 @@ i=3: min=5@[3] no-op [1,2,3,5,8] ✓ */</span></pre>
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>matrix.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>matrix.c</div>
             <pre><span class="kw">#define</span> <span class="nm">ROWS</span> <span class="nm">3</span>
 <span class="kw">#define</span> <span class="nm">COLS</span> <span class="nm">4</span>
 
@@ -9372,19 +9530,25 @@ matrix[<span class="nm">1</span>][<span class="nm">2</span>] = <span class="nm">
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">2D = ARRAY OF ARRAYS</div>
-            <div class="c-body"><code>matrix[3][4]</code> is 3 rows, each containing 4 ints. Think of it as a table or grid.</div>
+            <div class="c-body"><code>matrix[3][4]</code> is 3 rows, each containing 4 ints. Think of it as a table or
+              grid.</div>
           </div>
           <div class="card">
             <div class="c-label">ROW-MAJOR ORDER</div>
-            <div class="c-body">C stores elements row by row in memory. <code>matrix[0][0..3]</code> are contiguous, then <code>matrix[1][0..3]</code>, etc.</div>
+            <div class="c-body">C stores elements row by row in memory. <code>matrix[0][0..3]</code> are contiguous,
+              then <code>matrix[1][0..3]</code>, etc.</div>
           </div>
           <div class="card">
             <div class="c-label">PASSING TO FUNCTIONS</div>
-            <div class="c-body"><code>void func(int m[][COLS], int rows)</code> — the <b style="color:var(--phos)">column size must be specified</b>; only the first dimension can be omitted.</div>
+            <div class="c-body"><code>void func(int m[][COLS], int rows)</code> — the <b
+                style="color:var(--phos)">column size must be specified</b>; only the first dimension can be omitted.
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ INITIALIZATION</div>
-            <div class="c-body">Partial initialization fills remaining elements with 0. <code>int m[3][4] = {{1},{2}}</code> sets m[0][0]=1, m[1][0]=2, rest=0.</div>
+            <div class="c-body">Partial initialization fills remaining elements with 0.
+              <code>int m[3][4] = {{1},{2}}</code> sets m[0][0]=1, m[1][0]=2, rest=0.
+            </div>
           </div>
         </div>
       </div>
@@ -9399,7 +9563,8 @@ matrix[<span class="nm">1</span>][<span class="nm">2</span>] = <span class="nm">
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>strings.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>strings.c</div>
             <pre><span class="cm">/* a string = char array + null terminator */</span>
 <span class="kw">char</span> greeting[<span class="nm">6</span>] = {<span class="st">'H'</span>,<span class="st">'e'</span>,<span class="st">'l'</span>,<span class="st">'l'</span>,<span class="st">'o'</span>,<span class="st">'\0'</span>};
 
@@ -9424,11 +9589,14 @@ matrix[<span class="nm">1</span>][<span class="nm">2</span>] = <span class="nm">
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="defrow">
             <div class="dk">\0 (null char)</div>
-            <div class="dv">Marks the end of the string. Without it, <code>printf</code> keeps reading past the array — garbage or crash.</div>
+            <div class="dv">Marks the end of the string. Without it, <code>printf</code> keeps reading past the array —
+              garbage or crash.</div>
           </div>
           <div class="defrow">
             <div class="dk">No &amp; for scanf</div>
-            <div class="dv">The array name <b style="color:var(--phos)">is already an address</b>. <code>scanf("%s", name)</code> not <code>&amp;name</code>.</div>
+            <div class="dv">The array name <b style="color:var(--phos)">is already an address</b>.
+              <code>scanf("%s", name)</code> not <code>&amp;name</code>.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">Size = length + 1</div>
@@ -9436,7 +9604,8 @@ matrix[<span class="nm">1</span>][<span class="nm">2</span>] = <span class="nm">
           </div>
           <div class="card amb" style="margin-top:10px">
             <div class="c-label">⚠ BUFFER OVERFLOW</div>
-            <div class="c-body">If the user types more than 49 chars into <code>name[50]</code>, data overwrites adjacent memory. Use <code>fgets(name, 50, stdin)</code> to limit input length.</div>
+            <div class="c-body">If the user types more than 49 chars into <code>name[50]</code>, data overwrites
+              adjacent memory. Use <code>fgets(name, 50, stdin)</code> to limit input length.</div>
           </div>
         </div>
       </div>
@@ -9489,12 +9658,15 @@ matrix[<span class="nm">1</span>][<span class="nm">2</span>] = <span class="nm">
           </table>
           <div class="card amb" style="margin-top:16px">
             <div class="c-label">⚠ NO = FOR STRINGS</div>
-            <div class="c-body"><code>str1 = str2</code> does NOT copy strings — it copies pointers. Always use <code>strcpy(str1, str2)</code>. Similarly, <code>str1 == str2</code> compares addresses, not content.</div>
+            <div class="c-body"><code>str1 = str2</code> does NOT copy strings — it copies pointers. Always use
+              <code>strcpy(str1, str2)</code>. Similarly, <code>str1 == str2</code> compares addresses, not content.
+            </div>
           </div>
         </div>
         <div class="col rv d3">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>string_lib.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>string_lib.c</div>
             <pre><span class="kw">#include</span> <span class="st">&lt;string.h&gt;</span>
 
 <span class="kw">char</span> src[] = <span class="st">"Hello"</span>;
@@ -9531,7 +9703,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>concat.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>concat.c</div>
             <pre><span class="kw">char</span> first[<span class="nm">30</span>] = <span class="st">"John"</span>;
 <span class="kw">char</span> last[<span class="nm">30</span>]  = <span class="st">"Smith"</span>;
 <span class="kw">char</span> full[<span class="nm">60</span>];
@@ -9556,15 +9729,18 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">strcat APPENDS</div>
-            <div class="c-body">Finds the <code>\0</code> in dst, starts copying src there. The dst array must be <b style="color:var(--phos)">large enough</b> to hold both strings plus <code>\0</code>.</div>
+            <div class="c-body">Finds the <code>\0</code> in dst, starts copying src there. The dst array must be <b
+                style="color:var(--phos)">large enough</b> to hold both strings plus <code>\0</code>.</div>
           </div>
           <div class="card">
             <div class="c-label">fgets vs scanf</div>
-            <div class="c-body"><code>scanf("%s")</code> stops at whitespace. <code>fgets(buf, size, stdin)</code> reads the entire line including spaces — the safe choice for names and sentences.</div>
+            <div class="c-body"><code>scanf("%s")</code> stops at whitespace. <code>fgets(buf, size, stdin)</code> reads
+              the entire line including spaces — the safe choice for names and sentences.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ NEWLINE IN fgets</div>
-            <div class="c-body"><code>fgets</code> keeps the <code>\n</code> if the line fits. Always strip it before using the string in comparisons or output.</div>
+            <div class="c-body"><code>fgets</code> keeps the <code>\n</code> if the line fits. Always strip it before
+              using the string in comparisons or output.</div>
           </div>
         </div>
       </div>
@@ -9579,7 +9755,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>strcmp_demo.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>strcmp_demo.c</div>
             <pre><span class="cm">/* strcmp(a, b) returns:
    &lt; 0  if a comes BEFORE b
      0  if a EQUALS b
@@ -9605,15 +9782,18 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">LEXICOGRAPHIC ORDER</div>
-            <div class="c-body">Compares character by character using ASCII values. First difference decides the result. Uppercase letters (65-90) come before lowercase (97-122).</div>
+            <div class="c-body">Compares character by character using ASCII values. First difference decides the result.
+              Uppercase letters (65-90) come before lowercase (97-122).</div>
           </div>
           <div class="card">
             <div class="c-label">== 0 MEANS EQUAL</div>
-            <div class="c-body"><code>if (strcmp(a, b) == 0)</code> — the standard idiom for testing string equality. Not intuitive, but memorize it.</div>
+            <div class="c-body"><code>if (strcmp(a, b) == 0)</code> — the standard idiom for testing string equality.
+              Not intuitive, but memorize it.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ NEVER USE == </div>
-            <div class="c-body"><code>str1 == str2</code> compares <b>pointer addresses</b>, not string content. Two strings with identical text at different addresses would be "not equal."</div>
+            <div class="c-body"><code>str1 == str2</code> compares <b>pointer addresses</b>, not string content. Two
+              strings with identical text at different addresses would be "not equal."</div>
           </div>
         </div>
       </div>
@@ -9628,7 +9808,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>ptr_array.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>ptr_array.c</div>
             <pre><span class="cm">/* array of char pointers — each points
    to a string literal in read-only memory */</span>
 <span class="kw">char</span> *months[] = {
@@ -9655,15 +9836,21 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">char *arr[] vs char arr[][]</div>
-            <div class="c-body"><code>char *arr[]</code> — each element is a pointer; strings can differ in length. <code>char arr[N][M]</code> — each row is fixed at M chars, wastes space.</div>
+            <div class="c-body"><code>char *arr[]</code> — each element is a pointer; strings can differ in length.
+              <code>char arr[N][M]</code> — each row is fixed at M chars, wastes space.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">FAST SORTING</div>
-            <div class="c-body">To sort strings, swap the <b style="color:var(--phos)">pointers</b> (4-8 bytes) instead of copying entire strings (many bytes). Much faster.</div>
+            <div class="c-body">To sort strings, swap the <b style="color:var(--phos)">pointers</b> (4-8 bytes) instead
+              of copying entire strings (many bytes). Much faster.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ READ-ONLY LITERALS</div>
-            <div class="c-body">String literals like <code>"January"</code> are stored in read-only memory. <code>months[0][0] = 'j'</code> causes undefined behavior. Use <code>char arr[][] = {...}</code> if you need to modify.</div>
+            <div class="c-body">String literals like <code>"January"</code> are stored in read-only memory.
+              <code>months[0][0] = 'j'</code> causes undefined behavior. Use <code>char arr[][] = {...}</code> if you
+              need to modify.
+            </div>
           </div>
         </div>
       </div>
@@ -9679,28 +9866,35 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d2">
           <div class="defrow">
             <div class="dk">Arrays</div>
-            <div class="dv">Contiguous, same-type, zero-indexed · <code>int arr[N]</code> · traverse with <code>for(i=0;i&lt;N;i++)</code> · pass to functions by address · no bounds checking.</div>
+            <div class="dv">Contiguous, same-type, zero-indexed · <code>int arr[N]</code> · traverse with
+              <code>for(i=0;i&lt;N;i++)</code> · pass to functions by address · no bounds checking.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">Searching</div>
-            <div class="dv"><b>Linear</b>: O(n), works on any array. <b>Binary</b>: O(log n), requires sorted array. Return -1 if not found.</div>
+            <div class="dv"><b>Linear</b>: O(n), works on any array. <b>Binary</b>: O(log n), requires sorted array.
+              Return -1 if not found.</div>
           </div>
           <div class="defrow">
             <div class="dk">Sorting</div>
-            <div class="dv"><b>Bubble</b>: swap adjacent, O(n²). <b>Insertion</b>: shift and insert, O(n²) worst / O(n) best. <b>Selection</b>: find min and swap, O(n²), fewest writes.</div>
+            <div class="dv"><b>Bubble</b>: swap adjacent, O(n²). <b>Insertion</b>: shift and insert, O(n²) worst / O(n)
+              best. <b>Selection</b>: find min and swap, O(n²), fewest writes.</div>
           </div>
           <div class="defrow">
             <div class="dk">Strings</div>
-            <div class="dv">char array + <code>\0</code> · <code>strcpy/strcat/strcmp/strlen</code> · no <code>=</code> or <code>==</code> for strings · <code>fgets</code> for whole lines.</div>
+            <div class="dv">char array + <code>\0</code> · <code>strcpy/strcat/strcmp/strlen</code> · no <code>=</code>
+              or <code>==</code> for strings · <code>fgets</code> for whole lines.</div>
           </div>
           <div class="defrow">
             <div class="dk">Advanced</div>
-            <div class="dv">Parallel arrays · enums · 2D arrays (row-major) · arrays of pointers for variable-length strings.</div>
+            <div class="dv">Parallel arrays · enums · 2D arrays (row-major) · arrays of pointers for variable-length
+              strings.</div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>course — exit status</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>course — exit status</div>
             <pre>$ grep -c <span class="st">"learned"</span> unit03.objectives
 <span class="nm">10 / 10</span>   <span class="fn">✓ all objectives covered</span>
 
@@ -9708,8 +9902,10 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
 <span class="fn">printf</span>(<span class="st">"ALGO = SEARCH + SORT\n"</span>);
 <span class="kw">return</span> (<span class="nm">0</span>);   <span class="cm">// success ✓</span></pre>
           </div>
-          <div style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
-            Next: UNIT IV — <span style="color:var(--amber)">Recursion, Structures &amp; Unions</span> <span class="blink-live">█</span>
+          <div
+            style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
+            Next: UNIT IV — <span style="color:var(--amber)">Recursion, Structures &amp; Unions</span> <span
+              class="blink-live">█</span>
           </div>
         </div>
       </div>
@@ -9732,14 +9928,18 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       </div>
       <div style="margin-top:30px" class="rv d2">
         <div class="kicker">Programming in C · Unit IV</div>
-        <h1 style="margin-top:10px">RECURSION &amp;<br><span style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">STRUCTURES</span></h1>
+        <h1 style="margin-top:10px">RECURSION &amp;<br><span
+            style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">STRUCTURES</span></h1>
       </div>
       <div class="rv d3" style="margin-top:28px;max-width:800px">
         <div class="rule"></div>
-        <p class="sub">The nature of recursion, tracing stack frames, recursive mathematical functions, recursive array/string processing — then user-defined structures, structure parameters, functions returning structures, and union types.</p>
+        <p class="sub">The nature of recursion, tracing stack frames, recursive mathematical functions, recursive
+          array/string processing — then user-defined structures, structure parameters, functions returning structures,
+          and union types.</p>
       </div>
       <div class="rv d4" style="margin-top:auto;display:flex;gap:30px;align-items:center">
-        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
+        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span
+            style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
       </div>
     </section>
 
@@ -9752,7 +9952,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>$ cat unit04.objectives</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>$ cat unit04.objectives</div>
             <pre><span class="fn">[OK]</span> 01 — understand the nature of recursion
 <span class="fn">[OK]</span> 02 — trace recursive functions (stack frames)
 <span class="fn">[OK]</span> 03 — write recursive mathematical functions
@@ -9768,13 +9969,17 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
           <div class="miniflow" style="align-items:stretch;gap:8px">
-            <div class="fnode" style="width:100%">ITERATION<br><span style="font-size:15px;color:var(--ink-dim)">loops solve repetition</span></div>
+            <div class="fnode" style="width:100%">ITERATION<br><span style="font-size:15px;color:var(--ink-dim)">loops
+                solve repetition</span></div>
             <div class="farrow">↓</div>
-            <div class="fnode amb" style="width:100%">RECURSION<br><span style="font-size:15px">functions that call themselves</span></div>
+            <div class="fnode amb" style="width:100%">RECURSION<br><span style="font-size:15px">functions that call
+                themselves</span></div>
             <div class="farrow" style="color:var(--amber)">↓</div>
-            <div class="fnode" style="width:100%">SCALAR TYPES<br><span style="font-size:15px;color:var(--ink-dim)">int, double, char</span></div>
+            <div class="fnode" style="width:100%">SCALAR TYPES<br><span style="font-size:15px;color:var(--ink-dim)">int,
+                double, char</span></div>
             <div class="farrow">↓</div>
-            <div class="fnode amb" style="width:100%">STRUCTURES &amp; UNIONS<br><span style="font-size:15px">user-defined composite types</span></div>
+            <div class="fnode amb" style="width:100%">STRUCTURES &amp; UNIONS<br><span
+                style="font-size:15px">user-defined composite types</span></div>
           </div>
         </div>
       </div>
@@ -9789,15 +9994,20 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <ul class="tl">
-            <li><b>Recursion</b> — a function that calls <b>itself</b>, directly or indirectly. The function solves a smaller version of the same problem, then combines results.</li>
-            <li><b>Base case</b> — the simplest input that can be answered without recursion. It <b>stops</b> the chain of calls. Without it: infinite recursion → stack overflow.</li>
-            <li><b>Recursive step</b> — reduces the problem toward the base case and calls itself. Each call must make progress.</li>
-            <li><b>Divide and conquer</b> — break a big problem into smaller identical sub-problems, solve each recursively, combine.</li>
+            <li><b>Recursion</b> — a function that calls <b>itself</b>, directly or indirectly. The function solves a
+              smaller version of the same problem, then combines results.</li>
+            <li><b>Base case</b> — the simplest input that can be answered without recursion. It <b>stops</b> the chain
+              of calls. Without it: infinite recursion → stack overflow.</li>
+            <li><b>Recursive step</b> — reduces the problem toward the base case and calls itself. Each call must make
+              progress.</li>
+            <li><b>Divide and conquer</b> — break a big problem into smaller identical sub-problems, solve each
+              recursively, combine.</li>
           </ul>
         </div>
         <div class="col rv d3">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>countdown.c — simplest recursion</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>countdown.c — simplest recursion</div>
             <pre><span class="kw">void</span> <span class="fn">countdown</span>(<span class="kw">int</span> n)
 {
     <span class="kw">if</span> (n &lt;= <span class="nm">0</span>) {              <span class="cm">← BASE CASE</span>
@@ -9831,7 +10041,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>factorial — stack trace</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>factorial — stack trace</div>
             <pre><span class="kw">int</span> <span class="fn">factorial</span>(<span class="kw">int</span> n)
 {
     <span class="kw">if</span> (n &lt;= <span class="nm">1</span>) <span class="kw">return</span> <span class="nm">1</span>;          <span class="cm">← base</span>
@@ -9860,19 +10071,23 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">STACK FRAME</div>
-            <div class="c-body">Each recursive call creates a <b style="color:var(--phos)">new stack frame</b> with its own copy of <code>n</code>. The frames accumulate until the base case.</div>
+            <div class="c-body">Each recursive call creates a <b style="color:var(--phos)">new stack frame</b> with its
+              own copy of <code>n</code>. The frames accumulate until the base case.</div>
           </div>
           <div class="card">
             <div class="c-label">WINDING</div>
-            <div class="c-body">Calls go deeper: 4→3→2→1. Each waits for the result of the next. The base case returns first.</div>
+            <div class="c-body">Calls go deeper: 4→3→2→1. Each waits for the result of the next. The base case returns
+              first.</div>
           </div>
           <div class="card">
             <div class="c-label">UNWINDING</div>
-            <div class="c-body">Results propagate back: 1→2→6→24. Each frame multiplies its <code>n</code> by the returned value and sends it up.</div>
+            <div class="c-body">Results propagate back: 1→2→6→24. Each frame multiplies its <code>n</code> by the
+              returned value and sends it up.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ STACK OVERFLOW</div>
-            <div class="c-body">Too-deep recursion exhausts stack memory. <code>factorial(100000)</code> would crash. Use iteration for very deep computations.</div>
+            <div class="c-body">Too-deep recursion exhausts stack memory. <code>factorial(100000)</code> would crash.
+              Use iteration for very deep computations.</div>
           </div>
         </div>
       </div>
@@ -9887,7 +10102,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>recursive_math.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>recursive_math.c</div>
             <pre><span class="cm">/* FACTORIAL: n! = n × (n-1)! */</span>
 <span class="kw">int</span> <span class="fn">fact</span>(<span class="kw">int</span> n) {
     <span class="kw">if</span> (n &lt;= <span class="nm">1</span>) <span class="kw">return</span> <span class="nm">1</span>;
@@ -9917,15 +10133,20 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">MATHEMATICAL DEFINITION</div>
-            <div class="c-body">Many math functions are <b style="color:var(--phos)">defined recursively</b>. The code mirrors the definition directly — elegant and provably correct.</div>
+            <div class="c-body">Many math functions are <b style="color:var(--phos)">defined recursively</b>. The code
+              mirrors the definition directly — elegant and provably correct.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ FIBONACCI IS SLOW</div>
-            <div class="c-body">Naive <code>fib(n)</code> has O(2ⁿ) time — it recomputes the same values exponentially. <code>fib(40)</code> takes seconds. Use iteration or memoization for large n.</div>
+            <div class="c-body">Naive <code>fib(n)</code> has O(2ⁿ) time — it recomputes the same values exponentially.
+              <code>fib(40)</code> takes seconds. Use iteration or memoization for large n.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">GCD — ELEGANT</div>
-            <div class="c-body">Euclid's algorithm: <code>gcd(a,b) = gcd(b, a%b)</code>. Base: <code>b==0 → return a</code>. Runs in O(log n) steps — recursion done right.</div>
+            <div class="c-body">Euclid's algorithm: <code>gcd(a,b) = gcd(b, a%b)</code>. Base:
+              <code>b==0 → return a</code>. Runs in O(log n) steps — recursion done right.
+            </div>
           </div>
         </div>
       </div>
@@ -9940,7 +10161,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>recursive_array.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>recursive_array.c</div>
             <pre><span class="cm">/* SUM of array elements */</span>
 <span class="kw">int</span> <span class="fn">array_sum</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
 {
@@ -9966,15 +10188,18 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">THE PATTERN</div>
-            <div class="c-body">Process the <b style="color:var(--phos)">last element</b>, then recursively process the rest (n-1 elements). Base case: empty array or single element.</div>
+            <div class="c-body">Process the <b style="color:var(--phos)">last element</b>, then recursively process the
+              rest (n-1 elements). Base case: empty array or single element.</div>
           </div>
           <div class="card">
             <div class="c-label">SHRINKING RANGE</div>
-            <div class="c-body">Each call decrements <code>n</code>. The array itself is unchanged — only the "window" shrinks. The pointer stays the same.</div>
+            <div class="c-body">Each call decrements <code>n</code>. The array itself is unchanged — only the "window"
+              shrinks. The pointer stays the same.</div>
           </div>
           <div class="card amb">
             <div class="c-label">RECURSION vs LOOP</div>
-            <div class="c-body">A loop is simpler and faster for array traversal. Recursion is elegant but has function-call overhead per element. Choose based on clarity vs. performance.</div>
+            <div class="c-body">A loop is simpler and faster for array traversal. Recursion is elegant but has
+              function-call overhead per element. Choose based on clarity vs. performance.</div>
           </div>
         </div>
       </div>
@@ -9989,7 +10214,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>recursive_string.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>recursive_string.c</div>
             <pre><span class="cm">/* recursive string length */</span>
 <span class="kw">int</span> <span class="fn">my_strlen</span>(<span class="kw">char</span> *s)
 {
@@ -10018,19 +10244,26 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">BASE CASE: \0</div>
-            <div class="c-body">The null terminator is the natural base case for string recursion. When <code>*s == '\0'</code>, the string is empty — stop.</div>
+            <div class="c-body">The null terminator is the natural base case for string recursion. When
+              <code>*s == '\0'</code>, the string is empty — stop.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">POINTER ARITHMETIC</div>
-            <div class="c-body"><code>s + 1</code> moves to the next character. Each recursive call processes a shorter string — one char closer to <code>\0</code>.</div>
+            <div class="c-body"><code>s + 1</code> moves to the next character. Each recursive call processes a shorter
+              string — one char closer to <code>\0</code>.</div>
           </div>
           <div class="card">
             <div class="c-label">ORDER MATTERS</div>
-            <div class="c-body"><code>print_reverse</code>: recurse <b style="color:var(--phos)">before</b> printing → prints in reverse order. Recurse <b>after</b> printing → prints forwards. The placement changes behavior.</div>
+            <div class="c-body"><code>print_reverse</code>: recurse <b style="color:var(--phos)">before</b> printing →
+              prints in reverse order. Recurse <b>after</b> printing → prints forwards. The placement changes behavior.
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">PALINDROME TRICK</div>
-            <div class="c-body">Compare first and last chars. If equal, recurse on the substring <code>s[lo+1..hi-1]</code>. Base: indices cross → it's a palindrome.</div>
+            <div class="c-body">Compare first and last chars. If equal, recurse on the substring
+              <code>s[lo+1..hi-1]</code>. Base: indices cross → it's a palindrome.
+            </div>
           </div>
         </div>
       </div>
@@ -10045,7 +10278,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>struct.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>struct.c</div>
             <pre><span class="cm">/* define a structure type */</span>
 <span class="kw">typedef struct</span> {
     <span class="kw">char</span>   name[<span class="nm">50</span>];
@@ -10076,23 +10310,28 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="defrow">
             <div class="dk">struct</div>
-            <div class="dv">Groups <b style="color:var(--phos)">different types</b> under one name. A student has a name (char[]), an id (int), and a gpa (double).</div>
+            <div class="dv">Groups <b style="color:var(--phos)">different types</b> under one name. A student has a name
+              (char[]), an id (int), and a gpa (double).</div>
           </div>
           <div class="defrow">
             <div class="dk">typedef</div>
-            <div class="dv">Creates a type alias: <code>student_t</code> instead of <code>struct student</code>. Shorter, cleaner code.</div>
+            <div class="dv">Creates a type alias: <code>student_t</code> instead of <code>struct student</code>.
+              Shorter, cleaner code.</div>
           </div>
           <div class="defrow">
             <div class="dk">Dot operator (.)</div>
-            <div class="dv"><code>s1.name</code> accesses the <code>name</code> member. Each member is like an independent variable.</div>
+            <div class="dv"><code>s1.name</code> accesses the <code>name</code> member. Each member is like an
+              independent variable.</div>
           </div>
           <div class="defrow">
             <div class="dk">Assignment (=)</div>
-            <div class="dv">Unlike arrays, structs CAN be assigned with <code>=</code>. Every member is copied. This is a deep copy for scalar members.</div>
+            <div class="dv">Unlike arrays, structs CAN be assigned with <code>=</code>. Every member is copied. This is
+              a deep copy for scalar members.</div>
           </div>
           <div class="card amb" style="margin-top:10px">
             <div class="c-label">⚠ NO == FOR STRUCTS</div>
-            <div class="c-body">You cannot compare structs with <code>==</code>. Compare member by member, or write a comparison function.</div>
+            <div class="c-body">You cannot compare structs with <code>==</code>. Compare member by member, or write a
+              comparison function.</div>
           </div>
         </div>
       </div>
@@ -10107,7 +10346,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>struct_params.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>struct_params.c</div>
             <pre><span class="cm">/* INPUT parameter — pass by value (copy) */</span>
 <span class="kw">void</span> <span class="fn">print_student</span>(<span class="fn">student_t</span> s)
 {
@@ -10135,19 +10375,25 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">ARROW OPERATOR (→)</div>
-            <div class="c-body">When you have a <b style="color:var(--phos)">pointer to a struct</b>, use <code>sp-&gt;member</code> instead of <code>(*sp).member</code>. Same thing, cleaner syntax.</div>
+            <div class="c-body">When you have a <b style="color:var(--phos)">pointer to a struct</b>, use
+              <code>sp-&gt;member</code> instead of <code>(*sp).member</code>. Same thing, cleaner syntax.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">BY VALUE = COPY</div>
-            <div class="c-body"><code>print_student(s)</code> copies the entire struct onto the stack. Safe (original unchanged) but expensive for large structs.</div>
+            <div class="c-body"><code>print_student(s)</code> copies the entire struct onto the stack. Safe (original
+              unchanged) but expensive for large structs.</div>
           </div>
           <div class="card">
             <div class="c-label">BY POINTER = MODIFY</div>
-            <div class="c-body"><code>read_student(&amp;s)</code> passes the address. The function fills the caller's struct through the pointer. Efficient and necessary for output.</div>
+            <div class="c-body"><code>read_student(&amp;s)</code> passes the address. The function fills the caller's
+              struct through the pointer. Efficient and necessary for output.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ EFFICIENCY TIP</div>
-            <div class="c-body">For large structs used as <i>input only</i>, pass a <code>const</code> pointer: <code>void print(const student_t *sp)</code> — no copy, no accidental modification.</div>
+            <div class="c-body">For large structs used as <i>input only</i>, pass a <code>const</code> pointer:
+              <code>void print(const student_t *sp)</code> — no copy, no accidental modification.
+            </div>
           </div>
         </div>
       </div>
@@ -10162,7 +10408,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>struct_return.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>struct_return.c</div>
             <pre><span class="kw">typedef struct</span> {
     <span class="kw">double</span> x, y;
 } <span class="fn">point_t</span>;
@@ -10195,15 +10442,18 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
           <div class="card">
             <div class="c-label">CONSTRUCTOR PATTERN</div>
-            <div class="c-body"><code>make_point(x, y)</code> acts like a constructor — creates and returns a struct. Clean, readable, reusable.</div>
+            <div class="c-body"><code>make_point(x, y)</code> acts like a constructor — creates and returns a struct.
+              Clean, readable, reusable.</div>
           </div>
           <div class="card">
             <div class="c-label">COMPOSABILITY</div>
-            <div class="c-body"><code>midpoint</code> takes two points, returns a point. Functions that accept and return structs compose naturally — building complex logic from simple pieces.</div>
+            <div class="c-body"><code>midpoint</code> takes two points, returns a point. Functions that accept and
+              return structs compose naturally — building complex logic from simple pieces.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ RETURN = COPY</div>
-            <div class="c-body">Returning a struct copies it. For small structs (point, complex number) this is fine. For large structs, consider output pointers instead.</div>
+            <div class="c-body">Returning a struct copies it. For small structs (point, complex number) this is fine.
+              For large structs, consider output pointers instead.</div>
           </div>
         </div>
       </div>
@@ -10218,7 +10468,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>nested.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>nested.c</div>
             <pre><span class="kw">typedef struct</span> {
     <span class="kw">int</span> day, month, year;
 } <span class="fn">date_t</span>;
@@ -10246,15 +10497,19 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">COMPOSITION</div>
-            <div class="c-body">Structures can contain other structures as members. <code>employee_t</code> contains two <code>date_t</code> members — natural data modeling.</div>
+            <div class="c-body">Structures can contain other structures as members. <code>employee_t</code> contains two
+              <code>date_t</code> members — natural data modeling.
+            </div>
           </div>
           <div class="card">
             <div class="c-label">CHAINED DOTS</div>
-            <div class="c-body"><code>e.birth.day</code> — first select the <code>birth</code> member (a date_t), then select <code>day</code> within it. Reads left to right.</div>
+            <div class="c-body"><code>e.birth.day</code> — first select the <code>birth</code> member (a date_t), then
+              select <code>day</code> within it. Reads left to right.</div>
           </div>
           <div class="card">
             <div class="c-label">ARRAYS OF STRUCTS</div>
-            <div class="c-body"><code>employee_t staff[100];</code> — an array where each element is a complete employee record. <code>staff[i].name</code> accesses the i-th employee's name.</div>
+            <div class="c-body"><code>employee_t staff[100];</code> — an array where each element is a complete employee
+              record. <code>staff[i].name</code> accesses the i-th employee's name.</div>
           </div>
         </div>
       </div>
@@ -10269,7 +10524,8 @@ dst[<span class="nm">19</span>] = <span class="st">'\0'</span>;  <span class="cm
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>union.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>union.c</div>
             <pre><span class="cm">/* union: ALL members SHARE the same memory */</span>
 <span class="kw">typedef union</span> {
     <span class="kw">int</span>    i;      <span class="cm">← 4 bytes</span>
@@ -10296,19 +10552,24 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">SHARED MEMORY</div>
-            <div class="c-body">All union members <b style="color:var(--phos)">overlap</b> in memory. Only <b>one</b> member is valid at a time. Size = size of the largest member.</div>
+            <div class="c-body">All union members <b style="color:var(--phos)">overlap</b> in memory. Only <b>one</b>
+              member is valid at a time. Size = size of the largest member.</div>
           </div>
           <div class="card">
             <div class="c-label">struct vs union</div>
-            <div class="c-body"><b style="color:var(--phos)">struct</b>: members are side by side (all active). <b style="color:var(--amber)">union</b>: members are stacked on top (one active). Struct size = sum; union size = max.</div>
+            <div class="c-body"><b style="color:var(--phos)">struct</b>: members are side by side (all active). <b
+                style="color:var(--amber)">union</b>: members are stacked on top (one active). Struct size = sum; union
+              size = max.</div>
           </div>
           <div class="card">
             <div class="c-label">TAGGED UNION</div>
-            <div class="c-body">Wrap the union in a struct with a <code>tag</code> field that records which member is currently valid. The safe way to use unions.</div>
+            <div class="c-body">Wrap the union in a struct with a <code>tag</code> field that records which member is
+              currently valid. The safe way to use unions.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ READING WRONG MEMBER</div>
-            <div class="c-body">Writing <code>v.d = 3.14</code> then reading <code>v.i</code> gives garbage — the bit pattern of a double interpreted as an int. Always track the active member.</div>
+            <div class="c-body">Writing <code>v.d = 3.14</code> then reading <code>v.i</code> gives garbage — the bit
+              pattern of a double interpreted as an int. Always track the active member.</div>
           </div>
         </div>
       </div>
@@ -10362,7 +10623,8 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
         </div>
         <div class="col rv d3">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>size_demo.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>size_demo.c</div>
             <pre><span class="kw">typedef struct</span> {
     <span class="kw">int</span>    i;    <span class="cm">/* 4 */</span>
     <span class="kw">double</span> d;    <span class="cm">/* 8 */</span>
@@ -10396,24 +10658,30 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
         <div class="col rv d2">
           <div class="defrow">
             <div class="dk">Recursion</div>
-            <div class="dv">Base case + recursive step · stack frames wind and unwind · factorial, power, fibonacci, GCD · works on arrays (sum, max) and strings (length, reverse, palindrome).</div>
+            <div class="dv">Base case + recursive step · stack frames wind and unwind · factorial, power, fibonacci, GCD
+              · works on arrays (sum, max) and strings (length, reverse, palindrome).</div>
           </div>
           <div class="defrow">
             <div class="dk">Structures</div>
-            <div class="dv"><code>typedef struct</code> groups different types · dot (<code>.</code>) and arrow (<code>-&gt;</code>) access · pass by value (copy) or pointer (modify) · can return structs · nestable.</div>
+            <div class="dv"><code>typedef struct</code> groups different types · dot (<code>.</code>) and arrow
+              (<code>-&gt;</code>) access · pass by value (copy) or pointer (modify) · can return structs · nestable.
+            </div>
           </div>
           <div class="defrow">
             <div class="dk">Unions</div>
-            <div class="dv">Shared memory · one active member · size = largest · tagged unions for safety · use for variant data types.</div>
+            <div class="dv">Shared memory · one active member · size = largest · tagged unions for safety · use for
+              variant data types.</div>
           </div>
           <div class="defrow">
             <div class="dk">Key Insight</div>
-            <div class="dv">Recursion = functions calling themselves. Structures = user-defined types. Both extend C's power to model real-world problems elegantly.</div>
+            <div class="dv">Recursion = functions calling themselves. Structures = user-defined types. Both extend C's
+              power to model real-world problems elegantly.</div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>course — exit status</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>course — exit status</div>
             <pre>$ grep -c <span class="st">"learned"</span> unit04.objectives
 <span class="nm">9 / 9</span>   <span class="fn">✓ all objectives covered</span>
 
@@ -10422,8 +10690,10 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
 <span class="fn">printf</span>(<span class="st">"UNION = SHARE SAME MEMORY\n"</span>);
 <span class="kw">return</span> (<span class="nm">0</span>);   <span class="cm">// success ✓</span></pre>
           </div>
-          <div style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
-            Next: UNIT V — <span style="color:var(--amber)">Files &amp; Searching/Sorting</span> <span class="blink-live">█</span>
+          <div
+            style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
+            Next: UNIT V — <span style="color:var(--amber)">Files &amp; Searching/Sorting</span> <span
+              class="blink-live">█</span>
           </div>
         </div>
       </div>
@@ -10446,14 +10716,18 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
       </div>
       <div style="margin-top:30px" class="rv d2">
         <div class="kicker">Programming in C · Unit V</div>
-        <h1 style="margin-top:10px">FILES &amp;<br><span style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">SEARCH / SORT</span></h1>
+        <h1 style="margin-top:10px">FILES &amp;<br><span
+            style="color:var(--amber);text-shadow:0 0 22px rgba(255,179,71,.4)">SEARCH / SORT</span></h1>
       </div>
       <div class="rv d3" style="margin-top:28px;max-width:800px">
         <div class="rule"></div>
-        <p class="sub">Text and binary file I/O — fopen, fclose, fprintf, fscanf, fread, fwrite, random access — then comprehensive searching (linear, binary) and sorting (bubble, insertion, selection) with complexity analysis and database applications.</p>
+        <p class="sub">Text and binary file I/O — fopen, fclose, fprintf, fscanf, fread, fwrite, random access — then
+          comprehensive searching (linear, binary) and sorting (bubble, insertion, selection) with complexity analysis
+          and database applications.</p>
       </div>
       <div class="rv d4" style="margin-top:auto;display:flex;gap:30px;align-items:center">
-        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
+        <span style="font-family:'VT323';font-size:26px;color:var(--phos)">Press <span
+            style="color:var(--amber)">→</span> to boot_</span><span class="cur"></span>
       </div>
     </section>
 
@@ -10466,7 +10740,8 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>$ cat unit05.objectives</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>$ cat unit05.objectives</div>
             <pre><span class="fn">[OK]</span> 01 — review I/O files: fopen, fclose, modes
 <span class="fn">[OK]</span> 02 — use fprintf / fscanf for text files
 <span class="fn">[OK]</span> 03 — work with binary files (fread/fwrite)
@@ -10484,13 +10759,17 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
           <div class="miniflow" style="align-items:stretch;gap:8px">
-            <div class="fnode" style="width:100%">RAM DATA<br><span style="font-size:15px;color:var(--ink-dim)">lost when program exits</span></div>
+            <div class="fnode" style="width:100%">RAM DATA<br><span style="font-size:15px;color:var(--ink-dim)">lost
+                when program exits</span></div>
             <div class="farrow">↓</div>
-            <div class="fnode amb" style="width:100%">FILE I/O<br><span style="font-size:15px">persist to disk</span></div>
+            <div class="fnode amb" style="width:100%">FILE I/O<br><span style="font-size:15px">persist to disk</span>
+            </div>
             <div class="farrow" style="color:var(--amber)">↓</div>
-            <div class="fnode" style="width:100%">DATABASE<br><span style="font-size:15px;color:var(--ink-dim)">search &amp; retrieve</span></div>
+            <div class="fnode" style="width:100%">DATABASE<br><span style="font-size:15px;color:var(--ink-dim)">search
+                &amp; retrieve</span></div>
             <div class="farrow">↓</div>
-            <div class="fnode amb" style="width:100%">SORT &amp; SEARCH<br><span style="font-size:15px">organize &amp; find efficiently</span></div>
+            <div class="fnode amb" style="width:100%">SORT &amp; SEARCH<br><span style="font-size:15px">organize &amp;
+                find efficiently</span></div>
           </div>
         </div>
       </div>
@@ -10505,7 +10784,8 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>file_io.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>file_io.c</div>
             <pre><span class="kw">#include</span> <span class="st">&lt;stdio.h&gt;</span>
 
 <span class="kw">int</span> <span class="fn">main</span>(<span class="kw">void</span>)
@@ -10536,20 +10816,46 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <table>
-            <tr><th>Mode</th><th>Purpose</th><th>Creates?</th></tr>
-            <tr><td>"r"</td><td>read text</td><td>No — error if missing</td></tr>
-            <tr><td>"w"</td><td>write text</td><td>Yes — truncates if exists</td></tr>
-            <tr><td>"a"</td><td>append text</td><td>Yes — adds to end</td></tr>
-            <tr><td>"rb"</td><td>read binary</td><td>No</td></tr>
-            <tr><td>"wb"</td><td>write binary</td><td>Yes — truncates</td></tr>
+            <tr>
+              <th>Mode</th>
+              <th>Purpose</th>
+              <th>Creates?</th>
+            </tr>
+            <tr>
+              <td>"r"</td>
+              <td>read text</td>
+              <td>No — error if missing</td>
+            </tr>
+            <tr>
+              <td>"w"</td>
+              <td>write text</td>
+              <td>Yes — truncates if exists</td>
+            </tr>
+            <tr>
+              <td>"a"</td>
+              <td>append text</td>
+              <td>Yes — adds to end</td>
+            </tr>
+            <tr>
+              <td>"rb"</td>
+              <td>read binary</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>"wb"</td>
+              <td>write binary</td>
+              <td>Yes — truncates</td>
+            </tr>
           </table>
           <div class="card amb" style="margin-top:14px">
             <div class="c-label">⚠ ALWAYS CHECK fopen</div>
-            <div class="c-body"><code>fopen</code> returns <code>NULL</code> on failure (file not found, permission denied). Using a NULL file pointer crashes the program.</div>
+            <div class="c-body"><code>fopen</code> returns <code>NULL</code> on failure (file not found, permission
+              denied). Using a NULL file pointer crashes the program.</div>
           </div>
           <div class="card" style="margin-top:14px">
             <div class="c-label">ALWAYS fclose</div>
-            <div class="c-body">Unflushed data may be lost. <code>fclose</code> writes buffers to disk and releases the file handle. One <code>fclose</code> per <code>fopen</code>.</div>
+            <div class="c-body">Unflushed data may be lost. <code>fclose</code> writes buffers to disk and releases the
+              file handle. One <code>fclose</code> per <code>fopen</code>.</div>
           </div>
         </div>
       </div>
@@ -10564,7 +10870,8 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>formatted_io.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>formatted_io.c</div>
             <pre><span class="cm">/* fprintf — write formatted data to file */</span>
 <span class="kw">FILE</span> *out = <span class="fn">fopen</span>(<span class="st">"grades.txt"</span>, <span class="st">"w"</span>);
 
@@ -10592,19 +10899,23 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">fprintf = printf TO FILE</div>
-            <div class="c-body">Same format strings, same placeholders — but first argument is the <code>FILE *</code> instead of stdout. <code>fprintf(stdout, ...)</code> = <code>printf(...)</code>.</div>
+            <div class="c-body">Same format strings, same placeholders — but first argument is the <code>FILE *</code>
+              instead of stdout. <code>fprintf(stdout, ...)</code> = <code>printf(...)</code>.</div>
           </div>
           <div class="card">
             <div class="c-label">fscanf RETURN VALUE</div>
-            <div class="c-body">Returns the number of items successfully read. Check <code>== expected_count</code> to detect end-of-file or malformed input.</div>
+            <div class="c-body">Returns the number of items successfully read. Check <code>== expected_count</code> to
+              detect end-of-file or malformed input.</div>
           </div>
           <div class="card">
             <div class="c-label">TEXT FORMAT</div>
-            <div class="c-body">Data is stored as human-readable characters. <code>42</code> becomes the characters '4' and '2'. Editable with any text editor, but larger than binary.</div>
+            <div class="c-body">Data is stored as human-readable characters. <code>42</code> becomes the characters '4'
+              and '2'. Editable with any text editor, but larger than binary.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ fscanf &amp; STRINGS</div>
-            <div class="c-body"><code>%s</code> stops at whitespace. For names with spaces, use <code>fgets</code> and parse manually, or use a delimiter format.</div>
+            <div class="c-body"><code>%s</code> stops at whitespace. For names with spaces, use <code>fgets</code> and
+              parse manually, or use a delimiter format.</div>
           </div>
         </div>
       </div>
@@ -10619,7 +10930,8 @@ v.d = <span class="nm">3.14</span>;            <span class="cm">← OVERWRITES i
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>binary.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>binary.c</div>
             <pre><span class="kw">typedef struct</span> {
     <span class="kw">int</span> id; <span class="kw">char</span> name[<span class="nm">30</span>]; <span class="kw">double</span> balance;
 } <span class="fn">account_t</span>;
@@ -10648,19 +10960,24 @@ fp = <span class="fn">fopen</span>(<span class="st">"accts.bin"</span>, <span cl
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="defrow">
             <div class="dk">fwrite(ptr,sz,n,fp)</div>
-            <div class="dv">Write <code>n</code> items, each <code>sz</code> bytes, from memory at <code>ptr</code> to file <code>fp</code>.</div>
+            <div class="dv">Write <code>n</code> items, each <code>sz</code> bytes, from memory at <code>ptr</code> to
+              file <code>fp</code>.</div>
           </div>
           <div class="defrow">
             <div class="dk">fread(ptr,sz,n,fp)</div>
-            <div class="dv">Read <code>n</code> items of <code>sz</code> bytes from file into memory. Returns number of items actually read.</div>
+            <div class="dv">Read <code>n</code> items of <code>sz</code> bytes from file into memory. Returns number of
+              items actually read.</div>
           </div>
           <div class="card" style="margin-top:10px">
             <div class="c-label">TEXT vs BINARY</div>
-            <div class="c-body"><b style="color:var(--phos)">Text</b>: human-readable, portable, larger. <b style="color:var(--amber)">Binary</b>: exact memory image, compact, fast, but not human-readable and platform-dependent.</div>
+            <div class="c-body"><b style="color:var(--phos)">Text</b>: human-readable, portable, larger. <b
+                style="color:var(--amber)">Binary</b>: exact memory image, compact, fast, but not human-readable and
+              platform-dependent.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ PORTABILITY</div>
-            <div class="c-body">Binary files depend on struct layout, byte order, and padding. A binary file written on one machine may not read correctly on another with different architecture.</div>
+            <div class="c-body">Binary files depend on struct layout, byte order, and padding. A binary file written on
+              one machine may not read correctly on another with different architecture.</div>
           </div>
         </div>
       </div>
@@ -10675,7 +10992,8 @@ fp = <span class="fn">fopen</span>(<span class="st">"accts.bin"</span>, <span cl
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>random_access.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>random_access.c</div>
             <pre><span class="cm">/* jump to specific record in binary file */</span>
 <span class="kw">FILE</span> *fp = <span class="fn">fopen</span>(<span class="st">"accts.bin"</span>, <span class="st">"rb"</span>);
 
@@ -10707,19 +11025,23 @@ rec.balance = <span class="nm">9999.99</span>;
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">DIRECT ACCESS</div>
-            <div class="c-body">With fixed-size records, <code>fseek(fp, index * sizeof(record), SEEK_SET)</code> jumps directly to any record — <b style="color:var(--phos)">O(1)</b> access, no scanning.</div>
+            <div class="c-body">With fixed-size records, <code>fseek(fp, index * sizeof(record), SEEK_SET)</code> jumps
+              directly to any record — <b style="color:var(--phos)">O(1)</b> access, no scanning.</div>
           </div>
           <div class="card">
             <div class="c-label">UPDATE IN PLACE</div>
-            <div class="c-body">Open with <code>"r+b"</code>, seek to the record, write the new data. The file size doesn't change — just the bytes at that position.</div>
+            <div class="c-body">Open with <code>"r+b"</code>, seek to the record, write the new data. The file size
+              doesn't change — just the bytes at that position.</div>
           </div>
           <div class="card">
             <div class="c-label">FILE POSITION</div>
-            <div class="c-body"><code>ftell(fp)</code> returns the current byte offset. After reading one record, it advances by <code>sizeof(record)</code> bytes.</div>
+            <div class="c-body"><code>ftell(fp)</code> returns the current byte offset. After reading one record, it
+              advances by <code>sizeof(record)</code> bytes.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ TEXT vs BINARY SEEK</div>
-            <div class="c-body"><code>fseek</code> with byte offsets only works reliably on <b>binary</b> files. In text mode, line endings may be translated, making byte counts unreliable.</div>
+            <div class="c-body"><code>fseek</code> with byte offsets only works reliably on <b>binary</b> files. In text
+              mode, line endings may be translated, making byte counts unreliable.</div>
           </div>
         </div>
       </div>
@@ -10734,7 +11056,8 @@ rec.balance = <span class="nm">9999.99</span>;
       <div class="cols">
         <div class="col rv d2">
           <div class="term" style="height:100%">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>db_search.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>db_search.c</div>
             <pre><span class="cm">/* sequential search in a binary file */</span>
 <span class="kw">int</span> <span class="fn">find_account</span>(<span class="kw">FILE</span> *fp, <span class="kw">int</span> target_id,
                  <span class="fn">account_t</span> *result)
@@ -10764,19 +11087,23 @@ rec.balance = <span class="nm">9999.99</span>;
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">SEQUENTIAL FILE SEARCH</div>
-            <div class="c-body">Read records one by one from the file until the target is found or EOF is reached. <b style="color:var(--phos)">O(n)</b> — must check every record in the worst case.</div>
+            <div class="c-body">Read records one by one from the file until the target is found or EOF is reached. <b
+                style="color:var(--phos)">O(n)</b> — must check every record in the worst case.</div>
           </div>
           <div class="card">
             <div class="c-label">BINARY SEARCH ON FILE</div>
-            <div class="c-body">If the file is sorted by key, use <code>fseek</code> to jump to the middle record, compare, and halve the search space — <b style="color:var(--phos)">O(log n)</b> disk reads.</div>
+            <div class="c-body">If the file is sorted by key, use <code>fseek</code> to jump to the middle record,
+              compare, and halve the search space — <b style="color:var(--phos)">O(log n)</b> disk reads.</div>
           </div>
           <div class="card">
             <div class="c-label">LOAD vs STREAM</div>
-            <div class="c-body"><b>Small DB</b>: load entire file into an array, search in memory. <b>Large DB</b>: stream from disk, process one record at a time to save RAM.</div>
+            <div class="c-body"><b>Small DB</b>: load entire file into an array, search in memory. <b>Large DB</b>:
+              stream from disk, process one record at a time to save RAM.</div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ FILE MUST BE OPEN</div>
-            <div class="c-body">The <code>FILE *</code> must remain open during the search. Don't close and reopen between reads — use <code>rewind</code> to restart.</div>
+            <div class="c-body">The <code>FILE *</code> must remain open during the search. Don't close and reopen
+              between reads — use <code>rewind</code> to restart.</div>
           </div>
         </div>
       </div>
@@ -10791,7 +11118,8 @@ rec.balance = <span class="nm">9999.99</span>;
       <div class="cols">
         <div class="col rv d2">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>linear_search.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>linear_search.c</div>
             <pre><span class="kw">int</span> <span class="fn">linear_search</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n,
                   <span class="kw">int</span> target)
 {
@@ -10802,24 +11130,44 @@ rec.balance = <span class="nm">9999.99</span>;
 }</pre>
           </div>
           <table style="margin-top:16px">
-            <tr><th>Case</th><th>Comparisons</th><th>Complexity</th></tr>
-            <tr><td>Best</td><td>1 (found at [0])</td><td>O(1)</td></tr>
-            <tr><td>Average</td><td>n/2</td><td>O(n)</td></tr>
-            <tr><td>Worst</td><td>n (not found)</td><td>O(n)</td></tr>
+            <tr>
+              <th>Case</th>
+              <th>Comparisons</th>
+              <th>Complexity</th>
+            </tr>
+            <tr>
+              <td>Best</td>
+              <td>1 (found at [0])</td>
+              <td>O(1)</td>
+            </tr>
+            <tr>
+              <td>Average</td>
+              <td>n/2</td>
+              <td>O(n)</td>
+            </tr>
+            <tr>
+              <td>Worst</td>
+              <td>n (not found)</td>
+              <td>O(n)</td>
+            </tr>
           </table>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">WHEN TO USE</div>
-            <div class="c-body"><b style="color:var(--phos)">Unsorted</b> data, <b style="color:var(--phos)">small</b> arrays, or when you need to search <b style="color:var(--phos)">once</b>. No preprocessing required.</div>
+            <div class="c-body"><b style="color:var(--phos)">Unsorted</b> data, <b style="color:var(--phos)">small</b>
+              arrays, or when you need to search <b style="color:var(--phos)">once</b>. No preprocessing required.</div>
           </div>
           <div class="card">
             <div class="c-label">SENTINEL VARIANT</div>
-            <div class="c-body">Place the target at <code>arr[n]</code> as a sentinel — eliminates the <code>i &lt; n</code> check each iteration. Slightly faster inner loop, same O(n).</div>
+            <div class="c-body">Place the target at <code>arr[n]</code> as a sentinel — eliminates the
+              <code>i &lt; n</code> check each iteration. Slightly faster inner loop, same O(n).
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">SCALING</div>
-            <div class="c-body">1,000 items: ~500 avg comparisons. 1,000,000 items: ~500,000. For large sorted data, binary search is <b>orders of magnitude faster</b>.</div>
+            <div class="c-body">1,000 items: ~500 avg comparisons. 1,000,000 items: ~500,000. For large sorted data,
+              binary search is <b>orders of magnitude faster</b>.</div>
           </div>
         </div>
       </div>
@@ -10834,7 +11182,8 @@ rec.balance = <span class="nm">9999.99</span>;
       <div class="cols">
         <div class="col rv d2">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>binary_search.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>binary_search.c</div>
             <pre><span class="kw">int</span> <span class="fn">binary_search</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n,
                   <span class="kw">int</span> target)
 {
@@ -10849,25 +11198,44 @@ rec.balance = <span class="nm">9999.99</span>;
 }</pre>
           </div>
           <table style="margin-top:16px">
-            <tr><th>n</th><th>Max comparisons</th></tr>
-            <tr><td>10</td><td>4</td></tr>
-            <tr><td>1,000</td><td>10</td></tr>
-            <tr><td>1,000,000</td><td>20</td></tr>
-            <tr><td>1 billion</td><td>30</td></tr>
+            <tr>
+              <th>n</th>
+              <th>Max comparisons</th>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td>1,000</td>
+              <td>10</td>
+            </tr>
+            <tr>
+              <td>1,000,000</td>
+              <td>20</td>
+            </tr>
+            <tr>
+              <td>1 billion</td>
+              <td>30</td>
+            </tr>
           </table>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <div class="card">
             <div class="c-label">O(log₂ n)</div>
-            <div class="c-body">Each comparison eliminates <b style="color:var(--phos)">half</b> the remaining elements. Doubling the array size adds only ONE more comparison.</div>
+            <div class="c-body">Each comparison eliminates <b style="color:var(--phos)">half</b> the remaining elements.
+              Doubling the array size adds only ONE more comparison.</div>
           </div>
           <div class="card">
             <div class="c-label">OVERFLOW-SAFE MID</div>
-            <div class="c-body"><code>mid = lo + (hi - lo) / 2</code> avoids integer overflow that <code>(lo + hi) / 2</code> can cause when both are large.</div>
+            <div class="c-body"><code>mid = lo + (hi - lo) / 2</code> avoids integer overflow that
+              <code>(lo + hi) / 2</code> can cause when both are large.
+            </div>
           </div>
           <div class="card amb">
             <div class="c-label">⚠ MUST BE SORTED</div>
-            <div class="c-body">Binary search on an unsorted array is <b>undefined</b> — it may return wrong results or miss existing elements. Sort first (one-time O(n log n) cost).</div>
+            <div class="c-body">Binary search on an unsorted array is <b>undefined</b> — it may return wrong results or
+              miss existing elements. Sort first (one-time O(n log n) cost).</div>
           </div>
         </div>
       </div>
@@ -10882,7 +11250,8 @@ rec.balance = <span class="nm">9999.99</span>;
       <div class="cols">
         <div class="col rv d2">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>bubble_sort.c — optimized</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>bubble_sort.c — optimized</div>
             <pre><span class="kw">void</span> <span class="fn">bubble_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
 {
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n-<span class="nm">1</span>; i++) {
@@ -10907,18 +11276,36 @@ pass 3: 1,|2|      (1 swap)  done ✓ */</span></pre>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <table>
-            <tr><th>Case</th><th>Comparisons</th><th>Swaps</th></tr>
-            <tr><td>Best (sorted)</td><td>n-1</td><td>0</td></tr>
-            <tr><td>Average</td><td>n²/4</td><td>n²/4</td></tr>
-            <tr><td>Worst (reverse)</td><td>n²/2</td><td>n²/2</td></tr>
+            <tr>
+              <th>Case</th>
+              <th>Comparisons</th>
+              <th>Swaps</th>
+            </tr>
+            <tr>
+              <td>Best (sorted)</td>
+              <td>n-1</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Average</td>
+              <td>n²/4</td>
+              <td>n²/4</td>
+            </tr>
+            <tr>
+              <td>Worst (reverse)</td>
+              <td>n²/2</td>
+              <td>n²/2</td>
+            </tr>
           </table>
           <div class="card" style="margin-top:14px">
             <div class="c-label">OPTIMIZATION</div>
-            <div class="c-body">The <code>swapped</code> flag detects if no swaps occurred — array is already sorted. Best case drops from O(n²) to <b style="color:var(--phos)">O(n)</b>.</div>
+            <div class="c-body">The <code>swapped</code> flag detects if no swaps occurred — array is already sorted.
+              Best case drops from O(n²) to <b style="color:var(--phos)">O(n)</b>.</div>
           </div>
           <div class="card amb">
             <div class="c-label">VERDICT</div>
-            <div class="c-body">Simple to understand and code. Too slow for large data. Good for <b>educational purposes</b> and very small arrays.</div>
+            <div class="c-body">Simple to understand and code. Too slow for large data. Good for <b>educational
+                purposes</b> and very small arrays.</div>
           </div>
         </div>
       </div>
@@ -10933,7 +11320,8 @@ pass 3: 1,|2|      (1 swap)  done ✓ */</span></pre>
       <div class="cols">
         <div class="col rv d2">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>insertion_sort.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>insertion_sort.c</div>
             <pre><span class="kw">void</span> <span class="fn">insertion_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
 {
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">1</span>; i &lt; n; i++) {
@@ -10955,22 +11343,41 @@ i=3: key=1, shift 4,3,2→ [1,2,3,4] ✓ */</span></pre>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <table>
-            <tr><th>Case</th><th>Comparisons</th><th>Shifts</th></tr>
-            <tr><td>Best (sorted)</td><td>n-1</td><td>0</td></tr>
-            <tr><td>Average</td><td>n²/4</td><td>n²/4</td></tr>
-            <tr><td>Worst (reverse)</td><td>n²/2</td><td>n²/2</td></tr>
+            <tr>
+              <th>Case</th>
+              <th>Comparisons</th>
+              <th>Shifts</th>
+            </tr>
+            <tr>
+              <td>Best (sorted)</td>
+              <td>n-1</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Average</td>
+              <td>n²/4</td>
+              <td>n²/4</td>
+            </tr>
+            <tr>
+              <td>Worst (reverse)</td>
+              <td>n²/2</td>
+              <td>n²/2</td>
+            </tr>
           </table>
           <div class="card" style="margin-top:14px">
             <div class="c-label">ADAPTIVE</div>
-            <div class="c-body"><b style="color:var(--phos)">O(n) for nearly sorted data</b> — few elements are far from their correct position, so few shifts needed. The best simple sort for "almost sorted" input.</div>
+            <div class="c-body"><b style="color:var(--phos)">O(n) for nearly sorted data</b> — few elements are far from
+              their correct position, so few shifts needed. The best simple sort for "almost sorted" input.</div>
           </div>
           <div class="card">
             <div class="c-label">ONLINE</div>
-            <div class="c-body">Can sort data as it arrives — no need to know the total count upfront. Each new element is inserted into the correct position immediately.</div>
+            <div class="c-body">Can sort data as it arrives — no need to know the total count upfront. Each new element
+              is inserted into the correct position immediately.</div>
           </div>
           <div class="card amb">
             <div class="c-label">VERDICT</div>
-            <div class="c-body">Best of the O(n²) sorts for practical use. Preferred for small arrays (n &lt; 50) and nearly-sorted data. Used as a subroutine in advanced sorts.</div>
+            <div class="c-body">Best of the O(n²) sorts for practical use. Preferred for small arrays (n &lt; 50) and
+              nearly-sorted data. Used as a subroutine in advanced sorts.</div>
           </div>
         </div>
       </div>
@@ -10985,7 +11392,8 @@ i=3: key=1, shift 4,3,2→ [1,2,3,4] ✓ */</span></pre>
       <div class="cols">
         <div class="col rv d2">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>selection_sort.c</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>selection_sort.c</div>
             <pre><span class="kw">void</span> <span class="fn">selection_sort</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> n)
 {
     <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; n-<span class="nm">1</span>; i++) {
@@ -11009,22 +11417,41 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:14px">
           <table>
-            <tr><th>Case</th><th>Comparisons</th><th>Swaps</th></tr>
-            <tr><td>Best</td><td>n²/2</td><td>0</td></tr>
-            <tr><td>Average</td><td>n²/2</td><td>n/2</td></tr>
-            <tr><td>Worst</td><td>n²/2</td><td>n-1</td></tr>
+            <tr>
+              <th>Case</th>
+              <th>Comparisons</th>
+              <th>Swaps</th>
+            </tr>
+            <tr>
+              <td>Best</td>
+              <td>n²/2</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Average</td>
+              <td>n²/2</td>
+              <td>n/2</td>
+            </tr>
+            <tr>
+              <td>Worst</td>
+              <td>n²/2</td>
+              <td>n-1</td>
+            </tr>
           </table>
           <div class="card" style="margin-top:14px">
             <div class="c-label">FEWEST SWAPS</div>
-            <div class="c-body">At most <b style="color:var(--phos)">n-1 swaps</b> — one per outer pass. Best choice when swaps are expensive (e.g., large records, slow memory).</div>
+            <div class="c-body">At most <b style="color:var(--phos)">n-1 swaps</b> — one per outer pass. Best choice
+              when swaps are expensive (e.g., large records, slow memory).</div>
           </div>
           <div class="card">
             <div class="c-label">CONSISTENT</div>
-            <div class="c-body">Always does n²/2 comparisons, regardless of input order. No best-case speedup like insertion sort — but predictable performance.</div>
+            <div class="c-body">Always does n²/2 comparisons, regardless of input order. No best-case speedup like
+              insertion sort — but predictable performance.</div>
           </div>
           <div class="card amb">
             <div class="c-label">VERDICT</div>
-            <div class="c-body">Simple, minimal memory writes. Not adaptive. Use when write cost dominates or for very small arrays.</div>
+            <div class="c-body">Simple, minimal memory writes. Not adaptive. Use when write cost dominates or for very
+              small arrays.</div>
           </div>
         </div>
       </div>
@@ -11074,21 +11501,27 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
           </table>
           <div class="card" style="margin-top:20px">
             <div class="c-label">SPACE COMPLEXITY</div>
-            <div class="c-body">All three are <b style="color:var(--phos)">in-place</b> — O(1) extra memory. They sort the array directly, no auxiliary array needed.</div>
+            <div class="c-body">All three are <b style="color:var(--phos)">in-place</b> — O(1) extra memory. They sort
+              the array directly, no auxiliary array needed.</div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center;gap:16px">
           <div class="card">
             <div class="c-label">CHOOSE WISELY</div>
-            <div class="c-body"><b style="color:var(--phos)">Nearly sorted?</b> → Insertion. <b style="color:var(--phos)">Expensive swaps?</b> → Selection. <b style="color:var(--phos)">Teaching?</b> → Bubble. <b style="color:var(--phos)">Large data?</b> → Use <code>qsort()</code> from stdlib.h (O(n log n)).</div>
+            <div class="c-body"><b style="color:var(--phos)">Nearly sorted?</b> → Insertion. <b
+                style="color:var(--phos)">Expensive swaps?</b> → Selection. <b style="color:var(--phos)">Teaching?</b> →
+              Bubble. <b style="color:var(--phos)">Large data?</b> → Use <code>qsort()</code> from stdlib.h (O(n log
+              n)).</div>
           </div>
           <div class="card">
             <div class="c-label">STABLE SORT</div>
-            <div class="c-body">A sort is <b style="color:var(--phos)">stable</b> if equal elements keep their original order. Important when sorting by multiple criteria (e.g., sort by name, then by grade).</div>
+            <div class="c-body">A sort is <b style="color:var(--phos)">stable</b> if equal elements keep their original
+              order. Important when sorting by multiple criteria (e.g., sort by name, then by grade).</div>
           </div>
           <div class="card amb">
             <div class="c-label">THE BIG PICTURE</div>
-            <div class="c-body">These three are <b>introductory sorts</b>. Real-world programs use O(n log n) algorithms like quicksort, mergesort, or heapsort. But understanding O(n²) sorts builds the foundation.</div>
+            <div class="c-body">These three are <b>introductory sorts</b>. Real-world programs use O(n log n) algorithms
+              like quicksort, mergesort, or heapsort. But understanding O(n²) sorts builds the foundation.</div>
           </div>
         </div>
       </div>
@@ -11104,24 +11537,30 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
         <div class="col rv d2">
           <div class="defrow">
             <div class="dk">Files</div>
-            <div class="dv"><code>fopen/fclose</code> · <code>fprintf/fscanf</code> (text) · <code>fread/fwrite</code> (binary) · <code>fseek/ftell/rewind</code> (random access) · always check for NULL.</div>
+            <div class="dv"><code>fopen/fclose</code> · <code>fprintf/fscanf</code> (text) · <code>fread/fwrite</code>
+              (binary) · <code>fseek/ftell/rewind</code> (random access) · always check for NULL.</div>
           </div>
           <div class="defrow">
             <div class="dk">Database</div>
-            <div class="dv">Sequential search on file (O(n)) · binary search with fseek on sorted file (O(log n)) · load small DBs into arrays for in-memory search.</div>
+            <div class="dv">Sequential search on file (O(n)) · binary search with fseek on sorted file (O(log n)) · load
+              small DBs into arrays for in-memory search.</div>
           </div>
           <div class="defrow">
             <div class="dk">Searching</div>
-            <div class="dv"><b>Linear</b>: O(n), any array. <b>Binary</b>: O(log n), sorted only. Return -1 if not found.</div>
+            <div class="dv"><b>Linear</b>: O(n), any array. <b>Binary</b>: O(log n), sorted only. Return -1 if not
+              found.</div>
           </div>
           <div class="defrow">
             <div class="dk">Sorting</div>
-            <div class="dv"><b>Bubble</b>: swap adjacent, stable. <b>Insertion</b>: shift &amp; insert, adaptive. <b>Selection</b>: find min, fewest swaps. All O(n²), in-place.</div>
+            <div class="dv"><b>Bubble</b>: swap adjacent, stable. <b>Insertion</b>: shift &amp; insert, adaptive.
+              <b>Selection</b>: find min, fewest swaps. All O(n²), in-place.
+            </div>
           </div>
         </div>
         <div class="col rv d3" style="display:flex;flex-direction:column;justify-content:center">
           <div class="term">
-            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>course — final exit status</div>
+            <div class="term-head"><span class="dots"><span class="dot"></span><span class="dot"></span><span
+                  class="dot"></span></span>course — final exit status</div>
             <pre>$ grep -c <span class="st">"learned"</span> all_units.objectives
 <span class="nm">45 / 45</span>   <span class="fn">✓ ALL COURSE OBJECTIVES COVERED</span>
 
@@ -11132,8 +11571,10 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
 <span class="fn">printf</span>(<span class="st">"\nYou are now a C programmer.\n"</span>);
 <span class="kw">return</span> (<span class="nm">0</span>);   <span class="cm">// EXIT_SUCCESS ✓</span></pre>
           </div>
-          <div style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
-            <span style="color:var(--amber)">COURSE COMPLETE</span> — go build something amazing <span class="blink-live">█</span>
+          <div
+            style="margin-top:26px;font-family:'VT323';font-size:34px;color:var(--phos);text-shadow:0 0 18px rgba(61,255,160,.4)">
+            <span style="color:var(--amber)">COURSE COMPLETE</span> — go build something amazing <span
+              class="blink-live">█</span>
           </div>
         </div>
       </div>
@@ -11152,9 +11593,12 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
       <button class="hud-btn amber-btn" id="menuBtn" onclick="toggleNav()" title="Open Unit Navigator (M)">
         ☰ UNITS
       </button>
-      <span class="pg" id="pagenum" style="font-family:'VT323',monospace;font-size:22px;color:var(--phos)">001 / 162</span>
+      <span class="pg" id="pagenum" style="font-family:'VT323',monospace;font-size:22px;color:var(--phos)">001 /
+        162</span>
       <span class="unit-tag" id="unitTag" onclick="toggleNav()" title="Click to view all units">PORTAL</span>
-      <span id="modname" style="color:var(--phos-dim);font-size:12px;letter-spacing:.08em;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">MASTER OVERVIEW</span>
+      <span id="modname"
+        style="color:var(--phos-dim);font-size:12px;letter-spacing:.08em;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">MASTER
+        OVERVIEW</span>
     </div>
 
     <div class="hud-right">
@@ -11171,57 +11615,57 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
   <script>
     /* ========== UNIT BOUNDARIES CONFIGURATION ========== */
     const UNITS = [
-  {
-    "unitIndex": 0,
-    "roman": "I",
-    "title": "Fundamentals & Structured C",
-    "desc": "Computer architecture, steps in development, syntax, types, operators, I/O, control flow (if/else, switch, while, for, do-while)",
-    "tag": "UNIT I",
-    "start": 1,
-    "end": 94,
-    "count": 94
-  },
-  {
-    "unitIndex": 1,
-    "roman": "II",
-    "title": "Functions & Modular Design",
-    "desc": "Top-down design, function declarations, parameters, pass-by-value/pointer, storage classes, variable scope, modular decomposition",
-    "tag": "UNIT II",
-    "start": 95,
-    "end": 114,
-    "count": 20
-  },
-  {
-    "unitIndex": 2,
-    "roman": "III",
-    "title": "Arrays & Strings",
-    "desc": "1D/2D arrays, sequential access, memory layout, string handling (char arrays, \\0), string.h library functions, search & sort basics",
-    "tag": "UNIT III",
-    "start": 115,
-    "end": 133,
-    "count": 19
-  },
-  {
-    "unitIndex": 3,
-    "roman": "IV",
-    "title": "Recursion & Structures",
-    "desc": "Nature of recursion, stack frames, recursive math/arrays/strings, typedef struct, memory layout, dot/arrow operators, union types",
-    "tag": "UNIT IV",
-    "start": 134,
-    "end": 147,
-    "count": 14
-  },
-  {
-    "unitIndex": 4,
-    "roman": "V",
-    "title": "Files & Search / Sort",
-    "desc": "Text & binary file I/O (fopen, fprintf, fread, fwrite, fseek), database searching, linear/binary search, bubble/insertion/selection sort",
-    "tag": "UNIT V",
-    "start": 148,
-    "end": 161,
-    "count": 14
-  }
-];
+      {
+        "unitIndex": 0,
+        "roman": "I",
+        "title": "Fundamentals & Structured C",
+        "desc": "Computer architecture, steps in development, syntax, types, operators, I/O, control flow (if/else, switch, while, for, do-while)",
+        "tag": "UNIT I",
+        "start": 1,
+        "end": 94,
+        "count": 94
+      },
+      {
+        "unitIndex": 1,
+        "roman": "II",
+        "title": "Functions & Modular Design",
+        "desc": "Top-down design, function declarations, parameters, pass-by-value/pointer, storage classes, variable scope, modular decomposition",
+        "tag": "UNIT II",
+        "start": 95,
+        "end": 114,
+        "count": 20
+      },
+      {
+        "unitIndex": 2,
+        "roman": "III",
+        "title": "Arrays & Strings",
+        "desc": "1D/2D arrays, sequential access, memory layout, string handling (char arrays, \\0), string.h library functions, search & sort basics",
+        "tag": "UNIT III",
+        "start": 115,
+        "end": 133,
+        "count": 19
+      },
+      {
+        "unitIndex": 3,
+        "roman": "IV",
+        "title": "Recursion & Structures",
+        "desc": "Nature of recursion, stack frames, recursive math/arrays/strings, typedef struct, memory layout, dot/arrow operators, union types",
+        "tag": "UNIT IV",
+        "start": 134,
+        "end": 147,
+        "count": 14
+      },
+      {
+        "unitIndex": 4,
+        "roman": "V",
+        "title": "Files & Search / Sort",
+        "desc": "Text & binary file I/O (fopen, fprintf, fread, fwrite, fseek), database searching, linear/binary search, bubble/insertion/selection sort",
+        "tag": "UNIT V",
+        "start": 148,
+        "end": 161,
+        "count": 14
+      }
+    ];
     const TOTAL = 162;
 
     /* ========== ENGINE STATE ========== */
@@ -11353,7 +11797,7 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
 
     function toggleFullScreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
+        document.documentElement.requestFullscreen().catch(() => { });
       } else {
         if (document.exitFullscreen) document.exitFullscreen();
       }
@@ -11406,7 +11850,7 @@ i=2: min=3@[2] no-op  done ✓ */</span></pre>
     document.getElementById('deck').addEventListener('click', e => {
       // Ignore clicks on interactive items
       if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.unit-card') ||
-          e.target.closest('.unit-nav') || e.target.closest('.jump-modal') || e.target.closest('.shortcuts-modal')) {
+        e.target.closest('.unit-nav') || e.target.closest('.jump-modal') || e.target.closest('.shortcuts-modal')) {
         return;
       }
       nav(e.clientX > window.innerWidth / 2 ? 1 : -1);
